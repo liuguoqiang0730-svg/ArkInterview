@@ -1,6 +1,6 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
-import { Question, SubmitAnswerResponse } from '../models/QuestionModels';
+import { Question, QuestionOption, SubmitAnswerResponse } from '../models/QuestionModels';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -8,14 +8,14 @@ const store = new PracticeStore();
 @Entry
 @Component
 struct QuestionPage {
-  @State private question?: Question = undefined;
+  @State private question: Question | undefined = undefined;
   @State private selectedOptionIds: string[] = [];
-  @State private answerBoolean?: boolean = undefined;
+  @State private answerBoolean: boolean | undefined = undefined;
   @State private shortAnswer: string = '';
-  @State private feedback?: SubmitAnswerResponse = undefined;
+  @State private feedback: SubmitAnswerResponse | undefined = undefined;
   @State private loading: boolean = true;
 
-  async aboutToAppear() {
+  aboutToAppear(): void {
     const params = router.getParams() as Record<string, string>;
     const questionId = params.questionId;
     if (!questionId) {
@@ -23,7 +23,7 @@ struct QuestionPage {
       router.back();
       return;
     }
-    await this.loadQuestion(questionId);
+    this.loadQuestion(questionId);
   }
 
   async loadQuestion(questionId: string) {
@@ -103,7 +103,7 @@ struct QuestionPage {
   AnswerArea() {
     if (this.question?.type === 'single' || this.question?.type === 'multiple') {
       Column() {
-        ForEach(this.question.options, (option) => {
+        ForEach(this.question.options, (option: QuestionOption) => {
           Row() {
             Text(this.selectedOptionIds.includes(option.id) ? '✓' : '')
               .fontSize(16)
@@ -124,7 +124,7 @@ struct QuestionPage {
           .backgroundColor('#ffffff')
           .borderRadius(8)
           .onClick(() => this.toggleOption(option.id))
-        }, (option) => option.id)
+        }, (option: QuestionOption) => option.id)
       }
       .width('100%')
       .margin({ top: 16 })

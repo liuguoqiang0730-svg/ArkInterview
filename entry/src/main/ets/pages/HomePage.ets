@@ -10,11 +10,11 @@ const store = new PracticeStore();
 @Component
 struct HomePage {
   @State private categories: Category[] = [];
-  @State private stats?: UserStats = undefined;
+  @State private stats: UserStats | undefined = undefined;
   @State private loading: boolean = true;
 
-  async aboutToAppear() {
-    await this.loadHome();
+  aboutToAppear(): void {
+    this.loadHome();
   }
 
   async loadHome() {

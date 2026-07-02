@@ -1,0 +1,7 @@
+{
+  "src": [
+    "pages/HomePage",
+    "pages/PracticePage",
+    "pages/QuestionPage"
+  ]
+}

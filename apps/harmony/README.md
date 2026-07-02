@@ -1,8 +1,21 @@
-# HarmonyOS App 目录
+# HarmonyOS App 说明
 
-这里预留 ArkTS + ArkUI + Stage 原生应用工程，并已提供一套可迁入 DevEco 工程的 MVP 源码骨架。
+HarmonyOS 工程已经放在仓库根目录，DevEco Studio 应直接打开：
 
-建议在 DevEco Studio 中创建 HarmonyOS 工程后，把工程放在本目录，关键配置使用：
+```text
+E:\Codex-AI-Coding\ArkInterview
+```
+
+根目录已包含 DevEco/Hvigor 识别所需文件：
+
+- `build-profile.json5`
+- `hvigorfile.ts`
+- `oh-package.json5`
+- `AppScope/app.json5`
+- `entry/build-profile.json5`
+- `entry/src/main/module.json5`
+
+工程配置：
 
 - App name: `Ark 面试通`
 - Bundle name: `com.lgq.arkinterview`
@@ -21,28 +34,16 @@
 
 客户端只保存匿名设备 ID、本地缓存、收藏、错题和练习记录。服务端 API Key、AI 评分和题库维护逻辑必须放在服务端。
 
-## 已提供源码骨架
+## App 源码位置
 
-- `src/main/ets/app/AppConfig.ets`：应用名、API 地址和匿名设备 ID 默认值。
-- `src/main/ets/models/QuestionModels.ets`：分类、题目、练习会话、答题反馈和统计模型。
-- `src/main/ets/services/ApiClient.ets`：后端 REST API 客户端。
-- `src/main/ets/viewmodels/PracticeStore.ets`：首页、练习、答题、收藏和错题状态入口。
-- `src/main/ets/pages/HomePage.ets`：首页分类和练习入口。
-- `src/main/ets/pages/PracticePage.ets`：练习题列表。
-- `src/main/ets/pages/QuestionPage.ets`：答题、反馈、解析和收藏。
+- `entry/src/main/ets/app/AppConfig.ets`：应用名、API 地址和匿名设备 ID 默认值。
+- `entry/src/main/ets/models/QuestionModels.ets`：分类、题目、练习会话、答题反馈和统计模型。
+- `entry/src/main/ets/services/ApiClient.ets`：后端 REST API 客户端。
+- `entry/src/main/ets/viewmodels/PracticeStore.ets`：首页、练习、答题、收藏和错题状态入口。
+- `entry/src/main/ets/pages/HomePage.ets`：首页分类和练习入口。
+- `entry/src/main/ets/pages/PracticePage.ets`：练习题列表。
+- `entry/src/main/ets/pages/QuestionPage.ets`：答题、反馈、解析和收藏。
 
-## 接入 DevEco 工程
+## 真机调试
 
-在 DevEco Studio 创建 Stage 模型工程后，把 `src/main/ets/` 下的源码迁入 `entry/src/main/ets/`，并在页面配置中加入：
-
-```json
-{
-  "src": [
-    "pages/HomePage",
-    "pages/PracticePage",
-    "pages/QuestionPage"
-  ]
-}
-```
-
-真机调试时，`AppConfig.ets` 里的 `API_BASE_URL` 不能使用 `127.0.0.1`，需要改成电脑局域网 IP 或部署后的 HTTPS 域名。
+真机调试时，`entry/src/main/ets/app/AppConfig.ets` 里的 `API_BASE_URL` 不能使用 `127.0.0.1`，需要改成电脑局域网 IP 或部署后的 HTTPS 域名。

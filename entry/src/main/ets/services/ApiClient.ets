@@ -132,9 +132,6 @@ export class ApiClient {
     if (method === 'POST') {
       return http.RequestMethod.POST;
     }
-    if (method === 'PATCH') {
-      return http.RequestMethod.PATCH;
-    }
     if (method === 'DELETE') {
       return http.RequestMethod.DELETE;
     }
@@ -148,4 +145,4 @@ export interface PracticeSessionOptions {
   count?: number;
 }
 
-type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'DELETE';

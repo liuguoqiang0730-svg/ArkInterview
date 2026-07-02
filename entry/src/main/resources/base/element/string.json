@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "Ark 面试通"
+    },
+    {
+      "name": "module_desc",
+      "value": "Ark 面试通主模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Ark 面试通"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Ark 面试通"
+    }
+  ]
+}

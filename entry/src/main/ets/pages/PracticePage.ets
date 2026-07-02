@@ -9,11 +9,11 @@ const store = new PracticeStore();
 @Component
 struct PracticePage {
   @State private title: string = '练习';
-  @State private session?: PracticeSession = undefined;
+  @State private session: PracticeSession | undefined = undefined;
   @State private loading: boolean = true;
 
-  async aboutToAppear() {
-    await this.loadSession();
+  aboutToAppear(): void {
+    this.loadSession();
   }
 
   async loadSession() {
