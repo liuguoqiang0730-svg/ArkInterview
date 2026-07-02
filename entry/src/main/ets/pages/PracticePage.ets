@@ -24,6 +24,7 @@ const TABLET_MIN_VP: number = 680;
 struct PracticePage {
   @State private title: string = '练习';
   @State private session: PracticeSession | undefined = undefined;
+  @State private selectedQuestion: Question | undefined = undefined;
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
 
@@ -47,6 +48,11 @@ struct PracticePage {
           categoryId,
           count: 20
         });
+      }
+      if ((this.session?.items.length ?? 0) > 0) {
+        this.selectedQuestion = this.session?.items[0];
+      } else {
+        this.selectedQuestion = undefined;
       }
     } catch (error) {
       promptAction.showToast({ message: `加载失败：${String(error)}` });
@@ -132,87 +138,196 @@ struct PracticePage {
         .constraintSize({ maxWidth: this.pageMaxWidth() })
         .alignSelf(ItemAlign.Center)
       } else {
-        List() {
-          ForEach(this.session?.items ?? [], (question: Question) => {
-            ListItem() {
-              Row() {
-                Column() {
-                  Text(`${question.order ?? 0}`)
-                    .fontSize(14)
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(this.typeColor(question.type))
-                  Text(this.typeLabel(question.type))
-                    .fontSize(10)
-                    .fontColor(COLOR_MUTED)
-                    .margin({ top: 4 })
-                }
-                .width(54)
-                .height(54)
-                .justifyContent(FlexAlign.Center)
-                .backgroundColor(this.typeSoftColor(question.type))
-                .borderRadius(8)
-                .margin({ right: 12 })
-
-                Column() {
-                 Row() {
-                    Text(question.difficulty === 'hard' ? '困难' : question.difficulty === 'medium' ? '中等' : '基础')
-                      .fontSize(12)
-                      .fontColor(this.typeColor(question.type))
-                      .backgroundColor(this.typeSoftColor(question.type))
-                      .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-                      .borderRadius(8)
-                    if (question.isFavorite) {
-                      Text('已收藏')
-                        .fontSize(12)
-                        .fontColor(COLOR_ORANGE)
-                        .backgroundColor(COLOR_SOFT_ORANGE)
-                        .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-                        .borderRadius(8)
-                        .margin({ left: 6 })
-                    }
-                  }
-                  .width('100%')
-
-                  Text(question.title)
-                    .fontSize(16)
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(COLOR_TEXT)
-                    .lineHeight(22)
-                    .margin({ top: 9 })
-                    .width('100%')
-
-                  Text((question.knowledgePoints || []).join(' / '))
-                    .fontSize(12)
-                    .fontColor(COLOR_MUTED)
-                    .lineHeight(18)
-                    .margin({ top: 8 })
-                    .width('100%')
-                }
-                .layoutWeight(1)
-              }
-              .width('100%')
-              .padding(14)
-              .backgroundColor(COLOR_SURFACE)
-              .borderRadius(8)
-              .border({ width: 1, color: COLOR_LINE })
-              .onClick(() => router.pushUrl({
-                url: 'pages/QuestionPage',
-                params: { questionId: question.id }
-              }))
-            }
-            .padding({ left: 16, right: 16, bottom: 10 })
-          }, (question: Question) => question.id)
+        if (this.isTablet) {
+          this.TabletPracticeWorkspace()
+        } else {
+          this.QuestionList()
         }
-        .width('100%')
-        .layoutWeight(1)
-        .padding({ top: 14 })
-        .constraintSize({ maxWidth: this.pageMaxWidth() })
-        .alignSelf(ItemAlign.Center)
       }
     }
     .width('100%')
     .height('100%')
     .backgroundColor(COLOR_BG)
+  }
+
+  @Builder
+  TabletPracticeWorkspace() {
+    Row() {
+      Column() {
+        Row() {
+          Text('题目列表')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+            .layoutWeight(1)
+          Text(`${this.session?.items.length ?? 0} 题`)
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+        }
+        .width('100%')
+        .margin({ bottom: 10 })
+
+        this.QuestionList()
+      }
+      .layoutWeight(5)
+      .height('100%')
+      .padding(16)
+      .backgroundColor('#f8fafc')
+      .borderRadius(8)
+      .border({ width: 1, color: COLOR_LINE })
+      .margin({ right: 16 })
+
+      this.QuestionPreview()
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .padding({ left: 16, right: 16, top: 16, bottom: 18 })
+    .constraintSize({ maxWidth: this.pageMaxWidth() })
+    .alignSelf(ItemAlign.Center)
+    .alignItems(VerticalAlign.Top)
+  }
+
+  @Builder
+  QuestionList() {
+    List() {
+      ForEach(this.session?.items ?? [], (question: Question) => {
+        ListItem() {
+          this.QuestionListItem(question)
+        }
+        .padding({ left: this.isTablet ? 0 : 16, right: this.isTablet ? 0 : 16, bottom: 10 })
+      }, (question: Question) => question.id)
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .padding({ top: this.isTablet ? 0 : 14 })
+    .constraintSize({ maxWidth: this.isTablet ? 9999 : this.pageMaxWidth() })
+    .alignSelf(ItemAlign.Center)
+  }
+
+  @Builder
+  QuestionListItem(question: Question) {
+    Row() {
+      Column() {
+        Text(`${question.order ?? 0}`)
+          .fontSize(14)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.typeColor(question.type))
+        Text(this.typeLabel(question.type))
+          .fontSize(10)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 4 })
+      }
+      .width(54)
+      .height(54)
+      .justifyContent(FlexAlign.Center)
+      .backgroundColor(this.typeSoftColor(question.type))
+      .borderRadius(8)
+      .margin({ right: 12 })
+
+      Column() {
+        Row() {
+          Text(this.difficultyLabel(question.difficulty))
+            .fontSize(12)
+            .fontColor(this.typeColor(question.type))
+            .backgroundColor(this.typeSoftColor(question.type))
+            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .borderRadius(8)
+          if (question.isFavorite) {
+            Text('已收藏')
+              .fontSize(12)
+              .fontColor(COLOR_ORANGE)
+              .backgroundColor(COLOR_SOFT_ORANGE)
+              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .borderRadius(8)
+              .margin({ left: 6 })
+          }
+        }
+        .width('100%')
+
+        Text(question.title)
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+          .lineHeight(22)
+          .margin({ top: 9 })
+          .width('100%')
+
+        Text((question.knowledgePoints || []).join(' / '))
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(18)
+          .margin({ top: 8 })
+          .width('100%')
+      }
+      .layoutWeight(1)
+    }
+    .width('100%')
+    .padding(14)
+    .backgroundColor(this.isSelectedQuestion(question) ? '#f1faf6' : COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: this.isSelectedQuestion(question) ? COLOR_GREEN : COLOR_LINE })
+    .onClick(() => this.handleQuestionTap(question))
+  }
+
+  @Builder
+  QuestionPreview() {
+    Column() {
+      if (this.selectedQuestion) {
+        Row() {
+          Text(this.typeLabel(this.selectedQuestion.type))
+            .fontSize(12)
+            .fontColor(this.typeColor(this.selectedQuestion.type))
+            .backgroundColor(this.typeSoftColor(this.selectedQuestion.type))
+            .padding({ left: 9, right: 9, top: 5, bottom: 5 })
+            .borderRadius(8)
+          Text(this.difficultyLabel(this.selectedQuestion.difficulty))
+            .fontSize(12)
+            .fontColor(COLOR_ORANGE)
+            .backgroundColor(COLOR_SOFT_ORANGE)
+            .padding({ left: 9, right: 9, top: 5, bottom: 5 })
+            .borderRadius(8)
+            .margin({ left: 8 })
+        }
+        .width('100%')
+
+        Text(this.selectedQuestion.title)
+          .fontSize(22)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+          .lineHeight(30)
+          .margin({ top: 18 })
+          .width('100%')
+
+        Text((this.selectedQuestion.knowledgePoints || []).join(' / '))
+          .fontSize(13)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(20)
+          .margin({ top: 12 })
+          .width('100%')
+
+        Button('开始答题')
+          .width('100%')
+          .height(46)
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#ffffff')
+          .backgroundColor(COLOR_GREEN)
+          .borderRadius(8)
+          .margin({ top: 24 })
+          .onClick(() => this.openSelectedQuestion())
+      } else {
+        Text('请选择一道题目')
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+      }
+    }
+    .layoutWeight(4)
+    .height('100%')
+    .padding(18)
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
   }
 
   @Builder
@@ -247,6 +362,16 @@ struct PracticePage {
       return '基础模拟面试';
     }
     return '随机练习';
+  }
+
+  difficultyLabel(difficulty: string): string {
+    if (difficulty === 'hard') {
+      return '困难';
+    }
+    if (difficulty === 'medium') {
+      return '中等';
+    }
+    return '基础';
   }
 
   typeLabel(type: string): string {
@@ -289,7 +414,33 @@ struct PracticePage {
   }
 
   pageMaxWidth(): number {
-    return this.isTablet ? 920 : 520;
+    return this.isTablet ? 1120 : 520;
+  }
+
+  isSelectedQuestion(question: Question): boolean {
+    return this.isTablet && this.selectedQuestion?.id === question.id;
+  }
+
+  handleQuestionTap(question: Question): void {
+    if (this.isTablet) {
+      this.selectedQuestion = question;
+      return;
+    }
+    this.openQuestion(question);
+  }
+
+  openSelectedQuestion(): void {
+    if (!this.selectedQuestion) {
+      return;
+    }
+    this.openQuestion(this.selectedQuestion);
+  }
+
+  openQuestion(question: Question): void {
+    router.pushUrl({
+      url: 'pages/QuestionPage',
+      params: { questionId: question.id }
+    });
   }
 
   updateLayoutMode(): void {
