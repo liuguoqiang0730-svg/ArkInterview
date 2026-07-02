@@ -1,1 +1,164 @@
-[]
+[
+  {
+    "id": "component-communication-001",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "父组件把普通展示数据传给子组件，子组件只负责展示不反向修改，最适合优先使用哪类状态装饰器？",
+    "options": [
+      {
+        "id": "a",
+        "text": "@Prop"
+      },
+      {
+        "id": "b",
+        "text": "@Link"
+      },
+      {
+        "id": "c",
+        "text": "@Provide"
+      },
+      {
+        "id": "d",
+        "text": "@Consume"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@Prop 用于父组件向子组件传递数据，适合子组件基于父组件数据进行展示的场景。需要子组件反向同步修改父组件状态时，再考虑 @Link。",
+    "knowledgePoints": [
+      "组件通信",
+      "@Prop",
+      "父子组件传值"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "component-communication-002",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "父子组件之间需要双向同步一个可编辑状态，例如开关选中状态，优先应该使用哪种装饰器？",
+    "options": [
+      {
+        "id": "a",
+        "text": "@Link"
+      },
+      {
+        "id": "b",
+        "text": "@State"
+      },
+      {
+        "id": "c",
+        "text": "@Consume"
+      },
+      {
+        "id": "d",
+        "text": "@StorageLink"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@Link 用于父子组件之间建立双向数据同步关系。子组件修改 @Link 变量时，父组件中被链接的状态也会同步变化，适合编辑类子组件。",
+    "knowledgePoints": [
+      "组件通信",
+      "@Link",
+      "双向同步"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "component-communication-003",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 @Provide 和 @Consume 的使用场景，哪些说法是合理的？",
+    "options": [
+      {
+        "id": "a",
+        "text": "适合跨层级组件共享同一份状态"
+      },
+      {
+        "id": "b",
+        "text": "可以减少多层 props 逐级透传"
+      },
+      {
+        "id": "c",
+        "text": "只能在相邻父子组件之间使用"
+      },
+      {
+        "id": "d",
+        "text": "它们用于发起 HTTP 请求"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "explanation": "@Provide/@Consume 用于跨组件层级提供和消费状态，适合主题、登录状态、全局筛选条件这类不希望逐层透传的数据。相邻父子组件的简单传值通常用 @Prop 或 @Link 更直接。",
+    "knowledgePoints": [
+      "组件通信",
+      "@Provide",
+      "@Consume",
+      "跨层级通信"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "component-communication-004",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "@Prop 更适合父到子的单向数据传递；如果子组件需要把编辑结果同步回父组件，应优先考虑 @Link。",
+    "answerBoolean": true,
+    "explanation": "这是父子组件通信中很常见的区分：展示型子组件用 @Prop，编辑型子组件需要与父组件状态保持同步时用 @Link，避免把单向传值误用成双向状态。",
+    "knowledgePoints": [
+      "组件通信",
+      "@Prop",
+      "@Link"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

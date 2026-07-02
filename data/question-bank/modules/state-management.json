@@ -1,1 +1,170 @@
-[]
+[
+  {
+    "id": "state-management-001",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "组件内部维护会影响 UI 刷新的本地状态，最常用的装饰器是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "@State"
+      },
+      {
+        "id": "b",
+        "text": "@Prop"
+      },
+      {
+        "id": "c",
+        "text": "@Consume"
+      },
+      {
+        "id": "d",
+        "text": "@Builder"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@State 用于组件内部拥有的状态。状态变化会驱动依赖该状态的 UI 更新，适合当前组件自己维护的计数、开关、加载状态等。",
+    "knowledgePoints": [
+      "状态管理",
+      "@State",
+      "UI 刷新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "state-management-002",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用内多个页面或组件都需要访问同一份 UI 状态时，哪类能力更贴近全局 UI 状态管理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "AppStorage"
+      },
+      {
+        "id": "b",
+        "text": "局部普通变量"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "d",
+        "text": "HTTP responseCode"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "AppStorage 面向应用级 UI 状态共享，适合多个组件或页面都要访问的状态。单个组件内部状态仍应优先放在组件自己的 @State 中，避免无必要地扩大状态作用域。",
+    "knowledgePoints": [
+      "状态管理",
+      "AppStorage",
+      "应用级状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "state-management-003",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于状态作用域设计，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "只在单个组件使用的状态放在组件内部"
+      },
+      {
+        "id": "b",
+        "text": "跨层级共享的状态再考虑 @Provide/@Consume 或应用级状态"
+      },
+      {
+        "id": "c",
+        "text": "所有状态都放进全局对象，方便任意地方修改"
+      },
+      {
+        "id": "d",
+        "text": "状态变量不需要考虑所有权，能刷新 UI 就行"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "explanation": "状态管理的核心是明确所有权和作用域。局部状态留在组件内，跨组件共享状态再提升作用域，可以减少不可控更新和调试成本。",
+    "knowledgePoints": [
+      "状态管理",
+      "状态所有权",
+      "作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "state-management-004",
+    "categoryId": "state-management",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 @State、@Prop、@Link 在父子组件状态传递中的典型区别。",
+    "referenceAnswer": "@State 通常表示组件自己拥有并驱动 UI 刷新的本地状态；@Prop 用于父组件向子组件传入数据，适合子组件展示；@Link 用于父子组件之间双向同步状态，适合子组件编辑并需要同步回父组件的场景。",
+    "scoringPoints": [
+      "能说明 @State 是组件内部状态",
+      "能说明 @Prop 偏父到子传递",
+      "能说明 @Link 偏父子双向同步",
+      "能结合展示型和编辑型子组件举例"
+    ],
+    "explanation": "这道题考察状态所有权。面试中不只看能否背出装饰器名字，还要看能否根据数据是否需要回写父组件来选择合适通信方式。",
+    "knowledgePoints": [
+      "状态管理",
+      "@State",
+      "@Prop",
+      "@Link"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

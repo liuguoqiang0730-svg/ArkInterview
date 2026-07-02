@@ -1,1 +1,163 @@
-[]
+[
+  {
+    "id": "network-001",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "使用 @ohos.net.http 发起请求前，通常需要先创建哪个对象？",
+    "options": [
+      {
+        "id": "a",
+        "text": "HttpRequest"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore"
+      },
+      {
+        "id": "c",
+        "text": "Preferences"
+      },
+      {
+        "id": "d",
+        "text": "WindowStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方 API 中 createHttp() 返回 HttpRequest，调用 HttpRequest 的 request 方法发起 HTTP 请求。RdbStore、Preferences、WindowStage 分别属于数据库、键值存储和窗口阶段。",
+    "knowledgePoints": [
+      "网络请求",
+      "HttpRequest",
+      "createHttp"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "network-002",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 HttpRequestOptions，哪些配置和请求稳定性直接相关？",
+    "options": [
+      {
+        "id": "a",
+        "text": "connectTimeout"
+      },
+      {
+        "id": "b",
+        "text": "readTimeout"
+      },
+      {
+        "id": "c",
+        "text": "WindowStage"
+      },
+      {
+        "id": "d",
+        "text": "AbilityStageContext"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "explanation": "HTTP 请求选项中 connectTimeout 和 readTimeout 分别用于控制连接和读取超时。移动端网络不稳定时，明确超时配置比无限等待更利于错误处理和用户反馈。",
+    "knowledgePoints": [
+      "网络请求",
+      "超时",
+      "HttpRequestOptions"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "network-003",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "HTTP 请求完成后判断接口是否成功，通常首先应检查响应对象中的哪个字段？",
+    "options": [
+      {
+        "id": "a",
+        "text": "responseCode"
+      },
+      {
+        "id": "b",
+        "text": "categoryId"
+      },
+      {
+        "id": "c",
+        "text": "windowStage"
+      },
+      {
+        "id": "d",
+        "text": "verifiedAt"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "HttpResponse 中包含 responseCode。业务层通常先判断 HTTP 状态码是否在成功范围内，再解析响应体并处理业务错误。",
+    "knowledgePoints": [
+      "网络请求",
+      "HttpResponse",
+      "responseCode"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "network-004",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "每次创建 HttpRequest 发起请求后，都可以在 finally 中调用 destroy() 释放请求对象资源。",
+    "answerBoolean": true,
+    "explanation": "HttpRequest 提供 destroy() 方法。把 destroy 放在 finally 中，可以保证成功、失败或解析异常时都释放请求对象，避免请求资源长期占用。",
+    "knowledgePoints": [
+      "网络请求",
+      "HttpRequest",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

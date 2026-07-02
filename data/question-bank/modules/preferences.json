@@ -1,1 +1,209 @@
-[]
+[
+  {
+    "id": "preferences-001",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 HarmonyOS 中获取指定 Preferences 文件对应实例，常用哪个 API？",
+    "options": [
+      {
+        "id": "a",
+        "text": "preferences.getPreferences"
+      },
+      {
+        "id": "b",
+        "text": "relationalStore.getRdbStore"
+      },
+      {
+        "id": "c",
+        "text": "http.createHttp"
+      },
+      {
+        "id": "d",
+        "text": "router.pushUrl"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "preferences.getPreferences 用于获取指定 Preferences 文件名或选项对应的 Preferences 实例。relationalStore.getRdbStore 是关系型数据库能力，不能替代轻量键值存储。",
+    "knowledgePoints": [
+      "Preferences",
+      "getPreferences",
+      "轻量键值存储"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "preferences-002",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "Preferences 实例上常见的键值操作包括哪些？",
+    "options": [
+      {
+        "id": "a",
+        "text": "get"
+      },
+      {
+        "id": "b",
+        "text": "put"
+      },
+      {
+        "id": "c",
+        "text": "delete"
+      },
+      {
+        "id": "d",
+        "text": "onWindowStageCreate"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Preferences 提供 get、put、delete 等键值读写删除能力。onWindowStageCreate 是 UIAbility 窗口阶段回调，不属于 Preferences API。",
+    "knowledgePoints": [
+      "Preferences",
+      "键值读写",
+      "本地存储"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "preferences-003",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Preferences 实例加载后会驻留在内存中，必要时可以通过 removePreferencesFromCache 从内存缓存中移除。",
+    "answerBoolean": true,
+    "explanation": "官方 API 说明中，getPreferences 获取的实例会加载文件数据并驻留内存；removePreferencesFromCache 用于把实例从内存中移除。这里移除的是缓存实例，不等同于删除 Preferences 文件。",
+    "knowledgePoints": [
+      "Preferences",
+      "内存缓存",
+      "removePreferencesFromCache"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "preferences-004",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "将 Preferences 中的修改写入持久化存储，应该调用哪个方法？",
+    "options": [
+      {
+        "id": "a",
+        "text": "flush"
+      },
+      {
+        "id": "b",
+        "text": "back"
+      },
+      {
+        "id": "c",
+        "text": "responseCode"
+      },
+      {
+        "id": "d",
+        "text": "createAtManager"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "Preferences 实例提供 flush 方法用于写入数据。只调用 put 更新键值后，还应根据业务需要调用 flush，避免误以为内存中的变化已经完成持久化。",
+    "knowledgePoints": [
+      "Preferences",
+      "flush",
+      "持久化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  },
+  {
+    "id": "preferences-005",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "如果要删除整个 Preferences 文件，而不是只移除内存缓存，应该使用哪个 API？",
+    "options": [
+      {
+        "id": "a",
+        "text": "deletePreferences"
+      },
+      {
+        "id": "b",
+        "text": "removePreferencesFromCache"
+      },
+      {
+        "id": "c",
+        "text": "getPreferencesSync"
+      },
+      {
+        "id": "d",
+        "text": "checkAccessToken"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "deletePreferences 用于删除指定 Preferences 文件；removePreferencesFromCache 用于从内存缓存移除实例。两者作用不同，面试中经常考察是否能区分文件删除和缓存移除。",
+    "knowledgePoints": [
+      "Preferences",
+      "deletePreferences",
+      "缓存管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 5
+  }
+]

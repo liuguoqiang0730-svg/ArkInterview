@@ -1,1 +1,163 @@
-[]
+[
+  {
+    "id": "routing-001",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 ArkUI 页面中要跳转到一个新页面，并把新页面压入页面栈，常见 API 是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "router.pushUrl"
+      },
+      {
+        "id": "b",
+        "text": "router.getParams"
+      },
+      {
+        "id": "c",
+        "text": "router.back"
+      },
+      {
+        "id": "d",
+        "text": "http.createHttp"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "router.pushUrl 用于按指定路由信息跳转页面，并进入新的页面。getParams 用于读取参数，back 用于返回，http.createHttp 属于网络请求能力。",
+    "knowledgePoints": [
+      "路由导航",
+      "pushUrl",
+      "页面栈"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "routing-002",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "页面 B 由页面 A 跳转进入，页面 B 需要读取传入的 questionId，最对应哪个路由能力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "router.getParams"
+      },
+      {
+        "id": "b",
+        "text": "router.back"
+      },
+      {
+        "id": "c",
+        "text": "router.clear"
+      },
+      {
+        "id": "d",
+        "text": "preferences.flush"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "跳转时通过路由参数传入 questionId，目标页面读取参数应使用 getParams 类能力。back 负责返回，不负责读取当前页面参数。",
+    "knowledgePoints": [
+      "路由导航",
+      "参数传递",
+      "getParams"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "routing-003",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "router.back() 的职责是返回页面栈中的上一页或指定页面，不适合用来发起网络请求。",
+    "answerBoolean": true,
+    "explanation": "router.back 属于页面返回导航能力。网络请求应使用 @ohos.net.http 中的 HttpRequest 相关 API，不能把路由返回和数据请求职责混在一起。",
+    "knowledgePoints": [
+      "路由导航",
+      "back",
+      "职责边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "routing-004",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于页面路由参数设计，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "列表页跳详情页时传 questionId，由详情页再请求题目详情"
+      },
+      {
+        "id": "b",
+        "text": "路由参数只放必要的小数据，避免塞入完整大型对象"
+      },
+      {
+        "id": "c",
+        "text": "把完整题库 JSON 都放进路由参数，减少接口请求"
+      },
+      {
+        "id": "d",
+        "text": "路由参数不需要判空，目标页面一定能拿到"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "explanation": "路由参数适合传递页面定位所需的轻量信息，例如 questionId。详情页根据 ID 拉取详情，既能控制参数大小，也能处理参数缺失或数据过期。",
+    "knowledgePoints": [
+      "路由导航",
+      "参数传递",
+      "页面职责"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

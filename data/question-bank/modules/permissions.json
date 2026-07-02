@@ -1,1 +1,184 @@
-[]
+[
+  {
+    "id": "permissions-001",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "应用运行时检查或申请用户授权前，通常先通过哪个 API 获取 AtManager 实例？",
+    "options": [
+      {
+        "id": "a",
+        "text": "abilityAccessCtrl.createAtManager()"
+      },
+      {
+        "id": "b",
+        "text": "http.createHttp()"
+      },
+      {
+        "id": "c",
+        "text": "preferences.getPreferences()"
+      },
+      {
+        "id": "d",
+        "text": "relationalStore.getRdbStore()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "abilityAccessCtrl.createAtManager() 用于获取 AtManager 实例。权限检查和动态申请都应围绕权限管理能力处理，而不是使用网络或存储 API。",
+    "knowledgePoints": [
+      "权限申请",
+      "AtManager",
+      "createAtManager"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "permissions-002",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在执行需要敏感权限的能力前，想先检查当前 token 是否已有某权限，最对应 AtManager 的哪个方法？",
+    "options": [
+      {
+        "id": "a",
+        "text": "checkAccessToken"
+      },
+      {
+        "id": "b",
+        "text": "request"
+      },
+      {
+        "id": "c",
+        "text": "flush"
+      },
+      {
+        "id": "d",
+        "text": "pushUrl"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "AtManager 提供 checkAccessToken 和 checkAccessTokenSync 用于检查访问令牌权限状态。先检查再决定是否发起授权，可以减少不必要的弹窗和失败调用。",
+    "knowledgePoints": [
+      "权限申请",
+      "权限检查",
+      "checkAccessToken"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "permissions-003",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要向用户动态申请权限时，应使用 AtManager 的哪个方法？",
+    "options": [
+      {
+        "id": "a",
+        "text": "requestPermissionsFromUser"
+      },
+      {
+        "id": "b",
+        "text": "deletePreferences"
+      },
+      {
+        "id": "c",
+        "text": "executeSql"
+      },
+      {
+        "id": "d",
+        "text": "onWindowStageCreate"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "AtManager.requestPermissionsFromUser 用于向用户请求权限，并返回 PermissionRequestResult。权限申请应放在用户触发的明确场景中，避免冷启动时无上下文地弹窗。",
+    "knowledgePoints": [
+      "权限申请",
+      "动态授权",
+      "requestPermissionsFromUser"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "permissions-004",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 PermissionRequestResult 中 authResults 的含义，哪些说法正确？",
+    "options": [
+      {
+        "id": "a",
+        "text": "0 表示权限已授予"
+      },
+      {
+        "id": "b",
+        "text": "-1 表示未授予"
+      },
+      {
+        "id": "c",
+        "text": "2 表示请求无效"
+      },
+      {
+        "id": "d",
+        "text": "200 表示权限已授予"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "PermissionRequestResult.authResults 与请求的 permissions 数组对应。官方声明说明 0 表示授权，-1 表示未授权，2 表示请求无效，不能把 HTTP 状态码 200 当作权限结果。",
+    "knowledgePoints": [
+      "权限申请",
+      "PermissionRequestResult",
+      "authResults"
+    ],
+    "sourceRefs": [
+      {
+        "title": "PermissionRequestResult",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]
