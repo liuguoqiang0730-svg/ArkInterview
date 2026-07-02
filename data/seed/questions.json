@@ -1,0 +1,152 @@
+[
+  {
+    "id": "q-arkts-001",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 ArkTS 项目中，哪一种写法更符合强类型开发实践？",
+    "options": [
+      { "id": "a", "text": "把接口响应统一声明为 any，使用时再按字段访问" },
+      { "id": "b", "text": "为接口响应定义明确类型，并在边界处做必要校验" },
+      { "id": "c", "text": "尽量避免定义 interface，减少代码量" },
+      { "id": "d", "text": "所有变量都使用 string 类型再手动转换" }
+    ],
+    "correctOptionIds": ["b"],
+    "answerBoolean": null,
+    "referenceAnswer": "",
+    "scoringPoints": [],
+    "explanation": "ArkTS 更强调静态类型约束。接口边界可以做运行时校验，但业务内部应尽量使用明确类型，降低字段拼写、空值和类型转换错误。",
+    "knowledgePoints": ["ArkTS", "类型系统", "接口建模"],
+    "status": "published"
+  },
+  {
+    "id": "q-arkui-001",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 ArkUI 声明式 UI 的说法，哪些是合理的？",
+    "options": [
+      { "id": "a", "text": "UI 结构通常由 build 方法描述" },
+      { "id": "b", "text": "状态变化可以驱动相关 UI 刷新" },
+      { "id": "c", "text": "组件中可以完全忽略状态所有权" },
+      { "id": "d", "text": "复杂页面应注意组件拆分和状态边界" }
+    ],
+    "correctOptionIds": ["a", "b", "d"],
+    "answerBoolean": null,
+    "referenceAnswer": "",
+    "scoringPoints": [],
+    "explanation": "声明式 UI 通过状态描述界面，状态变化触发相关界面更新。复杂页面需要拆分组件，并明确状态归属，避免状态散落导致维护困难。",
+    "knowledgePoints": ["ArkUI", "声明式 UI", "状态驱动"],
+    "status": "published"
+  },
+  {
+    "id": "q-stage-001",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Stage 模型中，UIAbility 通常负责应用界面的生命周期和窗口创建等工作。",
+    "options": [],
+    "correctOptionIds": [],
+    "answerBoolean": true,
+    "referenceAnswer": "",
+    "scoringPoints": [],
+    "explanation": "UIAbility 是 Stage 模型中承载 UI 交互的重要组件，常见职责包括生命周期处理、窗口创建和页面加载。",
+    "knowledgePoints": ["Stage 模型", "UIAbility", "生命周期"],
+    "status": "published"
+  },
+  {
+    "id": "q-state-001",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "父组件需要把一个可变状态传给子组件并允许子组件回写，首要关注点是什么？",
+    "options": [
+      { "id": "a", "text": "直接在子组件里重新声明一个同名状态" },
+      { "id": "b", "text": "明确状态所有权和双向绑定边界" },
+      { "id": "c", "text": "把所有状态都放到全局变量" },
+      { "id": "d", "text": "避免把状态传给子组件" }
+    ],
+    "correctOptionIds": ["b"],
+    "answerBoolean": null,
+    "referenceAnswer": "",
+    "scoringPoints": [],
+    "explanation": "组件通信不是只看语法，更要明确状态归属、更新方向和组件职责。双向绑定适合明确的局部协作，不应滥用为全局状态共享。",
+    "knowledgePoints": ["状态管理", "组件通信", "双向绑定"],
+    "status": "published"
+  },
+  {
+    "id": "q-network-001",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "实现远程题库拉取时，客户端需要重点处理哪些情况？",
+    "options": [
+      { "id": "a", "text": "网络超时和失败重试" },
+      { "id": "b", "text": "接口返回结构变化或字段缺失" },
+      { "id": "c", "text": "分页加载和本地缓存" },
+      { "id": "d", "text": "把服务端 API Key 写入 App 包内" }
+    ],
+    "correctOptionIds": ["a", "b", "c"],
+    "answerBoolean": null,
+    "referenceAnswer": "",
+    "scoringPoints": [],
+    "explanation": "题库 App 对网络稳定性和数据一致性敏感，需要处理超时、错误、分页、缓存和数据校验。服务端密钥不能放到客户端。",
+    "knowledgePoints": ["网络请求", "缓存", "安全边界"],
+    "status": "published"
+  },
+  {
+    "id": "q-preferences-001",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Preferences 更适合保存体量较小、结构简单的键值数据，例如用户设置或最近练习分类。",
+    "options": [],
+    "correctOptionIds": [],
+    "answerBoolean": true,
+    "referenceAnswer": "",
+    "scoringPoints": [],
+    "explanation": "Preferences 的典型场景是轻量键值存储。复杂列表、题目缓存或大量练习记录更适合使用结构化存储方案。",
+    "knowledgePoints": ["Preferences", "本地存储"],
+    "status": "published"
+  },
+  {
+    "id": "q-arkui-002",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "请说明在 ArkUI 页面中拆分组件时，应该如何判断一个状态应放在父组件还是子组件。",
+    "options": [],
+    "correctOptionIds": [],
+    "answerBoolean": null,
+    "referenceAnswer": "判断状态归属时应先看谁拥有该状态、谁负责修改、谁需要消费。如果状态只影响子组件内部展示和交互，通常放在子组件内部；如果多个子组件共享，或父组件需要根据该状态组织流程，就应上提到共同父组件或更明确的状态管理层。还要避免无边界地把所有状态全局化。",
+    "scoringPoints": [
+      "能说明状态所有权",
+      "能区分局部状态和共享状态",
+      "能提到更新方向和组件职责",
+      "能说明避免滥用全局状态"
+    ],
+    "explanation": "组件拆分的核心是职责和状态边界。状态放错位置会导致重复数据、刷新异常或组件之间耦合过重。",
+    "knowledgePoints": ["ArkUI", "组件拆分", "状态管理"],
+    "status": "published"
+  },
+  {
+    "id": "q-next-001",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "Android 开发者转 HarmonyOS NEXT 时，做网络、存储和原生能力迁移应重点关注哪些边界？",
+    "options": [],
+    "correctOptionIds": [],
+    "answerBoolean": null,
+    "referenceAnswer": "需要关注平台 API 差异、权限模型、生命周期模型、后台任务限制、数据存储能力、网络错误处理、原生扩展方式和三方库可用性。迁移时不应把 Android 架构和 SDK 调用逐行搬过来，而应按 HarmonyOS 的 Stage 模型、ArkTS 类型约束和平台能力重新划分边界。",
+    "scoringPoints": [
+      "能识别平台 API 和权限差异",
+      "能说明生命周期和后台限制",
+      "能提到本地存储与网络错误处理",
+      "能说明不要机械照搬 Android 实现"
+    ],
+    "explanation": "HarmonyOS NEXT 适配不是语法替换，重点是平台模型、能力边界、生命周期和工程依赖的重新评估。",
+    "knowledgePoints": ["HarmonyOS NEXT", "迁移", "平台能力"],
+    "status": "published"
+  }
+]

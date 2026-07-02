@@ -1,0 +1,98 @@
+[
+  {
+    "id": "arkts",
+    "name": "ArkTS",
+    "order": 1,
+    "description": "ArkTS 语言基础、类型系统、装饰器与工程实践"
+  },
+  {
+    "id": "arkui",
+    "name": "ArkUI",
+    "order": 2,
+    "description": "声明式 UI、组件、布局、事件与渲染"
+  },
+  {
+    "id": "stage-model",
+    "name": "Stage 模型",
+    "order": 3,
+    "description": "Stage 模型应用结构、AbilityStage 与 UIAbility"
+  },
+  {
+    "id": "ability-lifecycle",
+    "name": "Ability 生命周期",
+    "order": 4,
+    "description": "UIAbility 生命周期、窗口阶段与前后台切换"
+  },
+  {
+    "id": "component-communication",
+    "name": "组件通信",
+    "order": 5,
+    "description": "父子组件、跨层级通信和状态传递"
+  },
+  {
+    "id": "state-management",
+    "name": "状态管理",
+    "order": 6,
+    "description": "状态装饰器、观察更新和状态所有权"
+  },
+  {
+    "id": "routing",
+    "name": "路由导航",
+    "order": 7,
+    "description": "页面路由、参数传递和返回栈"
+  },
+  {
+    "id": "network",
+    "name": "网络请求",
+    "order": 8,
+    "description": "HTTP 请求、错误处理、超时与数据解析"
+  },
+  {
+    "id": "permissions",
+    "name": "权限申请",
+    "order": 9,
+    "description": "权限声明、动态申请和用户授权处理"
+  },
+  {
+    "id": "storage",
+    "name": "数据存储",
+    "order": 10,
+    "description": "本地数据缓存、持久化和数据边界"
+  },
+  {
+    "id": "preferences",
+    "name": "Preferences",
+    "order": 11,
+    "description": "轻量键值数据存储"
+  },
+  {
+    "id": "relational-store",
+    "name": "relationalStore",
+    "order": 12,
+    "description": "关系型本地数据库建模与查询"
+  },
+  {
+    "id": "napi",
+    "name": "NAPI",
+    "order": 13,
+    "description": "Native 扩展、JS 绑定和跨语言调用"
+  },
+  {
+    "id": "performance",
+    "name": "性能优化",
+    "order": 14,
+    "description": "启动、渲染、内存、网络和列表性能优化"
+  },
+  {
+    "id": "debug-release",
+    "name": "调试与发布",
+    "order": 15,
+    "description": "日志、断点、签名、构建和上架前检查"
+  },
+  {
+    "id": "next-adaptation",
+    "name": "HarmonyOS NEXT 适配",
+    "order": 16,
+    "description": "NEXT 约束、兼容性调整和平台能力适配"
+  }
+]

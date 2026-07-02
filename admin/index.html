@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ark 面试通后台</title>
+    <link rel="stylesheet" href="/admin/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">ArkInterview Admin</p>
+        <h1>题库管理</h1>
+      </div>
+      <button id="refreshButton" class="icon-button" title="刷新题库" aria-label="刷新题库">↻</button>
+    </header>
+
+    <main class="layout">
+      <section class="panel stats-panel" aria-label="概览">
+        <div>
+          <span class="metric-label">分类</span>
+          <strong id="categoryCount">0</strong>
+        </div>
+        <div>
+          <span class="metric-label">题目</span>
+          <strong id="questionCount">0</strong>
+        </div>
+        <div>
+          <span class="metric-label">已发布</span>
+          <strong id="publishedCount">0</strong>
+        </div>
+        <div>
+          <span class="metric-label">草稿</span>
+          <strong id="draftCount">0</strong>
+        </div>
+      </section>
+
+      <section class="panel form-panel" aria-label="新增题目">
+        <div class="panel-heading">
+          <h2>新增题目</h2>
+          <span id="formMessage" class="form-message" role="status"></span>
+        </div>
+        <form id="questionForm" class="question-form">
+          <label>
+            分类
+            <select id="categoryInput" name="categoryId" required></select>
+          </label>
+          <label>
+            题型
+            <select id="questionTypeInput" name="type" required>
+              <option value="single">单选题</option>
+              <option value="multiple">多选题</option>
+              <option value="boolean">判断题</option>
+              <option value="short">简答题</option>
+            </select>
+          </label>
+          <label>
+            难度
+            <select name="difficulty">
+              <option value="easy">简单</option>
+              <option value="medium" selected>中等</option>
+              <option value="hard">困难</option>
+            </select>
+          </label>
+          <label>
+            状态
+            <select name="status">
+              <option value="draft">草稿</option>
+              <option value="published">发布</option>
+              <option value="offline">下架</option>
+            </select>
+          </label>
+
+          <label class="full-row">
+            题干
+            <textarea name="title" rows="2" required placeholder="输入面试题题干"></textarea>
+          </label>
+
+          <label class="choice-field full-row">
+            选项
+            <textarea name="optionsText" rows="4" placeholder="每行一个选项，例如：&#10;A. 使用明确类型&#10;B. 全部写 any"></textarea>
+          </label>
+
+          <label class="choice-field">
+            正确选项
+            <input name="correctOptionIds" placeholder="例如：a 或 a,b">
+          </label>
+
+          <label class="boolean-field">
+            判断答案
+            <select name="answerBoolean">
+              <option value="true">正确</option>
+              <option value="false">错误</option>
+            </select>
+          </label>
+
+          <label class="short-field full-row">
+            参考答案
+            <textarea name="referenceAnswer" rows="3" placeholder="简答题参考答案"></textarea>
+          </label>
+
+          <label class="short-field full-row">
+            评分点
+            <textarea name="scoringPointsText" rows="3" placeholder="每行一个评分点"></textarea>
+          </label>
+
+          <label class="full-row">
+            解析
+            <textarea name="explanation" rows="3" placeholder="答题后展示的解析"></textarea>
+          </label>
+
+          <label class="full-row">
+            知识点
+            <input name="knowledgePointsText" placeholder="用逗号分隔，例如：ArkTS, 类型系统">
+          </label>
+
+          <div class="form-actions full-row">
+            <button type="submit" class="primary-button">保存题目</button>
+            <button type="reset" class="secondary-button">清空</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="content-grid">
+        <aside class="panel category-panel">
+          <div class="panel-heading">
+            <h2>分类</h2>
+          </div>
+          <div id="categoryList" class="category-list"></div>
+        </aside>
+
+        <section class="panel question-panel">
+          <div class="panel-heading">
+            <h2>题目</h2>
+            <select id="typeFilter" aria-label="题型筛选">
+              <option value="">全部题型</option>
+              <option value="single">单选题</option>
+              <option value="multiple">多选题</option>
+              <option value="boolean">判断题</option>
+              <option value="short">简答题</option>
+            </select>
+          </div>
+          <div id="questionList" class="question-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/admin/app.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+# Node / backend
+node_modules/
+npm-debug.log*
+backend/storage/*.json
+!backend/storage/.gitkeep
+
+# HarmonyOS / DevEco
+.hvigor/
+oh_modules/
+build/
+dist/
+*.hap
+*.hsp
+*.app
+*.p7b
+*.cer
+*.p12
+local.properties
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
