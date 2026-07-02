@@ -430,7 +430,7 @@ struct PracticePage {
     if (this.mode === 'wrongs' || this.mode === 'favorites') {
       return this.mode;
     }
-    return '';
+    return 'home';
   }
 
   isSelectedQuestion(question: Question): boolean {
@@ -458,7 +458,8 @@ struct PracticePage {
       params: {
         questionId: question.id,
         questionIds: this.sessionQuestionIds(),
-        questionIndex: String(this.questionIndex(question))
+        questionIndex: String(this.questionIndex(question)),
+        navActive: this.navActive()
       }
     });
   }

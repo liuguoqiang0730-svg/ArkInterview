@@ -53,6 +53,7 @@ struct QuestionPage {
   @State private isTablet: boolean = false;
   @State private masteringWrong: boolean = false;
   @State private autoMoveToken: number = 0;
+  @State private navActive: string = 'home';
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -63,6 +64,7 @@ struct QuestionPage {
       router.back();
       return;
     }
+    this.navActive = params.navActive || 'home';
     const ids = this.parseQuestionIds(params.questionIds, questionId);
     this.questionIds = ids;
     this.answerProgress = this.createProgress(ids);
@@ -152,7 +154,7 @@ struct QuestionPage {
       .layoutWeight(1)
       .width('100%')
 
-      BottomNavBar({ active: '', isTablet: this.isTablet })
+      BottomNavBar({ active: this.navActive, isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')
@@ -202,7 +204,7 @@ struct QuestionPage {
           if (this.feedback) {
             this.FeedbackPanel()
           } else {
-            this.StudyPanel()
+            this.SessionStatusPanel()
           }
         }
         .width('100%')
@@ -301,22 +303,58 @@ struct QuestionPage {
   }
 
   @Builder
-  StudyPanel() {
+  SessionStatusPanel() {
     Column() {
-      Text('答题提示')
+      Text('本轮状态')
         .fontSize(18)
         .fontWeight(FontWeight.Bold)
         .fontColor(COLOR_NAVY)
         .width('100%')
 
-      Text('先独立作答，提交后在这里查看正确答案、解析和评分点。')
+      Row() {
+        this.StatusMetric('已答', String(this.answeredCount()), COLOR_SOFT_BLUE, COLOR_BLUE)
+        this.StatusMetric('正确', String(this.correctCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+        this.StatusMetric('错误', String(this.wrongCount()), COLOR_SOFT_RED, COLOR_RED)
+      }
+      .width('100%')
+      .margin({ top: 14 })
+
+      Text('题号状态')
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_TEXT)
+        .width('100%')
+        .margin({ top: 18 })
+
+      Grid() {
+        ForEach(this.answerProgress, (item: AnswerProgressItem) => {
+          GridItem() {
+            Text(String(item.order + 1))
+              .fontSize(12)
+              .fontWeight(this.currentIndex === item.order ? FontWeight.Bold : FontWeight.Normal)
+              .fontColor(this.progressTextColor(item))
+              .textAlign(TextAlign.Center)
+              .width('100%')
+              .height(32)
+              .backgroundColor(this.progressBgColor(item))
+              .borderRadius(8)
+              .border({ width: 1, color: this.currentIndex === item.order ? COLOR_NAVY : this.progressBorderColor(item) })
+          }
+          .onClick(() => this.goQuestionAt(item.order))
+        }, (item: AnswerProgressItem) => item.questionId)
+      }
+      .columnsTemplate('1fr 1fr 1fr 1fr')
+      .columnsGap(8)
+      .rowsGap(8)
+      .width('100%')
+      .margin({ top: 10 })
+
+      Text((this.question?.knowledgePoints || []).join(' / '))
         .fontSize(13)
         .fontColor(COLOR_MUTED)
         .lineHeight(20)
-        .margin({ top: 10 })
+        .margin({ top: 18 })
         .width('100%')
-
-      this.SectionText('关联知识点', (this.question?.knowledgePoints || []).join(' / '))
 
       if (this.question?.wrong && this.question.wrong.mastered !== true) {
         Row() {
@@ -340,6 +378,25 @@ struct QuestionPage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  StatusMetric(label: string, value: string, bgColor: string, textColor: string) {
+    Column() {
+      Text(value)
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(textColor)
+      Text(label)
+        .fontSize(11)
+        .fontColor(COLOR_MUTED)
+        .margin({ top: 2 })
+    }
+    .layoutWeight(1)
+    .padding({ top: 10, bottom: 10 })
+    .margin({ left: 3, right: 3 })
+    .backgroundColor(bgColor)
+    .borderRadius(8)
   }
 
   @Builder
@@ -758,6 +815,26 @@ struct QuestionPage {
     let count = 0;
     for (const item of this.answerProgress) {
       if (item.status !== ANSWER_STATUS_UNANSWERED) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  correctCount(): number {
+    let count = 0;
+    for (const item of this.answerProgress) {
+      if (item.status === ANSWER_STATUS_CORRECT) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  wrongCount(): number {
+    let count = 0;
+    for (const item of this.answerProgress) {
+      if (item.status === ANSWER_STATUS_WRONG) {
         count++;
       }
     }

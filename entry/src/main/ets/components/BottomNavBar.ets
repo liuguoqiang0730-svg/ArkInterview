@@ -5,6 +5,7 @@ const COLOR_GREEN: string = '#16745f';
 const COLOR_MUTED: string = '#667085';
 const COLOR_LINE: string = '#e4e9f0';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
+const NAV_ANIMATION_DURATION: number = 180;
 
 @Component
 export struct BottomNavBar {
@@ -45,6 +46,15 @@ export struct BottomNavBar {
     .backgroundColor(this.active === target ? COLOR_SOFT_GREEN : COLOR_SURFACE)
     .borderRadius(8)
     .margin({ left: 4, right: 4 })
+    .scale({
+      x: this.active === target ? 1.04 : 1,
+      y: this.active === target ? 1.04 : 1
+    })
+    .opacity(this.active === target ? 1 : 0.82)
+    .animation({
+      duration: NAV_ANIMATION_DURATION,
+      curve: Curve.EaseOut
+    })
     .onClick(() => this.openTarget(target))
   }
 
