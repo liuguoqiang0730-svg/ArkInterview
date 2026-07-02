@@ -49,16 +49,16 @@ struct HomePage {
 
   build() {
     Column() {
-      Scroll() {
-        if (this.isTablet) {
-          this.TabletHome()
-        } else {
+      if (this.isTablet) {
+        this.TabletHome()
+      } else {
+        Scroll() {
           this.PhoneHome()
         }
+        .width('100%')
+        .layoutWeight(1)
+        .backgroundColor(COLOR_BG)
       }
-      .width('100%')
-      .layoutWeight(1)
-      .backgroundColor(COLOR_BG)
 
       BottomNavBar({ active: 'home', isTablet: this.isTablet })
     }
@@ -81,17 +81,32 @@ struct HomePage {
       .justifyContent(FlexAlign.Start)
 
       Column() {
-        this.CategorySection()
+        this.CategoryHeader()
+        if (this.loading) {
+          LoadingProgress()
+            .width(36)
+            .height(36)
+            .margin({ top: 28, bottom: 28 })
+        } else {
+          Scroll() {
+            this.CategoryList()
+          }
+          .width('100%')
+          .layoutWeight(1)
+        }
       }
       .layoutWeight(6)
+      .height('100%')
       .alignItems(HorizontalAlign.Start)
       .justifyContent(FlexAlign.Start)
     }
     .width('100%')
+    .height('100%')
     .alignItems(VerticalAlign.Top)
     .constraintSize({ maxWidth: 1220 })
     .alignSelf(ItemAlign.Center)
     .padding({ left: 28, right: 28, top: 26, bottom: 18 })
+    .layoutWeight(1)
   }
 
   @Builder
@@ -105,6 +120,49 @@ struct HomePage {
     .width('100%')
     .constraintSize({ maxWidth: 520 })
     .alignSelf(ItemAlign.Center)
+  }
+
+  @Builder
+  CategorySection() {
+    Column() {
+      this.CategoryHeader()
+      if (this.loading) {
+        LoadingProgress()
+          .width(36)
+          .height(36)
+          .margin({ top: 28, bottom: 28 })
+      } else {
+        this.CategoryList()
+      }
+    }
+    .width('100%')
+  }
+
+  @Builder
+  CategoryHeader() {
+    Row() {
+      Text('题库模块')
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_NAVY)
+        .layoutWeight(1)
+      Text(`${this.categories.length} 个分类`)
+        .fontSize(12)
+        .fontColor(COLOR_MUTED)
+    }
+    .width('100%')
+    .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 8 })
+  }
+
+  @Builder
+  CategoryList() {
+    Column() {
+      ForEach(this.categories, (category: Category) => {
+        this.CategoryCard(category)
+      }, (category: Category) => category.id)
+    }
+    .width('100%')
+    .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 20 })
   }
 
   @Builder
@@ -216,40 +274,6 @@ struct HomePage {
     }
     .width('100%')
     .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 16 })
-  }
-
-  @Builder
-  CategorySection() {
-    Column() {
-      Row() {
-        Text('题库模块')
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_NAVY)
-          .layoutWeight(1)
-        Text(`${this.categories.length} 个分类`)
-          .fontSize(12)
-          .fontColor(COLOR_MUTED)
-      }
-      .width('100%')
-      .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 8 })
-
-      if (this.loading) {
-        LoadingProgress()
-          .width(36)
-          .height(36)
-          .margin({ top: 28, bottom: 28 })
-      } else {
-        Column() {
-          ForEach(this.categories, (category: Category) => {
-            this.CategoryCard(category)
-          }, (category: Category) => category.id)
-        }
-        .width('100%')
-        .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 20 })
-      }
-    }
-    .width('100%')
   }
 
   @Builder

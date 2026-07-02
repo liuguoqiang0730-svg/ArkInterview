@@ -15,17 +15,36 @@ const COLOR_LINE: string = '#e4e9f0';
 const COLOR_GREEN: string = '#16745f';
 const COLOR_ORANGE: string = '#d97924';
 const COLOR_BLUE: string = '#2c5f8f';
-const COLOR_RED: string = '#b54708';
+const COLOR_RED: string = '#b42318';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
-const COLOR_SOFT_RED: string = '#fff4ed';
+const COLOR_SOFT_RED: string = '#fee4e2';
 const TABLET_MIN_VP: number = 680;
+const ANSWER_STATUS_UNANSWERED: string = 'unanswered';
+const ANSWER_STATUS_CORRECT: string = 'correct';
+const ANSWER_STATUS_WRONG: string = 'wrong';
+const ANSWER_STATUS_REVIEW: string = 'review';
+
+interface AnswerProgressItem {
+  questionId: string;
+  order: number;
+  status: string;
+  isCorrect: boolean | null;
+  selectedOptionIds: string[];
+  answerBoolean?: boolean;
+  shortAnswer: string;
+  feedback?: SubmitAnswerResponse;
+}
 
 @Entry
 @Component
 struct QuestionPage {
   @State private question: Question | undefined = undefined;
+  @State private questionIds: string[] = [];
+  @State private currentIndex: number = 0;
+  @State private answerProgress: AnswerProgressItem[] = [];
+  @State private showProgressPanel: boolean = false;
   @State private selectedOptionIds: string[] = [];
   @State private answerBoolean: boolean | undefined = undefined;
   @State private shortAnswer: string = '';
@@ -33,6 +52,7 @@ struct QuestionPage {
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
   @State private masteringWrong: boolean = false;
+  @State private autoMoveToken: number = 0;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -43,18 +63,19 @@ struct QuestionPage {
       router.back();
       return;
     }
-    this.loadQuestion(questionId);
+    const ids = this.parseQuestionIds(params.questionIds, questionId);
+    this.questionIds = ids;
+    this.answerProgress = this.createProgress(ids);
+    this.currentIndex = this.findQuestionIndex(ids, questionId);
+    this.loadQuestion(ids[this.currentIndex]);
   }
 
   async loadQuestion(questionId: string) {
     this.loading = true;
-    this.feedback = undefined;
-    this.selectedOptionIds = [];
-    this.answerBoolean = undefined;
-    this.shortAnswer = '';
     this.masteringWrong = false;
     try {
       this.question = await store.loadQuestion(questionId);
+      this.restoreAnswerState(questionId);
     } catch (error) {
       promptAction.showToast({ message: `加载失败：${String(error)}` });
     } finally {
@@ -79,6 +100,14 @@ struct QuestionPage {
             .fontColor(COLOR_NAVY)
             .layoutWeight(1)
             .textAlign(TextAlign.Center)
+          Button(this.progressSummary())
+            .height(34)
+            .fontSize(13)
+            .fontColor(this.showProgressPanel ? '#ffffff' : COLOR_BLUE)
+            .backgroundColor(this.showProgressPanel ? COLOR_BLUE : COLOR_SOFT_BLUE)
+            .borderRadius(8)
+            .margin({ right: 8 })
+            .onClick(() => this.showProgressPanel = !this.showProgressPanel)
           Button(this.question?.isFavorite ? '已收藏' : '收藏')
             .height(34)
             .fontSize(13)
@@ -94,6 +123,10 @@ struct QuestionPage {
         .constraintSize({ maxWidth: this.pageMaxWidth() })
         .alignSelf(ItemAlign.Center)
         .margin({ top: this.isTablet ? 20 : 0 })
+
+        if (this.showProgressPanel) {
+          this.ProgressPanel()
+        }
 
         if (this.loading) {
           Column() {
@@ -131,6 +164,7 @@ struct QuestionPage {
     Scroll() {
       Column() {
         this.QuestionCard()
+        this.QuestionNavigator()
         this.AnswerArea()
         this.SubmitButton()
         if (this.feedback) {
@@ -152,6 +186,7 @@ struct QuestionPage {
       Scroll() {
         Column() {
           this.QuestionCard()
+          this.QuestionNavigator()
           this.AnswerArea()
           this.SubmitButton()
         }
@@ -182,6 +217,87 @@ struct QuestionPage {
     .constraintSize({ maxWidth: this.pageMaxWidth() })
     .alignSelf(ItemAlign.Center)
     .alignItems(VerticalAlign.Top)
+  }
+
+  @Builder
+  ProgressPanel() {
+    Column() {
+      Row() {
+        Text('本轮进度')
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+          .layoutWeight(1)
+        Text('绿=正确  红=错误  蓝=待自评')
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+      }
+      .width('100%')
+      .margin({ bottom: 10 })
+
+      Grid() {
+        ForEach(this.answerProgress, (item: AnswerProgressItem) => {
+          GridItem() {
+            Text(String(item.order + 1))
+              .fontSize(13)
+              .fontWeight(this.currentIndex === item.order ? FontWeight.Bold : FontWeight.Normal)
+              .fontColor(this.progressTextColor(item))
+              .textAlign(TextAlign.Center)
+              .width('100%')
+              .height(34)
+              .backgroundColor(this.progressBgColor(item))
+              .borderRadius(8)
+              .border({ width: 1, color: this.currentIndex === item.order ? COLOR_NAVY : this.progressBorderColor(item) })
+          }
+          .onClick(() => this.goQuestionAt(item.order))
+        }, (item: AnswerProgressItem) => item.questionId)
+      }
+      .columnsTemplate(this.isTablet ? '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr' : '1fr 1fr 1fr 1fr 1fr')
+      .columnsGap(8)
+      .rowsGap(8)
+      .width('100%')
+    }
+    .width('100%')
+    .padding(14)
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+    .constraintSize({ maxWidth: this.pageMaxWidth() })
+    .alignSelf(ItemAlign.Center)
+    .margin({ top: 12, bottom: 2 })
+  }
+
+  @Builder
+  QuestionNavigator() {
+    Row() {
+      Button('上一题')
+        .height(38)
+        .fontSize(13)
+        .fontColor(this.hasPrevious() ? COLOR_NAVY : COLOR_MUTED)
+        .enabled(this.hasPrevious())
+        .backgroundColor('#eef2f6')
+        .borderRadius(8)
+        .onClick(() => this.goPreviousQuestion())
+
+      Text(`第 ${this.currentIndex + 1}/${this.questionIds.length || 1} 题`)
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_MUTED)
+        .textAlign(TextAlign.Center)
+        .layoutWeight(1)
+
+      Button('下一题')
+        .height(38)
+        .fontSize(13)
+        .fontColor(this.hasNext() ? COLOR_NAVY : COLOR_MUTED)
+        .enabled(this.hasNext())
+        .backgroundColor('#eef2f6')
+        .borderRadius(8)
+        .onClick(() => this.goNextQuestion())
+    }
+    .width('100%')
+    .padding({ left: 2, right: 2 })
+    .margin({ top: 12 })
   }
 
   @Builder
@@ -562,6 +678,156 @@ struct QuestionPage {
     return this.isTablet ? 1120 : 520;
   }
 
+  parseQuestionIds(value: string | undefined, fallback: string): string[] {
+    const ids: string[] = [];
+    const rawItems = (value ?? '').split(',');
+    for (const raw of rawItems) {
+      const id = raw.trim();
+      if (id.length > 0) {
+        ids.push(id);
+      }
+    }
+    if (ids.length === 0) {
+      ids.push(fallback);
+    }
+    return ids;
+  }
+
+  createProgress(ids: string[]): AnswerProgressItem[] {
+    const items: AnswerProgressItem[] = [];
+    for (let index = 0; index < ids.length; index++) {
+      const item: AnswerProgressItem = {
+        questionId: ids[index],
+        order: index,
+        status: ANSWER_STATUS_UNANSWERED,
+        isCorrect: null,
+        selectedOptionIds: [],
+        shortAnswer: ''
+      };
+      items.push(item);
+    }
+    return items;
+  }
+
+  findQuestionIndex(ids: string[], questionId: string): number {
+    for (let index = 0; index < ids.length; index++) {
+      if (ids[index] === questionId) {
+        return index;
+      }
+    }
+    return 0;
+  }
+
+  restoreAnswerState(questionId: string): void {
+    const item = this.progressFor(questionId);
+    if (item) {
+      this.selectedOptionIds = this.copyStringArray(item.selectedOptionIds);
+      this.answerBoolean = item.answerBoolean;
+      this.shortAnswer = item.shortAnswer;
+      this.feedback = item.feedback;
+      return;
+    }
+    this.selectedOptionIds = [];
+    this.answerBoolean = undefined;
+    this.shortAnswer = '';
+    this.feedback = undefined;
+  }
+
+  progressFor(questionId: string): AnswerProgressItem | undefined {
+    for (const item of this.answerProgress) {
+      if (item.questionId === questionId) {
+        return item;
+      }
+    }
+    return undefined;
+  }
+
+  copyStringArray(values: string[]): string[] {
+    const copied: string[] = [];
+    for (const value of values) {
+      copied.push(value);
+    }
+    return copied;
+  }
+
+  progressSummary(): string {
+    return `已答 ${this.answeredCount()}/${this.questionIds.length || 1}`;
+  }
+
+  answeredCount(): number {
+    let count = 0;
+    for (const item of this.answerProgress) {
+      if (item.status !== ANSWER_STATUS_UNANSWERED) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  progressTextColor(item: AnswerProgressItem): string {
+    if (item.status === ANSWER_STATUS_CORRECT) {
+      return COLOR_GREEN;
+    }
+    if (item.status === ANSWER_STATUS_WRONG) {
+      return COLOR_RED;
+    }
+    if (item.status === ANSWER_STATUS_REVIEW) {
+      return COLOR_BLUE;
+    }
+    return COLOR_MUTED;
+  }
+
+  progressBgColor(item: AnswerProgressItem): string {
+    if (item.status === ANSWER_STATUS_CORRECT) {
+      return COLOR_SOFT_GREEN;
+    }
+    if (item.status === ANSWER_STATUS_WRONG) {
+      return COLOR_SOFT_RED;
+    }
+    if (item.status === ANSWER_STATUS_REVIEW) {
+      return COLOR_SOFT_BLUE;
+    }
+    return '#f8fafc';
+  }
+
+  progressBorderColor(item: AnswerProgressItem): string {
+    if (item.status === ANSWER_STATUS_CORRECT) {
+      return COLOR_GREEN;
+    }
+    if (item.status === ANSWER_STATUS_WRONG) {
+      return COLOR_RED;
+    }
+    if (item.status === ANSWER_STATUS_REVIEW) {
+      return COLOR_BLUE;
+    }
+    return COLOR_LINE;
+  }
+
+  hasPrevious(): boolean {
+    return this.currentIndex > 0;
+  }
+
+  hasNext(): boolean {
+    return this.currentIndex < this.questionIds.length - 1;
+  }
+
+  goPreviousQuestion(): void {
+    this.goQuestionAt(this.currentIndex - 1);
+  }
+
+  goNextQuestion(): void {
+    this.goQuestionAt(this.currentIndex + 1);
+  }
+
+  goQuestionAt(index: number): void {
+    if (index < 0 || index >= this.questionIds.length) {
+      return;
+    }
+    this.autoMoveToken++;
+    this.currentIndex = index;
+    this.loadQuestion(this.questionIds[index]);
+  }
+
   updateLayoutMode(): void {
     try {
       const currentDisplay = display.getDefaultDisplaySync();
@@ -604,9 +870,55 @@ struct QuestionPage {
         answerBoolean: this.answerBoolean,
         shortAnswer: this.shortAnswer
       });
+      this.updateAnswerProgress(this.feedback);
+      this.scheduleAutoNext(this.feedback.questionId);
     } catch (error) {
       promptAction.showToast({ message: `提交失败：${String(error)}` });
     }
+  }
+
+  updateAnswerProgress(response: SubmitAnswerResponse): void {
+    let status = ANSWER_STATUS_REVIEW;
+    if (response.isCorrect === true) {
+      status = ANSWER_STATUS_CORRECT;
+    } else if (response.isCorrect === false) {
+      status = ANSWER_STATUS_WRONG;
+    }
+
+    const next: AnswerProgressItem[] = [];
+    for (const item of this.answerProgress) {
+      if (item.questionId === response.questionId) {
+        const updated: AnswerProgressItem = {
+          questionId: item.questionId,
+          order: item.order,
+          status,
+          isCorrect: response.isCorrect,
+          selectedOptionIds: this.copyStringArray(this.selectedOptionIds),
+          answerBoolean: this.answerBoolean,
+          shortAnswer: this.shortAnswer,
+          feedback: response
+        };
+        next.push(updated);
+      } else {
+        next.push(item);
+      }
+    }
+    this.answerProgress = next;
+  }
+
+  scheduleAutoNext(questionId: string): void {
+    if (!this.hasNext()) {
+      return;
+    }
+    this.autoMoveToken++;
+    const token = this.autoMoveToken;
+    const message = this.feedback?.isCorrect === false ? '已记录，切到下一题' : '已提交，切到下一题';
+    promptAction.showToast({ message });
+    setTimeout(() => {
+      if (this.autoMoveToken === token && this.question?.id === questionId) {
+        this.goNextQuestion();
+      }
+    }, 800);
   }
 
   async toggleFavorite() {

@@ -455,8 +455,30 @@ struct PracticePage {
   openQuestion(question: Question): void {
     router.pushUrl({
       url: 'pages/QuestionPage',
-      params: { questionId: question.id }
+      params: {
+        questionId: question.id,
+        questionIds: this.sessionQuestionIds(),
+        questionIndex: String(this.questionIndex(question))
+      }
     });
+  }
+
+  sessionQuestionIds(): string {
+    const ids: string[] = [];
+    for (const item of this.session?.items ?? []) {
+      ids.push(item.id);
+    }
+    return ids.join(',');
+  }
+
+  questionIndex(question: Question): number {
+    const items: Question[] = this.session?.items ?? [];
+    for (let index = 0; index < items.length; index++) {
+      if (items[index].id === question.id) {
+        return index;
+      }
+    }
+    return 0;
   }
 
   updateLayoutMode(): void {
