@@ -31,6 +31,7 @@ struct QuestionPage {
   @State private feedback: SubmitAnswerResponse | undefined = undefined;
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
+  @State private masteringWrong: boolean = false;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -50,6 +51,7 @@ struct QuestionPage {
     this.selectedOptionIds = [];
     this.answerBoolean = undefined;
     this.shortAnswer = '';
+    this.masteringWrong = false;
     try {
       this.question = await store.loadQuestion(questionId);
     } catch (error) {
@@ -334,6 +336,20 @@ struct QuestionPage {
       }
 
       this.SectionText('解析', this.feedback?.explanation ?? '')
+
+      if (this.canMarkMastered()) {
+        Button(this.masteringWrong ? '正在标记' : '标记已掌握')
+          .width('100%')
+          .height(42)
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#ffffff')
+          .enabled(!this.masteringWrong)
+          .backgroundColor(this.masteringWrong ? '#aab3bd' : COLOR_GREEN)
+          .borderRadius(8)
+          .margin({ top: 14 })
+          .onClick(() => this.markWrongMastered())
+      }
     }
     .width('100%')
     .padding(16)
@@ -437,6 +453,13 @@ struct QuestionPage {
     return COLOR_SOFT_BLUE;
   }
 
+  canMarkMastered(): boolean {
+    if (!this.question || !this.question.wrong || !this.feedback) {
+      return false;
+    }
+    return this.feedback.isCorrect === true && this.question.wrong.mastered !== true;
+  }
+
   pageMaxWidth(): number {
     return this.isTablet ? 860 : 520;
   }
@@ -502,6 +525,26 @@ struct QuestionPage {
       }
     } catch (error) {
       promptAction.showToast({ message: `操作失败：${String(error)}` });
+    }
+  }
+
+  async markWrongMastered() {
+    if (!this.question || !this.question.wrong || this.masteringWrong) {
+      return;
+    }
+    this.masteringWrong = true;
+    try {
+      await store.markWrongMastered(this.question.id);
+      const current: Question = this.question;
+      if (current.wrong) {
+        current.wrong.mastered = true;
+      }
+      this.question = current;
+      promptAction.showToast({ message: '已标记掌握' });
+    } catch (error) {
+      promptAction.showToast({ message: `操作失败：${String(error)}` });
+    } finally {
+      this.masteringWrong = false;
     }
   }
 
