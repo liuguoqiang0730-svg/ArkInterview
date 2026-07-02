@@ -18,7 +18,7 @@ const COLOR_BLUE: string = '#2c5f8f';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
-const TABLET_MIN_SIDE: number = 1200;
+const TABLET_MIN_VP: number = 680;
 
 @Entry
 @Component
@@ -47,12 +47,19 @@ struct HomePage {
   }
 
   build() {
-    Scroll() {
-      if (this.isTablet) {
-        this.TabletHome()
-      } else {
-        this.PhoneHome()
+    Column() {
+      Scroll() {
+        if (this.isTablet) {
+          this.TabletHome()
+        } else {
+          this.PhoneHome()
+        }
       }
+      .width('100%')
+      .layoutWeight(1)
+      .backgroundColor(COLOR_BG)
+
+      this.BottomNav()
     }
     .width('100%')
     .height('100%')
@@ -78,9 +85,9 @@ struct HomePage {
       .alignItems(HorizontalAlign.Start)
     }
     .width('100%')
-    .constraintSize({ maxWidth: 1180 })
+    .constraintSize({ maxWidth: 1220 })
     .alignSelf(ItemAlign.Center)
-    .padding({ left: 28, right: 28, top: 26, bottom: 26 })
+    .padding({ left: 28, right: 28, top: 26, bottom: 18 })
   }
 
   @Builder
@@ -101,7 +108,7 @@ struct HomePage {
     Row() {
       Column() {
         Text(APP_NAME)
-          .fontSize(this.isTablet ? 32 : 28)
+          .fontSize(this.isTablet ? 34 : 28)
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_NAVY)
         Text('HarmonyOS 开发者面试训练台')
@@ -112,8 +119,8 @@ struct HomePage {
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
-      Button('刷新')
-        .height(36)
+      Button(this.isTablet ? '同步题库' : '刷新')
+        .height(38)
         .fontSize(13)
         .fontColor(COLOR_GREEN)
         .backgroundColor(COLOR_SOFT_GREEN)
@@ -177,6 +184,19 @@ struct HomePage {
   @Builder
   ActionGrid() {
     Column() {
+      Row() {
+        Text('快捷训练')
+          .fontSize(17)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+          .layoutWeight(1)
+        Text('开始一次练习')
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+      }
+      .width('100%')
+      .margin({ bottom: 10 })
+
       Row() {
         this.ActionCard('随机练习', '快速进入综合训练', COLOR_GREEN, COLOR_SOFT_GREEN, 'random')
         this.ActionCard('模拟面试', '按面试节奏抽题', COLOR_BLUE, COLOR_SOFT_BLUE, 'interview')
@@ -251,25 +271,40 @@ struct HomePage {
   ActionCard(title: string, desc: string, color: string, bgColor: string, mode: string) {
     Column() {
       Row() {
-        Text(title)
-          .fontSize(16)
+        Text(this.actionMark(mode))
+          .fontSize(14)
           .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_TEXT)
+          .fontColor(color)
+          .textAlign(TextAlign.Center)
+          .width(34)
+          .height(34)
+          .backgroundColor(bgColor)
+          .borderRadius(8)
+          .margin({ right: 10 })
+
+        Column() {
+          Text(title)
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+            .width('100%')
+          Text(desc)
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 5 })
+            .width('100%')
+        }
+        .alignItems(HorizontalAlign.Start)
           .layoutWeight(1)
+
         Text('>')
           .fontSize(18)
           .fontColor(color)
       }
       .width('100%')
-
-      Text(desc)
-        .fontSize(12)
-        .fontColor(COLOR_MUTED)
-        .margin({ top: 8 })
-        .width('100%')
     }
     .layoutWeight(1)
-    .height(94)
+    .height(this.isTablet ? 104 : 94)
     .padding(14)
     .margin({ left: 4, right: 4 })
     .backgroundColor(COLOR_SURFACE)
@@ -281,11 +316,15 @@ struct HomePage {
   @Builder
   CategoryCard(category: Category) {
     Row() {
-      Column()
-        .width(4)
-        .height(58)
-        .backgroundColor(this.categoryColor(category.order))
-        .borderRadius(2)
+      Text(this.categoryMark(category.name))
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.categoryColor(category.order))
+        .textAlign(TextAlign.Center)
+        .width(42)
+        .height(42)
+        .backgroundColor(this.categorySoftColor(category.order))
+        .borderRadius(8)
         .margin({ right: 12 })
 
       Column() {
@@ -308,7 +347,7 @@ struct HomePage {
           .fontSize(13)
           .fontColor(COLOR_MUTED)
           .lineHeight(18)
-          .margin({ top: 6 })
+          .margin({ top: 7 })
           .width('100%')
       }
       .layoutWeight(1)
@@ -320,6 +359,43 @@ struct HomePage {
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
     .onClick(() => this.openPractice('category', category))
+  }
+
+  @Builder
+  BottomNav() {
+    Row() {
+      this.NavItem('首页', '训练', true)
+      this.NavItem('错题', '复盘', false)
+      this.NavItem('收藏', '重点', false)
+      this.NavItem('记录', '进度', false)
+    }
+    .width('100%')
+    .height(this.isTablet ? 68 : 60)
+    .constraintSize({ maxWidth: this.isTablet ? 1220 : 520 })
+    .alignSelf(ItemAlign.Center)
+    .padding({ left: this.isTablet ? 28 : 18, right: this.isTablet ? 28 : 18, top: 8, bottom: 8 })
+    .backgroundColor(COLOR_SURFACE)
+    .border({ width: { top: 1 }, color: COLOR_LINE })
+  }
+
+  @Builder
+  NavItem(title: string, desc: string, active: boolean) {
+    Column() {
+      Text(title)
+        .fontSize(13)
+        .fontWeight(active ? FontWeight.Bold : FontWeight.Normal)
+        .fontColor(active ? COLOR_GREEN : COLOR_MUTED)
+      Text(desc)
+        .fontSize(10)
+        .fontColor(active ? COLOR_GREEN : '#98a2b3')
+        .margin({ top: 2 })
+    }
+    .layoutWeight(1)
+    .height('100%')
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(active ? COLOR_SOFT_GREEN : COLOR_SURFACE)
+    .borderRadius(8)
+    .margin({ left: 4, right: 4 })
   }
 
   categoryProgress(categoryId: string): string {
@@ -359,10 +435,44 @@ struct HomePage {
     return COLOR_SOFT_ORANGE;
   }
 
+  actionMark(mode: string): string {
+    if (mode === 'interview') {
+      return '面';
+    }
+    if (mode === 'wrongs') {
+      return '错';
+    }
+    if (mode === 'favorites') {
+      return '藏';
+    }
+    return '练';
+  }
+
+  categoryMark(name: string): string {
+    if (name === 'ArkTS') {
+      return 'TS';
+    }
+    if (name === 'ArkUI') {
+      return 'UI';
+    }
+    if (name === 'Stage 模型') {
+      return 'ST';
+    }
+    if (name === 'HarmonyOS NEXT 适配') {
+      return 'NX';
+    }
+    if (name.length >= 2) {
+      return name.substring(0, 2);
+    }
+    return name;
+  }
+
   updateLayoutMode(): void {
     try {
       const currentDisplay = display.getDefaultDisplaySync();
-      this.isTablet = Math.min(currentDisplay.width, currentDisplay.height) >= TABLET_MIN_SIDE;
+      const density = currentDisplay.densityPixels > 0 ? currentDisplay.densityPixels : 1;
+      const shortSideVp = Math.min(currentDisplay.width, currentDisplay.height) / density;
+      this.isTablet = shortSideVp >= TABLET_MIN_VP;
     } catch (error) {
       this.isTablet = false;
     }

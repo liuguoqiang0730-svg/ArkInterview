@@ -19,7 +19,7 @@ const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
 const COLOR_SOFT_RED: string = '#fff4ed';
-const TABLET_MIN_SIDE: number = 1200;
+const TABLET_MIN_VP: number = 680;
 
 @Entry
 @Component
@@ -444,7 +444,9 @@ struct QuestionPage {
   updateLayoutMode(): void {
     try {
       const currentDisplay = display.getDefaultDisplaySync();
-      this.isTablet = Math.min(currentDisplay.width, currentDisplay.height) >= TABLET_MIN_SIDE;
+      const density = currentDisplay.densityPixels > 0 ? currentDisplay.densityPixels : 1;
+      const shortSideVp = Math.min(currentDisplay.width, currentDisplay.height) / density;
+      this.isTablet = shortSideVp >= TABLET_MIN_VP;
     } catch (error) {
       this.isTablet = false;
     }
