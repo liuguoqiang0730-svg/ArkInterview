@@ -255,19 +255,22 @@ struct QuestionPage {
     try {
       if (this.question.isFavorite) {
         await store.removeFavorite(this.question.id);
-        this.question = {
-          ...this.question,
-          isFavorite: false
-        };
+        this.updateFavoriteState(false);
       } else {
         await store.addFavorite(this.question.id);
-        this.question = {
-          ...this.question,
-          isFavorite: true
-        };
+        this.updateFavoriteState(true);
       }
     } catch (error) {
       promptAction.showToast({ message: `操作失败：${String(error)}` });
     }
+  }
+
+  private updateFavoriteState(isFavorite: boolean): void {
+    if (!this.question) {
+      return;
+    }
+    const current: Question = this.question;
+    current.isFavorite = isFavorite;
+    this.question = current;
   }
 }

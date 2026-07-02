@@ -29,11 +29,11 @@ export class ApiClient {
   }
 
   async getQuestions(categoryId?: string, type?: QuestionType, page: number = 1): Promise<PageResult<Question>> {
-    const query = this.queryString({
-      categoryId,
-      type,
-      page: String(page)
-    });
+    const pairs: string[] = [];
+    this.appendQueryParam(pairs, 'categoryId', categoryId);
+    this.appendQueryParam(pairs, 'type', type);
+    this.appendQueryParam(pairs, 'page', String(page));
+    const query = this.queryString(pairs);
     return this.request<PageResult<Question>>(`/questions${query}`);
   }
 
@@ -43,20 +43,20 @@ export class ApiClient {
   }
 
   async getPracticeSession(mode: PracticeMode, options?: PracticeSessionOptions): Promise<PracticeSession> {
-    const query = this.queryString({
-      mode,
-      categoryId: options?.categoryId,
-      type: options?.type,
-      count: options?.count ? String(options.count) : undefined
-    });
+    const pairs: string[] = [];
+    this.appendQueryParam(pairs, 'mode', mode);
+    this.appendQueryParam(pairs, 'categoryId', options?.categoryId);
+    this.appendQueryParam(pairs, 'type', options?.type);
+    this.appendQueryParam(pairs, 'count', options?.count ? String(options.count) : undefined);
+    const query = this.queryString(pairs);
     return this.request<PracticeSession>(`/practice/session${query}`);
   }
 
   async getBasicInterview(count: number = 8, categoryId?: string): Promise<PracticeSession> {
-    const query = this.queryString({
-      count: String(count),
-      categoryId
-    });
+    const pairs: string[] = [];
+    this.appendQueryParam(pairs, 'count', String(count));
+    this.appendQueryParam(pairs, 'categoryId', categoryId);
+    const query = this.queryString(pairs);
     return this.request<PracticeSession>(`/interviews/basic${query}`);
   }
 
@@ -79,7 +79,10 @@ export class ApiClient {
   }
 
   async addFavorite(questionId: string): Promise<string[]> {
-    const result = await this.request<ListResult<string>>('/users/me/favorites', 'POST', { questionId });
+    const payload: FavoriteQuestionRequest = {
+      questionId: questionId
+    };
+    const result = await this.request<ListResult<string>>('/users/me/favorites', 'POST', payload);
     return result.items;
   }
 
@@ -117,14 +120,13 @@ export class ApiClient {
     }
   }
 
-  private queryString(params: Record<string, string | undefined>): string {
-    const pairs: string[] = [];
-    Object.keys(params).forEach((key: string) => {
-      const value = params[key];
-      if (value !== undefined && value !== '') {
-        pairs.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
-      }
-    });
+  private appendQueryParam(pairs: string[], key: string, value?: string): void {
+    if (value !== undefined && value !== '') {
+      pairs.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+    }
+  }
+
+  private queryString(pairs: string[]): string {
     return pairs.length === 0 ? '' : `?${pairs.join('&')}`;
   }
 
@@ -143,6 +145,10 @@ export interface PracticeSessionOptions {
   categoryId?: string;
   type?: QuestionType;
   count?: number;
+}
+
+interface FavoriteQuestionRequest {
+  questionId: string;
 }
 
 type HttpMethod = 'GET' | 'POST' | 'DELETE';
