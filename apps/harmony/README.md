@@ -22,7 +22,7 @@ E:\Codex-AI-Coding\ArkInterview
 - Model: Stage
 - Language: ArkTS
 - UI: ArkUI
-- SDK: 使用 DevEco 缺省 SDK
+- SDK: 编译 SDK 使用 DevEco 缺省值；兼容/目标 SDK 配置为 `6.1.0(23)`
 
 首版 App 页面建议：
 
