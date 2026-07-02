@@ -24,9 +24,9 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   },
   {
     "id": "q-arkui-001",
@@ -53,9 +53,9 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   },
   {
     "id": "q-stage-001",
@@ -77,9 +77,9 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   },
   {
     "id": "q-state-001",
@@ -106,9 +106,9 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   },
   {
     "id": "q-network-001",
@@ -135,9 +135,9 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   },
   {
     "id": "q-preferences-001",
@@ -159,9 +159,9 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   },
   {
     "id": "q-arkui-002",
@@ -188,9 +188,9 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   },
   {
     "id": "q-next-001",
@@ -217,8 +217,8 @@
         "publisher": "Huawei Developer"
       }
     ],
-    "verifiedAt": "2026-07-02",
-    "reviewStatus": "verified",
-    "status": "published"
+    "verifiedAt": null,
+    "reviewStatus": "needs_review",
+    "status": "draft"
   }
 ]

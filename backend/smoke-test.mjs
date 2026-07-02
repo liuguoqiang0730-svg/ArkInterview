@@ -61,9 +61,14 @@ async function runChecks() {
   assert(categories.items.length === 16, 'categories count should be 16');
 
   const questions = await getJson('/api/questions?pageSize=20');
-  assert(questions.total === 8, 'published question count should be 8');
+  assert(questions.total === 0, 'unverified seed questions should not be published');
 
-  const questionDetail = await getJson('/api/questions/q-arkts-001');
+  await createVerifiedSmokeQuestions();
+
+  const publishedQuestions = await getJson('/api/questions?pageSize=20');
+  assert(publishedQuestions.total === 4, 'verified smoke question count should be 4');
+
+  const questionDetail = await getJson('/api/questions/q-smoke-single');
   assert(questionDetail.item.sourceRefs.length > 0, 'question detail should include official sources');
 
   const randomPractice = await getJson('/api/practice/session?mode=random&count=3');
@@ -74,19 +79,19 @@ async function runChecks() {
   assert(categoryPractice.items.every((item) => item.categoryId === 'arkui'), 'category practice should filter category');
 
   const correctAnswer = await postJson('/api/answers/submit', {
-    questionId: 'q-arkts-001',
+    questionId: 'q-smoke-single',
     selectedOptionIds: ['b']
   });
   assert(correctAnswer.isCorrect === true, 'correct answer should be accepted');
 
   await postJson('/api/answers/submit', {
-    questionId: 'q-arkts-001',
+    questionId: 'q-smoke-single',
     selectedOptionIds: ['a']
   });
   const wrongPractice = await getJson('/api/practice/session?mode=wrongs&count=5');
   assert(wrongPractice.total === 1, 'wrong practice should include wrong question');
 
-  await postJson('/api/users/me/favorites', { questionId: 'q-arkts-001' });
+  await postJson('/api/users/me/favorites', { questionId: 'q-smoke-single' });
   const favoritePractice = await getJson('/api/practice/session?mode=favorites&count=5');
   assert(favoritePractice.total === 1, 'favorite practice should include favorite question');
   assert(favoritePractice.items[0].isFavorite === true, 'favorite practice should include favorite marker');
@@ -113,6 +118,76 @@ async function runChecks() {
     status: 'published'
   }, false);
   assert(blocked.status === 400, 'publishing without official source should be blocked');
+}
+
+async function createVerifiedSmokeQuestions() {
+  const common = {
+    difficulty: 'easy',
+    status: 'published',
+    reviewStatus: 'verified',
+    verifiedAt: '2026-07-02',
+    sourceRefs: [
+      {
+        title: 'ArkTS 概述',
+        url: 'https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-overview-V5',
+        publisher: 'Huawei Developer'
+      }
+    ]
+  };
+
+  await postJson('/api/admin/questions', {
+    ...common,
+    id: 'q-smoke-single',
+    categoryId: 'arkts',
+    type: 'single',
+    title: '已核验单选测试题',
+    options: [
+      { id: 'a', text: '错误选项' },
+      { id: 'b', text: '正确选项' }
+    ],
+    correctOptionIds: ['b'],
+    explanation: '用于验证单选题答题流程。',
+    knowledgePoints: ['ArkTS']
+  });
+
+  await postJson('/api/admin/questions', {
+    ...common,
+    id: 'q-smoke-multiple',
+    categoryId: 'network',
+    type: 'multiple',
+    title: '已核验多选测试题',
+    options: [
+      { id: 'a', text: '处理超时' },
+      { id: 'b', text: '处理错误状态' },
+      { id: 'c', text: '忽略失败' }
+    ],
+    correctOptionIds: ['a', 'b'],
+    explanation: '用于验证多选题和随机练习流程。',
+    knowledgePoints: ['网络请求']
+  });
+
+  await postJson('/api/admin/questions', {
+    ...common,
+    id: 'q-smoke-boolean',
+    categoryId: 'preferences',
+    type: 'boolean',
+    title: '已核验判断测试题',
+    answerBoolean: true,
+    explanation: '用于验证判断题流程。',
+    knowledgePoints: ['Preferences']
+  });
+
+  await postJson('/api/admin/questions', {
+    ...common,
+    id: 'q-smoke-short',
+    categoryId: 'arkui',
+    type: 'short',
+    title: '已核验简答测试题',
+    referenceAnswer: '这是用于验证简答题流程的参考答案。',
+    scoringPoints: ['参考答案存在', '评分点存在'],
+    explanation: '用于验证简答题和模拟面试流程。',
+    knowledgePoints: ['ArkUI']
+  });
 }
 
 async function getJson(pathname) {

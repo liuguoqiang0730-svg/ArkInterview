@@ -28,7 +28,7 @@ npm run dev
 - API: `http://127.0.0.1:8787/api`
 - 管理后台: `http://127.0.0.1:8787/admin/`
 
-服务首次启动会从 `data/seed/` 生成本地运行库 `backend/storage/db.json`。该文件是本地运行状态，不纳入版本控制。
+服务首次启动会从 `data/seed/` 生成本地运行库 `backend/storage/db.json`。该文件是本地运行状态，不纳入版本控制。当前种子题是待核验草稿，不会作为正式题库对用户公开。
 
 ## 验证
 
