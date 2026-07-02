@@ -22,6 +22,10 @@ export class PracticeStore {
     return { categories, stats };
   }
 
+  async loadStats(): Promise<UserStats> {
+    return this.api.getStats();
+  }
+
   async startPractice(mode: PracticeMode, options?: PracticeSessionOptions): Promise<PracticeSession> {
     return this.api.getPracticeSession(mode, options);
   }

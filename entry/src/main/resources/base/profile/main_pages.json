@@ -2,6 +2,7 @@
   "src": [
     "pages/HomePage",
     "pages/PracticePage",
-    "pages/QuestionPage"
+    "pages/QuestionPage",
+    "pages/RecordPage"
   ]
 }

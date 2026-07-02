@@ -367,10 +367,10 @@ struct HomePage {
   @Builder
   BottomNav() {
     Row() {
-      this.NavItem('首页', '训练', true)
-      this.NavItem('错题', '复盘', false)
-      this.NavItem('收藏', '重点', false)
-      this.NavItem('记录', '进度', false)
+      this.NavItem('首页', '训练', true, 'home')
+      this.NavItem('错题', '复盘', false, 'wrongs')
+      this.NavItem('收藏', '重点', false, 'favorites')
+      this.NavItem('记录', '进度', false, 'records')
     }
     .width('100%')
     .height(this.isTablet ? 68 : 60)
@@ -382,7 +382,7 @@ struct HomePage {
   }
 
   @Builder
-  NavItem(title: string, desc: string, active: boolean) {
+  NavItem(title: string, desc: string, active: boolean, target: string) {
     Column() {
       Text(title)
         .fontSize(13)
@@ -399,6 +399,7 @@ struct HomePage {
     .backgroundColor(active ? COLOR_SOFT_GREEN : COLOR_SURFACE)
     .borderRadius(8)
     .margin({ left: 4, right: 4 })
+    .onClick(() => this.openBottomNav(target))
   }
 
   categoryProgress(categoryId: string): string {
@@ -479,6 +480,19 @@ struct HomePage {
     } catch (error) {
       this.isTablet = false;
     }
+  }
+
+  openBottomNav(target: string): void {
+    if (target === 'home') {
+      return;
+    }
+    if (target === 'records') {
+      router.pushUrl({
+        url: 'pages/RecordPage'
+      });
+      return;
+    }
+    this.openPractice(target);
   }
 
   openPractice(mode: string, category?: Category) {
