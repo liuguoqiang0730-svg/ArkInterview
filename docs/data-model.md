@@ -51,11 +51,11 @@
 - `boolean`：使用 `answerBoolean`。
 - `short`：使用 `referenceAnswer` 和 `scoringPoints`。
 
-发布约束：
+入库约束：
 
-- `status=published` 时必须有官方 `sourceRefs`。
-- `status=published` 时 `reviewStatus` 必须是 `verified`。
-- `status=published` 时必须填写 `verifiedAt`。
+- 保存到运行题库前必须有官方 `sourceRefs`。
+- 保存到运行题库前 `reviewStatus` 必须是 `verified`。
+- 保存到运行题库前必须填写 `verifiedAt`。
 - 后端只允许 `developer.huawei.com`、`docs.openharmony.cn`、`gitee.com/openharmony/docs` 作为官方来源域名。
 
 ## UserState

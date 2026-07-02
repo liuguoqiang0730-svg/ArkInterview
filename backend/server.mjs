@@ -280,24 +280,19 @@ function validateQuestion(question, db, { allowExistingId = false } = {}) {
 }
 
 function validateOfficialSources(question) {
-  if (question.sourceRefs.length > 0) {
-    const invalid = question.sourceRefs.find((source) => !isOfficialSourceUrl(source.url));
-    if (invalid) {
-      throw httpError(400, `题目来源必须使用官方文档链接：${invalid.url}`);
-    }
-  }
-
-  if (question.status !== 'published') {
-    return;
-  }
   if (question.reviewStatus !== 'verified') {
-    throw httpError(400, '发布题目前必须先标记为已核验');
+    throw httpError(400, '题目入库前必须先标记为已核验');
   }
   if (!question.verifiedAt) {
-    throw httpError(400, '发布题目前必须填写核验日期');
+    throw httpError(400, '题目入库前必须填写核验日期');
   }
   if (question.sourceRefs.length === 0) {
-    throw httpError(400, '发布题目前必须填写至少一个官方文档来源');
+    throw httpError(400, '题目入库前必须填写至少一个官方文档来源');
+  }
+
+  const invalid = question.sourceRefs.find((source) => !isOfficialSourceUrl(source.url));
+  if (invalid) {
+    throw httpError(400, `题目来源必须使用官方文档链接：${invalid.url}`);
   }
 }
 

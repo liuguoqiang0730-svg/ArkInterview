@@ -191,7 +191,7 @@ GET /api/practice/session?mode=favorites&count=20
 }
 ```
 
-发布题目时，后端会要求 `sourceRefs` 至少包含一个官方来源，`reviewStatus` 为 `verified`，且 `verifiedAt` 已填写。
+保存题目入库时，后端会要求 `sourceRefs` 至少包含一个官方来源，`reviewStatus` 为 `verified`，且 `verifiedAt` 已填写。
 
 ### PATCH /api/admin/questions/{id}
 

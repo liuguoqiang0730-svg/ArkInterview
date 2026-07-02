@@ -10,7 +10,7 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 
 - `backend/`：零依赖 Node.js REST API，提供题库、答题、收藏、错题和管理接口。
 - `admin/`：静态管理后台，可通过后端服务访问 `/admin/`，支持题目浏览、新增、发布/下架和难度调整。
-- `data/seed/`：MVP 分类和样例题库种子数据。
+- `data/seed/`：MVP 分类种子数据；题库默认为空。
 - `apps/harmony/`：HarmonyOS ArkTS + ArkUI + Stage 应用开发说明和目录占位。
 - `docs/`：产品范围、API 契约、数据模型和路线图。
 - `docs/question-authoring-guidelines.md`：题库编写与官方文档核验规范。
@@ -28,7 +28,7 @@ npm run dev
 - API: `http://127.0.0.1:8787/api`
 - 管理后台: `http://127.0.0.1:8787/admin/`
 
-服务首次启动会从 `data/seed/` 生成本地运行库 `backend/storage/db.json`。该文件是本地运行状态，不纳入版本控制。当前种子题是待核验草稿，不会作为正式题库对用户公开。
+服务首次启动会从 `data/seed/` 生成本地运行库 `backend/storage/db.json`。该文件是本地运行状态，不纳入版本控制。当前不内置题目，确认合理、答案正确且完成官方来源核验后，题目才能入库。
 
 ## 验证
 

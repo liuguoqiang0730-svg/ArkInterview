@@ -99,7 +99,7 @@ async function runChecks() {
   const interview = await getJson('/api/interviews/basic?count=4');
   assert(interview.total === 4, 'basic interview should return 4 questions');
 
-  const draft = await postJson('/api/admin/questions', {
+  const blockedDraft = await postJson('/api/admin/questions', {
     categoryId: 'arkts',
     type: 'single',
     difficulty: 'easy',
@@ -113,11 +113,8 @@ async function runChecks() {
     correctOptionIds: ['a'],
     explanation: '这道题用于验证发布质量闸门。',
     knowledgePoints: ['内容审核']
-  });
-  const blocked = await patchJson(`/api/admin/questions/${draft.item.id}`, {
-    status: 'published'
   }, false);
-  assert(blocked.status === 400, 'publishing without official source should be blocked');
+  assert(blockedDraft.status === 400, 'saving unverified question should be blocked');
 }
 
 async function createVerifiedSmokeQuestions() {
@@ -199,7 +196,7 @@ async function getJson(pathname) {
   return parseResponse(response);
 }
 
-async function postJson(pathname, body) {
+async function postJson(pathname, body, expectOk = true) {
   const response = await fetch(`${baseUrl}${pathname}`, {
     method: 'POST',
     headers: {
@@ -208,6 +205,12 @@ async function postJson(pathname, body) {
     },
     body: JSON.stringify(body)
   });
+  if (!expectOk) {
+    return {
+      status: response.status,
+      data: await response.json()
+    };
+  }
   return parseResponse(response);
 }
 
