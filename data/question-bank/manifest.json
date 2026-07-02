@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "description": "Ark 面试通题库模块清单。题库源数据按分类模块维护，运行题库由 scripts/build-question-bank.mjs 聚合生成。",
+  "modules": [
+    {
+      "categoryId": "arkts",
+      "name": "ArkTS",
+      "sourceFile": "modules/arkts.json",
+      "idPrefix": "arkts"
+    },
+    {
+      "categoryId": "arkui",
+      "name": "ArkUI",
+      "sourceFile": "modules/arkui.json",
+      "idPrefix": "arkui"
+    },
+    {
+      "categoryId": "stage-model",
+      "name": "Stage 模型",
+      "sourceFile": "modules/stage-model.json",
+      "idPrefix": "stage-model"
+    },
+    {
+      "categoryId": "ability-lifecycle",
+      "name": "Ability 生命周期",
+      "sourceFile": "modules/ability-lifecycle.json",
+      "idPrefix": "ability-lifecycle"
+    },
+    {
+      "categoryId": "component-communication",
+      "name": "组件通信",
+      "sourceFile": "modules/component-communication.json",
+      "idPrefix": "component-communication"
+    },
+    {
+      "categoryId": "state-management",
+      "name": "状态管理",
+      "sourceFile": "modules/state-management.json",
+      "idPrefix": "state-management"
+    },
+    {
+      "categoryId": "routing",
+      "name": "路由导航",
+      "sourceFile": "modules/routing.json",
+      "idPrefix": "routing"
+    },
+    {
+      "categoryId": "network",
+      "name": "网络请求",
+      "sourceFile": "modules/network.json",
+      "idPrefix": "network"
+    },
+    {
+      "categoryId": "permissions",
+      "name": "权限申请",
+      "sourceFile": "modules/permissions.json",
+      "idPrefix": "permissions"
+    },
+    {
+      "categoryId": "storage",
+      "name": "数据存储",
+      "sourceFile": "modules/storage.json",
+      "idPrefix": "storage"
+    },
+    {
+      "categoryId": "preferences",
+      "name": "Preferences",
+      "sourceFile": "modules/preferences.json",
+      "idPrefix": "preferences"
+    },
+    {
+      "categoryId": "relational-store",
+      "name": "relationalStore",
+      "sourceFile": "modules/relational-store.json",
+      "idPrefix": "relational-store"
+    },
+    {
+      "categoryId": "napi",
+      "name": "NAPI",
+      "sourceFile": "modules/napi.json",
+      "idPrefix": "napi"
+    },
+    {
+      "categoryId": "performance",
+      "name": "性能优化",
+      "sourceFile": "modules/performance.json",
+      "idPrefix": "performance"
+    },
+    {
+      "categoryId": "debug-release",
+      "name": "调试与发布",
+      "sourceFile": "modules/debug-release.json",
+      "idPrefix": "debug-release"
+    },
+    {
+      "categoryId": "next-adaptation",
+      "name": "HarmonyOS NEXT 适配",
+      "sourceFile": "modules/next-adaptation.json",
+      "idPrefix": "next-adaptation"
+    }
+  ]
+}

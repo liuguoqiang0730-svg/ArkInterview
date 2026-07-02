@@ -61,12 +61,12 @@ async function runChecks() {
   assert(categories.items.length === 16, 'categories count should be 16');
 
   const questions = await getJson('/api/questions?pageSize=20');
-  assert(questions.total === 0, 'unverified seed questions should not be published');
+  const seedPublishedTotal = questions.total;
 
   await createVerifiedSmokeQuestions();
 
   const publishedQuestions = await getJson('/api/questions?pageSize=20');
-  assert(publishedQuestions.total === 4, 'verified smoke question count should be 4');
+  assert(publishedQuestions.total === seedPublishedTotal + 4, 'verified smoke questions should be added');
 
   const questionDetail = await getJson('/api/questions/q-smoke-single');
   assert(questionDetail.item.sourceRefs.length > 0, 'question detail should include official sources');
