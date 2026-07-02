@@ -53,6 +53,28 @@ Query 参数：
 }
 ```
 
+## 练习会话
+
+### GET /api/practice/session
+
+生成一组练习题，不返回正确答案。客户端进入题目详情或提交答案后再展示解析。
+
+Query 参数：
+
+- `mode`：练习模式，支持 `category`、`random`、`wrongs`、`favorites`，默认 `random`。
+- `categoryId`：可选。`mode=category` 时必填；`mode=random` 时可用于限制分类。
+- `type`：可选，`single`、`multiple`、`boolean`、`short`。
+- `count`：可选，默认 `10`，最大 `50`。
+
+示例：
+
+```http
+GET /api/practice/session?mode=category&categoryId=arkui&count=20
+GET /api/practice/session?mode=random&count=10
+GET /api/practice/session?mode=wrongs&count=20
+GET /api/practice/session?mode=favorites&count=20
+```
+
 ## 答题
 
 ### POST /api/answers/submit
@@ -91,6 +113,8 @@ Query 参数：
 ### GET /api/users/me/stats
 
 返回答题数量、正确率、分类完成度和最近练习时间。
+
+分类统计中的 `attempts` 是作答次数，`answered` 是去重后的已答题目数，`completionRate` 基于去重题目数计算。
 
 ### GET /api/users/me/wrongs
 

@@ -3,6 +3,7 @@ node_modules/
 npm-debug.log*
 backend/storage/*.json
 !backend/storage/.gitkeep
+.tmp/
 
 # HarmonyOS / DevEco
 .hvigor/

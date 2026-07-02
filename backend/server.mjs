@@ -8,8 +8,9 @@ import { randomUUID } from 'node:crypto';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
-const storageDir = path.join(__dirname, 'storage');
-const dbFile = path.join(storageDir, 'db.json');
+const defaultStorageDir = path.join(__dirname, 'storage');
+const dbFile = process.env.DB_FILE ? path.resolve(process.env.DB_FILE) : path.join(defaultStorageDir, 'db.json');
+const storageDir = path.dirname(dbFile);
 const seedCategoriesFile = path.join(rootDir, 'data', 'seed', 'categories.json');
 const seedQuestionsFile = path.join(rootDir, 'data', 'seed', 'questions.json');
 const adminDir = path.join(rootDir, 'admin');
@@ -290,6 +291,63 @@ function interviewPlan(db, query) {
   };
 }
 
+function practiceSession(db, user, query) {
+  const mode = query.get('mode') || 'random';
+  const categoryId = query.get('categoryId');
+  const type = query.get('type');
+  const count = Math.min(Math.max(Number(query.get('count') || 10), 1), 50);
+  const publishedQuestions = db.questions
+    .filter((question) => question.status === 'published')
+    .filter((question) => !type || question.type === type);
+
+  let pool = [];
+  if (mode === 'category') {
+    if (!categoryId) {
+      throw httpError(400, '按分类练习必须传入 categoryId');
+    }
+    pool = publishedQuestions.filter((question) => question.categoryId === categoryId);
+  } else if (mode === 'random') {
+    pool = publishedQuestions.filter((question) => !categoryId || question.categoryId === categoryId);
+  } else if (mode === 'wrongs') {
+    const ids = new Set(Object.values(user.wrongs)
+      .filter((wrong) => !wrong.mastered)
+      .map((wrong) => wrong.questionId));
+    pool = publishedQuestions.filter((question) => ids.has(question.id));
+  } else if (mode === 'favorites') {
+    const ids = new Set(user.favorites);
+    pool = publishedQuestions.filter((question) => ids.has(question.id));
+  } else {
+    throw httpError(400, '练习模式必须是 category、random、wrongs 或 favorites');
+  }
+
+  const selected = shuffle(pool).slice(0, count);
+  return {
+    sessionId: `practice-${mode}-${Date.now()}`,
+    mode,
+    categoryId: categoryId || null,
+    type: type || null,
+    total: selected.length,
+    items: selected.map((question, index) => questionForPractice(question, user, index + 1))
+  };
+}
+
+function questionForPractice(question, user, order) {
+  return stripUndefined({
+    order,
+    ...publicQuestion(question),
+    isFavorite: user.favorites.includes(question.id),
+    wrong: user.wrongs[question.id] || undefined
+  });
+}
+
+function questionDetailForUser(question, user) {
+  return stripUndefined({
+    ...publicQuestion(question, { includeAnswer: true }),
+    isFavorite: user.favorites.includes(question.id),
+    wrong: user.wrongs[question.id] || undefined
+  });
+}
+
 function answerFeedback(question, isCorrect) {
   return {
     isCorrect,
@@ -304,10 +362,13 @@ function statsFor(db, user) {
   const totalAnswers = user.answers.length;
   const gradedAnswers = user.answers.filter((answer) => answer.isCorrect !== null);
   const correctAnswers = gradedAnswers.filter((answer) => answer.isCorrect).length;
+  const answeredQuestionCount = new Set(user.answers.map((answer) => answer.questionId)).size;
+  const masteredWrongCount = Object.values(user.wrongs).filter((wrong) => wrong.mastered).length;
   const categoryMap = new Map(db.categories.map((category) => [category.id, {
     categoryId: category.id,
     name: category.name,
-    answered: 0,
+    attempts: 0,
+    answeredQuestionIds: new Set(),
     correct: 0,
     totalPublished: db.questions.filter((question) => question.categoryId === category.id && question.status === 'published').length
   }]));
@@ -317,7 +378,8 @@ function statsFor(db, user) {
     if (!item) {
       continue;
     }
-    item.answered += 1;
+    item.attempts += 1;
+    item.answeredQuestionIds.add(answer.questionId);
     if (answer.isCorrect) {
       item.correct += 1;
     }
@@ -325,16 +387,26 @@ function statsFor(db, user) {
 
   return {
     totalAnswers,
+    answeredQuestionCount,
     correctAnswers,
     accuracy: gradedAnswers.length === 0 ? 0 : Number((correctAnswers / gradedAnswers.length).toFixed(4)),
     wrongCount: Object.values(user.wrongs).filter((wrong) => !wrong.mastered).length,
+    masteredWrongCount,
     favoriteCount: user.favorites.length,
     lastPracticedAt: user.answers.at(-1)?.submittedAt || null,
-    categories: Array.from(categoryMap.values()).map((item) => ({
-      ...item,
-      completionRate: item.totalPublished === 0 ? 0 : Number((Math.min(item.answered, item.totalPublished) / item.totalPublished).toFixed(4)),
-      accuracy: item.answered === 0 ? 0 : Number((item.correct / item.answered).toFixed(4))
-    }))
+    categories: Array.from(categoryMap.values()).map((item) => {
+      const answered = item.answeredQuestionIds.size;
+      return {
+        categoryId: item.categoryId,
+        name: item.name,
+        attempts: item.attempts,
+        answered,
+        correct: item.correct,
+        totalPublished: item.totalPublished,
+        completionRate: item.totalPublished === 0 ? 0 : Number((answered / item.totalPublished).toFixed(4)),
+        accuracy: item.attempts === 0 ? 0 : Number((item.correct / item.attempts).toFixed(4))
+      };
+    })
   };
 }
 
@@ -436,6 +508,11 @@ async function routeApi(req, res, db, url) {
     return;
   }
 
+  if (method === 'GET' && pathname === '/api/practice/session') {
+    sendJson(res, 200, practiceSession(db, user, searchParams));
+    return;
+  }
+
   const questionMatch = pathname.match(/^\/api\/questions\/([^/]+)$/);
   if (method === 'GET' && questionMatch) {
     const question = db.questions.find((item) => item.id === questionMatch[1] && item.status === 'published');
@@ -443,7 +520,7 @@ async function routeApi(req, res, db, url) {
       notFound(res);
       return;
     }
-    sendJson(res, 200, { item: publicQuestion(question, { includeAnswer: true }) });
+    sendJson(res, 200, { item: questionDetailForUser(question, user) });
     return;
   }
 

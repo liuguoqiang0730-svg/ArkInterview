@@ -6,7 +6,8 @@
   "description": "Ark 面试通：面向鸿蒙开发者的刷题与面试训练 App MVP 服务端和管理后台骨架。",
   "scripts": {
     "dev": "node backend/server.mjs",
-    "seed": "node backend/server.mjs --seed-only"
+    "seed": "node backend/server.mjs --seed-only",
+    "test": "node backend/smoke-test.mjs"
   },
   "engines": {
     "node": ">=18"

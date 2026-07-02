@@ -29,6 +29,14 @@ npm run dev
 
 服务首次启动会从 `data/seed/` 生成本地运行库 `backend/storage/db.json`。该文件是本地运行状态，不纳入版本控制。
 
+## 验证
+
+```powershell
+npm test
+```
+
+测试会使用 `.tmp/smoke-db.json` 启动临时后端，覆盖分类、题目、随机练习、错题练习、收藏练习、答题提交和基础模拟面试接口。
+
 ## MVP 原则
 
 第一版以“能稳定刷题”为目标：
