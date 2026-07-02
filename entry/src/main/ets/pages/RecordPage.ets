@@ -238,6 +238,10 @@ struct RecordPage {
         Text(`作答 ${item.attempts} 次`)
           .fontSize(12)
           .fontColor(COLOR_MUTED)
+        Text('去练习 >')
+          .fontSize(12)
+          .fontColor(this.progressColor(item.completionRate))
+          .margin({ left: 10 })
       }
       .width('100%')
       .margin({ top: 8 })
@@ -248,6 +252,7 @@ struct RecordPage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+    .onClick(() => this.openCategoryPractice(item))
   }
 
   pageMaxWidth(): number {
@@ -279,6 +284,17 @@ struct RecordPage {
       return '暂无';
     }
     return value.substring(0, 10);
+  }
+
+  openCategoryPractice(item: CategoryStats): void {
+    router.pushUrl({
+      url: 'pages/PracticePage',
+      params: {
+        mode: 'category',
+        categoryId: item.categoryId,
+        title: item.name
+      }
+    });
   }
 
   updateLayoutMode(): void {
