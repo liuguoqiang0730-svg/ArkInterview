@@ -107,40 +107,131 @@ struct QuestionPage {
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
       } else if (this.question) {
-        Scroll() {
-          Column() {
-            this.QuestionCard()
-
-            this.AnswerArea()
-
-            Button(this.feedback ? '已提交' : '提交答案')
-              .width('100%')
-              .height(46)
-              .fontSize(16)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#ffffff')
-              .enabled(!this.feedback)
-              .backgroundColor(this.feedback ? '#aab3bd' : COLOR_GREEN)
-              .borderRadius(8)
-              .margin({ top: 16 })
-              .onClick(() => this.submit())
-
-            if (this.feedback) {
-              this.FeedbackPanel()
-            }
-          }
-          .width('100%')
-          .padding(16)
-          .constraintSize({ maxWidth: this.pageMaxWidth() })
-          .alignSelf(ItemAlign.Center)
+        if (this.isTablet) {
+          this.TabletAnswerWorkspace()
+        } else {
+          this.PhoneAnswerFlow()
         }
-        .width('100%')
-        .layoutWeight(1)
       }
     }
     .width('100%')
     .height('100%')
     .backgroundColor(COLOR_BG)
+  }
+
+  @Builder
+  PhoneAnswerFlow() {
+    Scroll() {
+      Column() {
+        this.QuestionCard()
+        this.AnswerArea()
+        this.SubmitButton()
+        if (this.feedback) {
+          this.FeedbackPanel()
+        }
+      }
+      .width('100%')
+      .padding(16)
+      .constraintSize({ maxWidth: this.pageMaxWidth() })
+      .alignSelf(ItemAlign.Center)
+    }
+    .width('100%')
+    .layoutWeight(1)
+  }
+
+  @Builder
+  TabletAnswerWorkspace() {
+    Row() {
+      Scroll() {
+        Column() {
+          this.QuestionCard()
+          this.AnswerArea()
+          this.SubmitButton()
+        }
+        .width('100%')
+        .padding(16)
+      }
+      .layoutWeight(6)
+      .height('100%')
+      .margin({ right: 16 })
+
+      Scroll() {
+        Column() {
+          if (this.feedback) {
+            this.FeedbackPanel()
+          } else {
+            this.StudyPanel()
+          }
+        }
+        .width('100%')
+        .padding(16)
+      }
+      .layoutWeight(4)
+      .height('100%')
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .padding({ left: 16, right: 16, top: 16, bottom: 18 })
+    .constraintSize({ maxWidth: this.pageMaxWidth() })
+    .alignSelf(ItemAlign.Center)
+    .alignItems(VerticalAlign.Top)
+  }
+
+  @Builder
+  StudyPanel() {
+    Column() {
+      Text('答题提示')
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_NAVY)
+        .width('100%')
+
+      Text('先独立作答，提交后在这里查看正确答案、解析和评分点。')
+        .fontSize(13)
+        .fontColor(COLOR_MUTED)
+        .lineHeight(20)
+        .margin({ top: 10 })
+        .width('100%')
+
+      this.SectionText('关联知识点', (this.question?.knowledgePoints || []).join(' / '))
+
+      if (this.question?.wrong && this.question.wrong.mastered !== true) {
+        Row() {
+          Text('错题本')
+            .fontSize(12)
+            .fontColor(COLOR_ORANGE)
+            .backgroundColor(COLOR_SOFT_ORANGE)
+            .padding({ left: 9, right: 9, top: 5, bottom: 5 })
+            .borderRadius(8)
+          Text(`已错 ${this.question.wrong.wrongCount} 次`)
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .margin({ left: 8 })
+        }
+        .width('100%')
+        .margin({ top: 14 })
+      }
+    }
+    .width('100%')
+    .padding(16)
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  SubmitButton() {
+    Button(this.feedback ? '已提交' : '提交答案')
+      .width('100%')
+      .height(46)
+      .fontSize(16)
+      .fontWeight(FontWeight.Bold)
+      .fontColor('#ffffff')
+      .enabled(!this.feedback)
+      .backgroundColor(this.feedback ? '#aab3bd' : COLOR_GREEN)
+      .borderRadius(8)
+      .margin({ top: 16 })
+      .onClick(() => this.submit())
   }
 
   @Builder
@@ -461,7 +552,7 @@ struct QuestionPage {
   }
 
   pageMaxWidth(): number {
-    return this.isTablet ? 860 : 520;
+    return this.isTablet ? 1120 : 520;
   }
 
   updateLayoutMode(): void {
