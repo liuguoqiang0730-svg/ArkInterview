@@ -1,1 +1,72 @@
-[]
+[
+  {
+    "id": "stage-model-001",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 Stage 模型中，需要在 HAP 加载期间做资源预加载或线程创建，最应该放在哪个运行时类中？",
+    "options": [
+      {
+        "id": "a",
+        "text": "AbilityStage"
+      },
+      {
+        "id": "b",
+        "text": "UIAbilityContext"
+      },
+      {
+        "id": "c",
+        "text": "WindowStage"
+      },
+      {
+        "id": "d",
+        "text": "页面自定义组件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "AbilityStage 是 HAP 的运行时类，官方 API 说明明确它用于在 HAP 加载期间通知开发者执行初始化，例如资源预加载和线程创建。UIAbility 和页面组件更偏向具体 UIAbility 实例和页面展示流程。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "AbilityStage",
+      "HAP 初始化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "stage-model-002",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "AbilityStage.onCreate() 可以依赖异步回调完成后再返回，因此适合把必须等待完成的异步初始化都放在这里。",
+    "answerBoolean": false,
+    "explanation": "官方 API 说明中 AbilityStage.onCreate() 是同步返回，并且不支持异步回调。这里可以做阶段初始化，但不能假设框架会等待普通异步回调完成后再继续后续流程。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "onCreate",
+      "同步生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  }
+]

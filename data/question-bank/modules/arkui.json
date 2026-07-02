@@ -1,1 +1,73 @@
-[]
+[
+  {
+    "id": "arkui-001",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 ArkUI 自定义组件生命周期中，哪个阶段发生在组件实例创建后、build() 执行前，并允许修改状态变量？",
+    "options": [
+      {
+        "id": "a",
+        "text": "aboutToAppear"
+      },
+      {
+        "id": "b",
+        "text": "onDidBuild"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "d",
+        "text": "onWindowStageDestroy"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "aboutToAppear 在自定义组件新实例创建后、build() 执行前触发，官方说明允许开发者在该阶段修改状态变量。onDidBuild 发生在 build() 之后，aboutToDisappear 则是组件销毁前。",
+    "knowledgePoints": [
+      "ArkUI",
+      "自定义组件生命周期",
+      "aboutToAppear"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "arkui-002",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "aboutToDisappear() 发生在自定义组件销毁前，因此推荐在这里修改状态变量，尤其是修改 @Link 变量。",
+    "answerBoolean": false,
+    "explanation": "官方 API 说明中 aboutToDisappear() 在自定义组件销毁前执行，但不允许在该函数内修改状态变量，尤其修改 @Link 变量可能导致应用行为不稳定。销毁前更适合做不依赖状态刷新链路的清理。",
+    "knowledgePoints": [
+      "ArkUI",
+      "aboutToDisappear",
+      "状态变量",
+      "@Link"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  }
+]

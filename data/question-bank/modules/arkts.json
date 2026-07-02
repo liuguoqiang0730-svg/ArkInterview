@@ -1,1 +1,92 @@
-[]
+[
+  {
+    "id": "arkts-001",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在 ArkTS 严格编译下，向接口提交收藏请求这类结构化数据时，哪种写法更稳妥？",
+    "options": [
+      {
+        "id": "a",
+        "text": "先声明请求体接口或类，再让对象字面量符合该类型"
+      },
+      {
+        "id": "b",
+        "text": "直接把未声明类型的对象字面量传给任意函数，等运行时再校验字段"
+      },
+      {
+        "id": "c",
+        "text": "把所有请求体都声明为 any，避免编译器检查字段"
+      },
+      {
+        "id": "d",
+        "text": "只传 JSON 字符串，业务层不再描述字段结构"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 对对象字面量比普通 TypeScript 更严格。接口请求体、缓存记录这类有固定字段的数据，应先用 interface 或 class 描述形状，再创建符合该形状的对象，这样编译器可以提前发现字段名和类型问题。",
+    "knowledgePoints": [
+      "ArkTS 类型系统",
+      "对象字面量",
+      "接口建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "arkts-002",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "遇到 ArkTS 对 spread 写法报错时，更新已选项数组的处理方式应优先选择哪一种？",
+    "options": [
+      {
+        "id": "a",
+        "text": "用显式复制、遍历或 push 生成目标数组，并保持数组元素类型清晰"
+      },
+      {
+        "id": "b",
+        "text": "忽略编译错误，等真机运行时再观察是否崩溃"
+      },
+      {
+        "id": "c",
+        "text": "把数组改成 Object，再通过对象展开合并字段"
+      },
+      {
+        "id": "d",
+        "text": "删除相关状态变量类型，让编译器自动推断为任意结构"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 编译会限制不明确的 spread 用法。状态数组更新时，显式创建新数组并逐项写入，能让元素类型和更新过程更清楚，也更容易通过 ArkTS 的静态检查。",
+    "knowledgePoints": [
+      "ArkTS 编译规则",
+      "数组状态更新",
+      "静态类型检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  }
+]

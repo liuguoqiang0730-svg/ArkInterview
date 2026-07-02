@@ -1,1 +1,170 @@
-[]
+[
+  {
+    "id": "ability-lifecycle-001",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "一个 UIAbility 从完全关闭状态冷启动时，初始化业务逻辑最对应哪个生命周期回调？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onCreate(want, launchParam)"
+      },
+      {
+        "id": "b",
+        "text": "onBackground()"
+      },
+      {
+        "id": "c",
+        "text": "onWindowStageDestroy()"
+      },
+      {
+        "id": "d",
+        "text": "aboutToDisappear()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility.onCreate(want, launchParam) 用于 UIAbility 实例从完全关闭状态被创建时初始化业务逻辑，也就是冷启动进入的生命周期回调。onBackground、onWindowStageDestroy 和 aboutToDisappear 分别对应后台、窗口销毁和组件销毁场景。",
+    "knowledgePoints": [
+      "UIAbility",
+      "冷启动",
+      "onCreate"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "ability-lifecycle-002",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 UIAbility 中拿到 WindowStage 并加载页面内容，最应该从哪个回调开始处理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onWindowStageCreate(windowStage)"
+      },
+      {
+        "id": "b",
+        "text": "onCreate(want, launchParam)"
+      },
+      {
+        "id": "c",
+        "text": "onBackground()"
+      },
+      {
+        "id": "d",
+        "text": "onDestroy()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility.onWindowStageCreate(windowStage) 在该 UIAbility 的 WindowStage 创建时触发，并直接提供 windowStage 参数。页面加载和窗口相关初始化应从这里处理，而不是在尚未获得 WindowStage 的 onCreate 中硬取窗口。",
+    "knowledgePoints": [
+      "UIAbility",
+      "WindowStage",
+      "页面加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "ability-lifecycle-003",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 UIAbility 前后台切换中的资源处理，哪些说法是正确的？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onForeground() 可用于应用从后台到前台时请求所需系统资源"
+      },
+      {
+        "id": "b",
+        "text": "onBackground() 可用于 UI 不再可见时释放资源，例如停止定位服务"
+      },
+      {
+        "id": "c",
+        "text": "onBackground() 表示 WindowStage 已经被创建，适合首次加载页面"
+      },
+      {
+        "id": "d",
+        "text": "onForeground() 是组件 build() 之后的数据上报回调"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "explanation": "官方 API 说明中，onForeground() 在应用从后台切到前台时触发，可请求所需系统资源；onBackground() 在应用从前台切到后台时触发，可在 UI 不可见时释放资源。窗口创建和组件构建不属于这两个回调的职责。",
+    "knowledgePoints": [
+      "UIAbility",
+      "onForeground",
+      "onBackground",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "ability-lifecycle-004",
+    "categoryId": "ability-lifecycle",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 UIAbility 冷启动时 onCreate 与 onWindowStageCreate 的职责区别。",
+    "referenceAnswer": "onCreate(want, launchParam) 面向 UIAbility 实例冷启动创建，适合初始化业务逻辑；onWindowStageCreate(windowStage) 在该 UIAbility 的 WindowStage 创建时触发，适合进行窗口相关初始化和页面加载。不要把需要 windowStage 的页面加载逻辑直接放到 onCreate 中处理。",
+    "scoringPoints": [
+      "能说明 onCreate 对应 UIAbility 冷启动创建和业务初始化",
+      "能说明 onWindowStageCreate 会提供 WindowStage，适合窗口和页面加载",
+      "能区分业务初始化和窗口初始化的边界"
+    ],
+    "explanation": "这道题考察 Stage 模型里 UIAbility 实例生命周期和窗口阶段的分工。面试中常见误区是把所有初始化都塞进 onCreate，导致还没有 WindowStage 时就处理页面加载。",
+    "knowledgePoints": [
+      "UIAbility",
+      "onCreate",
+      "onWindowStageCreate",
+      "WindowStage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

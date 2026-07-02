@@ -1,1 +1,401 @@
-[]
+[
+  {
+    "id": "arkts-001",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在 ArkTS 严格编译下，向接口提交收藏请求这类结构化数据时，哪种写法更稳妥？",
+    "options": [
+      {
+        "id": "a",
+        "text": "先声明请求体接口或类，再让对象字面量符合该类型"
+      },
+      {
+        "id": "b",
+        "text": "直接把未声明类型的对象字面量传给任意函数，等运行时再校验字段"
+      },
+      {
+        "id": "c",
+        "text": "把所有请求体都声明为 any，避免编译器检查字段"
+      },
+      {
+        "id": "d",
+        "text": "只传 JSON 字符串，业务层不再描述字段结构"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 对对象字面量比普通 TypeScript 更严格。接口请求体、缓存记录这类有固定字段的数据，应先用 interface 或 class 描述形状，再创建符合该形状的对象，这样编译器可以提前发现字段名和类型问题。",
+    "knowledgePoints": [
+      "ArkTS 类型系统",
+      "对象字面量",
+      "接口建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "arkts-002",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "遇到 ArkTS 对 spread 写法报错时，更新已选项数组的处理方式应优先选择哪一种？",
+    "options": [
+      {
+        "id": "a",
+        "text": "用显式复制、遍历或 push 生成目标数组，并保持数组元素类型清晰"
+      },
+      {
+        "id": "b",
+        "text": "忽略编译错误，等真机运行时再观察是否崩溃"
+      },
+      {
+        "id": "c",
+        "text": "把数组改成 Object，再通过对象展开合并字段"
+      },
+      {
+        "id": "d",
+        "text": "删除相关状态变量类型，让编译器自动推断为任意结构"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 编译会限制不明确的 spread 用法。状态数组更新时，显式创建新数组并逐项写入，能让元素类型和更新过程更清楚，也更容易通过 ArkTS 的静态检查。",
+    "knowledgePoints": [
+      "ArkTS 编译规则",
+      "数组状态更新",
+      "静态类型检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "arkui-001",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 ArkUI 自定义组件生命周期中，哪个阶段发生在组件实例创建后、build() 执行前，并允许修改状态变量？",
+    "options": [
+      {
+        "id": "a",
+        "text": "aboutToAppear"
+      },
+      {
+        "id": "b",
+        "text": "onDidBuild"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "d",
+        "text": "onWindowStageDestroy"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "aboutToAppear 在自定义组件新实例创建后、build() 执行前触发，官方说明允许开发者在该阶段修改状态变量。onDidBuild 发生在 build() 之后，aboutToDisappear 则是组件销毁前。",
+    "knowledgePoints": [
+      "ArkUI",
+      "自定义组件生命周期",
+      "aboutToAppear"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "arkui-002",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "aboutToDisappear() 发生在自定义组件销毁前，因此推荐在这里修改状态变量，尤其是修改 @Link 变量。",
+    "answerBoolean": false,
+    "explanation": "官方 API 说明中 aboutToDisappear() 在自定义组件销毁前执行，但不允许在该函数内修改状态变量，尤其修改 @Link 变量可能导致应用行为不稳定。销毁前更适合做不依赖状态刷新链路的清理。",
+    "knowledgePoints": [
+      "ArkUI",
+      "aboutToDisappear",
+      "状态变量",
+      "@Link"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "stage-model-001",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 Stage 模型中，需要在 HAP 加载期间做资源预加载或线程创建，最应该放在哪个运行时类中？",
+    "options": [
+      {
+        "id": "a",
+        "text": "AbilityStage"
+      },
+      {
+        "id": "b",
+        "text": "UIAbilityContext"
+      },
+      {
+        "id": "c",
+        "text": "WindowStage"
+      },
+      {
+        "id": "d",
+        "text": "页面自定义组件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "AbilityStage 是 HAP 的运行时类，官方 API 说明明确它用于在 HAP 加载期间通知开发者执行初始化，例如资源预加载和线程创建。UIAbility 和页面组件更偏向具体 UIAbility 实例和页面展示流程。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "AbilityStage",
+      "HAP 初始化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "stage-model-002",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "AbilityStage.onCreate() 可以依赖异步回调完成后再返回，因此适合把必须等待完成的异步初始化都放在这里。",
+    "answerBoolean": false,
+    "explanation": "官方 API 说明中 AbilityStage.onCreate() 是同步返回，并且不支持异步回调。这里可以做阶段初始化，但不能假设框架会等待普通异步回调完成后再继续后续流程。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "onCreate",
+      "同步生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "ability-lifecycle-001",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "一个 UIAbility 从完全关闭状态冷启动时，初始化业务逻辑最对应哪个生命周期回调？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onCreate(want, launchParam)"
+      },
+      {
+        "id": "b",
+        "text": "onBackground()"
+      },
+      {
+        "id": "c",
+        "text": "onWindowStageDestroy()"
+      },
+      {
+        "id": "d",
+        "text": "aboutToDisappear()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility.onCreate(want, launchParam) 用于 UIAbility 实例从完全关闭状态被创建时初始化业务逻辑，也就是冷启动进入的生命周期回调。onBackground、onWindowStageDestroy 和 aboutToDisappear 分别对应后台、窗口销毁和组件销毁场景。",
+    "knowledgePoints": [
+      "UIAbility",
+      "冷启动",
+      "onCreate"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "ability-lifecycle-002",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 UIAbility 中拿到 WindowStage 并加载页面内容，最应该从哪个回调开始处理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onWindowStageCreate(windowStage)"
+      },
+      {
+        "id": "b",
+        "text": "onCreate(want, launchParam)"
+      },
+      {
+        "id": "c",
+        "text": "onBackground()"
+      },
+      {
+        "id": "d",
+        "text": "onDestroy()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility.onWindowStageCreate(windowStage) 在该 UIAbility 的 WindowStage 创建时触发，并直接提供 windowStage 参数。页面加载和窗口相关初始化应从这里处理，而不是在尚未获得 WindowStage 的 onCreate 中硬取窗口。",
+    "knowledgePoints": [
+      "UIAbility",
+      "WindowStage",
+      "页面加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "ability-lifecycle-003",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 UIAbility 前后台切换中的资源处理，哪些说法是正确的？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onForeground() 可用于应用从后台到前台时请求所需系统资源"
+      },
+      {
+        "id": "b",
+        "text": "onBackground() 可用于 UI 不再可见时释放资源，例如停止定位服务"
+      },
+      {
+        "id": "c",
+        "text": "onBackground() 表示 WindowStage 已经被创建，适合首次加载页面"
+      },
+      {
+        "id": "d",
+        "text": "onForeground() 是组件 build() 之后的数据上报回调"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "explanation": "官方 API 说明中，onForeground() 在应用从后台切到前台时触发，可请求所需系统资源；onBackground() 在应用从前台切到后台时触发，可在 UI 不可见时释放资源。窗口创建和组件构建不属于这两个回调的职责。",
+    "knowledgePoints": [
+      "UIAbility",
+      "onForeground",
+      "onBackground",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "ability-lifecycle-004",
+    "categoryId": "ability-lifecycle",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 UIAbility 冷启动时 onCreate 与 onWindowStageCreate 的职责区别。",
+    "referenceAnswer": "onCreate(want, launchParam) 面向 UIAbility 实例冷启动创建，适合初始化业务逻辑；onWindowStageCreate(windowStage) 在该 UIAbility 的 WindowStage 创建时触发，适合进行窗口相关初始化和页面加载。不要把需要 windowStage 的页面加载逻辑直接放到 onCreate 中处理。",
+    "scoringPoints": [
+      "能说明 onCreate 对应 UIAbility 冷启动创建和业务初始化",
+      "能说明 onWindowStageCreate 会提供 WindowStage，适合窗口和页面加载",
+      "能区分业务初始化和窗口初始化的边界"
+    ],
+    "explanation": "这道题考察 Stage 模型里 UIAbility 实例生命周期和窗口阶段的分工。面试中常见误区是把所有初始化都塞进 onCreate，导致还没有 WindowStage 时就处理页面加载。",
+    "knowledgePoints": [
+      "UIAbility",
+      "onCreate",
+      "onWindowStageCreate",
+      "WindowStage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]
