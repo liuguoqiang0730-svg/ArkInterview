@@ -77,14 +77,17 @@ struct HomePage {
       .layoutWeight(4)
       .margin({ right: 18 })
       .alignItems(HorizontalAlign.Start)
+      .justifyContent(FlexAlign.Start)
 
       Column() {
         this.CategorySection()
       }
       .layoutWeight(6)
       .alignItems(HorizontalAlign.Start)
+      .justifyContent(FlexAlign.Start)
     }
     .width('100%')
+    .alignItems(VerticalAlign.Top)
     .constraintSize({ maxWidth: 1220 })
     .alignSelf(ItemAlign.Center)
     .padding({ left: 28, right: 28, top: 26, bottom: 18 })
