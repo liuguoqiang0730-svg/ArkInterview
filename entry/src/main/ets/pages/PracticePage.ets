@@ -1,6 +1,7 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
+import { BottomNavBar } from '../components/BottomNavBar';
 import { PracticeMode, PracticeSession, Question } from '../models/QuestionModels';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
@@ -23,6 +24,7 @@ const TABLET_MIN_VP: number = 680;
 @Component
 struct PracticePage {
   @State private title: string = '练习';
+  @State private mode: string = 'random';
   @State private session: PracticeSession | undefined = undefined;
   @State private selectedQuestion: Question | undefined = undefined;
   @State private loading: boolean = true;
@@ -37,6 +39,7 @@ struct PracticePage {
     const params = router.getParams() as Record<string, string>;
     const mode = params.mode || 'random';
     const categoryId = params.categoryId || undefined;
+    this.mode = mode;
     this.title = params.title || this.modeTitle(mode);
     this.loading = true;
 
@@ -64,86 +67,92 @@ struct PracticePage {
   build() {
     Column() {
       Column() {
-        Row() {
-          Button('<')
-            .width(38)
-            .height(34)
-            .fontColor(COLOR_NAVY)
-            .backgroundColor('#eef2f6')
-            .borderRadius(8)
-            .onClick(() => router.back())
-          Text(this.title)
-            .fontSize(22)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(COLOR_NAVY)
-            .layoutWeight(1)
-            .textAlign(TextAlign.Center)
-          Button('换题')
-            .height(34)
-            .fontSize(13)
-            .fontColor(COLOR_GREEN)
-            .backgroundColor(COLOR_SOFT_GREEN)
-            .borderRadius(8)
-            .onClick(() => this.loadSession())
-        }
-        .width('100%')
-
-        Row() {
-          this.SummaryPill('题量', `${this.session?.total ?? 0}`)
-          this.SummaryPill('模式', this.title)
-          this.SummaryPill('状态', this.loading ? '加载中' : '可练习')
-        }
-        .width('100%')
-        .margin({ top: 14 })
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 14 })
-      .backgroundColor(COLOR_SURFACE)
-      .borderRadius(this.isTablet ? 8 : 0)
-      .constraintSize({ maxWidth: this.pageMaxWidth() })
-      .alignSelf(ItemAlign.Center)
-      .margin({ top: this.isTablet ? 20 : 0 })
-
-      if (this.loading) {
         Column() {
-          LoadingProgress()
-            .width(36)
-            .height(36)
-          Text('正在加载训练题目')
-            .fontSize(14)
-            .fontColor(COLOR_MUTED)
-            .margin({ top: 12 })
+          Row() {
+            Button('<')
+              .width(38)
+              .height(34)
+              .fontColor(COLOR_NAVY)
+              .backgroundColor('#eef2f6')
+              .borderRadius(8)
+              .onClick(() => router.back())
+            Text(this.title)
+              .fontSize(22)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(COLOR_NAVY)
+              .layoutWeight(1)
+              .textAlign(TextAlign.Center)
+            Button('换题')
+              .height(34)
+              .fontSize(13)
+              .fontColor(COLOR_GREEN)
+              .backgroundColor(COLOR_SOFT_GREEN)
+              .borderRadius(8)
+              .onClick(() => this.loadSession())
+          }
+          .width('100%')
+
+          Row() {
+            this.SummaryPill('题量', `${this.session?.total ?? 0}`)
+            this.SummaryPill('模式', this.title)
+            this.SummaryPill('状态', this.loading ? '加载中' : '可练习')
+          }
+          .width('100%')
+          .margin({ top: 14 })
         }
         .width('100%')
-        .layoutWeight(1)
-        .justifyContent(FlexAlign.Center)
-      } else if ((this.session?.items.length ?? 0) === 0) {
-        Column() {
-          Text('当前模式下还没有可练习题目')
-            .fontSize(16)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(COLOR_TEXT)
-          Text('可以先切换到随机练习，或等待该模块题库补充。')
-            .fontSize(13)
-            .fontColor(COLOR_MUTED)
-            .lineHeight(19)
-            .textAlign(TextAlign.Center)
-            .margin({ top: 8 })
-        }
-        .width('100%')
-        .padding(20)
-        .margin({ left: 16, right: 16, top: 20 })
+        .padding({ left: 16, right: 16, top: 16, bottom: 14 })
         .backgroundColor(COLOR_SURFACE)
-        .borderRadius(8)
+        .borderRadius(this.isTablet ? 8 : 0)
         .constraintSize({ maxWidth: this.pageMaxWidth() })
         .alignSelf(ItemAlign.Center)
-      } else {
-        if (this.isTablet) {
-          this.TabletPracticeWorkspace()
+        .margin({ top: this.isTablet ? 20 : 0 })
+
+        if (this.loading) {
+          Column() {
+            LoadingProgress()
+              .width(36)
+              .height(36)
+            Text('正在加载训练题目')
+              .fontSize(14)
+              .fontColor(COLOR_MUTED)
+              .margin({ top: 12 })
+          }
+          .width('100%')
+          .layoutWeight(1)
+          .justifyContent(FlexAlign.Center)
+        } else if ((this.session?.items.length ?? 0) === 0) {
+          Column() {
+            Text('当前模式下还没有可练习题目')
+              .fontSize(16)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(COLOR_TEXT)
+            Text('可以先切换到随机练习，或等待该模块题库补充。')
+              .fontSize(13)
+              .fontColor(COLOR_MUTED)
+              .lineHeight(19)
+              .textAlign(TextAlign.Center)
+              .margin({ top: 8 })
+          }
+          .width('100%')
+          .padding(20)
+          .margin({ left: 16, right: 16, top: 20 })
+          .backgroundColor(COLOR_SURFACE)
+          .borderRadius(8)
+          .constraintSize({ maxWidth: this.pageMaxWidth() })
+          .alignSelf(ItemAlign.Center)
         } else {
-          this.QuestionList()
+          if (this.isTablet) {
+            this.TabletPracticeWorkspace()
+          } else {
+            this.QuestionList()
+          }
         }
       }
+      .layoutWeight(1)
+      .width('100%')
+
+      BottomNavBar({ active: this.navActive(), isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')
@@ -415,6 +424,13 @@ struct PracticePage {
 
   pageMaxWidth(): number {
     return this.isTablet ? 1120 : 520;
+  }
+
+  navActive(): string {
+    if (this.mode === 'wrongs' || this.mode === 'favorites') {
+      return this.mode;
+    }
+    return '';
   }
 
   isSelectedQuestion(question: Question): boolean {

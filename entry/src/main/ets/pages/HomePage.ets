@@ -2,6 +2,7 @@ import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
 import { APP_NAME } from '../app/AppConfig';
+import { BottomNavBar } from '../components/BottomNavBar';
 import { Category, UserStats } from '../models/QuestionModels';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
@@ -59,7 +60,7 @@ struct HomePage {
       .layoutWeight(1)
       .backgroundColor(COLOR_BG)
 
-      this.BottomNav()
+      BottomNavBar({ active: 'home', isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')
@@ -364,44 +365,6 @@ struct HomePage {
     .onClick(() => this.openPractice('category', category))
   }
 
-  @Builder
-  BottomNav() {
-    Row() {
-      this.NavItem('首页', '训练', true, 'home')
-      this.NavItem('错题', '复盘', false, 'wrongs')
-      this.NavItem('收藏', '重点', false, 'favorites')
-      this.NavItem('记录', '进度', false, 'records')
-    }
-    .width('100%')
-    .height(this.isTablet ? 68 : 60)
-    .constraintSize({ maxWidth: this.isTablet ? 1220 : 520 })
-    .alignSelf(ItemAlign.Center)
-    .padding({ left: this.isTablet ? 28 : 18, right: this.isTablet ? 28 : 18, top: 8, bottom: 8 })
-    .backgroundColor(COLOR_SURFACE)
-    .border({ width: { top: 1 }, color: COLOR_LINE })
-  }
-
-  @Builder
-  NavItem(title: string, desc: string, active: boolean, target: string) {
-    Column() {
-      Text(title)
-        .fontSize(13)
-        .fontWeight(active ? FontWeight.Bold : FontWeight.Normal)
-        .fontColor(active ? COLOR_GREEN : COLOR_MUTED)
-      Text(desc)
-        .fontSize(10)
-        .fontColor(active ? COLOR_GREEN : '#98a2b3')
-        .margin({ top: 2 })
-    }
-    .layoutWeight(1)
-    .height('100%')
-    .justifyContent(FlexAlign.Center)
-    .backgroundColor(active ? COLOR_SOFT_GREEN : COLOR_SURFACE)
-    .borderRadius(8)
-    .margin({ left: 4, right: 4 })
-    .onClick(() => this.openBottomNav(target))
-  }
-
   categoryProgress(categoryId: string): string {
     if (!this.stats) {
       return '待练习';
@@ -480,19 +443,6 @@ struct HomePage {
     } catch (error) {
       this.isTablet = false;
     }
-  }
-
-  openBottomNav(target: string): void {
-    if (target === 'home') {
-      return;
-    }
-    if (target === 'records') {
-      router.pushUrl({
-        url: 'pages/RecordPage'
-      });
-      return;
-    }
-    this.openPractice(target);
   }
 
   openPractice(mode: string, category?: Category) {

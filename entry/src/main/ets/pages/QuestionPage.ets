@@ -1,6 +1,7 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
+import { BottomNavBar } from '../components/BottomNavBar';
 import { Question, QuestionOption, SubmitAnswerResponse } from '../models/QuestionModels';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
@@ -63,56 +64,62 @@ struct QuestionPage {
 
   build() {
     Column() {
-      Row() {
-        Button('<')
-          .width(38)
-          .height(34)
-          .fontColor(COLOR_NAVY)
-          .backgroundColor('#eef2f6')
-          .borderRadius(8)
-          .onClick(() => router.back())
-        Text('训练答题')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_NAVY)
-          .layoutWeight(1)
-          .textAlign(TextAlign.Center)
-        Button(this.question?.isFavorite ? '已收藏' : '收藏')
-          .height(34)
-          .fontSize(13)
-          .fontColor(this.question?.isFavorite ? COLOR_ORANGE : COLOR_GREEN)
-          .backgroundColor(this.question?.isFavorite ? COLOR_SOFT_ORANGE : COLOR_SOFT_GREEN)
-          .borderRadius(8)
-          .onClick(() => this.toggleFavorite())
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 14 })
-      .backgroundColor(COLOR_SURFACE)
-      .borderRadius(this.isTablet ? 8 : 0)
-      .constraintSize({ maxWidth: this.pageMaxWidth() })
-      .alignSelf(ItemAlign.Center)
-      .margin({ top: this.isTablet ? 20 : 0 })
-
-      if (this.loading) {
-        Column() {
-          LoadingProgress()
-            .width(36)
-            .height(36)
-          Text('正在加载题目详情')
-            .fontSize(14)
-            .fontColor(COLOR_MUTED)
-            .margin({ top: 12 })
+      Column() {
+        Row() {
+          Button('<')
+            .width(38)
+            .height(34)
+            .fontColor(COLOR_NAVY)
+            .backgroundColor('#eef2f6')
+            .borderRadius(8)
+            .onClick(() => router.back())
+          Text('训练答题')
+            .fontSize(22)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+            .layoutWeight(1)
+            .textAlign(TextAlign.Center)
+          Button(this.question?.isFavorite ? '已收藏' : '收藏')
+            .height(34)
+            .fontSize(13)
+            .fontColor(this.question?.isFavorite ? COLOR_ORANGE : COLOR_GREEN)
+            .backgroundColor(this.question?.isFavorite ? COLOR_SOFT_ORANGE : COLOR_SOFT_GREEN)
+            .borderRadius(8)
+            .onClick(() => this.toggleFavorite())
         }
         .width('100%')
-        .layoutWeight(1)
-        .justifyContent(FlexAlign.Center)
-      } else if (this.question) {
-        if (this.isTablet) {
-          this.TabletAnswerWorkspace()
-        } else {
-          this.PhoneAnswerFlow()
+        .padding({ left: 16, right: 16, top: 16, bottom: 14 })
+        .backgroundColor(COLOR_SURFACE)
+        .borderRadius(this.isTablet ? 8 : 0)
+        .constraintSize({ maxWidth: this.pageMaxWidth() })
+        .alignSelf(ItemAlign.Center)
+        .margin({ top: this.isTablet ? 20 : 0 })
+
+        if (this.loading) {
+          Column() {
+            LoadingProgress()
+              .width(36)
+              .height(36)
+            Text('正在加载题目详情')
+              .fontSize(14)
+              .fontColor(COLOR_MUTED)
+              .margin({ top: 12 })
+          }
+          .width('100%')
+          .layoutWeight(1)
+          .justifyContent(FlexAlign.Center)
+        } else if (this.question) {
+          if (this.isTablet) {
+            this.TabletAnswerWorkspace()
+          } else {
+            this.PhoneAnswerFlow()
+          }
         }
       }
+      .layoutWeight(1)
+      .width('100%')
+
+      BottomNavBar({ active: '', isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')
