@@ -54,6 +54,7 @@ struct QuestionPage {
   @State private masteringWrong: boolean = false;
   @State private autoMoveToken: number = 0;
   @State private navActive: string = 'home';
+  @State private showCompletionSummary: boolean = false;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -130,7 +131,9 @@ struct QuestionPage {
           this.ProgressPanel()
         }
 
-        if (this.loading) {
+        if (this.showCompletionSummary) {
+          this.CompletionFlow()
+        } else if (this.loading) {
           Column() {
             LoadingProgress()
               .width(36)
@@ -159,6 +162,147 @@ struct QuestionPage {
     .width('100%')
     .height('100%')
     .backgroundColor(COLOR_BG)
+  }
+
+  @Builder
+  CompletionFlow() {
+    Scroll() {
+      Column() {
+        this.CompletionPanel()
+      }
+      .width('100%')
+      .padding(16)
+      .constraintSize({ maxWidth: this.pageMaxWidth() })
+      .alignSelf(ItemAlign.Center)
+    }
+    .width('100%')
+    .layoutWeight(1)
+  }
+
+  @Builder
+  CompletionPanel() {
+    Column() {
+      Text('本轮完成')
+        .fontSize(24)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_NAVY)
+        .width('100%')
+
+      Text('可以继续复盘错题或补做未答题，也可以返回题单重新选择。')
+        .fontSize(13)
+        .fontColor(COLOR_MUTED)
+        .lineHeight(20)
+        .margin({ top: 8 })
+        .width('100%')
+
+      Row() {
+        this.SummaryMetric('题量', String(this.questionIds.length), COLOR_SOFT_BLUE, COLOR_BLUE)
+        this.SummaryMetric('已答', String(this.answeredCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+        this.SummaryMetric('正确率', this.correctRateText(), COLOR_SOFT_ORANGE, COLOR_ORANGE)
+      }
+      .width('100%')
+      .margin({ top: 18 })
+
+      Row() {
+        this.SummaryMetric('正确', String(this.correctCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+        this.SummaryMetric('错误', String(this.wrongCount()), COLOR_SOFT_RED, COLOR_RED)
+        this.SummaryMetric('未答', String(this.unansweredCount()), '#f8fafc', COLOR_MUTED)
+      }
+      .width('100%')
+      .margin({ top: 10 })
+
+      Text('题号总览')
+        .fontSize(15)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_TEXT)
+        .width('100%')
+        .margin({ top: 20 })
+
+      Grid() {
+        ForEach(this.answerProgress, (item: AnswerProgressItem) => {
+          GridItem() {
+            Text(String(item.order + 1))
+              .fontSize(13)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.progressTextColor(item))
+              .textAlign(TextAlign.Center)
+              .width('100%')
+              .height(36)
+              .backgroundColor(this.progressBgColor(item))
+              .borderRadius(8)
+              .border({ width: 1, color: this.progressBorderColor(item) })
+          }
+          .onClick(() => this.goQuestionAt(item.order))
+        }, (item: AnswerProgressItem) => item.questionId)
+      }
+      .columnsTemplate(this.isTablet ? '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr' : '1fr 1fr 1fr 1fr 1fr')
+      .columnsGap(8)
+      .rowsGap(8)
+      .width('100%')
+      .margin({ top: 12 })
+
+      Row() {
+        Button('复盘错题')
+          .layoutWeight(1)
+          .height(44)
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.wrongCount() > 0 ? '#ffffff' : COLOR_MUTED)
+          .enabled(this.wrongCount() > 0)
+          .backgroundColor(this.wrongCount() > 0 ? COLOR_RED : '#eef2f6')
+          .borderRadius(8)
+          .margin({ right: 8 })
+          .onClick(() => this.goFirstByStatus(ANSWER_STATUS_WRONG))
+        Button('查看未答')
+          .layoutWeight(1)
+          .height(44)
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.unansweredCount() > 0 ? '#ffffff' : COLOR_MUTED)
+          .enabled(this.unansweredCount() > 0)
+          .backgroundColor(this.unansweredCount() > 0 ? COLOR_BLUE : '#eef2f6')
+          .borderRadius(8)
+          .margin({ left: 8 })
+          .onClick(() => this.goFirstByStatus(ANSWER_STATUS_UNANSWERED))
+      }
+      .width('100%')
+      .margin({ top: 22 })
+
+      Button('返回题单')
+        .width('100%')
+        .height(44)
+        .fontSize(15)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_GREEN)
+        .backgroundColor(COLOR_SOFT_GREEN)
+        .borderRadius(8)
+        .margin({ top: 12 })
+        .onClick(() => router.back())
+    }
+    .width('100%')
+    .padding(18)
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  SummaryMetric(label: string, value: string, bgColor: string, textColor: string) {
+    Column() {
+      Text(value)
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(textColor)
+      Text(label)
+        .fontSize(11)
+        .fontColor(COLOR_MUTED)
+        .margin({ top: 3 })
+    }
+    .layoutWeight(1)
+    .padding({ top: 12, bottom: 12 })
+    .margin({ left: 3, right: 3 })
+    .backgroundColor(bgColor)
+    .borderRadius(8)
   }
 
   @Builder
@@ -841,6 +985,24 @@ struct QuestionPage {
     return count;
   }
 
+  unansweredCount(): number {
+    let count = 0;
+    for (const item of this.answerProgress) {
+      if (item.status === ANSWER_STATUS_UNANSWERED) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  correctRateText(): string {
+    const checkedCount = this.correctCount() + this.wrongCount();
+    if (checkedCount === 0) {
+      return '0%';
+    }
+    return `${Math.round(this.correctCount() * 100 / checkedCount)}%`;
+  }
+
   progressTextColor(item: AnswerProgressItem): string {
     if (item.status === ANSWER_STATUS_CORRECT) {
       return COLOR_GREEN;
@@ -901,8 +1063,19 @@ struct QuestionPage {
       return;
     }
     this.autoMoveToken++;
+    this.showCompletionSummary = false;
+    this.showProgressPanel = false;
     this.currentIndex = index;
     this.loadQuestion(this.questionIds[index]);
+  }
+
+  goFirstByStatus(status: string): void {
+    for (const item of this.answerProgress) {
+      if (item.status === status) {
+        this.goQuestionAt(item.order);
+        return;
+      }
+    }
   }
 
   updateLayoutMode(): void {
@@ -985,6 +1158,7 @@ struct QuestionPage {
 
   scheduleAutoNext(questionId: string): void {
     if (!this.hasNext()) {
+      this.scheduleCompletionSummary(questionId);
       return;
     }
     this.autoMoveToken++;
@@ -996,6 +1170,18 @@ struct QuestionPage {
         this.goNextQuestion();
       }
     }, 800);
+  }
+
+  scheduleCompletionSummary(questionId: string): void {
+    this.autoMoveToken++;
+    const token = this.autoMoveToken;
+    promptAction.showToast({ message: '本轮已完成' });
+    setTimeout(() => {
+      if (this.autoMoveToken === token && this.question?.id === questionId) {
+        this.showProgressPanel = false;
+        this.showCompletionSummary = true;
+      }
+    }, 700);
   }
 
   async toggleFavorite() {
