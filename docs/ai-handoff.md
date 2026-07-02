@@ -54,6 +54,7 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 12. 记录页分类完成度卡片可直接进入对应分类练习。
 13. 练习页平板双栏布局：左侧题目列表，右侧选中题目预览和开始答题。
 14. 答题页平板双栏布局：左侧题干和作答，右侧答题提示或解析反馈。
+15. 题库模块覆盖清单：`docs/question-bank-coverage.md`。
 
 题库当前状态：
 
@@ -169,7 +170,7 @@ git diff --cached --stat
 1. 继续对齐平板真实 UI 和预览方向，重点检查真机平板是否进入两栏布局。
 2. 梳理底部导航后续形态，避免在二级页面和首页出现交互不一致。
 3. 处理 ArkUI deprecated API 警告，优先迁移路由和 Toast。
-4. 继续扩充题库前，先建立模块覆盖清单，避免重复生成题目。
+4. 按 `docs/question-bank-coverage.md` 优先补空模块题库，入库前必须逐题核验官方来源。
 
 优先级 P1：
 
@@ -202,7 +203,7 @@ git diff --cached --stat
 1. 阅读 `AGENTS.md`。
 2. 阅读本文档。
 3. 查看 `git status --short`，确认是否存在用户本地改动。
-4. 如果涉及题库，阅读 `docs/question-authoring-guidelines.md`。
+4. 如果涉及题库，阅读 `docs/question-authoring-guidelines.md` 和 `docs/question-bank-coverage.md`。
 5. 如果涉及产品范围，阅读 `docs/product-scope.md` 和 `docs/roadmap.md`。
 6. 如果涉及接口或数据结构，阅读 `docs/api-contract.md` 和 `docs/data-model.md`。
 7. 开始改动前确认不要覆盖用户本地签名配置。
