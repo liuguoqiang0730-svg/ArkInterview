@@ -1,5 +1,6 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import display from '@ohos.display';
 import { PracticeMode, PracticeSession, Question } from '../models/QuestionModels';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
@@ -16,6 +17,7 @@ const COLOR_BLUE: string = '#2c5f8f';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
+const TABLET_MIN_SIDE: number = 1200;
 
 @Entry
 @Component
@@ -23,8 +25,10 @@ struct PracticePage {
   @State private title: string = '练习';
   @State private session: PracticeSession | undefined = undefined;
   @State private loading: boolean = true;
+  @State private isTablet: boolean = false;
 
   aboutToAppear(): void {
+    this.updateLayoutMode();
     this.loadSession();
   }
 
@@ -89,6 +93,10 @@ struct PracticePage {
       .width('100%')
       .padding({ left: 16, right: 16, top: 16, bottom: 14 })
       .backgroundColor(COLOR_SURFACE)
+      .borderRadius(this.isTablet ? 8 : 0)
+      .constraintSize({ maxWidth: this.pageMaxWidth() })
+      .alignSelf(ItemAlign.Center)
+      .margin({ top: this.isTablet ? 20 : 0 })
 
       if (this.loading) {
         Column() {
@@ -121,6 +129,8 @@ struct PracticePage {
         .margin({ left: 16, right: 16, top: 20 })
         .backgroundColor(COLOR_SURFACE)
         .borderRadius(8)
+        .constraintSize({ maxWidth: this.pageMaxWidth() })
+        .alignSelf(ItemAlign.Center)
       } else {
         List() {
           ForEach(this.session?.items ?? [], (question: Question) => {
@@ -193,8 +203,11 @@ struct PracticePage {
             .padding({ left: 16, right: 16, bottom: 10 })
           }, (question: Question) => question.id)
         }
+        .width('100%')
         .layoutWeight(1)
         .padding({ top: 14 })
+        .constraintSize({ maxWidth: this.pageMaxWidth() })
+        .alignSelf(ItemAlign.Center)
       }
     }
     .width('100%')
@@ -273,5 +286,18 @@ struct PracticePage {
       return COLOR_SOFT_ORANGE;
     }
     return '#eef2f6';
+  }
+
+  pageMaxWidth(): number {
+    return this.isTablet ? 920 : 520;
+  }
+
+  updateLayoutMode(): void {
+    try {
+      const currentDisplay = display.getDefaultDisplaySync();
+      this.isTablet = Math.min(currentDisplay.width, currentDisplay.height) >= TABLET_MIN_SIDE;
+    } catch (error) {
+      this.isTablet = false;
+    }
   }
 }

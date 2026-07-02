@@ -1,5 +1,6 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import display from '@ohos.display';
 import { Question, QuestionOption, SubmitAnswerResponse } from '../models/QuestionModels';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
@@ -18,6 +19,7 @@ const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
 const COLOR_SOFT_RED: string = '#fff4ed';
+const TABLET_MIN_SIDE: number = 1200;
 
 @Entry
 @Component
@@ -28,8 +30,10 @@ struct QuestionPage {
   @State private shortAnswer: string = '';
   @State private feedback: SubmitAnswerResponse | undefined = undefined;
   @State private loading: boolean = true;
+  @State private isTablet: boolean = false;
 
   aboutToAppear(): void {
+    this.updateLayoutMode();
     const params = router.getParams() as Record<string, string>;
     const questionId = params.questionId;
     if (!questionId) {
@@ -82,6 +86,10 @@ struct QuestionPage {
       .width('100%')
       .padding({ left: 16, right: 16, top: 16, bottom: 14 })
       .backgroundColor(COLOR_SURFACE)
+      .borderRadius(this.isTablet ? 8 : 0)
+      .constraintSize({ maxWidth: this.pageMaxWidth() })
+      .alignSelf(ItemAlign.Center)
+      .margin({ top: this.isTablet ? 20 : 0 })
 
       if (this.loading) {
         Column() {
@@ -121,7 +129,10 @@ struct QuestionPage {
           }
           .width('100%')
           .padding(16)
+          .constraintSize({ maxWidth: this.pageMaxWidth() })
+          .alignSelf(ItemAlign.Center)
         }
+        .width('100%')
         .layoutWeight(1)
       }
     }
@@ -424,6 +435,19 @@ struct QuestionPage {
       return COLOR_SOFT_GREEN;
     }
     return COLOR_SOFT_BLUE;
+  }
+
+  pageMaxWidth(): number {
+    return this.isTablet ? 860 : 520;
+  }
+
+  updateLayoutMode(): void {
+    try {
+      const currentDisplay = display.getDefaultDisplaySync();
+      this.isTablet = Math.min(currentDisplay.width, currentDisplay.height) >= TABLET_MIN_SIDE;
+    } catch (error) {
+      this.isTablet = false;
+    }
   }
 
   toggleOption(optionId: string) {

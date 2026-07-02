@@ -1,5 +1,6 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import display from '@ohos.display';
 import { APP_NAME } from '../app/AppConfig';
 import { Category, UserStats } from '../models/QuestionModels';
 import { PracticeStore } from '../viewmodels/PracticeStore';
@@ -17,6 +18,7 @@ const COLOR_BLUE: string = '#2c5f8f';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
+const TABLET_MIN_SIDE: number = 1200;
 
 @Entry
 @Component
@@ -24,8 +26,10 @@ struct HomePage {
   @State private categories: Category[] = [];
   @State private stats: UserStats | undefined = undefined;
   @State private loading: boolean = true;
+  @State private isTablet: boolean = false;
 
   aboutToAppear(): void {
+    this.updateLayoutMode();
     this.loadHome();
   }
 
@@ -44,129 +48,184 @@ struct HomePage {
 
   build() {
     Scroll() {
-      Column() {
-        Row() {
-          Column() {
-            Text(APP_NAME)
-              .fontSize(28)
-              .fontWeight(FontWeight.Bold)
-              .fontColor(COLOR_NAVY)
-            Text('HarmonyOS 开发者面试训练台')
-              .fontSize(13)
-              .fontColor(COLOR_MUTED)
-              .margin({ top: 5 })
-          }
-          .alignItems(HorizontalAlign.Start)
-          .layoutWeight(1)
-
-          Button('刷新')
-            .height(36)
-            .fontSize(13)
-            .fontColor(COLOR_GREEN)
-            .backgroundColor(COLOR_SOFT_GREEN)
-            .borderRadius(8)
-            .onClick(() => this.loadHome())
-        }
-        .width('100%')
-        .padding({ left: 18, right: 18, top: 20, bottom: 14 })
-
-        Column() {
-          Row() {
-            Column() {
-              Text('学习进度')
-                .fontSize(13)
-                .fontColor('#d8efe8')
-              Text(`${this.stats?.answeredQuestionCount ?? 0}`)
-                .fontSize(34)
-                .fontWeight(FontWeight.Bold)
-                .fontColor('#ffffff')
-                .margin({ top: 4 })
-              Text('已覆盖题目')
-                .fontSize(13)
-                .fontColor('#d8efe8')
-                .margin({ top: 2 })
-            }
-            .alignItems(HorizontalAlign.Start)
-            .layoutWeight(1)
-
-            Column() {
-              Text(`${Math.round((this.stats?.accuracy ?? 0) * 100)}%`)
-                .fontSize(28)
-                .fontWeight(FontWeight.Bold)
-                .fontColor('#ffffff')
-              Text('正确率')
-                .fontSize(12)
-                .fontColor('#d8efe8')
-                .margin({ top: 3 })
-            }
-            .alignItems(HorizontalAlign.End)
-          }
-          .width('100%')
-
-          Row() {
-            this.DashboardMetric('已答', String(this.stats?.totalAnswers ?? 0), COLOR_SOFT_BLUE, COLOR_BLUE)
-            this.DashboardMetric('错题', String(this.stats?.wrongCount ?? 0), COLOR_SOFT_ORANGE, COLOR_ORANGE)
-            this.DashboardMetric('收藏', String(this.stats?.favoriteCount ?? 0), COLOR_SOFT_GREEN, COLOR_GREEN)
-          }
-          .width('100%')
-          .margin({ top: 18 })
-        }
-        .width('100%')
-        .padding(18)
-        .backgroundColor(COLOR_NAVY)
-        .borderRadius(8)
-        .margin({ left: 18, right: 18, bottom: 14 })
-
-        Column() {
-          Row() {
-            this.ActionCard('随机练习', '快速进入综合训练', COLOR_GREEN, COLOR_SOFT_GREEN, 'random')
-            this.ActionCard('模拟面试', '按面试节奏抽题', COLOR_BLUE, COLOR_SOFT_BLUE, 'interview')
-          }
-          .width('100%')
-
-          Row() {
-            this.ActionCard('错题练习', '集中处理薄弱点', COLOR_ORANGE, COLOR_SOFT_ORANGE, 'wrongs')
-            this.ActionCard('收藏复习', '回看重点题目', COLOR_GREEN, COLOR_SOFT_GREEN, 'favorites')
-          }
-          .width('100%')
-          .margin({ top: 10 })
-        }
-        .width('100%')
-        .padding({ left: 18, right: 18, bottom: 16 })
-
-        Row() {
-          Text('题库模块')
-            .fontSize(18)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(COLOR_NAVY)
-            .layoutWeight(1)
-          Text(`${this.categories.length} 个分类`)
-            .fontSize(12)
-            .fontColor(COLOR_MUTED)
-        }
-        .width('100%')
-        .padding({ left: 18, right: 18, bottom: 8 })
-
-        if (this.loading) {
-          LoadingProgress()
-            .width(36)
-            .height(36)
-            .margin({ top: 28, bottom: 28 })
-        } else {
-          Column() {
-            ForEach(this.categories, (category: Category) => {
-              this.CategoryCard(category)
-            }, (category: Category) => category.id)
-          }
-          .width('100%')
-          .padding({ left: 18, right: 18, bottom: 20 })
-        }
+      if (this.isTablet) {
+        this.TabletHome()
+      } else {
+        this.PhoneHome()
       }
-      .width('100%')
     }
     .width('100%')
     .height('100%')
     .backgroundColor(COLOR_BG)
+  }
+
+  @Builder
+  TabletHome() {
+    Row() {
+      Column() {
+        this.HomeHeader()
+        this.OverviewPanel()
+        this.ActionGrid()
+      }
+      .layoutWeight(4)
+      .margin({ right: 18 })
+      .alignItems(HorizontalAlign.Start)
+
+      Column() {
+        this.CategorySection()
+      }
+      .layoutWeight(6)
+      .alignItems(HorizontalAlign.Start)
+    }
+    .width('100%')
+    .constraintSize({ maxWidth: 1180 })
+    .alignSelf(ItemAlign.Center)
+    .padding({ left: 28, right: 28, top: 26, bottom: 26 })
+  }
+
+  @Builder
+  PhoneHome() {
+    Column() {
+      this.HomeHeader()
+      this.OverviewPanel()
+      this.ActionGrid()
+      this.CategorySection()
+    }
+    .width('100%')
+    .constraintSize({ maxWidth: 520 })
+    .alignSelf(ItemAlign.Center)
+  }
+
+  @Builder
+  HomeHeader() {
+    Row() {
+      Column() {
+        Text(APP_NAME)
+          .fontSize(this.isTablet ? 32 : 28)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+        Text('HarmonyOS 开发者面试训练台')
+          .fontSize(13)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 5 })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      Button('刷新')
+        .height(36)
+        .fontSize(13)
+        .fontColor(COLOR_GREEN)
+        .backgroundColor(COLOR_SOFT_GREEN)
+        .borderRadius(8)
+        .onClick(() => this.loadHome())
+    }
+    .width('100%')
+    .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, top: this.isTablet ? 0 : 20, bottom: 14 })
+  }
+
+  @Builder
+  OverviewPanel() {
+    Column() {
+      Row() {
+        Column() {
+          Text('学习进度')
+            .fontSize(13)
+            .fontColor('#d8efe8')
+          Text(`${this.stats?.answeredQuestionCount ?? 0}`)
+            .fontSize(this.isTablet ? 38 : 34)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#ffffff')
+            .margin({ top: 4 })
+          Text('已覆盖题目')
+            .fontSize(13)
+            .fontColor('#d8efe8')
+            .margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        Column() {
+          Text(`${Math.round((this.stats?.accuracy ?? 0) * 100)}%`)
+            .fontSize(this.isTablet ? 32 : 28)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#ffffff')
+          Text('正确率')
+            .fontSize(12)
+            .fontColor('#d8efe8')
+            .margin({ top: 3 })
+        }
+        .alignItems(HorizontalAlign.End)
+      }
+      .width('100%')
+
+      Row() {
+        this.DashboardMetric('已答', String(this.stats?.totalAnswers ?? 0), COLOR_SOFT_BLUE, COLOR_BLUE)
+        this.DashboardMetric('错题', String(this.stats?.wrongCount ?? 0), COLOR_SOFT_ORANGE, COLOR_ORANGE)
+        this.DashboardMetric('收藏', String(this.stats?.favoriteCount ?? 0), COLOR_SOFT_GREEN, COLOR_GREEN)
+      }
+      .width('100%')
+      .margin({ top: 18 })
+    }
+    .width('100%')
+    .padding(18)
+    .backgroundColor(COLOR_NAVY)
+    .borderRadius(8)
+    .margin({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 14 })
+  }
+
+  @Builder
+  ActionGrid() {
+    Column() {
+      Row() {
+        this.ActionCard('随机练习', '快速进入综合训练', COLOR_GREEN, COLOR_SOFT_GREEN, 'random')
+        this.ActionCard('模拟面试', '按面试节奏抽题', COLOR_BLUE, COLOR_SOFT_BLUE, 'interview')
+      }
+      .width('100%')
+
+      Row() {
+        this.ActionCard('错题练习', '集中处理薄弱点', COLOR_ORANGE, COLOR_SOFT_ORANGE, 'wrongs')
+        this.ActionCard('收藏复习', '回看重点题目', COLOR_GREEN, COLOR_SOFT_GREEN, 'favorites')
+      }
+      .width('100%')
+      .margin({ top: 10 })
+    }
+    .width('100%')
+    .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 16 })
+  }
+
+  @Builder
+  CategorySection() {
+    Column() {
+      Row() {
+        Text('题库模块')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+          .layoutWeight(1)
+        Text(`${this.categories.length} 个分类`)
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+      }
+      .width('100%')
+      .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 8 })
+
+      if (this.loading) {
+        LoadingProgress()
+          .width(36)
+          .height(36)
+          .margin({ top: 28, bottom: 28 })
+      } else {
+        Column() {
+          ForEach(this.categories, (category: Category) => {
+            this.CategoryCard(category)
+          }, (category: Category) => category.id)
+        }
+        .width('100%')
+        .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 20 })
+      }
+    }
+    .width('100%')
   }
 
   @Builder
@@ -298,6 +357,15 @@ struct HomePage {
       return COLOR_SOFT_BLUE;
     }
     return COLOR_SOFT_ORANGE;
+  }
+
+  updateLayoutMode(): void {
+    try {
+      const currentDisplay = display.getDefaultDisplaySync();
+      this.isTablet = Math.min(currentDisplay.width, currentDisplay.height) >= TABLET_MIN_SIDE;
+    } catch (error) {
+      this.isTablet = false;
+    }
   }
 
   openPractice(mode: string, category?: Category) {
