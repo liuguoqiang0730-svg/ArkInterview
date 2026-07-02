@@ -22,7 +22,7 @@ E:\Codex-AI-Coding\ArkInterview
 - Model: Stage
 - Language: ArkTS
 - UI: ArkUI
-- SDK: API 20
+- SDK: 使用 DevEco 缺省 SDK
 
 首版 App 页面建议：
 

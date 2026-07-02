@@ -49,7 +49,7 @@ E:\Codex-AI-Coding\ArkInterview
 
 真机调试时，把 `entry/src/main/ets/app/AppConfig.ets` 中的 `API_BASE_URL` 改成后端服务可访问的局域网 IP 或 HTTPS 域名。
 
-当前 HarmonyOS 工程按 API 20 配置；如果你的 DevEco 只安装了其他 API 版本，可以在 `build-profile.json5` 中同步调整 `compileSdkVersion`、`compatibleSdkVersion` 和 `targetSdkVersion`。
+当前 HarmonyOS 工程不显式指定 SDK 版本，使用 DevEco 当前安装并支持的缺省 SDK。
 
 ## MVP 原则
 
