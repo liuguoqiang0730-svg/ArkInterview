@@ -16,6 +16,7 @@ const seedQuestionsFile = path.join(rootDir, 'data', 'seed', 'questions.json');
 const adminDir = path.join(rootDir, 'admin');
 
 const port = Number(process.env.PORT || 8787);
+const host = process.env.HOST || '0.0.0.0';
 
 async function readJson(file) {
   return JSON.parse(await readFile(file, 'utf8'));
@@ -782,9 +783,13 @@ async function main() {
     }
   });
 
-  server.listen(port, '127.0.0.1', () => {
-    console.log(`ArkInterview API running at http://127.0.0.1:${port}`);
-    console.log(`Admin console running at http://127.0.0.1:${port}/admin/`);
+  server.listen(port, host, () => {
+    const localHost = host === '0.0.0.0' ? '127.0.0.1' : host;
+    console.log(`ArkInterview API running at http://${localHost}:${port}`);
+    console.log(`Admin console running at http://${localHost}:${port}/admin/`);
+    if (host === '0.0.0.0') {
+      console.log(`LAN access enabled. Use http://<your-computer-ip>:${port}/api from a device.`);
+    }
   });
 }
 

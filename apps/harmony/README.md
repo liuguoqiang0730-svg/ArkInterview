@@ -48,3 +48,5 @@ E:\Codex-AI-Coding\ArkInterview
 ## 真机调试
 
 真机调试时，`entry/src/main/ets/app/AppConfig.ets` 里的 `API_BASE_URL` 不能使用 `127.0.0.1`，需要改成电脑局域网 IP 或部署后的 HTTPS 域名。
+
+本地后端用 `npm run dev` 启动，默认监听 `0.0.0.0:8787`。新增题库后如果 App 仍然没有题，先运行 `npm run seed` 重新生成 `backend/storage/db.json`。

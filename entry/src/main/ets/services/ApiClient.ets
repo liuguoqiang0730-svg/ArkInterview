@@ -97,8 +97,9 @@ export class ApiClient {
 
   private async request<T>(path: string, method: HttpMethod = 'GET', body?: object): Promise<T> {
     const request = http.createHttp();
+    const url = `${this.baseUrl}${path}`;
     try {
-      const response = await request.request(`${this.baseUrl}${path}`, {
+      const response = await request.request(url, {
         method: this.toRequestMethod(method),
         header: {
           'Content-Type': 'application/json',
@@ -112,9 +113,11 @@ export class ApiClient {
       const code = response.responseCode;
       const text = response.result ? String(response.result) : '{}';
       if (code < 200 || code >= 300) {
-        throw new Error(text);
+        throw new Error(`HTTP ${code}: ${text}`);
       }
       return JSON.parse(text) as T;
+    } catch (error) {
+      throw new Error(`请求失败：${url}。请确认后端已启动，并且设备能访问该地址。${String(error)}`);
     } finally {
       request.destroy();
     }
