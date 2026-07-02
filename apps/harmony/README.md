@@ -22,6 +22,7 @@ E:\Codex-AI-Coding\ArkInterview
 - Model: Stage
 - Language: ArkTS
 - UI: ArkUI
+- SDK: API 20
 
 首版 App 页面建议：
 
