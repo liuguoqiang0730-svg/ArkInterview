@@ -21,6 +21,12 @@ export interface WrongRecord {
   updatedAt: string;
 }
 
+export interface SourceRef {
+  title: string;
+  url: string;
+  publisher: string;
+}
+
 export interface Question {
   id: string;
   categoryId: string;
@@ -33,6 +39,9 @@ export interface Question {
   answerBoolean?: boolean;
   referenceAnswer?: string;
   scoringPoints?: string[];
+  sourceRefs?: SourceRef[];
+  verifiedAt?: string;
+  reviewStatus?: string;
   knowledgePoints: string[];
   status: string;
   order?: number;

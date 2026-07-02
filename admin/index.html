@@ -70,6 +70,14 @@
               <option value="offline">下架</option>
             </select>
           </label>
+          <label>
+            审核状态
+            <select name="reviewStatus">
+              <option value="needs_review" selected>待核验</option>
+              <option value="verified">已核验</option>
+              <option value="rejected">已驳回</option>
+            </select>
+          </label>
 
           <label class="full-row">
             题干
@@ -112,6 +120,16 @@
           <label class="full-row">
             知识点
             <input name="knowledgePointsText" placeholder="用逗号分隔，例如：ArkTS, 类型系统">
+          </label>
+
+          <label class="full-row">
+            官方来源
+            <textarea name="sourceRefsText" rows="3" placeholder="每行一个来源：标题 | https://developer.huawei.com/..."></textarea>
+          </label>
+
+          <label>
+            核验日期
+            <input name="verifiedAt" type="date">
           </label>
 
           <div class="form-actions full-row">

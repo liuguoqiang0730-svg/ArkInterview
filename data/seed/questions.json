@@ -17,6 +17,15 @@
     "scoringPoints": [],
     "explanation": "ArkTS 更强调静态类型约束。接口边界可以做运行时校验，但业务内部应尽量使用明确类型，降低字段拼写、空值和类型转换错误。",
     "knowledgePoints": ["ArkTS", "类型系统", "接口建模"],
+    "sourceRefs": [
+      {
+        "title": "ArkTS 概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   },
   {
@@ -37,6 +46,15 @@
     "scoringPoints": [],
     "explanation": "声明式 UI 通过状态描述界面，状态变化触发相关界面更新。复杂页面需要拆分组件，并明确状态归属，避免状态散落导致维护困难。",
     "knowledgePoints": ["ArkUI", "声明式 UI", "状态驱动"],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   },
   {
@@ -52,6 +70,15 @@
     "scoringPoints": [],
     "explanation": "UIAbility 是 Stage 模型中承载 UI 交互的重要组件，常见职责包括生命周期处理、窗口创建和页面加载。",
     "knowledgePoints": ["Stage 模型", "UIAbility", "生命周期"],
+    "sourceRefs": [
+      {
+        "title": "UIAbility 概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/uiability-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   },
   {
@@ -72,6 +99,15 @@
     "scoringPoints": [],
     "explanation": "组件通信不是只看语法，更要明确状态归属、更新方向和组件职责。双向绑定适合明确的局部协作，不应滥用为全局状态共享。",
     "knowledgePoints": ["状态管理", "组件通信", "双向绑定"],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   },
   {
@@ -92,6 +128,15 @@
     "scoringPoints": [],
     "explanation": "题库 App 对网络稳定性和数据一致性敏感，需要处理超时、错误、分页、缓存和数据校验。服务端密钥不能放到客户端。",
     "knowledgePoints": ["网络请求", "缓存", "安全边界"],
+    "sourceRefs": [
+      {
+        "title": "发起 HTTP 网络请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/http-request-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   },
   {
@@ -107,6 +152,15 @@
     "scoringPoints": [],
     "explanation": "Preferences 的典型场景是轻量键值存储。复杂列表、题目缓存或大量练习记录更适合使用结构化存储方案。",
     "knowledgePoints": ["Preferences", "本地存储"],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   },
   {
@@ -127,6 +181,15 @@
     ],
     "explanation": "组件拆分的核心是职责和状态边界。状态放错位置会导致重复数据、刷新异常或组件之间耦合过重。",
     "knowledgePoints": ["ArkUI", "组件拆分", "状态管理"],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   },
   {
@@ -147,6 +210,15 @@
     ],
     "explanation": "HarmonyOS NEXT 适配不是语法替换，重点是平台模型、能力边界、生命周期和工程依赖的重新评估。",
     "knowledgePoints": ["HarmonyOS NEXT", "迁移", "平台能力"],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS 应用开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/start-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-02",
+    "reviewStatus": "verified",
     "status": "published"
   }
 ]

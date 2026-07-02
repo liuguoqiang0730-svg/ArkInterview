@@ -39,6 +39,12 @@ const statusLabels = {
   offline: '已下架'
 };
 
+const reviewStatusLabels = {
+  needs_review: '待核验',
+  verified: '已核验',
+  rejected: '已驳回'
+};
+
 async function request(path, options = {}) {
   const response = await fetch(path, {
     headers: {
@@ -152,6 +158,8 @@ function questionItem(question) {
     </div>
     <div class="badges">
       <span class="badge ${question.status}">${statusLabels[question.status] || question.status}</span>
+      <span class="badge review-${question.reviewStatus || 'needs_review'}">${reviewStatusLabels[question.reviewStatus] || '待核验'}</span>
+      <span class="badge">官方来源 ${(question.sourceRefs || []).length}</span>
       ${(question.knowledgePoints || []).map((point) => `<span class="badge">${escapeHtml(point)}</span>`).join('')}
     </div>
   `;
@@ -217,7 +225,10 @@ function parseQuestionForm(form) {
     status: data.get('status'),
     title: String(data.get('title') || '').trim(),
     explanation: String(data.get('explanation') || '').trim(),
-    knowledgePoints: splitList(data.get('knowledgePointsText'))
+    knowledgePoints: splitList(data.get('knowledgePointsText')),
+    sourceRefs: parseSourceRefs(data.get('sourceRefsText')),
+    verifiedAt: data.get('verifiedAt') || null,
+    reviewStatus: data.get('reviewStatus')
   };
 
   if (type === 'single' || type === 'multiple') {
@@ -265,6 +276,24 @@ function splitLines(value) {
     .split(/\r?\n/)
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function parseSourceRefs(value) {
+  return splitLines(value).map((line) => {
+    const parts = line.split('|').map((item) => item.trim());
+    if (parts.length >= 2) {
+      return {
+        title: parts[0],
+        url: parts[1],
+        publisher: parts[2] || 'Huawei Developer'
+      };
+    }
+    return {
+      title: line,
+      url: line,
+      publisher: 'Huawei Developer'
+    };
+  });
 }
 
 function setFormMessage(message, isError = false) {

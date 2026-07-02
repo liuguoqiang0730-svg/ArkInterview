@@ -13,6 +13,7 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 - `data/seed/`：MVP 分类和样例题库种子数据。
 - `apps/harmony/`：HarmonyOS ArkTS + ArkUI + Stage 应用开发说明和目录占位。
 - `docs/`：产品范围、API 契约、数据模型和路线图。
+- `docs/question-authoring-guidelines.md`：题库编写与官方文档核验规范。
 
 ## 本地启动
 
@@ -46,3 +47,4 @@ npm test
 - MVP 可以使用匿名设备 ID 保存记录。
 - AI 简答题评分和模拟面试追问后续接入，API Key 必须只放服务端。
 - 题目允许参考公开知识点，但不能直接搬运 CSDN、掘金、公众号等平台的题库和答案。
+- 题目发布必须绑定官方文档来源，且人工核验后才能发布。

@@ -105,6 +105,9 @@ function publicQuestion(question, { includeAnswer = false } = {}) {
     answerBoolean: question.answerBoolean,
     referenceAnswer: question.referenceAnswer,
     scoringPoints: question.scoringPoints,
+    sourceRefs: question.sourceRefs,
+    verifiedAt: question.verifiedAt,
+    reviewStatus: question.reviewStatus,
     createdAt: question.createdAt,
     updatedAt: question.updatedAt
   });
@@ -175,6 +178,9 @@ function normalizeQuestionPayload(payload, existing = {}) {
     scoringPoints: payload.scoringPoints ?? existing.scoringPoints ?? [],
     explanation: payload.explanation ?? existing.explanation ?? '',
     knowledgePoints: payload.knowledgePoints ?? existing.knowledgePoints ?? [],
+    sourceRefs: normalizeSourceRefs(payload.sourceRefs ?? existing.sourceRefs ?? []),
+    verifiedAt: payload.verifiedAt ?? existing.verifiedAt ?? null,
+    reviewStatus: payload.reviewStatus ?? existing.reviewStatus ?? 'needs_review',
     status: payload.status ?? existing.status ?? 'draft',
     createdAt: existing.createdAt || now,
     updatedAt: now
@@ -195,6 +201,19 @@ function normalizeQuestionPayload(payload, existing = {}) {
   return question;
 }
 
+function normalizeSourceRefs(sourceRefs) {
+  if (!Array.isArray(sourceRefs)) {
+    return [];
+  }
+  return sourceRefs
+    .filter((source) => source && source.title && source.url)
+    .map((source) => ({
+      title: String(source.title).trim(),
+      url: String(source.url).trim(),
+      publisher: source.publisher ? String(source.publisher).trim() : 'Huawei Developer'
+    }));
+}
+
 function normalizeOptions(options) {
   if (!Array.isArray(options)) {
     return [];
@@ -211,6 +230,7 @@ function validateQuestion(question, db, { allowExistingId = false } = {}) {
   const types = new Set(['single', 'multiple', 'boolean', 'short']);
   const difficulties = new Set(['easy', 'medium', 'hard']);
   const statuses = new Set(['draft', 'published', 'offline']);
+  const reviewStatuses = new Set(['needs_review', 'verified', 'rejected']);
 
   if (!question.categoryId || !db.categories.some((category) => category.id === question.categoryId)) {
     throw httpError(400, '题目必须关联有效分类');
@@ -226,6 +246,9 @@ function validateQuestion(question, db, { allowExistingId = false } = {}) {
   }
   if (!statuses.has(question.status)) {
     throw httpError(400, '状态必须是 draft、published 或 offline');
+  }
+  if (!reviewStatuses.has(question.reviewStatus)) {
+    throw httpError(400, '审核状态必须是 needs_review、verified 或 rejected');
   }
   if (!allowExistingId && db.questions.some((item) => item.id === question.id)) {
     throw httpError(409, '题目 ID 已存在');
@@ -252,6 +275,42 @@ function validateQuestion(question, db, { allowExistingId = false } = {}) {
   }
   if (question.type === 'short' && !question.referenceAnswer) {
     throw httpError(400, '简答题必须设置参考答案');
+  }
+  validateOfficialSources(question);
+}
+
+function validateOfficialSources(question) {
+  if (question.sourceRefs.length > 0) {
+    const invalid = question.sourceRefs.find((source) => !isOfficialSourceUrl(source.url));
+    if (invalid) {
+      throw httpError(400, `题目来源必须使用官方文档链接：${invalid.url}`);
+    }
+  }
+
+  if (question.status !== 'published') {
+    return;
+  }
+  if (question.reviewStatus !== 'verified') {
+    throw httpError(400, '发布题目前必须先标记为已核验');
+  }
+  if (!question.verifiedAt) {
+    throw httpError(400, '发布题目前必须填写核验日期');
+  }
+  if (question.sourceRefs.length === 0) {
+    throw httpError(400, '发布题目前必须填写至少一个官方文档来源');
+  }
+}
+
+function isOfficialSourceUrl(value) {
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase();
+    const pathname = url.pathname.toLowerCase();
+    return host === 'developer.huawei.com'
+      || host === 'docs.openharmony.cn'
+      || (host === 'gitee.com' && pathname.startsWith('/openharmony/docs'));
+  } catch {
+    return false;
   }
 }
 

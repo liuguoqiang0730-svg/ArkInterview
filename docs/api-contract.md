@@ -178,9 +178,20 @@ GET /api/practice/session?mode=favorites&count=20
   "referenceAnswer": "",
   "scoringPoints": [],
   "explanation": "解析",
-  "knowledgePoints": ["ArkTS"]
+  "knowledgePoints": ["ArkTS"],
+  "sourceRefs": [
+    {
+      "title": "ArkTS 概述",
+      "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-overview-V5",
+      "publisher": "Huawei Developer"
+    }
+  ],
+  "verifiedAt": "2026-07-02",
+  "reviewStatus": "verified"
 }
 ```
+
+发布题目时，后端会要求 `sourceRefs` 至少包含一个官方来源，`reviewStatus` 为 `verified`，且 `verifiedAt` 已填写。
 
 ### PATCH /api/admin/questions/{id}
 

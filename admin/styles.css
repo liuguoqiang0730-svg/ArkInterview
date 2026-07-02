@@ -318,6 +318,21 @@ textarea {
   color: var(--accent);
 }
 
+.badge.review-verified {
+  background: #e7f5ed;
+  color: var(--brand-strong);
+}
+
+.badge.review-needs_review {
+  background: #fff5dd;
+  color: var(--warning);
+}
+
+.badge.review-rejected {
+  background: #fdebe7;
+  color: var(--accent);
+}
+
 .empty {
   padding: 30px 14px;
   color: var(--muted);

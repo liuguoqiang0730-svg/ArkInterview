@@ -29,6 +29,15 @@
   "scoringPoints": [],
   "explanation": "解析",
   "knowledgePoints": ["ArkTS"],
+  "sourceRefs": [
+    {
+      "title": "ArkTS 概述",
+      "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-overview-V5",
+      "publisher": "Huawei Developer"
+    }
+  ],
+  "verifiedAt": "2026-07-02",
+  "reviewStatus": "verified",
   "status": "published",
   "createdAt": "2026-07-02T00:00:00.000Z",
   "updatedAt": "2026-07-02T00:00:00.000Z"
@@ -41,6 +50,13 @@
 - `multiple`：使用 `options` 和多个 `correctOptionIds`。
 - `boolean`：使用 `answerBoolean`。
 - `short`：使用 `referenceAnswer` 和 `scoringPoints`。
+
+发布约束：
+
+- `status=published` 时必须有官方 `sourceRefs`。
+- `status=published` 时 `reviewStatus` 必须是 `verified`。
+- `status=published` 时必须填写 `verifiedAt`。
+- 后端只允许 `developer.huawei.com`、`docs.openharmony.cn`、`gitee.com/openharmony/docs` 作为官方来源域名。
 
 ## UserState
 
