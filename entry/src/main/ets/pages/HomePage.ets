@@ -370,7 +370,8 @@ struct HomePage {
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
     .shadow({ radius: 12, color: COLOR_SHADOW, offsetX: 0, offsetY: 6 })
-    .onClick(() => this.openPractice(mode))
+    .opacity(this.quickPracticeEnabled(mode) ? 1 : 0.72)
+    .onClick(() => this.handleQuickPractice(mode))
   }
 
   @Builder
@@ -565,6 +566,24 @@ struct HomePage {
       return '重点回看';
     }
     return '立即开始';
+  }
+
+  quickPracticeEnabled(mode: string): boolean {
+    if (mode === 'wrongs') {
+      return (this.stats?.wrongCount ?? 0) > 0;
+    }
+    if (mode === 'favorites') {
+      return (this.stats?.favoriteCount ?? 0) > 0;
+    }
+    return true;
+  }
+
+  handleQuickPractice(mode: string): void {
+    if (!this.quickPracticeEnabled(mode)) {
+      AppToast.show(mode === 'wrongs' ? '还没有错题，先完成一组练习' : '还没有收藏题目，先收藏重点题');
+      return;
+    }
+    this.openPractice(mode);
   }
 
   categoryMark(name: string): string {
