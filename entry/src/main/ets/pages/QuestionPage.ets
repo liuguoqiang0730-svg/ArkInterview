@@ -809,10 +809,25 @@ struct QuestionPage {
       .border({ width: 1, color: COLOR_LINE })
     } else {
       Column() {
-        Text('简答思路')
-          .fontSize(17)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_NAVY)
+        Row() {
+          Text('简答思路')
+            .fontSize(17)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+            .layoutWeight(1)
+          Text('自评模式')
+            .fontSize(12)
+            .fontColor(COLOR_BLUE)
+            .backgroundColor(COLOR_SOFT_BLUE)
+            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .borderRadius(8)
+        }
+          .width('100%')
+        Text('提交后展示参考答案和评分点，第一版由你对照自评。')
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(18)
+          .margin({ top: 8 })
           .width('100%')
         TextArea({ placeholder: '输入你的作答思路，提交后对照参考答案和评分点自评。', text: this.shortAnswer })
           .height(160)
@@ -850,7 +865,7 @@ struct QuestionPage {
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_RED)
       } else {
-        Text('参考答案')
+        Text(this.feedbackTitleText())
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_BLUE)
@@ -1247,6 +1262,10 @@ struct QuestionPage {
 
   favoriteButtonText(): string {
     return this.question?.isFavorite ? '取消收藏' : '加入收藏';
+  }
+
+  feedbackTitleText(): string {
+    return this.question?.type === 'short' ? '参考答案与评分点' : '参考答案';
   }
 
   answeredCount(): number {
