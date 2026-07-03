@@ -105,15 +105,7 @@ struct QuestionPage {
             .fontColor(COLOR_NAVY)
             .layoutWeight(1)
             .textAlign(TextAlign.Center)
-          Button('|||')
-            .width(42)
-            .height(34)
-            .fontSize(13)
-            .fontColor(this.showProgressPanel ? '#ffffff' : COLOR_BLUE)
-            .backgroundColor(this.showProgressPanel ? COLOR_BLUE : COLOR_SOFT_BLUE)
-            .borderRadius(8)
-            .margin({ right: 8 })
-            .onClick(() => this.showProgressPanel = !this.showProgressPanel)
+          this.ProgressButton()
           Button(this.question?.isFavorite ? '已收藏' : '收藏')
             .height(34)
             .fontSize(13)
@@ -168,6 +160,28 @@ struct QuestionPage {
     .width('100%')
     .height('100%')
     .backgroundColor(COLOR_BG)
+  }
+
+  @Builder
+  ProgressButton() {
+    Row() {
+      Text('题卡')
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.showProgressPanel ? '#ffffff' : COLOR_BLUE)
+      Text(this.questionCardSummary())
+        .fontSize(11)
+        .fontColor(this.showProgressPanel ? '#e9f0f7' : COLOR_MUTED)
+        .margin({ left: 6 })
+    }
+    .height(34)
+    .padding({ left: 12, right: 12 })
+    .margin({ right: 8 })
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(this.showProgressPanel ? COLOR_BLUE : COLOR_SOFT_BLUE)
+    .borderRadius(8)
+    .border({ width: 1, color: this.showProgressPanel ? COLOR_BLUE : '#d6e4f2' })
+    .onClick(() => this.showProgressPanel = !this.showProgressPanel)
   }
 
   @Builder
@@ -414,6 +428,22 @@ struct QuestionPage {
       .width('100%')
       .margin({ bottom: 10 })
 
+      Row() {
+        this.StatusMetric('已答', String(this.answeredCount()), COLOR_SOFT_BLUE, COLOR_BLUE)
+        this.StatusMetric('正确', String(this.correctCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+        this.StatusMetric('错误', String(this.wrongCount()), COLOR_SOFT_RED, COLOR_RED)
+      }
+      .width('100%')
+      .margin({ bottom: 12 })
+
+      Row() {
+        this.ProgressLegend('正确', COLOR_SOFT_GREEN, COLOR_GREEN)
+        this.ProgressLegend('错误', COLOR_SOFT_RED, COLOR_RED)
+        this.ProgressLegend('未答', '#f8fafc', COLOR_LINE)
+      }
+      .width('100%')
+      .margin({ bottom: 10 })
+
       Grid() {
         ForEach(this.answerProgress, (item: AnswerProgressItem) => {
           GridItem() {
@@ -423,7 +453,7 @@ struct QuestionPage {
               .fontColor(this.progressTextColor(item))
               .textAlign(TextAlign.Center)
               .width('100%')
-              .height(34)
+              .height(30)
               .backgroundColor(this.progressBgColor(item))
               .borderRadius(8)
               .border({ width: 1, color: this.currentIndex === item.order ? COLOR_NAVY : this.progressBorderColor(item) })
@@ -432,11 +462,11 @@ struct QuestionPage {
         }, (item: AnswerProgressItem) => item.questionId)
       }
       .columnsTemplate(this.isTablet ? '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr' : '1fr 1fr 1fr 1fr 1fr')
-      .columnsGap(8)
-      .rowsGap(8)
+      .columnsGap(7)
+      .rowsGap(7)
       .width('100%')
     }
-    .width(this.isTablet ? 420 : 320)
+    .width(this.isTablet ? 392 : 312)
     .padding(14)
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
@@ -553,6 +583,24 @@ struct QuestionPage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  ProgressLegend(label: string, bgColor: string, borderColor: string) {
+    Row() {
+      Text('')
+        .width(10)
+        .height(10)
+        .backgroundColor(bgColor)
+        .borderRadius(3)
+        .border({ width: 1, color: borderColor })
+      Text(label)
+        .fontSize(11)
+        .fontColor(COLOR_MUTED)
+        .margin({ left: 5 })
+    }
+    .layoutWeight(1)
+    .justifyContent(FlexAlign.Center)
   }
 
   @Builder
@@ -1122,6 +1170,10 @@ struct QuestionPage {
 
   progressSummary(): string {
     return `已答 ${this.answeredCount()}/${this.questionIds.length || 1}`;
+  }
+
+  questionCardSummary(): string {
+    return `${this.answeredCount()}/${this.questionIds.length || 1}`;
   }
 
   answeredCount(): number {
