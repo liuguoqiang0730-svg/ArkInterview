@@ -113,7 +113,7 @@ struct QuestionPage {
             .layoutWeight(1)
             .alignItems(HorizontalAlign.Center)
           this.ProgressButton()
-          Button(this.question?.isFavorite ? '已收藏' : '收藏')
+          Button(this.favoriteButtonText())
             .height(34)
             .fontSize(13)
             .fontColor(this.question?.isFavorite ? COLOR_ORANGE : COLOR_GREEN)
@@ -1243,6 +1243,10 @@ struct QuestionPage {
       return COLOR_GREEN;
     }
     return COLOR_BLUE;
+  }
+
+  favoriteButtonText(): string {
+    return this.question?.isFavorite ? '取消收藏' : '加入收藏';
   }
 
   answeredCount(): number {
