@@ -379,6 +379,15 @@ struct PracticePage {
               .borderRadius(8)
               .margin({ left: 6 })
           }
+          if (this.isSelectedQuestion(question)) {
+            Text('当前预览')
+              .fontSize(12)
+              .fontColor(COLOR_GREEN)
+              .backgroundColor(COLOR_SOFT_GREEN)
+              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .borderRadius(8)
+              .margin({ left: 6 })
+          }
         }
         .width('100%')
 
@@ -404,7 +413,7 @@ struct PracticePage {
             .backgroundColor(COLOR_SOFT_BLUE)
             .padding({ left: 8, right: 8, top: 4, bottom: 4 })
             .borderRadius(8)
-          Text('去答题 >')
+          Text(this.questionListActionText(question))
             .fontSize(12)
             .fontWeight(FontWeight.Bold)
             .fontColor(this.typeColor(question.type))
@@ -567,6 +576,13 @@ struct PracticePage {
       return COLOR_SOFT_ORANGE;
     }
     return '#eef2f6';
+  }
+
+  questionListActionText(question: Question): string {
+    if (this.isTablet) {
+      return this.isSelectedQuestion(question) ? '开始答题 >' : '查看预览 >';
+    }
+    return '去答题 >';
   }
 
   pageMaxWidth(): number {
