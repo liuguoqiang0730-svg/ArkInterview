@@ -325,10 +325,20 @@ struct ReviewListPage {
         .margin({ top: 10 })
         .width('100%')
 
-      Text((question.knowledgePoints || []).join(' / '))
-        .fontSize(12)
-        .fontColor(COLOR_MUTED)
-        .lineHeight(18)
+      Row() {
+        Text('知识点')
+          .fontSize(11)
+          .fontColor(COLOR_BLUE)
+          .backgroundColor(COLOR_SOFT_BLUE)
+          .padding({ left: 7, right: 7, top: 3, bottom: 3 })
+          .borderRadius(8)
+          .margin({ right: 8 })
+        Text(this.knowledgeSummary(question))
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(18)
+          .layoutWeight(1)
+      }
         .margin({ top: 8 })
         .width('100%')
 
@@ -349,7 +359,7 @@ struct ReviewListPage {
       .margin({ top: 10 })
 
       Row() {
-        Button('开始复习')
+        Button(this.primaryReviewButtonText())
           .layoutWeight(1)
           .height(38)
           .fontSize(13)
@@ -572,6 +582,17 @@ struct ReviewListPage {
       return '按模块、题型和难度整理收藏重点。';
     }
     return '优先处理未掌握错题，按错误次数或难度复盘。';
+  }
+
+  knowledgeSummary(question: Question): string {
+    if ((question.knowledgePoints || []).length === 0) {
+      return '待补充';
+    }
+    return (question.knowledgePoints || []).join(' / ');
+  }
+
+  primaryReviewButtonText(): string {
+    return this.mode === 'favorites' ? '复习收藏' : '复盘错题';
   }
 
   reviewStatusText(question: Question): string {
