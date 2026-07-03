@@ -21,6 +21,7 @@ const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
 const COLOR_SOFT_RED: string = '#fee4e2';
+const COLOR_SHADOW: string = '#1f2a3714';
 const TABLET_MIN_VP: number = 680;
 const ANSWER_STATUS_UNANSWERED: string = 'unanswered';
 const ANSWER_STATUS_CORRECT: string = 'correct';
@@ -99,12 +100,18 @@ struct QuestionPage {
             .backgroundColor('#eef2f6')
             .borderRadius(8)
             .onClick(() => AppRouter.back())
-          Text('训练答题')
-            .fontSize(22)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(COLOR_NAVY)
+          Column() {
+            Text('训练答题')
+              .fontSize(22)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(COLOR_NAVY)
+            Text(this.headerProgressText())
+              .fontSize(11)
+              .fontColor(COLOR_MUTED)
+              .margin({ top: 2 })
+          }
             .layoutWeight(1)
-            .textAlign(TextAlign.Center)
+            .alignItems(HorizontalAlign.Center)
           this.ProgressButton()
           Button(this.question?.isFavorite ? '已收藏' : '收藏')
             .height(34)
@@ -121,6 +128,7 @@ struct QuestionPage {
         .constraintSize({ maxWidth: this.pageMaxWidth() })
         .alignSelf(ItemAlign.Center)
         .margin({ top: this.isTablet ? 20 : 0 })
+        .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: 7 })
 
         if (this.showCompletionSummary) {
           this.CompletionFlow()
@@ -1170,6 +1178,10 @@ struct QuestionPage {
 
   progressSummary(): string {
     return `已答 ${this.answeredCount()}/${this.questionIds.length || 1}`;
+  }
+
+  headerProgressText(): string {
+    return `第 ${this.currentIndex + 1}/${this.questionIds.length || 1} 题 · 已答 ${this.answeredCount()}`;
   }
 
   questionCardSummary(): string {
