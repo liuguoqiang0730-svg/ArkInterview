@@ -7,12 +7,13 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
-const tempDir = path.join(rootDir, '.tmp');
+const tempRoot = path.join(rootDir, '.tmp');
+const tempDir = path.join(tempRoot, `smoke-${process.pid}-${Date.now()}`);
 const dbFile = path.join(tempDir, 'smoke-db.json');
 const port = 8791;
 const baseUrl = `http://127.0.0.1:${port}`;
 
-await rm(tempDir, { recursive: true, force: true });
+await mkdir(tempRoot, { recursive: true });
 await mkdir(tempDir, { recursive: true });
 
 const server = spawn(process.execPath, [path.join(rootDir, 'backend', 'server.mjs')], {
