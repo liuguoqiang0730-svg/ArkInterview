@@ -233,6 +233,13 @@ struct RecordPage {
           .backgroundColor(this.progressBgColor(item.completionRate))
           .padding({ left: 8, right: 8, top: 4, bottom: 4 })
           .borderRadius(8)
+        Text(this.categoryStatusLabel(item))
+          .fontSize(12)
+          .fontColor(this.progressColor(item.completionRate))
+          .backgroundColor(this.progressBgColor(item.completionRate))
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .borderRadius(8)
+          .margin({ left: 8 })
       }
       .width('100%')
 
@@ -257,8 +264,13 @@ struct RecordPage {
         Text(`作答 ${item.attempts} 次`)
           .fontSize(12)
           .fontColor(COLOR_MUTED)
+        Text(`覆盖 ${Math.round(item.completionRate * 100)}%`)
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .margin({ left: 10 })
         Text('去练习 >')
           .fontSize(12)
+          .fontWeight(FontWeight.Bold)
           .fontColor(this.progressColor(item.completionRate))
           .margin({ left: 10 })
       }
@@ -297,6 +309,16 @@ struct RecordPage {
       return COLOR_SOFT_BLUE;
     }
     return COLOR_SOFT_ORANGE;
+  }
+
+  categoryStatusLabel(item: CategoryStats): string {
+    if (item.completionRate >= 1) {
+      return '已完成';
+    }
+    if (item.attempts > 0) {
+      return '进行中';
+    }
+    return '未开始';
   }
 
   formatDate(value?: string): string {
