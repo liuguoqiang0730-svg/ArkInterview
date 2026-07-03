@@ -188,18 +188,7 @@ struct QuestionPage {
   @Builder
   CompletionPanel() {
     Column() {
-      Text('本轮完成')
-        .fontSize(24)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(COLOR_NAVY)
-        .width('100%')
-
-      Text('可以继续复盘错题或补做未答题，也可以返回题单重新选择。')
-        .fontSize(13)
-        .fontColor(COLOR_MUTED)
-        .lineHeight(20)
-        .margin({ top: 8 })
-        .width('100%')
+      this.CompletionHero()
 
       Row() {
         this.SummaryMetric('题量', String(this.questionIds.length), COLOR_SOFT_BLUE, COLOR_BLUE)
@@ -290,6 +279,49 @@ struct QuestionPage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  CompletionHero() {
+    Row() {
+      Column() {
+        Text('本轮复盘')
+          .fontSize(24)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#ffffff')
+          .width('100%')
+        Text(this.completionSummaryText())
+          .fontSize(13)
+          .fontColor('#d8efe8')
+          .lineHeight(20)
+          .margin({ top: 8 })
+          .width('100%')
+      }
+      .layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+
+      Column() {
+        Text(this.correctRateText())
+          .fontSize(34)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#ffffff')
+        Text('正确率')
+          .fontSize(12)
+          .fontColor('#d8efe8')
+          .margin({ top: 4 })
+      }
+      .width(108)
+      .height(108)
+      .justifyContent(FlexAlign.Center)
+      .backgroundColor('#ffffff1f')
+      .borderRadius(8)
+      .border({ width: 1, color: '#ffffff33' })
+    }
+    .width('100%')
+    .padding(18)
+    .backgroundColor(this.completionToneColor())
+    .borderRadius(8)
+    .margin({ bottom: 18 })
   }
 
   @Builder
@@ -766,6 +798,8 @@ struct QuestionPage {
           .margin({ top: 14 })
           .onClick(() => this.markWrongMastered())
       }
+
+      this.FeedbackActions()
     }
     .width('100%')
     .padding(16)
@@ -773,6 +807,37 @@ struct QuestionPage {
     .backgroundColor(this.feedbackBgColor())
     .borderRadius(8)
     .border({ width: 1, color: this.feedbackColor() })
+  }
+
+  @Builder
+  FeedbackActions() {
+    Row() {
+      Button(this.feedbackPrimaryActionLabel())
+        .layoutWeight(1)
+        .height(42)
+        .fontSize(15)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#ffffff')
+        .backgroundColor(COLOR_NAVY)
+        .borderRadius(8)
+        .margin({ right: this.hasPrevious() ? 8 : 0 })
+        .onClick(() => this.handleFeedbackPrimaryAction())
+
+      if (this.hasPrevious()) {
+        Button('上一题')
+          .layoutWeight(1)
+          .height(42)
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+          .backgroundColor('#eef2f6')
+          .borderRadius(8)
+          .margin({ left: 8 })
+          .onClick(() => this.goPreviousQuestion())
+      }
+    }
+    .width('100%')
+    .margin({ top: 16 })
   }
 
   @Builder
@@ -1107,6 +1172,26 @@ struct QuestionPage {
     return `${Math.round(this.correctCount() * 100 / checkedCount)}%`;
   }
 
+  completionSummaryText(): string {
+    if (this.wrongCount() === 0 && this.unansweredCount() === 0) {
+      return '这轮全部答对，可以继续保持节奏。';
+    }
+    if (this.wrongCount() > 0) {
+      return '建议先复盘红色题号，再回到对应解析补齐薄弱点。';
+    }
+    return '还有未答题目，可以从下方题号继续补做。';
+  }
+
+  completionToneColor(): string {
+    if (this.wrongCount() === 0 && this.unansweredCount() === 0) {
+      return COLOR_GREEN;
+    }
+    if (this.wrongCount() > 0) {
+      return COLOR_NAVY;
+    }
+    return COLOR_BLUE;
+  }
+
   progressTextColor(item: AnswerProgressItem): string {
     if (item.status === ANSWER_STATUS_CORRECT) {
       return COLOR_GREEN;
@@ -1180,6 +1265,29 @@ struct QuestionPage {
         return;
       }
     }
+  }
+
+  feedbackPrimaryActionLabel(): string {
+    if (this.answeredCount() === this.questionIds.length) {
+      return '查看本轮结果';
+    }
+    if (this.hasNext()) {
+      return '下一题';
+    }
+    return '补做未答';
+  }
+
+  handleFeedbackPrimaryAction(): void {
+    if (this.answeredCount() === this.questionIds.length) {
+      this.showProgressPanel = false;
+      this.showCompletionSummary = true;
+      return;
+    }
+    if (this.hasNext()) {
+      this.goNextQuestion();
+      return;
+    }
+    this.goFirstByStatus(ANSWER_STATUS_UNANSWERED);
   }
 
   updateLayoutMode(): void {
