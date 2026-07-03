@@ -29,6 +29,9 @@ struct PracticePage {
   @State private selectedQuestion: Question | undefined = undefined;
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
+  @State private categoryFilter: string = 'all';
+  @State private typeFilter: string = 'all';
+  @State private wrongScope: string = 'active';
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -53,7 +56,8 @@ struct PracticePage {
         });
       }
       if ((this.session?.items.length ?? 0) > 0) {
-        this.selectedQuestion = this.session?.items[0];
+        this.resetFilters();
+        this.selectedQuestion = this.filteredQuestions()[0];
       } else {
         this.selectedQuestion = undefined;
       }
@@ -145,6 +149,7 @@ struct PracticePage {
           if (this.isTablet) {
             this.TabletPracticeWorkspace()
           } else {
+            this.FilterBar()
             this.QuestionList()
           }
         }
@@ -176,6 +181,7 @@ struct PracticePage {
         .width('100%')
         .margin({ bottom: 10 })
 
+        this.FilterBar()
         this.QuestionList()
       }
       .layoutWeight(5)
@@ -198,19 +204,84 @@ struct PracticePage {
 
   @Builder
   QuestionList() {
-    List() {
-      ForEach(this.session?.items ?? [], (question: Question) => {
-        ListItem() {
-          this.QuestionListItem(question)
+    if (this.filteredQuestions().length === 0) {
+      Column() {
+        Text('当前筛选下没有题目')
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+        Text('可以切换模块、题型或错题范围继续复习。')
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(18)
+          .margin({ top: 6 })
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(COLOR_SURFACE)
+      .borderRadius(8)
+      .border({ width: 1, color: COLOR_LINE })
+    } else {
+      List() {
+        ForEach(this.filteredQuestions(), (question: Question) => {
+          ListItem() {
+            this.QuestionListItem(question)
+          }
+          .padding({ left: this.isTablet ? 0 : 16, right: this.isTablet ? 0 : 16, bottom: 10 })
+        }, (question: Question) => question.id)
+      }
+      .width('100%')
+      .layoutWeight(1)
+      .padding({ top: this.isTablet ? 0 : 14 })
+      .constraintSize({ maxWidth: this.isTablet ? 9999 : this.pageMaxWidth() })
+      .alignSelf(ItemAlign.Center)
+    }
+  }
+
+  @Builder
+  FilterBar() {
+    Column() {
+      Row() {
+        this.FilterChip('模块', this.categoryFilterLabel(), COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextCategoryFilter())
+        this.FilterChip('题型', this.typeFilterLabel(), COLOR_GREEN, COLOR_SOFT_GREEN, () => this.nextTypeFilter())
+        if (this.mode === 'wrongs') {
+          this.FilterChip('范围', this.wrongScopeLabel(), COLOR_ORANGE, COLOR_SOFT_ORANGE, () => this.nextWrongScope())
         }
-        .padding({ left: this.isTablet ? 0 : 16, right: this.isTablet ? 0 : 16, bottom: 10 })
-      }, (question: Question) => question.id)
+      }
+      .width('100%')
+
+      Text(`当前显示 ${this.filteredQuestions().length}/${this.session?.items.length ?? 0} 题`)
+        .fontSize(12)
+        .fontColor(COLOR_MUTED)
+        .margin({ top: 8 })
+        .width('100%')
     }
     .width('100%')
+    .padding({ left: this.isTablet ? 0 : 16, right: this.isTablet ? 0 : 16, top: this.isTablet ? 0 : 12, bottom: 10 })
+  }
+
+  @Builder
+  FilterChip(label: string, value: string, color: string, bgColor: string, action: () => void) {
+    Column() {
+      Text(label)
+        .fontSize(10)
+        .fontColor(COLOR_MUTED)
+      Text(value)
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(color)
+        .maxLines(1)
+        .margin({ top: 2 })
+    }
     .layoutWeight(1)
-    .padding({ top: this.isTablet ? 0 : 14 })
-    .constraintSize({ maxWidth: this.isTablet ? 9999 : this.pageMaxWidth() })
-    .alignSelf(ItemAlign.Center)
+    .height(48)
+    .justifyContent(FlexAlign.Center)
+    .padding({ left: 8, right: 8 })
+    .margin({ left: 3, right: 3 })
+    .backgroundColor(bgColor)
+    .borderRadius(8)
+    .border({ width: 1, color: color })
+    .onClick(action)
   }
 
   @Builder
@@ -426,11 +497,197 @@ struct PracticePage {
     return this.isTablet ? 1120 : 520;
   }
 
+  resetFilters(): void {
+    this.categoryFilter = 'all';
+    this.typeFilter = 'all';
+    this.wrongScope = this.mode === 'wrongs' ? 'active' : 'all';
+  }
+
   navActive(): string {
     if (this.mode === 'wrongs' || this.mode === 'favorites') {
       return this.mode;
     }
     return 'home';
+  }
+
+  filteredQuestions(): Question[] {
+    const result: Question[] = [];
+    for (const question of this.session?.items ?? []) {
+      if (this.categoryFilter !== 'all' && question.categoryId !== this.categoryFilter) {
+        continue;
+      }
+      if (this.typeFilter !== 'all' && question.type !== this.typeFilter) {
+        continue;
+      }
+      if (this.mode === 'wrongs' && this.wrongScope === 'active' && question.wrong?.mastered === true) {
+        continue;
+      }
+      result.push(question);
+    }
+    return result;
+  }
+
+  availableCategoryIds(): string[] {
+    const ids: string[] = [];
+    for (const question of this.session?.items ?? []) {
+      if (!this.containsString(ids, question.categoryId)) {
+        ids.push(question.categoryId);
+      }
+    }
+    return ids;
+  }
+
+  containsString(items: string[], value: string): boolean {
+    for (const item of items) {
+      if (item === value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  categoryFilterLabel(): string {
+    if (this.categoryFilter === 'all') {
+      return '全部模块';
+    }
+    return this.categoryName(this.categoryFilter);
+  }
+
+  typeFilterLabel(): string {
+    if (this.typeFilter === 'single') {
+      return '单选';
+    }
+    if (this.typeFilter === 'multiple') {
+      return '多选';
+    }
+    if (this.typeFilter === 'boolean') {
+      return '判断';
+    }
+    if (this.typeFilter === 'short') {
+      return '简答';
+    }
+    return '全部题型';
+  }
+
+  wrongScopeLabel(): string {
+    return this.wrongScope === 'all' ? '全部错题' : '未掌握';
+  }
+
+  nextCategoryFilter(): void {
+    const ids = this.availableCategoryIds();
+    if (ids.length === 0) {
+      this.categoryFilter = 'all';
+      this.syncSelectedQuestion();
+      return;
+    }
+    if (this.categoryFilter === 'all') {
+      this.categoryFilter = ids[0];
+      this.syncSelectedQuestion();
+      return;
+    }
+    for (let index = 0; index < ids.length; index++) {
+      if (ids[index] === this.categoryFilter) {
+        if (index + 1 < ids.length) {
+          this.categoryFilter = ids[index + 1];
+        } else {
+          this.categoryFilter = 'all';
+        }
+        this.syncSelectedQuestion();
+        return;
+      }
+    }
+    this.categoryFilter = 'all';
+    this.syncSelectedQuestion();
+  }
+
+  nextTypeFilter(): void {
+    if (this.typeFilter === 'all') {
+      this.typeFilter = 'single';
+    } else if (this.typeFilter === 'single') {
+      this.typeFilter = 'multiple';
+    } else if (this.typeFilter === 'multiple') {
+      this.typeFilter = 'boolean';
+    } else if (this.typeFilter === 'boolean') {
+      this.typeFilter = 'short';
+    } else {
+      this.typeFilter = 'all';
+    }
+    this.syncSelectedQuestion();
+  }
+
+  nextWrongScope(): void {
+    this.wrongScope = this.wrongScope === 'active' ? 'all' : 'active';
+    this.syncSelectedQuestion();
+  }
+
+  syncSelectedQuestion(): void {
+    const questions = this.filteredQuestions();
+    if (questions.length === 0) {
+      this.selectedQuestion = undefined;
+      return;
+    }
+    if (!this.selectedQuestion) {
+      this.selectedQuestion = questions[0];
+      return;
+    }
+    for (const question of questions) {
+      if (question.id === this.selectedQuestion.id) {
+        return;
+      }
+    }
+    this.selectedQuestion = questions[0];
+  }
+
+  categoryName(categoryId: string): string {
+    if (categoryId === 'arkts') {
+      return 'ArkTS';
+    }
+    if (categoryId === 'arkui') {
+      return 'ArkUI';
+    }
+    if (categoryId === 'stage-model') {
+      return 'Stage';
+    }
+    if (categoryId === 'ability-lifecycle') {
+      return 'Ability';
+    }
+    if (categoryId === 'component-communication') {
+      return '组件通信';
+    }
+    if (categoryId === 'state-management') {
+      return '状态管理';
+    }
+    if (categoryId === 'routing') {
+      return '路由';
+    }
+    if (categoryId === 'network') {
+      return '网络';
+    }
+    if (categoryId === 'permissions') {
+      return '权限';
+    }
+    if (categoryId === 'storage') {
+      return '数据存储';
+    }
+    if (categoryId === 'preferences') {
+      return 'Preferences';
+    }
+    if (categoryId === 'relational-store') {
+      return '关系库';
+    }
+    if (categoryId === 'napi') {
+      return 'NAPI';
+    }
+    if (categoryId === 'performance') {
+      return '性能';
+    }
+    if (categoryId === 'debug-release') {
+      return '调试发布';
+    }
+    if (categoryId === 'next-adaptation') {
+      return 'NEXT';
+    }
+    return categoryId;
   }
 
   isSelectedQuestion(question: Question): boolean {
@@ -466,14 +723,14 @@ struct PracticePage {
 
   sessionQuestionIds(): string {
     const ids: string[] = [];
-    for (const item of this.session?.items ?? []) {
+    for (const item of this.filteredQuestions()) {
       ids.push(item.id);
     }
     return ids.join(',');
   }
 
   questionIndex(question: Question): number {
-    const items: Question[] = this.session?.items ?? [];
+    const items: Question[] = this.filteredQuestions();
     for (let index = 0; index < items.length; index++) {
       if (items[index].id === question.id) {
         return index;
