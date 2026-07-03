@@ -20,6 +20,7 @@ const COLOR_BLUE: string = '#2c5f8f';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
+const COLOR_SHADOW: string = '#1f2a3714';
 const TABLET_MIN_VP: number = 680;
 
 @Entry
@@ -86,6 +87,7 @@ struct HomePage {
         this.ActionGrid()
       }
       .layoutWeight(4)
+      .height('100%')
       .margin({ right: 18 })
       .alignItems(HorizontalAlign.Start)
       .justifyContent(FlexAlign.Start)
@@ -251,6 +253,7 @@ struct HomePage {
     .backgroundColor(COLOR_NAVY)
     .borderRadius(8)
     .margin({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 14 })
+    .shadow({ radius: 18, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
   }
 
   @Builder
@@ -347,7 +350,8 @@ struct HomePage {
     .margin({ left: 4, right: 4 })
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
-    .border({ width: 1, color: bgColor })
+    .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 12, color: COLOR_SHADOW, offsetX: 0, offsetY: 6 })
     .onClick(() => this.openPractice(mode))
   }
 
@@ -396,6 +400,7 @@ struct HomePage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 10, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
     .onClick(() => this.openPractice('category', category))
   }
 

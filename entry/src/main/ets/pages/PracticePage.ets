@@ -18,6 +18,7 @@ const COLOR_BLUE: string = '#2c5f8f';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
+const COLOR_SHADOW: string = '#1f2a3714';
 const TABLET_MIN_VP: number = 680;
 
 @Entry
@@ -187,10 +188,11 @@ struct PracticePage {
       .layoutWeight(1)
       .height('100%')
       .padding(16)
-      .backgroundColor('#f8fafc')
+      .backgroundColor(COLOR_SURFACE)
       .borderRadius(8)
       .border({ width: 1, color: COLOR_LINE })
       .margin({ right: 0 })
+      .shadow({ radius: 16, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
     }
     .width('100%')
     .layoutWeight(1)
@@ -344,6 +346,7 @@ struct PracticePage {
     .backgroundColor(this.isSelectedQuestion(question) ? '#f1faf6' : COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: this.isSelectedQuestion(question) ? COLOR_GREEN : COLOR_LINE })
+    .shadow({ radius: 10, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
     .onClick(() => this.handleQuestionTap(question))
   }
 

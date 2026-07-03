@@ -19,6 +19,7 @@ const COLOR_BLUE: string = '#2c5f8f';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
+const COLOR_SHADOW: string = '#1f2a3714';
 const TABLET_MIN_VP: number = 680;
 
 @Entry
@@ -172,6 +173,7 @@ struct RecordPage {
     .padding(18)
     .backgroundColor(COLOR_NAVY)
     .borderRadius(8)
+    .shadow({ radius: 18, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
   }
 
   @Builder
@@ -269,11 +271,12 @@ struct RecordPage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 10, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
     .onClick(() => this.openCategoryPractice(item))
   }
 
   pageMaxWidth(): number {
-    return this.isTablet ? 920 : 520;
+    return this.isTablet ? 1120 : 520;
   }
 
   progressColor(rate: number): string {
