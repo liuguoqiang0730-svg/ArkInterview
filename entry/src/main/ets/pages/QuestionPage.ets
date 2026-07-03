@@ -1121,7 +1121,11 @@ struct QuestionPage {
       });
       this.updateAnswerProgress(this.feedback);
       PracticeEvents.markStatsChanged();
-      AppToast.show(this.answeredCount() === this.questionIds.length ? '本轮已答完' : '已提交');
+      if (this.answeredCount() === this.questionIds.length) {
+        this.scheduleCompletionSummary(this.feedback.questionId);
+      } else {
+        AppToast.show('已提交');
+      }
     } catch (error) {
       AppToast.show(`提交失败：${String(error)}`);
     }
