@@ -3,6 +3,7 @@ import { BottomNavBar } from '../components/BottomNavBar';
 import { CategoryStats, UserStats } from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
+import { PracticeEvents } from '../utils/PracticeEvents';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -26,16 +27,25 @@ struct RecordPage {
   @State private stats: UserStats | undefined = undefined;
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
+  private observedStatsVersion: number = 0;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
     this.loadStats();
   }
 
+  onPageShow(): void {
+    this.updateLayoutMode();
+    if (this.observedStatsVersion !== PracticeEvents.currentStatsVersion()) {
+      this.loadStats();
+    }
+  }
+
   async loadStats() {
     this.loading = true;
     try {
       this.stats = await store.loadStats();
+      this.observedStatsVersion = PracticeEvents.currentStatsVersion();
     } catch (error) {
       AppToast.show(`加载失败：${String(error)}`);
     } finally {

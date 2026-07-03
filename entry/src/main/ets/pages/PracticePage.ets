@@ -184,15 +184,13 @@ struct PracticePage {
         this.FilterBar()
         this.QuestionList()
       }
-      .layoutWeight(5)
+      .layoutWeight(1)
       .height('100%')
       .padding(16)
       .backgroundColor('#f8fafc')
       .borderRadius(8)
       .border({ width: 1, color: COLOR_LINE })
-      .margin({ right: 16 })
-
-      this.QuestionPreview()
+      .margin({ right: 0 })
     }
     .width('100%')
     .layoutWeight(1)
@@ -695,10 +693,6 @@ struct PracticePage {
   }
 
   handleQuestionTap(question: Question): void {
-    if (this.isTablet) {
-      this.selectedQuestion = question;
-      return;
-    }
     this.openQuestion(question);
   }
 

@@ -4,6 +4,7 @@ import { BottomNavBar } from '../components/BottomNavBar';
 import { Category, UserStats } from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
+import { PracticeEvents } from '../utils/PracticeEvents';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -28,10 +29,18 @@ struct HomePage {
   @State private stats: UserStats | undefined = undefined;
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
+  private observedStatsVersion: number = 0;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
     this.loadHome();
+  }
+
+  onPageShow(): void {
+    this.updateLayoutMode();
+    if (this.observedStatsVersion !== PracticeEvents.currentStatsVersion()) {
+      this.loadHome();
+    }
   }
 
   async loadHome() {
@@ -40,6 +49,7 @@ struct HomePage {
       const snapshot = await store.loadHome();
       this.categories = snapshot.categories;
       this.stats = snapshot.stats;
+      this.observedStatsVersion = PracticeEvents.currentStatsVersion();
     } catch (error) {
       AppToast.show(`加载失败：${String(error)}`);
     } finally {

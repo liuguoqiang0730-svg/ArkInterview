@@ -3,6 +3,7 @@ import { BottomNavBar } from '../components/BottomNavBar';
 import { Question, QuestionOption, SubmitAnswerResponse } from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
+import { PracticeEvents } from '../utils/PracticeEvents';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -88,7 +89,8 @@ struct QuestionPage {
 
   build() {
     Column() {
-      Column() {
+      Stack({ alignContent: Alignment.TopEnd }) {
+        Column() {
         Row() {
           Button('<')
             .width(38)
@@ -103,7 +105,8 @@ struct QuestionPage {
             .fontColor(COLOR_NAVY)
             .layoutWeight(1)
             .textAlign(TextAlign.Center)
-          Button(this.progressSummary())
+          Button('|||')
+            .width(42)
             .height(34)
             .fontSize(13)
             .fontColor(this.showProgressPanel ? '#ffffff' : COLOR_BLUE)
@@ -127,10 +130,6 @@ struct QuestionPage {
         .alignSelf(ItemAlign.Center)
         .margin({ top: this.isTablet ? 20 : 0 })
 
-        if (this.showProgressPanel) {
-          this.ProgressPanel()
-        }
-
         if (this.showCompletionSummary) {
           this.CompletionFlow()
         } else if (this.loading) {
@@ -152,6 +151,13 @@ struct QuestionPage {
           } else {
             this.PhoneAnswerFlow()
           }
+        }
+        }
+        .width('100%')
+        .height('100%')
+
+        if (this.showProgressPanel) {
+          this.ProgressOverlay()
         }
       }
       .layoutWeight(1)
@@ -328,41 +334,36 @@ struct QuestionPage {
 
   @Builder
   TabletAnswerWorkspace() {
-    Row() {
-      Scroll() {
-        Column() {
-          this.QuestionCard()
-          this.QuestionNavigator()
-          this.AnswerArea()
-          this.SubmitButton()
+    Scroll() {
+      Column() {
+        this.QuestionCard()
+        this.QuestionNavigator()
+        this.AnswerArea()
+        this.SubmitButton()
+        if (this.feedback) {
+          this.FeedbackPanel()
         }
-        .width('100%')
-        .padding(16)
       }
-      .layoutWeight(6)
-      .height('100%')
-      .margin({ right: 16 })
-
-      Scroll() {
-        Column() {
-          if (this.feedback) {
-            this.FeedbackPanel()
-          } else {
-            this.SessionStatusPanel()
-          }
-        }
-        .width('100%')
-        .padding(16)
-      }
-      .layoutWeight(4)
-      .height('100%')
+      .width('100%')
+      .padding(16)
     }
     .width('100%')
     .layoutWeight(1)
-    .padding({ left: 16, right: 16, top: 16, bottom: 18 })
     .constraintSize({ maxWidth: this.pageMaxWidth() })
     .alignSelf(ItemAlign.Center)
-    .alignItems(VerticalAlign.Top)
+  }
+
+  @Builder
+  ProgressOverlay() {
+    Column() {
+      this.ProgressPanel()
+    }
+    .width('100%')
+    .height('100%')
+    .padding({ top: this.isTablet ? 74 : 58, right: this.isTablet ? 28 : 16 })
+    .alignItems(HorizontalAlign.End)
+    .backgroundColor('#00000000')
+    .onClick(() => this.showProgressPanel = false)
   }
 
   @Builder
@@ -403,14 +404,12 @@ struct QuestionPage {
       .rowsGap(8)
       .width('100%')
     }
-    .width('100%')
+    .width(this.isTablet ? 420 : 320)
     .padding(14)
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
-    .constraintSize({ maxWidth: this.pageMaxWidth() })
-    .alignSelf(ItemAlign.Center)
-    .margin({ top: 12, bottom: 2 })
+    .shadow({ radius: 18, color: '#1f2a3726', offsetX: 0, offsetY: 8 })
   }
 
   @Builder
@@ -1121,7 +1120,8 @@ struct QuestionPage {
         shortAnswer: this.shortAnswer
       });
       this.updateAnswerProgress(this.feedback);
-      this.scheduleAutoNext(this.feedback.questionId);
+      PracticeEvents.markStatsChanged();
+      AppToast.show(this.answeredCount() === this.questionIds.length ? '本轮已答完' : '已提交');
     } catch (error) {
       AppToast.show(`提交失败：${String(error)}`);
     }
@@ -1196,6 +1196,7 @@ struct QuestionPage {
         await store.addFavorite(this.question.id);
         this.updateFavoriteState(true);
       }
+      PracticeEvents.markStatsChanged();
     } catch (error) {
       AppToast.show(`操作失败：${String(error)}`);
     }
@@ -1213,6 +1214,7 @@ struct QuestionPage {
         current.wrong.mastered = true;
       }
       this.question = current;
+      PracticeEvents.markStatsChanged();
       AppToast.show('已标记掌握');
     } catch (error) {
       AppToast.show(`操作失败：${String(error)}`);
