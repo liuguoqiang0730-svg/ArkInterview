@@ -4,6 +4,7 @@ import { BottomNavBar } from '../components/BottomNavBar';
 import { Category, UserStats } from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
+import { FormatUtils } from '../utils/FormatUtils';
 import { PracticeEvents } from '../utils/PracticeEvents';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
@@ -227,7 +228,7 @@ struct HomePage {
         .layoutWeight(1)
 
         Column() {
-          Text(`${Math.round((this.stats?.accuracy ?? 0) * 100)}%`)
+          Text(FormatUtils.percent(this.stats?.accuracy ?? 0))
             .fontSize(this.isTablet ? 32 : 28)
             .fontWeight(FontWeight.Bold)
             .fontColor('#ffffff')
@@ -420,7 +421,7 @@ struct HomePage {
         Row() {
           Column()
             .height(6)
-            .width(`${Math.round(this.categoryCompletionRate(category.id) * 100)}%`)
+            .width(FormatUtils.percent(this.categoryCompletionRate(category.id)))
             .backgroundColor(this.categoryColor(category.order))
             .borderRadius(3)
         }
@@ -491,7 +492,7 @@ struct HomePage {
         if (item.attempts === 0) {
           return '尚未开始';
         }
-        return `正确率 ${Math.round(item.accuracy * 100)}% · 作答 ${item.attempts} 次`;
+        return `正确率 ${FormatUtils.percent(item.accuracy)} · 作答 ${item.attempts} 次`;
       }
     }
     return '尚未开始';

@@ -3,6 +3,7 @@ import { BottomNavBar } from '../components/BottomNavBar';
 import { CategoryStats, UserStats } from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
+import { FormatUtils } from '../utils/FormatUtils';
 import { PracticeEvents } from '../utils/PracticeEvents';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
@@ -150,7 +151,7 @@ struct RecordPage {
         .layoutWeight(1)
 
         Column() {
-          Text(`${Math.round((this.stats?.accuracy ?? 0) * 100)}%`)
+          Text(FormatUtils.percent(this.stats?.accuracy ?? 0))
             .fontSize(30)
             .fontWeight(FontWeight.Bold)
             .fontColor('#ffffff')
@@ -286,7 +287,7 @@ struct RecordPage {
       Row() {
         Column()
           .height(8)
-          .width(`${Math.round(item.completionRate * 100)}%`)
+          .width(FormatUtils.percent(item.completionRate))
           .backgroundColor(this.progressColor(item.completionRate))
           .borderRadius(4)
       }
@@ -297,14 +298,14 @@ struct RecordPage {
       .margin({ top: 10 })
 
       Row() {
-        Text(`正确率 ${Math.round(item.accuracy * 100)}%`)
+        Text(`正确率 ${FormatUtils.percent(item.accuracy)}`)
           .fontSize(12)
           .fontColor(COLOR_MUTED)
           .layoutWeight(1)
         Text(`作答 ${item.attempts} 次`)
           .fontSize(12)
           .fontColor(COLOR_MUTED)
-        Text(`覆盖 ${Math.round(item.completionRate * 100)}%`)
+        Text(`覆盖 ${FormatUtils.percent(item.completionRate)}`)
           .fontSize(12)
           .fontColor(COLOR_MUTED)
           .margin({ left: 10 })
