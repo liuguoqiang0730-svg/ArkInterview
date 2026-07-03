@@ -156,5 +156,234 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "performance-005",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "题库列表达到上百道后，首页或训练页列表性能优先关注哪一点？",
+    "options": [
+      {
+        "id": "a",
+        "text": "避免一次性创建所有列表项，使用合适的列表和懒加载策略"
+      },
+      {
+        "id": "b",
+        "text": "把所有题目都渲染成一个超长 Text"
+      },
+      {
+        "id": "c",
+        "text": "每次滚动都重新请求全部资源"
+      },
+      {
+        "id": "d",
+        "text": "关闭所有错误提示"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "长列表性能优化的核心是避免一次性加载所有元素。题库规模上升后，列表容器、懒加载和稳定 item 结构比堆叠静态组件更重要。",
+    "knowledgePoints": [
+      "长列表",
+      "懒加载",
+      "题库规模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "长列表性能优化",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/cta-use-of-list-and-grid-components-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "performance-006",
+    "categoryId": "performance",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "冷启动阶段不需要立即使用的大模块，可以结合 lazy import 思路推迟到实际使用时再加载。",
+    "answerBoolean": true,
+    "explanation": "lazy import 可让待加载文件在冷启动阶段不加载，直到运行过程中实际需要时再同步加载，有助于缩短冷启动耗时。",
+    "knowledgePoints": [
+      "lazy import",
+      "冷启动",
+      "按需加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-lazy-import-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "performance-007",
+    "categoryId": "performance",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "刷题 App 做性能优化时，哪些方向更贴近官方建议和真实场景？",
+    "options": [
+      {
+        "id": "a",
+        "text": "长列表使用懒加载，减少一次性创建元素"
+      },
+      {
+        "id": "b",
+        "text": "冷启动阶段推迟非首屏模块加载"
+      },
+      {
+        "id": "c",
+        "text": "分析卡顿时关注主线程耗时任务"
+      },
+      {
+        "id": "d",
+        "text": "把所有数据处理都放在 build 中同步执行"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "长列表、冷启动和 AppFreeze 分析是常见性能方向。把重数据处理放在 build 中同步执行会增加 UI 卡顿风险。",
+    "knowledgePoints": [
+      "长列表优化",
+      "冷启动优化",
+      "AppFreeze"
+    ],
+    "sourceRefs": [
+      {
+        "title": "长列表性能优化",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/cta-use-of-list-and-grid-components-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-lazy-import-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "分析AppFreeze（应用无响应）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/appfreeze-guidelines-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "performance-008",
+    "categoryId": "performance",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述如何排查一个答题页点击后短时间无响应的问题。",
+    "referenceAnswer": "先确认是否发生 AppFreeze 或主线程长任务，查看 HiLog、事件队列和近期耗时任务；检查点击处理是否同步执行了大量计算、JSON 解析或数据库操作；把重任务拆到合适的数据层或异步流程，并减少 UI 构建阶段的同步工作。",
+    "scoringPoints": [
+      "提到 AppFreeze 或主线程长任务",
+      "提到日志或事件队列",
+      "提到检查同步重计算或 IO",
+      "提到拆分任务或异步化",
+      "提到减少 UI 构建阶段负担"
+    ],
+    "explanation": "点击无响应通常要从主线程阻塞、事件队列和重任务入手，而不是只改按钮样式。",
+    "knowledgePoints": [
+      "AppFreeze",
+      "主线程阻塞",
+      "点击响应"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分析AppFreeze（应用无响应）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/appfreeze-guidelines-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "performance-009",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "大量题库数据不是首屏必须展示时，哪种优化方向更适合降低冷启动压力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "按需加载或延迟加载非首屏模块"
+      },
+      {
+        "id": "b",
+        "text": "冷启动时同步解析所有模块题目"
+      },
+      {
+        "id": "c",
+        "text": "在启动阶段循环渲染所有题卡"
+      },
+      {
+        "id": "d",
+        "text": "把所有页面都放入一个 build 方法"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "冷启动应优先加载首屏必需内容。非首屏模块可按需加载，避免启动阶段同步加载过多文件和数据。",
+    "knowledgePoints": [
+      "冷启动",
+      "按需加载",
+      "题库模块"
+    ],
+    "sourceRefs": [
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-lazy-import-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "performance-010",
+    "categoryId": "performance",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "性能优化应该结合具体瓶颈验证，不能只凭感觉删除功能。",
+    "answerBoolean": true,
+    "explanation": "性能问题需要通过日志、工具和场景复现定位。没有数据支撑就删除功能，可能既不能解决瓶颈，又破坏产品体验。",
+    "knowledgePoints": [
+      "性能验证",
+      "日志分析",
+      "产品体验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分析AppFreeze（应用无响应）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/appfreeze-guidelines-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

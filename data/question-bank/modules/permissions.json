@@ -180,5 +180,224 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "permissions-005",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "动态权限申请前，通常应先通过哪个能力创建权限管理对象？",
+    "options": [
+      {
+        "id": "a",
+        "text": "abilityAccessCtrl.createAtManager()"
+      },
+      {
+        "id": "b",
+        "text": "http.createHttp()"
+      },
+      {
+        "id": "c",
+        "text": "router.getParams()"
+      },
+      {
+        "id": "d",
+        "text": "preferences.getPreferences()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "权限检查和申请需要通过 abilityAccessCtrl 创建 AtManager。网络、路由和 Preferences API 分别属于其它能力。",
+    "knowledgePoints": [
+      "AtManager",
+      "createAtManager",
+      "权限申请"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "permissions-006",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "发起运行时权限申请时，最好放在用户明确触发的场景中，而不是冷启动时无上下文弹窗。",
+    "answerBoolean": true,
+    "explanation": "权限申请应结合用户操作和具体功能场景，先检查再申请，避免冷启动时无上下文打断用户。",
+    "knowledgePoints": [
+      "运行时权限",
+      "用户触发",
+      "授权体验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "permissions-007",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于权限申请结果处理，哪些说法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "按请求权限数组顺序读取 authResults"
+      },
+      {
+        "id": "b",
+        "text": "根据授权结果决定是否继续执行敏感能力"
+      },
+      {
+        "id": "c",
+        "text": "把 HTTP 200 当作权限授权成功"
+      },
+      {
+        "id": "d",
+        "text": "用户拒绝后给出合理提示或降级路径"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "PermissionRequestResult 的 authResults 与 permissions 对应。权限结果和 HTTP 状态码无关，拒绝后应提供合理提示或降级体验。",
+    "knowledgePoints": [
+      "PermissionRequestResult",
+      "authResults",
+      "降级体验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "permissions-008",
+    "categoryId": "permissions",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述一个需要相机或定位权限的 HarmonyOS 功能应该如何处理授权流程。",
+    "referenceAnswer": "应在用户触发相关功能时先通过 AtManager 检查权限状态；未授权时调用 requestPermissionsFromUser 发起申请；根据 authResults 判断是否继续执行功能；用户拒绝时给出说明或降级路径。",
+    "scoringPoints": [
+      "提到 AtManager",
+      "提到先检查权限",
+      "提到 requestPermissionsFromUser",
+      "提到处理 authResults",
+      "提到拒绝后的提示或降级"
+    ],
+    "explanation": "权限流程不是只弹窗。完整回答应包含检查、申请、结果处理和拒绝后的体验设计。",
+    "knowledgePoints": [
+      "权限流程",
+      "AtManager",
+      "用户体验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "permissions-009",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "申请权限后返回的授权结果数组字段通常是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "authResults"
+      },
+      {
+        "id": "b",
+        "text": "responseCode"
+      },
+      {
+        "id": "c",
+        "text": "questionIds"
+      },
+      {
+        "id": "d",
+        "text": "compileSdkVersion"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "PermissionRequestResult 中 authResults 用于表示权限授权结果。其它字段分别属于网络响应、业务参数或构建配置场景。",
+    "knowledgePoints": [
+      "authResults",
+      "PermissionRequestResult",
+      "权限结果"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "permissions-010",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "权限授权结果应作为是否执行敏感能力的依据之一，不能忽略用户拒绝。",
+    "answerBoolean": true,
+    "explanation": "运行时权限的意义在于尊重用户授权。用户拒绝时继续执行敏感能力会导致失败或体验问题，应按结果分支处理。",
+    "knowledgePoints": [
+      "权限结果",
+      "敏感能力",
+      "用户授权"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

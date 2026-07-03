@@ -308,5 +308,75 @@
       }
     ],
     "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-009",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "远程题库接口返回非 2xx 状态码时，客户端首先应该如何处理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "识别失败状态并进入错误处理或提示流程"
+      },
+      {
+        "id": "b",
+        "text": "继续当作成功数据解析"
+      },
+      {
+        "id": "c",
+        "text": "直接把状态码保存为正确答案"
+      },
+      {
+        "id": "d",
+        "text": "忽略响应体并静默关闭页面"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "HTTP 响应需要结合状态码和响应内容判断请求是否成功。非成功状态应进入错误处理，避免把错误响应当成正常题库数据。",
+    "knowledgePoints": [
+      "HTTP 状态码",
+      "错误处理",
+      "远程题库"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-010",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "把 AI 评分 API Key 直接放在 HarmonyOS 客户端代码中，属于安全风险，应该改为由服务端持有和调用。",
+    "answerBoolean": true,
+    "explanation": "客户端代码和包体存在被分析的风险。涉及 AI 评分、支付或管理权限的密钥应放在服务端，客户端只调用后端 REST API。",
+    "knowledgePoints": [
+      "API Key 安全",
+      "服务端代理",
+      "REST API"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

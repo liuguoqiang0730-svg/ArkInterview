@@ -307,5 +307,75 @@
       }
     ],
     "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-009",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "从答题页返回题单页时，最贴近页面栈返回语义的路由能力是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "router.back()"
+      },
+      {
+        "id": "b",
+        "text": "preferences.flush()"
+      },
+      {
+        "id": "c",
+        "text": "http.createHttp()"
+      },
+      {
+        "id": "d",
+        "text": "relationalStore.getRdbStore()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "router.back() 用于返回页面栈中的上一页或指定页面。它表达的是导航返回语义，不负责数据持久化、网络请求或数据库连接。",
+    "knowledgePoints": [
+      "router.back",
+      "页面栈",
+      "导航返回"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-010",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "路由设计中，页面路径和参数应该尽量清晰稳定，方便页面恢复和问题排查。",
+    "answerBoolean": true,
+    "explanation": "清晰稳定的路由路径和参数有利于页面跳转、状态恢复和调试。随意传递大对象或隐式依赖全局变量会增加排查成本。",
+    "knowledgePoints": [
+      "路由设计",
+      "页面恢复",
+      "调试"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

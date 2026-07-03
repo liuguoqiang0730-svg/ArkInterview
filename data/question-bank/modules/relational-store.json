@@ -208,5 +208,199 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "relational-store-006",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "创建或打开关系型数据库前，通常需要配置数据库名称等信息的对象是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "StoreConfig"
+      },
+      {
+        "id": "b",
+        "text": "PermissionRequestResult"
+      },
+      {
+        "id": "c",
+        "text": "HttpRequestOptions"
+      },
+      {
+        "id": "d",
+        "text": "RouterOptions"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "relationalStore 使用 StoreConfig 描述数据库配置，例如数据库名称等。权限结果、HTTP 选项和路由选项属于其它能力。",
+    "knowledgePoints": [
+      "StoreConfig",
+      "RDB Store",
+      "数据库配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "relational-store-007",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "关系型数据库适合保存有表结构、条件查询和多步写入一致性要求的数据。",
+    "answerBoolean": true,
+    "explanation": "relationalStore 面向关系型数据，支持表数据操作和事务等能力，适合结构化记录、条件查询和一致性要求更高的本地数据。",
+    "knowledgePoints": [
+      "关系型数据库",
+      "条件查询",
+      "事务"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "relational-store-008",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "用 relationalStore 保存答题历史时，哪些设计更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "为答题记录设计清晰表结构"
+      },
+      {
+        "id": "b",
+        "text": "按 questionId、categoryId 等字段支持查询"
+      },
+      {
+        "id": "c",
+        "text": "多步写入需要一致性时考虑事务"
+      },
+      {
+        "id": "d",
+        "text": "把所有记录都拼成一个超长字符串存在单个 key 中"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "答题历史是结构化数据，适合通过表结构和条件字段查询。事务可用于多步一致性写入，单 key 大字符串不利于查询和维护。",
+    "knowledgePoints": [
+      "答题历史",
+      "表结构",
+      "事务"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "relational-store-009",
+    "categoryId": "relational-store",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 RdbStore 中事务能力适合解决什么问题。",
+    "referenceAnswer": "事务适合多步数据库写入需要保持一致性的场景，例如同时写入答题记录、更新分类统计和错题状态。通过 beginTransaction、commit、rollBack 或 rollback 相关能力，可以做到要么全部成功，要么失败回滚。",
+    "scoringPoints": [
+      "说明多步写入一致性",
+      "提到 beginTransaction",
+      "提到 commit",
+      "提到回滚能力",
+      "能结合业务场景举例"
+    ],
+    "explanation": "事务不是为了简单查询，而是为了保证一组写操作的原子性和一致性。刷题记录更新就是典型业务例子。",
+    "knowledgePoints": [
+      "事务",
+      "一致性",
+      "RdbStore"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "relational-store-010",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "执行建表或表结构初始化这类 SQL 语句时，RdbStore 中常关注哪类执行 SQL 的能力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "executeSql"
+      },
+      {
+        "id": "b",
+        "text": "showToast"
+      },
+      {
+        "id": "c",
+        "text": "pushUrl"
+      },
+      {
+        "id": "d",
+        "text": "checkAccessToken"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "建表等 SQL 语句应通过 RdbStore 的 SQL 执行能力处理。Toast、路由和权限检查都不是关系型数据库建表 API。",
+    "knowledgePoints": [
+      "executeSql",
+      "建表",
+      "RdbStore"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

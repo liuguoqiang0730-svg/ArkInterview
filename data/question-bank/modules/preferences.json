@@ -205,5 +205,203 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "preferences-006",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "Preferences 中读取指定 key 的值，通常会使用实例上的哪类方法？",
+    "options": [
+      {
+        "id": "a",
+        "text": "get"
+      },
+      {
+        "id": "b",
+        "text": "request"
+      },
+      {
+        "id": "c",
+        "text": "pushUrl"
+      },
+      {
+        "id": "d",
+        "text": "beginTransaction"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "Preferences 实例提供键值读写能力，读取值使用 get 类方法。request 属于 HTTP，pushUrl 属于路由，beginTransaction 属于关系型数据库事务。",
+    "knowledgePoints": [
+      "Preferences",
+      "get",
+      "键值读取"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "preferences-007",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Preferences 适合保存大量复杂关系表数据，因此可以完全替代 relationalStore。",
+    "answerBoolean": false,
+    "explanation": "Preferences 适合用户首选项和轻量键值配置。大量复杂关系表数据、条件查询和事务场景应考虑 relationalStore。",
+    "knowledgePoints": [
+      "Preferences",
+      "relationalStore",
+      "存储边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "preferences-008",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "使用 Preferences 保存设置项时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "为 key 命名保持稳定和可读"
+      },
+      {
+        "id": "b",
+        "text": "修改后按需要调用 flush 持久化"
+      },
+      {
+        "id": "c",
+        "text": "把复杂 SQL 查询全部拼进一个 key 中"
+      },
+      {
+        "id": "d",
+        "text": "区分删除缓存实例和删除 Preferences 文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "Preferences 是轻量键值存储，key 设计和持久化调用要清晰。复杂 SQL 查询不应被塞进 Preferences key 中。",
+    "knowledgePoints": [
+      "Preferences key",
+      "flush",
+      "缓存与文件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "preferences-009",
+    "categoryId": "preferences",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 removePreferencesFromCache 和 deletePreferences 的区别。",
+    "referenceAnswer": "removePreferencesFromCache 用于从内存缓存中移除 Preferences 实例；deletePreferences 用于删除 Preferences 文件。前者影响缓存实例，后者影响持久化文件，使用时要明确目标。",
+    "scoringPoints": [
+      "说明 removePreferencesFromCache 作用于内存缓存",
+      "说明 deletePreferences 删除文件",
+      "能说明二者目标不同",
+      "能提醒避免误删持久化数据"
+    ],
+    "explanation": "这道题考察 Preferences 常见 API 的边界。缓存移除和文件删除不是同一个动作，误用会造成数据管理问题。",
+    "knowledgePoints": [
+      "removePreferencesFromCache",
+      "deletePreferences",
+      "缓存管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "preferences-010",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "将 Preferences 中已修改的数据写入持久化文件时，应关注哪个方法？",
+    "options": [
+      {
+        "id": "a",
+        "text": "flush"
+      },
+      {
+        "id": "b",
+        "text": "router.back"
+      },
+      {
+        "id": "c",
+        "text": "destroy"
+      },
+      {
+        "id": "d",
+        "text": "getRdbStore"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "Preferences 修改后需要按 API 语义调用 flush 写入持久化存储。其它选项分别属于路由、HTTP 请求对象和关系型数据库。",
+    "knowledgePoints": [
+      "Preferences",
+      "flush",
+      "持久化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

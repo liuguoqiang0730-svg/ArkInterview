@@ -147,5 +147,223 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "storage-005",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要保存结构化表数据并按条件查询时，相比 Preferences 更适合选择哪类持久化能力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "关系型数据库 RDB Store"
+      },
+      {
+        "id": "b",
+        "text": "页面路由参数"
+      },
+      {
+        "id": "c",
+        "text": "UIAbility 生命周期"
+      },
+      {
+        "id": "d",
+        "text": "HiLog 日志窗口"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "关系型数据库适合结构化表数据和条件查询。Preferences 更适合轻量配置，不适合承载复杂表关系和查询需求。",
+    "knowledgePoints": [
+      "RDB Store",
+      "结构化数据",
+      "存储选型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "storage-006",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "用户首选项、键值型数据库和关系型数据库都属于 HarmonyOS 应用数据持久化选型中需要考虑的数据形态。",
+    "answerBoolean": true,
+    "explanation": "官方应用数据持久化概述列出了用户首选项、键值型数据库和关系型数据库。开发者应根据数据形态选择合适方案。",
+    "knowledgePoints": [
+      "数据持久化",
+      "存储形态",
+      "选型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "storage-007",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "设计刷题 App 本地缓存时，哪些数据更适合做本地持久化？",
+    "options": [
+      {
+        "id": "a",
+        "text": "收藏题目 ID"
+      },
+      {
+        "id": "b",
+        "text": "错题记录和掌握状态"
+      },
+      {
+        "id": "c",
+        "text": "最近练习时间和答题历史"
+      },
+      {
+        "id": "d",
+        "text": "服务端 AI 评分 API Key 明文"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "收藏、错题、练习记录属于用户本地数据或缓存，可持久化保存。API Key 属于敏感服务端密钥，不应明文放客户端本地存储。",
+    "knowledgePoints": [
+      "本地缓存",
+      "错题记录",
+      "安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "storage-008",
+    "categoryId": "storage",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述刷题 App 为什么不应该只依赖内存保存答题记录。",
+    "referenceAnswer": "内存数据在应用退出、进程被回收或设备重启后可能丢失。答题历史、错题、收藏和练习进度属于需要长期保留的数据，应根据数据形态持久化到 Preferences、KV-Store 或 RDB Store 等本地存储，并可与服务端同步。",
+    "scoringPoints": [
+      "提到内存数据易丢失",
+      "提到答题历史、错题或收藏需要保留",
+      "提到本地持久化选型",
+      "提到可与服务端同步"
+    ],
+    "explanation": "刷题产品的核心价值之一是进度和复盘。只放内存会导致记录丢失，无法形成错题本和练习记录闭环。",
+    "knowledgePoints": [
+      "本地持久化",
+      "练习记录",
+      "错题本"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "storage-009",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "保存“是否开启深色模式”这类单个用户偏好，优先考虑哪种存储？",
+    "options": [
+      {
+        "id": "a",
+        "text": "Preferences"
+      },
+      {
+        "id": "b",
+        "text": "RDB 事务"
+      },
+      {
+        "id": "c",
+        "text": "HTTP responseCode"
+      },
+      {
+        "id": "d",
+        "text": "AbilityStage onCreate"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "深色模式开关属于典型用户偏好配置，使用 Preferences 更直接。RDB 事务更适合复杂表数据的多步写入。",
+    "knowledgePoints": [
+      "用户偏好",
+      "Preferences",
+      "配置存储"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "storage-010",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "存储选型时，数据规模、结构复杂度、查询方式和安全性都应该纳入考虑。",
+    "answerBoolean": true,
+    "explanation": "不同存储能力适合不同数据形态。轻量配置、键值数据、结构化查询和敏感数据的处理方式不同，不能只按“能保存”来选型。",
+    "knowledgePoints": [
+      "存储选型",
+      "数据规模",
+      "安全性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

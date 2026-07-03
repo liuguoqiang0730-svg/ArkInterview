@@ -156,5 +156,228 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "napi-005",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ArkTS 侧调用 Native 模块导出能力时，通常先需要做什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "import 对应的 Node-API 模块"
+      },
+      {
+        "id": "b",
+        "text": "调用 router.back"
+      },
+      {
+        "id": "c",
+        "text": "删除 module.json5"
+      },
+      {
+        "id": "d",
+        "text": "把 C++ 代码写进 Text 组件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方流程中，ArkTS/JS 侧通过 import 一个 Native 模块，然后调用 C++ 导出的能力。路由返回和 UI 组件都不是 Native 模块导入流程。",
+    "knowledgePoints": [
+      "Node-API",
+      "import",
+      "Native 模块调用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "napi-006",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Node-API 适合封装需要 C/C++ 实现的能力，但普通 ArkUI 页面状态管理不应无理由全部迁移到 Native 层。",
+    "answerBoolean": true,
+    "explanation": "Node-API 用于跨语言调用和 Native 能力封装。普通 UI 状态用 ArkUI 状态管理更直接，滥用 Native 层会增加复杂度。",
+    "knowledgePoints": [
+      "Node-API 边界",
+      "ArkUI 状态",
+      "Native 封装"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "napi-007",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "Native 侧需要回调 ArkTS 或涉及子线程交互时，哪些关注点更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "关注官方 FAQ 中关于 Native 调 ArkTS 的限制和方式"
+      },
+      {
+        "id": "b",
+        "text": "明确回调函数、线程和生命周期边界"
+      },
+      {
+        "id": "c",
+        "text": "忽略线程来源，任意线程直接操作 UI 状态"
+      },
+      {
+        "id": "d",
+        "text": "用日志和最小示例验证跨语言调用链路"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "Native 回调 ArkTS 和线程交互容易出边界问题，应遵循官方 FAQ 和流程，明确回调、线程和生命周期，不能任意线程直接操作 UI 状态。",
+    "knowledgePoints": [
+      "Native 回调",
+      "线程边界",
+      "跨语言调用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Node-API常见问题",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-faqs-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "napi-008",
+    "categoryId": "napi",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述什么场景下你会考虑在 HarmonyOS App 中使用 Node-API。",
+    "referenceAnswer": "当应用需要复用已有 C/C++ 能力、接入性能敏感 Native 逻辑、封装底层系统或三方 Native 库时，可以考虑 Node-API。普通页面状态、路由和简单网络请求优先用 ArkTS/ArkUI 和系统 API 实现。",
+    "scoringPoints": [
+      "提到复用 C/C++ 能力",
+      "提到性能敏感或底层 Native 能力",
+      "提到 ArkTS 侧 import 调用",
+      "能说明不应滥用到普通 UI 状态"
+    ],
+    "explanation": "Node-API 是跨语言能力，不是所有业务逻辑的默认选择。面试回答应体现使用边界。",
+    "knowledgePoints": [
+      "Node-API 使用场景",
+      "C++ 复用",
+      "能力边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "napi-009",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Node-API 模块接入流程中，Native 侧最核心的准备工作是什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "按 Node-API 机制完成模块注册、加载和导出能力"
+      },
+      {
+        "id": "b",
+        "text": "把所有 ArkUI 组件移动到 C++ 文件中"
+      },
+      {
+        "id": "c",
+        "text": "删除 ArkTS 页面入口"
+      },
+      {
+        "id": "d",
+        "text": "把数据库文件改名为 router"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方流程强调 Native 模块注册和加载。只有模块正确导出后，ArkTS/JS 侧才能 import 并调用相关方法。",
+    "knowledgePoints": [
+      "模块注册",
+      "Native 导出",
+      "Node-API"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "napi-010",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "使用 Node-API 时，ArkTS 侧和 Native 侧都需要清晰约定函数参数、返回值和错误处理方式。",
+    "answerBoolean": true,
+    "explanation": "跨语言调用如果参数和返回值约定不清晰，会导致运行期错误难以定位。接口契约、错误码和日志都应提前设计。",
+    "knowledgePoints": [
+      "接口契约",
+      "参数返回值",
+      "错误处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

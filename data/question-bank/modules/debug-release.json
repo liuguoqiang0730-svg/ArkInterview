@@ -150,5 +150,229 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "debug-release-005",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "遇到 build-profile.json5 的 schema 校验错误时，第一步应优先做什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "根据错误路径检查对应字段类型和值"
+      },
+      {
+        "id": "b",
+        "text": "删除所有源码页面"
+      },
+      {
+        "id": "c",
+        "text": "修改题库答案"
+      },
+      {
+        "id": "d",
+        "text": "关闭所有日志窗口"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "schema 校验错误通常会给出 instancePath、字段类型和位置。应按错误路径检查 build-profile.json5 的字段类型和值。",
+    "knowledgePoints": [
+      "schema 校验",
+      "build-profile.json5",
+      "构建排障"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "debug-release-006",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "DevEco Studio 的 HiLog 可以帮助查看设备实时日志，是定位运行期问题的重要入口之一。",
+    "answerBoolean": true,
+    "explanation": "官方文档说明 DevEco Studio 提供 Log > HiLog 窗口查看设备实时日志。运行期问题不能只看编译输出，也应结合设备日志。",
+    "knowledgePoints": [
+      "HiLog",
+      "运行期调试",
+      "DevEco Studio"
+    ],
+    "sourceRefs": [
+      {
+        "title": "配置HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-setup-hilog-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "debug-release-007",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "排查 HarmonyOS 项目构建失败时，哪些信息更值得优先查看？",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hvigor 输出中的错误文件和行号"
+      },
+      {
+        "id": "b",
+        "text": "build-profile.json5 中 SDK 与产品配置"
+      },
+      {
+        "id": "c",
+        "text": "签名配置 signingConfigs"
+      },
+      {
+        "id": "d",
+        "text": "完全无关的网页缓存文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "构建失败常与源码错误、SDK 配置和签名配置相关。应按 Hvigor 输出定位错误文件，再检查工程级配置。",
+    "knowledgePoints": [
+      "Hvigor",
+      "SDK 配置",
+      "签名配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "debug-release-008",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述调试“真机运行正常但页面数据不刷新”时你会看哪些信息。",
+    "referenceAnswer": "先看 HiLog 和页面生命周期是否触发，再检查路由参数、数据层请求结果、本地缓存和状态变化通知；如果涉及构建配置或签名问题，再查看 Hvigor 输出和 build-profile.json5。",
+    "scoringPoints": [
+      "提到 HiLog",
+      "提到页面生命周期",
+      "提到路由参数或数据请求",
+      "提到状态刷新通知",
+      "能区分运行期和构建期问题"
+    ],
+    "explanation": "数据不刷新通常是运行期状态或数据流问题，优先看日志、生命周期和状态通知，而不是一开始就改签名配置。",
+    "knowledgePoints": [
+      "HiLog",
+      "页面刷新",
+      "状态通知"
+    ],
+    "sourceRefs": [
+      {
+        "title": "配置HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-setup-hilog-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "debug-release-009",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "HarmonyOS 工程签名配置通常出现在 build-profile.json5 的哪类配置中？",
+    "options": [
+      {
+        "id": "a",
+        "text": "signingConfigs"
+      },
+      {
+        "id": "b",
+        "text": "questionIds"
+      },
+      {
+        "id": "c",
+        "text": "authResults"
+      },
+      {
+        "id": "d",
+        "text": "scoringPoints"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "build-profile.json5 包含工程级签名和产品配置，签名相关配置通常在 signingConfigs 中。其它选项属于业务或权限字段。",
+    "knowledgePoints": [
+      "signingConfigs",
+      "签名",
+      "工程配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "debug-release-010",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "发布前只要本地 debug 包能运行，就可以忽略 release 签名、SDK 版本和兼容设备检查。",
+    "answerBoolean": false,
+    "explanation": "debug 运行通过不等于 release 可发布。发布前仍需检查签名、SDK 版本、产品配置和兼容设备体验。",
+    "knowledgePoints": [
+      "发布检查",
+      "release 签名",
+      "兼容性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]
