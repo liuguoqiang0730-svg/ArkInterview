@@ -104,6 +104,9 @@ struct RecordPage {
           Scroll() {
             Column() {
               this.SummaryPanel()
+              if (this.isEmptyRecord()) {
+                this.EmptyRecordPanel()
+              }
               this.CategoryProgressList()
             }
             .width('100%')
@@ -193,6 +196,43 @@ struct RecordPage {
     .margin({ left: 3, right: 3 })
     .backgroundColor(bgColor)
     .borderRadius(8)
+  }
+
+  @Builder
+  EmptyRecordPanel() {
+    Column() {
+      Text('还没有练习记录')
+        .fontSize(16)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_TEXT)
+        .width('100%')
+      Text('完成任意一组题目后，这里会展示覆盖题量、正确率和分类进度。')
+        .fontSize(13)
+        .fontColor(COLOR_MUTED)
+        .lineHeight(20)
+        .margin({ top: 8 })
+        .width('100%')
+      Button('开始随机练习')
+        .height(40)
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#ffffff')
+        .backgroundColor(COLOR_GREEN)
+        .borderRadius(8)
+        .margin({ top: 14 })
+        .onClick(() => AppRouter.push('pages/PracticePage', {
+          mode: 'random',
+          categoryId: '',
+          title: '随机练习'
+        }))
+    }
+    .width('100%')
+    .padding(16)
+    .margin({ top: 14 })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 10, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
   }
 
   @Builder
@@ -319,6 +359,10 @@ struct RecordPage {
       return '进行中';
     }
     return '未开始';
+  }
+
+  isEmptyRecord(): boolean {
+    return (this.stats?.totalAnswers ?? 0) === 0;
   }
 
   formatDate(value?: string): string {
