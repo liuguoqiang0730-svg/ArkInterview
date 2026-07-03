@@ -273,14 +273,14 @@ struct HomePage {
       .margin({ bottom: 10 })
 
       Row() {
-        this.ActionCard('随机练习', '快速进入综合训练', COLOR_GREEN, COLOR_SOFT_GREEN, 'random')
-        this.ActionCard('模拟面试', '按面试节奏抽题', COLOR_BLUE, COLOR_SOFT_BLUE, 'interview')
+        this.ActionCard('随机练习', '快速进入综合训练', COLOR_GREEN, COLOR_SOFT_GREEN, 'random', '综合')
+        this.ActionCard('模拟面试', '按面试节奏抽题', COLOR_BLUE, COLOR_SOFT_BLUE, 'interview', '8 题')
       }
       .width('100%')
 
       Row() {
-        this.ActionCard('错题练习', '集中处理薄弱点', COLOR_ORANGE, COLOR_SOFT_ORANGE, 'wrongs')
-        this.ActionCard('收藏复习', '回看重点题目', COLOR_GREEN, COLOR_SOFT_GREEN, 'favorites')
+        this.ActionCard('错题练习', '集中处理薄弱点', COLOR_ORANGE, COLOR_SOFT_ORANGE, 'wrongs', `${this.stats?.wrongCount ?? 0} 题`)
+        this.ActionCard('收藏复习', '回看重点题目', COLOR_GREEN, COLOR_SOFT_GREEN, 'favorites', `${this.stats?.favoriteCount ?? 0} 题`)
       }
       .width('100%')
       .margin({ top: 10 })
@@ -309,7 +309,7 @@ struct HomePage {
   }
 
   @Builder
-  ActionCard(title: string, desc: string, color: string, bgColor: string, mode: string) {
+  ActionCard(title: string, desc: string, color: string, bgColor: string, mode: string, meta: string) {
     Column() {
       Row() {
         Text(this.actionMark(mode))
@@ -343,9 +343,26 @@ struct HomePage {
           .fontColor(color)
       }
       .width('100%')
+
+      Row() {
+        Text(meta)
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(color)
+          .backgroundColor(bgColor)
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .borderRadius(8)
+        Text(this.actionHint(mode))
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .layoutWeight(1)
+          .textAlign(TextAlign.End)
+      }
+      .width('100%')
+      .margin({ top: 14 })
     }
     .layoutWeight(1)
-    .height(this.isTablet ? 104 : 94)
+    .height(this.isTablet ? 124 : 112)
     .padding(14)
     .margin({ left: 4, right: 4 })
     .backgroundColor(COLOR_SURFACE)
@@ -391,6 +408,32 @@ struct HomePage {
           .lineHeight(18)
           .margin({ top: 7 })
           .width('100%')
+
+        Row() {
+          Column()
+            .height(6)
+            .width(`${Math.round(this.categoryCompletionRate(category.id) * 100)}%`)
+            .backgroundColor(this.categoryColor(category.order))
+            .borderRadius(3)
+        }
+        .width('100%')
+        .height(6)
+        .backgroundColor('#eef2f6')
+        .borderRadius(3)
+        .margin({ top: 10 })
+
+        Row() {
+          Text(this.categoryStatusText(category.id))
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .layoutWeight(1)
+          Text('去练习 >')
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.categoryColor(category.order))
+        }
+        .width('100%')
+        .margin({ top: 8 })
       }
       .layoutWeight(1)
     }
@@ -417,6 +460,33 @@ struct HomePage {
       }
     }
     return '待练习';
+  }
+
+  categoryCompletionRate(categoryId: string): number {
+    if (!this.stats) {
+      return 0;
+    }
+    for (const item of this.stats.categories) {
+      if (item.categoryId === categoryId) {
+        return item.completionRate;
+      }
+    }
+    return 0;
+  }
+
+  categoryStatusText(categoryId: string): string {
+    if (!this.stats) {
+      return '尚未开始';
+    }
+    for (const item of this.stats.categories) {
+      if (item.categoryId === categoryId) {
+        if (item.attempts === 0) {
+          return '尚未开始';
+        }
+        return `正确率 ${Math.round(item.accuracy * 100)}% · 作答 ${item.attempts} 次`;
+      }
+    }
+    return '尚未开始';
   }
 
   categoryColor(order: number): string {
@@ -452,6 +522,19 @@ struct HomePage {
       return '藏';
     }
     return '练';
+  }
+
+  actionHint(mode: string): string {
+    if (mode === 'interview') {
+      return '模拟节奏';
+    }
+    if (mode === 'wrongs') {
+      return '优先复盘';
+    }
+    if (mode === 'favorites') {
+      return '重点回看';
+    }
+    return '立即开始';
   }
 
   categoryMark(name: string): string {
