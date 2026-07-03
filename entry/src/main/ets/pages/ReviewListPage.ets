@@ -20,6 +20,7 @@ const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
 const COLOR_SOFT_RED: string = '#fee4e2';
+const COLOR_SHADOW: string = '#1f2a3714';
 const TABLET_MIN_VP: number = 680;
 
 @Entry
@@ -151,11 +152,37 @@ struct ReviewListPage {
     .constraintSize({ maxWidth: this.pageMaxWidth() })
     .alignSelf(ItemAlign.Center)
     .margin({ top: this.isTablet ? 20 : 0 })
+    .shadow({ radius: 16, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
   }
 
   @Builder
   ToolPanel() {
     Column() {
+      Row() {
+        Column() {
+          Text('复盘筛选')
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+          Text(this.reviewToolSummary())
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 4 })
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+
+        Text(`${this.filteredQuestions().length}/${this.questions.length}`)
+          .fontSize(13)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_BLUE)
+          .backgroundColor(COLOR_SOFT_BLUE)
+          .padding({ left: 9, right: 9, top: 5, bottom: 5 })
+          .borderRadius(8)
+      }
+      .width('100%')
+      .margin({ bottom: 12 })
+
       TextInput({ placeholder: '搜索题干或知识点', text: this.keyword })
         .height(42)
         .width('100%')
@@ -200,9 +227,10 @@ struct ReviewListPage {
     }
     .width('100%')
     .padding(14)
-    .backgroundColor('#f8fafc')
+    .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: 7 })
   }
 
   @Builder
@@ -296,6 +324,22 @@ struct ReviewListPage {
         .width('100%')
 
       Row() {
+        Text(this.reviewStatusText(question))
+          .fontSize(12)
+          .fontColor(this.reviewStatusColor(question))
+          .backgroundColor(this.reviewStatusBgColor(question))
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .borderRadius(8)
+        Text(`第 ${index + 1}/${this.filteredQuestions().length} 题`)
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .layoutWeight(1)
+          .textAlign(TextAlign.End)
+      }
+      .width('100%')
+      .margin({ top: 10 })
+
+      Row() {
         Button('开始复习')
           .layoutWeight(1)
           .height(38)
@@ -337,6 +381,7 @@ struct ReviewListPage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 10, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
   }
 
   @Builder
@@ -480,6 +525,46 @@ struct ReviewListPage {
       return this.mode === 'favorites' ? '还没有收藏题目' : '还没有错题';
     }
     return '当前筛选下没有题目';
+  }
+
+  reviewToolSummary(): string {
+    if (this.mode === 'favorites') {
+      return '按模块、题型和难度整理收藏重点。';
+    }
+    return '优先处理未掌握错题，按错误次数或难度复盘。';
+  }
+
+  reviewStatusText(question: Question): string {
+    if (this.mode === 'favorites') {
+      return question.isFavorite ? '收藏复习' : '重点回看';
+    }
+    if (question.wrong?.mastered === true) {
+      return '已掌握';
+    }
+    if (question.wrong) {
+      return `待复盘 · 错 ${question.wrong.wrongCount} 次`;
+    }
+    return '待复盘';
+  }
+
+  reviewStatusColor(question: Question): string {
+    if (this.mode === 'favorites') {
+      return COLOR_GREEN;
+    }
+    if (question.wrong?.mastered === true) {
+      return COLOR_GREEN;
+    }
+    return COLOR_ORANGE;
+  }
+
+  reviewStatusBgColor(question: Question): string {
+    if (this.mode === 'favorites') {
+      return COLOR_SOFT_GREEN;
+    }
+    if (question.wrong?.mastered === true) {
+      return COLOR_SOFT_GREEN;
+    }
+    return COLOR_SOFT_ORANGE;
   }
 
   categoryFilterLabel(): string {
@@ -787,7 +872,7 @@ struct ReviewListPage {
   }
 
   pageMaxWidth(): number {
-    return this.isTablet ? 980 : 520;
+    return this.isTablet ? 1120 : 520;
   }
 
   updateLayoutMode(): void {
