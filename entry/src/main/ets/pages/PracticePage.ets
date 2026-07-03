@@ -290,6 +290,29 @@ struct PracticePage {
         .fontColor(COLOR_MUTED)
         .margin({ top: 8 })
         .width('100%')
+
+      if (this.hasActiveFilters()) {
+        Row() {
+          Text(this.activeFilterText())
+            .fontSize(12)
+            .fontColor(COLOR_BLUE)
+            .layoutWeight(1)
+          Button('清空')
+            .height(30)
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_GREEN)
+            .backgroundColor(COLOR_SOFT_GREEN)
+            .borderRadius(8)
+            .onClick(() => this.resetFilters())
+        }
+        .width('100%')
+        .padding({ left: 10, right: 8, top: 8, bottom: 8 })
+        .margin({ top: 10 })
+        .backgroundColor(COLOR_SOFT_BLUE)
+        .borderRadius(8)
+        .border({ width: 1, color: COLOR_BLUE })
+      }
     }
     .width('100%')
     .padding({ left: this.isTablet ? 0 : 16, right: this.isTablet ? 0 : 16, top: this.isTablet ? 0 : 12, bottom: 12 })
@@ -636,6 +659,30 @@ struct PracticePage {
       return '按面试节奏抽题，建议完整完成一轮后再复盘。';
     }
     return '选择题目开始练习，答题后会自动记录进度。';
+  }
+
+  hasActiveFilters(): boolean {
+    if (this.categoryFilter !== 'all') {
+      return true;
+    }
+    if (this.typeFilter !== 'all') {
+      return true;
+    }
+    return this.mode === 'wrongs' && this.wrongScope !== 'active';
+  }
+
+  activeFilterText(): string {
+    let count = 0;
+    if (this.categoryFilter !== 'all') {
+      count++;
+    }
+    if (this.typeFilter !== 'all') {
+      count++;
+    }
+    if (this.mode === 'wrongs' && this.wrongScope !== 'active') {
+      count++;
+    }
+    return `已启用 ${count} 个筛选条件`;
   }
 
   wrongScopeLabel(): string {
