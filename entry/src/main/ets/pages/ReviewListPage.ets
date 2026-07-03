@@ -242,11 +242,20 @@ struct ReviewListPage {
             .fontSize(16)
             .fontWeight(FontWeight.Bold)
             .fontColor(COLOR_TEXT)
-          Text('可以调整搜索、模块、题型或错题范围。')
+          Text(this.emptyHint())
             .fontSize(13)
             .fontColor(COLOR_MUTED)
             .lineHeight(19)
             .margin({ top: 8 })
+          Button(this.emptyActionText())
+            .height(38)
+            .fontSize(13)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#ffffff')
+            .backgroundColor(COLOR_GREEN)
+            .borderRadius(8)
+            .margin({ top: 16 })
+            .onClick(() => this.handleEmptyAction())
         }
         .width('100%')
         .padding(20)
@@ -525,6 +534,37 @@ struct ReviewListPage {
       return this.mode === 'favorites' ? '还没有收藏题目' : '还没有错题';
     }
     return '当前筛选下没有题目';
+  }
+
+  emptyHint(): string {
+    if (this.questions.length === 0) {
+      if (this.mode === 'favorites') {
+        return '收藏的题目会集中出现在这里，适合考前复习重点。';
+      }
+      return '答错的题目会自动进入错题本，重新答对后可以标记掌握。';
+    }
+    return '当前筛选条件过窄，可以清空筛选后重新查看。';
+  }
+
+  emptyActionText(): string {
+    return this.questions.length === 0 ? '返回首页练习' : '清空筛选';
+  }
+
+  handleEmptyAction(): void {
+    if (this.questions.length === 0) {
+      AppRouter.push('pages/HomePage');
+      return;
+    }
+    this.resetFilters();
+  }
+
+  resetFilters(): void {
+    this.keyword = '';
+    this.categoryFilter = 'all';
+    this.typeFilter = 'all';
+    this.difficultyFilter = 'all';
+    this.sortMode = this.mode === 'wrongs' ? 'wrongCount' : 'default';
+    this.wrongScope = this.mode === 'wrongs' ? 'active' : 'all';
   }
 
   reviewToolSummary(): string {
