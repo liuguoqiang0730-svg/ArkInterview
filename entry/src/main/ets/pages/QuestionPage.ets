@@ -624,8 +624,8 @@ struct QuestionPage {
               .width(30)
               .height(30)
               .textAlign(TextAlign.Center)
-              .fontColor(this.selectedOptionIds.includes(option.id) ? '#ffffff' : COLOR_GREEN)
-              .backgroundColor(this.selectedOptionIds.includes(option.id) ? COLOR_GREEN : COLOR_SOFT_GREEN)
+              .fontColor(this.optionBadgeTextColor(option.id))
+              .backgroundColor(this.optionBadgeBgColor(option.id))
               .borderRadius(8)
             Text(option.text)
               .fontSize(15)
@@ -637,9 +637,9 @@ struct QuestionPage {
           .width('100%')
           .padding(12)
           .margin({ top: 10 })
-          .backgroundColor(this.selectedOptionIds.includes(option.id) ? '#f1faf6' : '#f8fafc')
+          .backgroundColor(this.optionBgColor(option.id))
           .borderRadius(8)
-          .border({ width: 1, color: this.selectedOptionIds.includes(option.id) ? COLOR_GREEN : COLOR_LINE })
+          .border({ width: 1, color: this.optionBorderColor(option.id) })
           .onClick(() => this.toggleOption(option.id))
         }, (option: QuestionOption) => option.id)
       }
@@ -662,21 +662,23 @@ struct QuestionPage {
             .height(44)
             .fontSize(15)
             .fontWeight(FontWeight.Bold)
-            .backgroundColor(this.answerBoolean === true ? COLOR_GREEN : '#f8fafc')
-            .fontColor(this.answerBoolean === true ? '#ffffff' : COLOR_TEXT)
+            .backgroundColor(this.booleanBgColor(true))
+            .fontColor(this.booleanTextColor(true))
             .borderRadius(8)
+            .border({ width: 1, color: this.booleanBorderColor(true) })
             .margin({ right: 8 })
-            .onClick(() => this.answerBoolean = true)
+            .onClick(() => this.selectBoolean(true))
           Button('错误')
             .layoutWeight(1)
             .height(44)
             .fontSize(15)
             .fontWeight(FontWeight.Bold)
             .margin({ left: 8 })
-            .backgroundColor(this.answerBoolean === false ? COLOR_GREEN : '#f8fafc')
-            .fontColor(this.answerBoolean === false ? '#ffffff' : COLOR_TEXT)
+            .backgroundColor(this.booleanBgColor(false))
+            .fontColor(this.booleanTextColor(false))
             .borderRadius(8)
-            .onClick(() => this.answerBoolean = false)
+            .border({ width: 1, color: this.booleanBorderColor(false) })
+            .onClick(() => this.selectBoolean(false))
         }
         .width('100%')
         .margin({ top: 12 })
@@ -845,6 +847,109 @@ struct QuestionPage {
       return COLOR_SOFT_ORANGE;
     }
     return '#eef2f6';
+  }
+
+  optionBgColor(optionId: string): string {
+    if (this.feedback) {
+      if (this.isCorrectOption(optionId)) {
+        return COLOR_SOFT_GREEN;
+      }
+      if (this.isSelectedOption(optionId)) {
+        return COLOR_SOFT_RED;
+      }
+      return '#f8fafc';
+    }
+    return this.isSelectedOption(optionId) ? '#f1faf6' : '#f8fafc';
+  }
+
+  optionBorderColor(optionId: string): string {
+    if (this.feedback) {
+      if (this.isCorrectOption(optionId)) {
+        return COLOR_GREEN;
+      }
+      if (this.isSelectedOption(optionId)) {
+        return COLOR_RED;
+      }
+      return COLOR_LINE;
+    }
+    return this.isSelectedOption(optionId) ? COLOR_GREEN : COLOR_LINE;
+  }
+
+  optionBadgeBgColor(optionId: string): string {
+    if (this.feedback) {
+      if (this.isCorrectOption(optionId)) {
+        return COLOR_GREEN;
+      }
+      if (this.isSelectedOption(optionId)) {
+        return COLOR_RED;
+      }
+      return '#eef2f6';
+    }
+    return this.isSelectedOption(optionId) ? COLOR_GREEN : COLOR_SOFT_GREEN;
+  }
+
+  optionBadgeTextColor(optionId: string): string {
+    if (this.feedback) {
+      if (this.isCorrectOption(optionId) || this.isSelectedOption(optionId)) {
+        return '#ffffff';
+      }
+      return COLOR_MUTED;
+    }
+    return this.isSelectedOption(optionId) ? '#ffffff' : COLOR_GREEN;
+  }
+
+  isSelectedOption(optionId: string): boolean {
+    for (const id of this.selectedOptionIds) {
+      if (id === optionId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isCorrectOption(optionId: string): boolean {
+    for (const id of this.feedback?.correctOptionIds ?? []) {
+      if (id === optionId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  booleanBgColor(value: boolean): string {
+    if (this.feedback && this.feedback.answerBoolean !== undefined) {
+      if (this.feedback.answerBoolean === value) {
+        return COLOR_GREEN;
+      }
+      if (this.answerBoolean === value) {
+        return COLOR_RED;
+      }
+      return '#f8fafc';
+    }
+    return this.answerBoolean === value ? COLOR_GREEN : '#f8fafc';
+  }
+
+  booleanTextColor(value: boolean): string {
+    if (this.feedback && this.feedback.answerBoolean !== undefined) {
+      if (this.feedback.answerBoolean === value || this.answerBoolean === value) {
+        return '#ffffff';
+      }
+      return COLOR_TEXT;
+    }
+    return this.answerBoolean === value ? '#ffffff' : COLOR_TEXT;
+  }
+
+  booleanBorderColor(value: boolean): string {
+    if (this.feedback && this.feedback.answerBoolean !== undefined) {
+      if (this.feedback.answerBoolean === value) {
+        return COLOR_GREEN;
+      }
+      if (this.answerBoolean === value) {
+        return COLOR_RED;
+      }
+      return COLOR_LINE;
+    }
+    return this.answerBoolean === value ? COLOR_GREEN : COLOR_LINE;
   }
 
   feedbackColor(): string {
@@ -1106,6 +1211,13 @@ struct QuestionPage {
       next.push(optionId);
       this.selectedOptionIds = next;
     }
+  }
+
+  selectBoolean(value: boolean): void {
+    if (this.feedback) {
+      return;
+    }
+    this.answerBoolean = value;
   }
 
   async submit() {
