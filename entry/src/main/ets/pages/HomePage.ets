@@ -159,7 +159,7 @@ struct HomePage {
         .fontWeight(FontWeight.Bold)
         .fontColor(COLOR_NAVY)
         .layoutWeight(1)
-      Text(`${this.categories.length} 个分类`)
+      Text(`${this.categories.length} 个分类 · ${this.totalPublishedCount()} 道题`)
         .fontSize(12)
         .fontColor(COLOR_MUTED)
     }
@@ -470,6 +470,17 @@ struct HomePage {
       }
     }
     return '待练习';
+  }
+
+  totalPublishedCount(): number {
+    if (!this.stats) {
+      return 0;
+    }
+    let count = 0;
+    for (const item of this.stats.categories) {
+      count += item.totalPublished;
+    }
+    return count;
   }
 
   categoryCompletionRate(categoryId: string): number {
