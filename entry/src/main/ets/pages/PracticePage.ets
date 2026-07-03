@@ -1,8 +1,8 @@
-import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
 import { PracticeMode, PracticeSession, Question } from '../models/QuestionModels';
+import { AppRouter } from '../utils/AppRouter';
+import { AppToast } from '../utils/AppToast';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -39,7 +39,7 @@ struct PracticePage {
   }
 
   async loadSession() {
-    const params = router.getParams() as Record<string, string>;
+    const params = AppRouter.params();
     const mode = params.mode || 'random';
     const categoryId = params.categoryId || undefined;
     this.mode = mode;
@@ -62,7 +62,7 @@ struct PracticePage {
         this.selectedQuestion = undefined;
       }
     } catch (error) {
-      promptAction.showToast({ message: `加载失败：${String(error)}` });
+      AppToast.show(`加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -79,7 +79,7 @@ struct PracticePage {
               .fontColor(COLOR_NAVY)
               .backgroundColor('#eef2f6')
               .borderRadius(8)
-              .onClick(() => router.back())
+              .onClick(() => AppRouter.back())
             Text(this.title)
               .fontSize(22)
               .fontWeight(FontWeight.Bold)
@@ -710,14 +710,11 @@ struct PracticePage {
   }
 
   openQuestion(question: Question): void {
-    router.pushUrl({
-      url: 'pages/QuestionPage',
-      params: {
-        questionId: question.id,
-        questionIds: this.sessionQuestionIds(),
-        questionIndex: String(this.questionIndex(question)),
-        navActive: this.navActive()
-      }
+    AppRouter.push('pages/QuestionPage', {
+      questionId: question.id,
+      questionIds: this.sessionQuestionIds(),
+      questionIndex: String(this.questionIndex(question)),
+      navActive: this.navActive()
     });
   }
 

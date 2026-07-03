@@ -1,9 +1,9 @@
-import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
 import { APP_NAME } from '../app/AppConfig';
 import { BottomNavBar } from '../components/BottomNavBar';
 import { Category, UserStats } from '../models/QuestionModels';
+import { AppRouter } from '../utils/AppRouter';
+import { AppToast } from '../utils/AppToast';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -41,7 +41,7 @@ struct HomePage {
       this.categories = snapshot.categories;
       this.stats = snapshot.stats;
     } catch (error) {
-      promptAction.showToast({ message: `加载失败：${String(error)}` });
+      AppToast.show(`加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -471,23 +471,17 @@ struct HomePage {
 
   openPractice(mode: string, category?: Category) {
     if (mode === 'interview') {
-      router.pushUrl({
-        url: 'pages/PracticePage',
-        params: {
-          mode: 'interview',
-          categoryId: '',
-          title: '基础模拟面试'
-        }
+      AppRouter.push('pages/PracticePage', {
+        mode: 'interview',
+        categoryId: '',
+        title: '基础模拟面试'
       });
       return;
     }
-    router.pushUrl({
-      url: 'pages/PracticePage',
-      params: {
-        mode,
-        categoryId: category?.id ?? '',
-        title: category?.name ?? ''
-      }
+    AppRouter.push('pages/PracticePage', {
+      mode,
+      categoryId: category?.id ?? '',
+      title: category?.name ?? ''
     });
   }
 }

@@ -1,8 +1,8 @@
-import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
 import { CategoryStats, UserStats } from '../models/QuestionModels';
+import { AppRouter } from '../utils/AppRouter';
+import { AppToast } from '../utils/AppToast';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -37,7 +37,7 @@ struct RecordPage {
     try {
       this.stats = await store.loadStats();
     } catch (error) {
-      promptAction.showToast({ message: `加载失败：${String(error)}` });
+      AppToast.show(`加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -53,7 +53,7 @@ struct RecordPage {
             .fontColor(COLOR_NAVY)
             .backgroundColor('#eef2f6')
             .borderRadius(8)
-            .onClick(() => router.back())
+            .onClick(() => AppRouter.back())
           Text('练习记录')
             .fontSize(22)
             .fontWeight(FontWeight.Bold)
@@ -294,13 +294,10 @@ struct RecordPage {
   }
 
   openCategoryPractice(item: CategoryStats): void {
-    router.pushUrl({
-      url: 'pages/PracticePage',
-      params: {
-        mode: 'category',
-        categoryId: item.categoryId,
-        title: item.name
-      }
+    AppRouter.push('pages/PracticePage', {
+      mode: 'category',
+      categoryId: item.categoryId,
+      title: item.name
     });
   }
 

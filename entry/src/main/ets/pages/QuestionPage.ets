@@ -1,8 +1,8 @@
-import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
 import { Question, QuestionOption, SubmitAnswerResponse } from '../models/QuestionModels';
+import { AppRouter } from '../utils/AppRouter';
+import { AppToast } from '../utils/AppToast';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -58,11 +58,11 @@ struct QuestionPage {
 
   aboutToAppear(): void {
     this.updateLayoutMode();
-    const params = router.getParams() as Record<string, string>;
+    const params = AppRouter.params();
     const questionId = params.questionId;
     if (!questionId) {
-      promptAction.showToast({ message: '题目参数缺失' });
-      router.back();
+      AppToast.show('题目参数缺失');
+      AppRouter.back();
       return;
     }
     this.navActive = params.navActive || 'home';
@@ -80,7 +80,7 @@ struct QuestionPage {
       this.question = await store.loadQuestion(questionId);
       this.restoreAnswerState(questionId);
     } catch (error) {
-      promptAction.showToast({ message: `加载失败：${String(error)}` });
+      AppToast.show(`加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -96,7 +96,7 @@ struct QuestionPage {
             .fontColor(COLOR_NAVY)
             .backgroundColor('#eef2f6')
             .borderRadius(8)
-            .onClick(() => router.back())
+            .onClick(() => AppRouter.back())
           Text('训练答题')
             .fontSize(22)
             .fontWeight(FontWeight.Bold)
@@ -277,7 +277,7 @@ struct QuestionPage {
         .backgroundColor(COLOR_SOFT_GREEN)
         .borderRadius(8)
         .margin({ top: 12 })
-        .onClick(() => router.back())
+        .onClick(() => AppRouter.back())
     }
     .width('100%')
     .padding(18)
@@ -1123,7 +1123,7 @@ struct QuestionPage {
       this.updateAnswerProgress(this.feedback);
       this.scheduleAutoNext(this.feedback.questionId);
     } catch (error) {
-      promptAction.showToast({ message: `提交失败：${String(error)}` });
+      AppToast.show(`提交失败：${String(error)}`);
     }
   }
 
@@ -1164,7 +1164,7 @@ struct QuestionPage {
     this.autoMoveToken++;
     const token = this.autoMoveToken;
     const message = this.feedback?.isCorrect === false ? '已记录，切到下一题' : '已提交，切到下一题';
-    promptAction.showToast({ message });
+    AppToast.show(message);
     setTimeout(() => {
       if (this.autoMoveToken === token && this.question?.id === questionId) {
         this.goNextQuestion();
@@ -1175,7 +1175,7 @@ struct QuestionPage {
   scheduleCompletionSummary(questionId: string): void {
     this.autoMoveToken++;
     const token = this.autoMoveToken;
-    promptAction.showToast({ message: '本轮已完成' });
+    AppToast.show('本轮已完成');
     setTimeout(() => {
       if (this.autoMoveToken === token && this.question?.id === questionId) {
         this.showProgressPanel = false;
@@ -1197,7 +1197,7 @@ struct QuestionPage {
         this.updateFavoriteState(true);
       }
     } catch (error) {
-      promptAction.showToast({ message: `操作失败：${String(error)}` });
+      AppToast.show(`操作失败：${String(error)}`);
     }
   }
 
@@ -1213,9 +1213,9 @@ struct QuestionPage {
         current.wrong.mastered = true;
       }
       this.question = current;
-      promptAction.showToast({ message: '已标记掌握' });
+      AppToast.show('已标记掌握');
     } catch (error) {
-      promptAction.showToast({ message: `操作失败：${String(error)}` });
+      AppToast.show(`操作失败：${String(error)}`);
     } finally {
       this.masteringWrong = false;
     }

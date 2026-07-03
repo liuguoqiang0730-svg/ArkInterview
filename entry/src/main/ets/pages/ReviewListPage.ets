@@ -1,8 +1,8 @@
-import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
 import { Question } from '../models/QuestionModels';
+import { AppRouter } from '../utils/AppRouter';
+import { AppToast } from '../utils/AppToast';
 import { PracticeStore } from '../viewmodels/PracticeStore';
 
 const store = new PracticeStore();
@@ -40,7 +40,7 @@ struct ReviewListPage {
 
   aboutToAppear(): void {
     this.updateLayoutMode();
-    const params = router.getParams() as Record<string, string>;
+    const params = AppRouter.params();
     this.mode = params.mode || 'wrongs';
     this.title = params.title || (this.mode === 'favorites' ? '收藏题目' : '错题本');
     this.wrongScope = this.mode === 'wrongs' ? 'active' : 'all';
@@ -56,7 +56,7 @@ struct ReviewListPage {
         this.questions = await store.loadWrongs();
       }
     } catch (error) {
-      promptAction.showToast({ message: `加载失败：${String(error)}` });
+      AppToast.show(`加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -115,7 +115,7 @@ struct ReviewListPage {
           .fontColor(COLOR_NAVY)
           .backgroundColor('#eef2f6')
           .borderRadius(8)
-          .onClick(() => router.back())
+          .onClick(() => AppRouter.back())
         Text(this.title)
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
@@ -624,14 +624,11 @@ struct ReviewListPage {
     for (const item of items) {
       ids.push(item.id);
     }
-    router.pushUrl({
-      url: 'pages/QuestionPage',
-      params: {
-        questionId: items[index].id,
-        questionIds: ids.join(','),
-        questionIndex: String(index),
-        navActive: this.navActive()
-      }
+    AppRouter.push('pages/QuestionPage', {
+      questionId: items[index].id,
+      questionIds: ids.join(','),
+      questionIndex: String(index),
+      navActive: this.navActive()
     });
   }
 
@@ -643,9 +640,9 @@ struct ReviewListPage {
     try {
       await store.removeFavorite(questionId);
       this.removeQuestionFromList(questionId);
-      promptAction.showToast({ message: '已取消收藏' });
+      AppToast.show('已取消收藏');
     } catch (error) {
-      promptAction.showToast({ message: `操作失败：${String(error)}` });
+      AppToast.show(`操作失败：${String(error)}`);
     } finally {
       this.busyQuestionId = '';
     }
@@ -659,9 +656,9 @@ struct ReviewListPage {
     try {
       await store.markWrongMastered(questionId);
       this.markQuestionMastered(questionId);
-      promptAction.showToast({ message: '已标记掌握' });
+      AppToast.show('已标记掌握');
     } catch (error) {
-      promptAction.showToast({ message: `操作失败：${String(error)}` });
+      AppToast.show(`操作失败：${String(error)}`);
     } finally {
       this.busyQuestionId = '';
     }

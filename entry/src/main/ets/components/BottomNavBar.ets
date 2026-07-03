@@ -1,4 +1,4 @@
-import router from '@ohos.router';
+import { AppRouter } from '../utils/AppRouter';
 
 const COLOR_SURFACE: string = '#ffffff';
 const COLOR_GREEN: string = '#16745f';
@@ -63,34 +63,24 @@ export struct BottomNavBar {
       return;
     }
     if (target === 'home') {
-      router.pushUrl({
-        url: 'pages/HomePage'
-      });
+      AppRouter.push('pages/HomePage');
       return;
     }
     if (target === 'records') {
-      router.pushUrl({
-        url: 'pages/RecordPage'
-      });
+      AppRouter.push('pages/RecordPage');
       return;
     }
     if (target === 'wrongs') {
-      router.pushUrl({
-        url: 'pages/ReviewListPage',
-        params: {
-          mode: 'wrongs',
-          title: '错题本'
-        }
+      AppRouter.push('pages/ReviewListPage', {
+        mode: 'wrongs',
+        title: '错题本'
       });
       return;
     }
     if (target === 'favorites') {
-      router.pushUrl({
-        url: 'pages/ReviewListPage',
-        params: {
-          mode: 'favorites',
-          title: '收藏题目'
-        }
+      AppRouter.push('pages/ReviewListPage', {
+        mode: 'favorites',
+        title: '收藏题目'
       });
     }
   }
