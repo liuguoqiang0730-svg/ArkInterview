@@ -166,5 +166,223 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-005",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "UIAbility 从后台重新回到前台时，通常更应该关注哪个生命周期阶段？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onWindowStageDestroy"
+      },
+      {
+        "id": "c",
+        "text": "removePreferencesFromCache"
+      },
+      {
+        "id": "d",
+        "text": "commit"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility 前后台切换有对应生命周期。回到前台时应关注 onForeground，用于恢复界面相关状态或刷新必要数据。",
+    "knowledgePoints": [
+      "UIAbility 生命周期",
+      "onForeground",
+      "前后台切换"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-006",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "UIAbility 进入后台时，可以考虑在后台阶段暂停前台动画、定位刷新等与界面强相关的工作。",
+    "answerBoolean": true,
+    "explanation": "前后台生命周期用于处理资源占用和状态切换。进入后台后暂停与界面强相关的刷新，有利于资源控制和用户体验。",
+    "knowledgePoints": [
+      "onBackground",
+      "资源管理",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-007",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 UIAbility 生命周期中的资源处理，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "创建窗口阶段加载页面内容"
+      },
+      {
+        "id": "b",
+        "text": "进入后台时暂停不必要的前台刷新"
+      },
+      {
+        "id": "c",
+        "text": "销毁窗口阶段释放窗口强相关资源"
+      },
+      {
+        "id": "d",
+        "text": "在任意生命周期中无条件重复创建所有全局对象"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "生命周期的意义是按阶段处理初始化、前后台切换和销毁。无条件重复创建全局对象会增加资源浪费和状态混乱风险。",
+    "knowledgePoints": [
+      "生命周期资源管理",
+      "窗口阶段",
+      "后台处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-008",
+    "categoryId": "ability-lifecycle",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 UIAbility 进入后台和重新回到前台时，刷题 App 可以分别做哪些处理。",
+    "referenceAnswer": "进入后台时可暂停计时器、动画或非必要刷新，并保存必要练习状态；回到前台时可刷新学习记录、恢复页面状态或检查本地缓存。处理时要避免重复初始化和阻塞主流程。",
+    "scoringPoints": [
+      "提到后台暂停不必要任务",
+      "提到保存练习状态",
+      "提到前台恢复或刷新数据",
+      "提到避免重复初始化或阻塞"
+    ],
+    "explanation": "这道题考察生命周期与业务结合。刷题 App 的答题状态、记录刷新和资源占用都应跟随 UIAbility 前后台变化做合理处理。",
+    "knowledgePoints": [
+      "onBackground",
+      "onForeground",
+      "业务状态恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-009",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "UIAbility 窗口销毁阶段，更适合处理哪类事情？",
+    "options": [
+      {
+        "id": "a",
+        "text": "释放与该窗口直接相关的资源"
+      },
+      {
+        "id": "b",
+        "text": "声明工程签名证书"
+      },
+      {
+        "id": "c",
+        "text": "新增题库分类"
+      },
+      {
+        "id": "d",
+        "text": "把 HTTP 状态码改成权限结果"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "窗口销毁阶段与当前 UIAbility 的窗口资源释放相关。工程签名、题库分类和权限结果都不是窗口销毁阶段的职责。",
+    "knowledgePoints": [
+      "窗口销毁",
+      "资源释放",
+      "UIAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-010",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "UIAbility 生命周期设计的目的之一，是让应用按创建、前后台切换、窗口销毁等阶段管理状态和资源。",
+    "answerBoolean": true,
+    "explanation": "UIAbility 生命周期提供不同阶段的回调，帮助应用在创建、前后台切换和销毁时管理页面、状态和资源。",
+    "knowledgePoints": [
+      "UIAbility 生命周期",
+      "状态管理",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

@@ -160,5 +160,223 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-005",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "父组件向子组件传递只读展示数据时，最贴近的状态装饰器是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "@Prop"
+      },
+      {
+        "id": "b",
+        "text": "@Link"
+      },
+      {
+        "id": "c",
+        "text": "@Provide"
+      },
+      {
+        "id": "d",
+        "text": "@Consume"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@Prop 适合父组件向子组件做单向数据传递。子组件需要反向同步修改时再考虑 @Link；跨层级共享再考虑 @Provide/@Consume。",
+    "knowledgePoints": [
+      "@Prop",
+      "父子组件",
+      "单向传递"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-006",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "@Provide 和 @Consume 更适合跨层级共享状态，不应滥用来替代所有简单父子传值。",
+    "answerBoolean": true,
+    "explanation": "@Provide/@Consume 适合跨层级状态传递。简单父子组件单向或双向传值，通常 @Prop 或 @Link 更直接、可读性更好。",
+    "knowledgePoints": [
+      "@Provide",
+      "@Consume",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-007",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "设计答题页组件通信时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "题目标题、选项等展示数据可由父组件传给子组件"
+      },
+      {
+        "id": "b",
+        "text": "子组件需要修改父组件状态时使用合适的双向同步机制"
+      },
+      {
+        "id": "c",
+        "text": "跨多层级共享的主题或用户状态可考虑 Provide/Consume"
+      },
+      {
+        "id": "d",
+        "text": "所有子组件都直接修改任意全局变量"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "组件通信要按数据方向和作用域选择机制。全局变量式随意修改会让状态来源不清晰，不利于维护和调试。",
+    "knowledgePoints": [
+      "组件通信",
+      "数据方向",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-008",
+    "categoryId": "component-communication",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 @Prop、@Link、@Provide/@Consume 的典型使用区别。",
+    "referenceAnswer": "@Prop 适合父到子的单向展示数据；@Link 适合父子之间需要双向同步的状态；@Provide/@Consume 适合跨组件层级共享状态，避免逐层透传。",
+    "scoringPoints": [
+      "说明 @Prop 单向传递",
+      "说明 @Link 双向同步",
+      "说明 @Provide/@Consume 跨层级共享",
+      "能提到按作用域选择"
+    ],
+    "explanation": "这道题是组件通信基础题。回答要体现数据方向和状态作用域，而不是只背装饰器名称。",
+    "knowledgePoints": [
+      "@Prop",
+      "@Link",
+      "@Provide/@Consume"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-009",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个筛选面板需要把用户选择同步回父页面刷新题目列表，优先考虑哪种通信方向？",
+    "options": [
+      {
+        "id": "a",
+        "text": "子组件的选择变化同步回父组件状态"
+      },
+      {
+        "id": "b",
+        "text": "子组件只展示固定文本，不产生事件"
+      },
+      {
+        "id": "c",
+        "text": "把筛选条件写进 build-profile.json5"
+      },
+      {
+        "id": "d",
+        "text": "让路由栈保存每个按钮颜色"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "筛选面板的交互结果会影响父页面列表，因此需要把子组件选择同步回父组件状态，或通过回调/双向状态机制表达数据变化。",
+    "knowledgePoints": [
+      "筛选组件",
+      "父子同步",
+      "交互状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-010",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "选择组件通信方式时，应先判断数据是单向展示、双向编辑，还是跨层级共享。",
+    "answerBoolean": true,
+    "explanation": "数据方向和作用域决定通信方式。先判断场景，再选择 @Prop、@Link 或 @Provide/@Consume，能降低状态混乱风险。",
+    "knowledgePoints": [
+      "通信方式选择",
+      "数据方向",
+      "作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

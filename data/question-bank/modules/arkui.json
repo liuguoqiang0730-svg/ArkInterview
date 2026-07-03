@@ -69,5 +69,320 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 2
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-003",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "ArkUI 自定义组件中，用于描述组件 UI 结构的核心方法通常是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "build()"
+      },
+      {
+        "id": "b",
+        "text": "onCreate()"
+      },
+      {
+        "id": "c",
+        "text": "flush()"
+      },
+      {
+        "id": "d",
+        "text": "request()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkUI 声明式开发范式中，自定义组件通过 build() 描述 UI 结构。onCreate 属于 Ability 生命周期，flush 属于数据持久化场景，request 属于网络请求。",
+    "knowledgePoints": [
+      "ArkUI",
+      "自定义组件",
+      "build"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 3
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-004",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "onDidBuild 发生在 build() 执行完成后，因此更适合放置依赖 UI 构建完成后的逻辑，而不是初始化所有业务数据的唯一入口。",
+    "answerBoolean": true,
+    "explanation": "自定义组件生命周期中，aboutToAppear 在组件创建后、build 前触发；onDidBuild 在 build 后触发。初始化状态和构建后处理应按生命周期阶段区分。",
+    "knowledgePoints": [
+      "onDidBuild",
+      "aboutToAppear",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-005",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 ArkUI 自定义组件生命周期，哪些说法是合理的？",
+    "options": [
+      {
+        "id": "a",
+        "text": "aboutToAppear 发生在组件实例创建后、build 执行前"
+      },
+      {
+        "id": "b",
+        "text": "onDidBuild 发生在 build 执行完成后"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear 与组件销毁前相关"
+      },
+      {
+        "id": "d",
+        "text": "所有网络请求都必须写在 onDidBuild 中"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "生命周期回调各自对应组件创建、构建和销毁阶段。网络请求是否放在某个回调中要看页面职责和状态管理，不存在“所有请求必须写在 onDidBuild”的规则。",
+    "knowledgePoints": [
+      "组件生命周期",
+      "aboutToAppear",
+      "aboutToDisappear"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-006",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在刷题 App 的题目列表页面中，哪种 ArkUI 设计更贴合大量数据展示？",
+    "options": [
+      {
+        "id": "a",
+        "text": "使用适合滚动和复用的列表结构，并控制每个列表项的布局稳定性"
+      },
+      {
+        "id": "b",
+        "text": "把所有题目都写成独立静态 Text 组件"
+      },
+      {
+        "id": "c",
+        "text": "禁用滚动，让页面无限向下撑开"
+      },
+      {
+        "id": "d",
+        "text": "每次滑动都重新创建整个应用"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "题目列表属于重复项展示，应优先考虑列表容器、稳定 item 尺寸和可读层级。静态堆叠所有题目会影响维护和性能。",
+    "knowledgePoints": [
+      "列表页面",
+      "布局稳定性",
+      "刷题场景"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-007",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 aboutToAppear 和 build 在 ArkUI 自定义组件中的职责区别。",
+    "referenceAnswer": "aboutToAppear 在组件实例创建后、build 执行前触发，适合做进入页面前的状态准备；build 用声明式方式描述 UI 结构。二者职责不同，不能把 UI 结构构建逻辑写成生命周期副作用。",
+    "scoringPoints": [
+      "说明 aboutToAppear 的时机",
+      "说明 build 用于描述 UI",
+      "能区分状态准备和 UI 构建",
+      "能联系组件生命周期"
+    ],
+    "explanation": "面试中常见误区是把生命周期和 UI 描述混在一起。ArkUI 中 build 是 UI 声明核心，aboutToAppear 是构建前的生命周期阶段。",
+    "knowledgePoints": [
+      "aboutToAppear",
+      "build",
+      "职责划分"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-008",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "ArkUI 提供声明式 UI 能力，开发者可以通过组件、布局、动画和交互事件构建应用界面。",
+    "answerBoolean": true,
+    "explanation": "官方 ArkUI 简介说明，ArkUI 为应用 UI 开发提供组件、布局、动画和交互事件等基础设施，支持声明式开发范式。",
+    "knowledgePoints": [
+      "ArkUI 简介",
+      "声明式 UI",
+      "交互事件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-009",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "设计平板优先的 ArkUI 页面时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "为内容区域设置合理最大宽度，避免宽屏拉伸过度"
+      },
+      {
+        "id": "b",
+        "text": "将列表和详情拆成双栏，提高大屏利用率"
+      },
+      {
+        "id": "c",
+        "text": "让所有文字随屏幕宽度无限变大"
+      },
+      {
+        "id": "d",
+        "text": "保证底部导航、筛选区和答题区在不同窗口下不遮挡"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "平板适配要关注信息密度、稳定布局和多窗口体验。无限放大文字或固定手机布局都容易导致空间浪费或内容遮挡。",
+    "knowledgePoints": [
+      "平板 UI",
+      "双栏布局",
+      "响应式"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-010",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "组件销毁前需要释放与该组件强相关的资源或停止监听时，应优先关注哪个生命周期？",
+    "options": [
+      {
+        "id": "a",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "b",
+        "text": "build"
+      },
+      {
+        "id": "c",
+        "text": "getParams"
+      },
+      {
+        "id": "d",
+        "text": "flush"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "aboutToDisappear 与自定义组件销毁前阶段相关。释放组件级监听、定时任务等资源，应关注组件销毁阶段，而不是 UI 描述方法 build。",
+    "knowledgePoints": [
+      "aboutToDisappear",
+      "资源释放",
+      "组件销毁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

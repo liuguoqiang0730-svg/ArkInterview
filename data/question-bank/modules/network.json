@@ -159,5 +159,154 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-005",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "使用 @ohos.net.http 发起请求后，为避免资源长期占用，通常应在请求结束后调用哪个方法释放请求对象？",
+    "options": [
+      {
+        "id": "a",
+        "text": "destroy()"
+      },
+      {
+        "id": "b",
+        "text": "flush()"
+      },
+      {
+        "id": "c",
+        "text": "rollback()"
+      },
+      {
+        "id": "d",
+        "text": "getParams()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "HttpRequest 对象使用完后应调用 destroy 释放资源。flush 属于首选项持久化，rollback 属于数据库事务，getParams 属于路由参数读取。",
+    "knowledgePoints": [
+      "HttpRequest",
+      "destroy",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-006",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "网络请求失败时只在页面上显示“加载失败”即可，不需要记录错误信息或区分超时、状态码等原因。",
+    "answerBoolean": false,
+    "explanation": "可靠的网络请求处理应关注错误信息、响应码、超时和用户提示。只显示泛化失败会影响定位，也不利于用户理解和重试。",
+    "knowledgePoints": [
+      "网络错误处理",
+      "状态码",
+      "超时"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-007",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "题库 App 请求远程题目列表时，哪些处理更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "设置合理超时时间"
+      },
+      {
+        "id": "b",
+        "text": "检查响应码或业务返回状态"
+      },
+      {
+        "id": "c",
+        "text": "请求完成后释放 HttpRequest 对象"
+      },
+      {
+        "id": "d",
+        "text": "失败时静默吞掉，不给用户任何反馈"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "远程题库请求需要处理超时、响应状态和资源释放。失败时应给用户可理解的反馈或重试入口，而不是静默失败。",
+    "knowledgePoints": [
+      "远程题库",
+      "超时",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-008",
+    "categoryId": "network",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 HarmonyOS App 中封装 REST API 客户端时应注意的几个点。",
+    "referenceAnswer": "应统一创建和释放 HttpRequest，设置合理超时和请求头，检查 HTTP 响应码和业务数据结构，对异常做统一提示或日志记录，并避免把 API Key 等敏感信息放在客户端。",
+    "scoringPoints": [
+      "提到 HttpRequest 创建和释放",
+      "提到超时和请求头",
+      "提到响应码或业务结构校验",
+      "提到异常处理或日志",
+      "提到敏感信息不要放客户端"
+    ],
+    "explanation": "REST API 客户端封装既要符合 HarmonyOS HTTP 请求流程，也要考虑真实产品的错误处理和安全边界。",
+    "knowledgePoints": [
+      "REST API",
+      "HttpRequest",
+      "错误处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
   }
 ]

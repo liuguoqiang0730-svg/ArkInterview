@@ -90,6 +90,316 @@
     "order": 2
   },
   {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-003",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "从 TypeScript 迁移到 ArkTS 时，处理动态对象数据更推荐哪种方式？",
+    "options": [
+      {
+        "id": "a",
+        "text": "把对象结构声明为 interface 或 class 后再使用"
+      },
+      {
+        "id": "b",
+        "text": "把所有对象都声明成 any，减少类型声明"
+      },
+      {
+        "id": "c",
+        "text": "用字符串拼接代替对象字段访问"
+      },
+      {
+        "id": "d",
+        "text": "删除编译配置，跳过 ArkTS 静态检查"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 比 TypeScript 更强调静态类型和可分析性。动态对象数据应通过接口或类描述结构，让对象字段、请求体和缓存记录在编译期被检查。",
+    "knowledgePoints": [
+      "ArkTS 迁移",
+      "静态类型",
+      "接口建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 3
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-004",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "ArkTS 迁移中，保留 TypeScript 中所有动态写法通常比显式建模更稳妥。",
+    "answerBoolean": false,
+    "explanation": "ArkTS 适配目标是让代码更静态、更可分析。遇到动态对象、隐式 any、难以推断的数据结构时，应优先显式建模，而不是保留所有动态写法。",
+    "knowledgePoints": [
+      "ArkTS 迁移",
+      "动态写法",
+      "显式建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-005",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "在 ArkTS 项目中设计 REST API 请求体时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "为请求体声明明确的接口或类"
+      },
+      {
+        "id": "b",
+        "text": "让对象字段名称和服务端契约保持一致"
+      },
+      {
+        "id": "c",
+        "text": "所有请求都传 any，业务层不描述字段"
+      },
+      {
+        "id": "d",
+        "text": "在提交前通过编译期类型检查减少字段错误"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "请求体属于结构化数据。ArkTS 中用明确类型约束请求字段，有利于减少字段拼写、类型不一致和后续维护风险。",
+    "knowledgePoints": [
+      "API 请求体",
+      "接口类型",
+      "编译期检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-006",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ArkTS 中维护页面状态数组时，为什么更推荐显式复制数组而不是依赖不清晰的动态展开？",
+    "options": [
+      {
+        "id": "a",
+        "text": "可以让元素类型和更新过程更清楚，便于通过静态检查"
+      },
+      {
+        "id": "b",
+        "text": "因为 ArkTS 不支持任何数组"
+      },
+      {
+        "id": "c",
+        "text": "因为 UI 状态不能使用数组保存"
+      },
+      {
+        "id": "d",
+        "text": "因为数组只能通过后端接口创建"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "页面状态更新需要可读、可检查。显式复制数组、逐项 push 或遍历生成新数组，比不清晰的动态展开更符合 ArkTS 静态检查和维护要求。",
+    "knowledgePoints": [
+      "数组更新",
+      "状态管理",
+      "ArkTS 静态检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-007",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 ArkTS 相比 TypeScript 在工程代码风格上的一个重要变化。",
+    "referenceAnswer": "ArkTS 更强调静态类型、结构清晰和编译期可分析。迁移时应减少隐式 any、动态对象和难以推断的写法，使用 interface、class、明确数组元素类型等方式表达数据结构。",
+    "scoringPoints": [
+      "提到静态类型更严格",
+      "提到减少隐式 any 或动态对象",
+      "提到用 interface/class 显式建模",
+      "能结合工程场景说明"
+    ],
+    "explanation": "这道题考察迁移理解，而不是背 API。面试回答应能把 ArkTS 规则落实到请求体、缓存记录、页面状态等真实代码上。",
+    "knowledgePoints": [
+      "ArkTS 迁移",
+      "工程规范",
+      "类型建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-008",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "遇到 ArkTS 编译提示对象字面量缺少明确类型时，第一步更应该做什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "补充接口、类或变量类型，让对象字面量有明确目标类型"
+      },
+      {
+        "id": "b",
+        "text": "把报错文件从项目中删除"
+      },
+      {
+        "id": "c",
+        "text": "把所有字段名改成单个字母"
+      },
+      {
+        "id": "d",
+        "text": "把业务逻辑迁移到字符串中执行"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "对象字面量没有明确结构时，ArkTS 难以进行静态分析。补充目标类型是更稳妥的修复方式，也能让 IDE 和编译器提前发现问题。",
+    "knowledgePoints": [
+      "对象字面量",
+      "类型声明",
+      "编译错误修复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-009",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Android 或前端开发者转 HarmonyOS 时，学习 ArkTS 应重点关注哪些差异？",
+    "options": [
+      {
+        "id": "a",
+        "text": "ArkTS 对动态类型和对象结构的约束更强"
+      },
+      {
+        "id": "b",
+        "text": "ArkTS 工程中应重视编译期类型错误"
+      },
+      {
+        "id": "c",
+        "text": "ArkTS 与 TypeScript 完全无关，不需要迁移理解"
+      },
+      {
+        "id": "d",
+        "text": "ArkTS 代码应结合 ArkUI 和 Stage 模型工程实践理解"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "转 HarmonyOS 不只是换语法。ArkTS 迁移、ArkUI 声明式 UI、Stage 模型生命周期会一起影响工程组织和问题排查。",
+    "knowledgePoints": [
+      "转鸿蒙",
+      "ArkTS 差异",
+      "Stage 模型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-010",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "ArkTS 中为服务端返回数据建立模型，有助于减少页面层直接依赖松散 JSON 字段带来的风险。",
+    "answerBoolean": true,
+    "explanation": "题库、练习记录、错题等服务端数据都有稳定结构。建立模型能让字段含义、可选性和类型更清晰，也更符合 ArkTS 静态类型实践。",
+    "knowledgePoints": [
+      "数据模型",
+      "服务端 JSON",
+      "类型安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
+  },
+  {
     "id": "arkui-001",
     "categoryId": "arkui",
     "type": "single",
@@ -161,6 +471,321 @@
     "order": 2
   },
   {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-003",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "ArkUI 自定义组件中，用于描述组件 UI 结构的核心方法通常是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "build()"
+      },
+      {
+        "id": "b",
+        "text": "onCreate()"
+      },
+      {
+        "id": "c",
+        "text": "flush()"
+      },
+      {
+        "id": "d",
+        "text": "request()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkUI 声明式开发范式中，自定义组件通过 build() 描述 UI 结构。onCreate 属于 Ability 生命周期，flush 属于数据持久化场景，request 属于网络请求。",
+    "knowledgePoints": [
+      "ArkUI",
+      "自定义组件",
+      "build"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 3
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-004",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "onDidBuild 发生在 build() 执行完成后，因此更适合放置依赖 UI 构建完成后的逻辑，而不是初始化所有业务数据的唯一入口。",
+    "answerBoolean": true,
+    "explanation": "自定义组件生命周期中，aboutToAppear 在组件创建后、build 前触发；onDidBuild 在 build 后触发。初始化状态和构建后处理应按生命周期阶段区分。",
+    "knowledgePoints": [
+      "onDidBuild",
+      "aboutToAppear",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-005",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 ArkUI 自定义组件生命周期，哪些说法是合理的？",
+    "options": [
+      {
+        "id": "a",
+        "text": "aboutToAppear 发生在组件实例创建后、build 执行前"
+      },
+      {
+        "id": "b",
+        "text": "onDidBuild 发生在 build 执行完成后"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear 与组件销毁前相关"
+      },
+      {
+        "id": "d",
+        "text": "所有网络请求都必须写在 onDidBuild 中"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "生命周期回调各自对应组件创建、构建和销毁阶段。网络请求是否放在某个回调中要看页面职责和状态管理，不存在“所有请求必须写在 onDidBuild”的规则。",
+    "knowledgePoints": [
+      "组件生命周期",
+      "aboutToAppear",
+      "aboutToDisappear"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-006",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在刷题 App 的题目列表页面中，哪种 ArkUI 设计更贴合大量数据展示？",
+    "options": [
+      {
+        "id": "a",
+        "text": "使用适合滚动和复用的列表结构，并控制每个列表项的布局稳定性"
+      },
+      {
+        "id": "b",
+        "text": "把所有题目都写成独立静态 Text 组件"
+      },
+      {
+        "id": "c",
+        "text": "禁用滚动，让页面无限向下撑开"
+      },
+      {
+        "id": "d",
+        "text": "每次滑动都重新创建整个应用"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "题目列表属于重复项展示，应优先考虑列表容器、稳定 item 尺寸和可读层级。静态堆叠所有题目会影响维护和性能。",
+    "knowledgePoints": [
+      "列表页面",
+      "布局稳定性",
+      "刷题场景"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-007",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 aboutToAppear 和 build 在 ArkUI 自定义组件中的职责区别。",
+    "referenceAnswer": "aboutToAppear 在组件实例创建后、build 执行前触发，适合做进入页面前的状态准备；build 用声明式方式描述 UI 结构。二者职责不同，不能把 UI 结构构建逻辑写成生命周期副作用。",
+    "scoringPoints": [
+      "说明 aboutToAppear 的时机",
+      "说明 build 用于描述 UI",
+      "能区分状态准备和 UI 构建",
+      "能联系组件生命周期"
+    ],
+    "explanation": "面试中常见误区是把生命周期和 UI 描述混在一起。ArkUI 中 build 是 UI 声明核心，aboutToAppear 是构建前的生命周期阶段。",
+    "knowledgePoints": [
+      "aboutToAppear",
+      "build",
+      "职责划分"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-008",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "ArkUI 提供声明式 UI 能力，开发者可以通过组件、布局、动画和交互事件构建应用界面。",
+    "answerBoolean": true,
+    "explanation": "官方 ArkUI 简介说明，ArkUI 为应用 UI 开发提供组件、布局、动画和交互事件等基础设施，支持声明式开发范式。",
+    "knowledgePoints": [
+      "ArkUI 简介",
+      "声明式 UI",
+      "交互事件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-009",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "设计平板优先的 ArkUI 页面时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "为内容区域设置合理最大宽度，避免宽屏拉伸过度"
+      },
+      {
+        "id": "b",
+        "text": "将列表和详情拆成双栏，提高大屏利用率"
+      },
+      {
+        "id": "c",
+        "text": "让所有文字随屏幕宽度无限变大"
+      },
+      {
+        "id": "d",
+        "text": "保证底部导航、筛选区和答题区在不同窗口下不遮挡"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "平板适配要关注信息密度、稳定布局和多窗口体验。无限放大文字或固定手机布局都容易导致空间浪费或内容遮挡。",
+    "knowledgePoints": [
+      "平板 UI",
+      "双栏布局",
+      "响应式"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkui-010",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "组件销毁前需要释放与该组件强相关的资源或停止监听时，应优先关注哪个生命周期？",
+    "options": [
+      {
+        "id": "a",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "b",
+        "text": "build"
+      },
+      {
+        "id": "c",
+        "text": "getParams"
+      },
+      {
+        "id": "d",
+        "text": "flush"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "aboutToDisappear 与自定义组件销毁前阶段相关。释放组件级监听、定时任务等资源，应关注组件销毁阶段，而不是 UI 描述方法 build。",
+    "knowledgePoints": [
+      "aboutToDisappear",
+      "资源释放",
+      "组件销毁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件生命周期",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-page-custom-components-lifecycle-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
+  },
+  {
     "id": "stage-model-001",
     "categoryId": "stage-model",
     "type": "single",
@@ -229,6 +854,341 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 2
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-003",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Stage 模型中，一个 HAP 包加载时与模块级初始化更相关的类是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "AbilityStage"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore"
+      },
+      {
+        "id": "c",
+        "text": "HttpRequest"
+      },
+      {
+        "id": "d",
+        "text": "Preferences"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "AbilityStage 是 Stage 模型中与 HAP 加载、模块级初始化相关的运行时类。其它选项分别属于数据库、网络和首选项存储。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "AbilityStage",
+      "HAP 加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 3
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-004",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Stage 模型下 UIAbility 负责承载具体 UI 页面窗口，AbilityStage 更偏模块级初始化，两者职责不应混淆。",
+    "answerBoolean": true,
+    "explanation": "AbilityStage 和 UIAbility 都属于 Stage 模型，但关注层级不同。AbilityStage 更偏 HAP 级生命周期，UIAbility 与具体用户界面能力和窗口阶段关联更紧密。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "UIAbility",
+      "职责边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-005",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Stage 模型工程组织，哪些理解更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "AbilityStage 适合放模块级初始化逻辑"
+      },
+      {
+        "id": "b",
+        "text": "UIAbility 负责具体界面能力的生命周期"
+      },
+      {
+        "id": "c",
+        "text": "页面 UI 构建全部写在 AbilityStage 中"
+      },
+      {
+        "id": "d",
+        "text": "窗口创建和页面加载通常与 UIAbility 的 WindowStage 阶段相关"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "Stage 模型强调不同层级的职责划分。AbilityStage 不应承担所有页面 UI 构建；UIAbility 和 WindowStage 才更贴近页面窗口创建和加载。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "UIAbility",
+      "WindowStage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-006",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "创建 Stage 模型 ArkTS 应用后，工程中用于承载页面能力的常见运行时类是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "UIAbility"
+      },
+      {
+        "id": "b",
+        "text": "HttpRequestOptions"
+      },
+      {
+        "id": "c",
+        "text": "PermissionRequestResult"
+      },
+      {
+        "id": "d",
+        "text": "StoreConfig"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility 是 Stage 模型中面向 UI 的 Ability 类型。HTTP、权限结果和数据库配置分别属于其它系统能力。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "UIAbility",
+      "页面能力"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-007",
+    "categoryId": "stage-model",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 Stage 模型中 AbilityStage 和 UIAbility 的典型职责差异。",
+    "referenceAnswer": "AbilityStage 更偏 HAP 或模块级运行时初始化，例如模块加载期间的资源准备；UIAbility 更贴近具体 UI 能力，负责界面生命周期、窗口阶段和页面加载。工程中应按层级拆分初始化、窗口和页面逻辑。",
+    "scoringPoints": [
+      "说明 AbilityStage 偏模块级",
+      "说明 UIAbility 偏界面能力",
+      "提到 WindowStage 或页面加载",
+      "能说明职责拆分意义"
+    ],
+    "explanation": "这道题考察 Stage 模型的职责边界。回答应避免把所有逻辑都塞进一个生命周期回调。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "UIAbility",
+      "职责拆分"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-008",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "在 UIAbility 还没有创建 WindowStage 前，通常不应该直接依赖页面窗口对象完成页面加载。",
+    "answerBoolean": true,
+    "explanation": "页面窗口相关操作应放在对应窗口阶段处理。将窗口对象尚未创建时的逻辑提前执行，容易导致页面加载失败或上下文错误。",
+    "knowledgePoints": [
+      "WindowStage",
+      "UIAbility",
+      "页面加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-009",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "一个刷题 App 基于 Stage 模型设计时，哪些逻辑放置更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "模块级初始化放在 AbilityStage 相关阶段"
+      },
+      {
+        "id": "b",
+        "text": "首页窗口加载放在 UIAbility 的窗口阶段"
+      },
+      {
+        "id": "c",
+        "text": "题目列表 UI 写在 ArkUI 页面组件中"
+      },
+      {
+        "id": "d",
+        "text": "数据库查询结果直接写入 build-profile.json5"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Stage 模型、UIAbility 和 ArkUI 页面应各司其职。build-profile.json5 是工程配置文件，不用于保存运行期数据库查询结果。",
+    "knowledgePoints": [
+      "工程分层",
+      "Stage 模型",
+      "ArkUI 页面"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-010",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "页面首次显示时加载首页路由和窗口内容，通常应关注 UIAbility 的哪个阶段？",
+    "options": [
+      {
+        "id": "a",
+        "text": "WindowStage 创建相关阶段"
+      },
+      {
+        "id": "b",
+        "text": "Preferences flush 阶段"
+      },
+      {
+        "id": "c",
+        "text": "HTTP destroy 阶段"
+      },
+      {
+        "id": "d",
+        "text": "RDB 事务回滚阶段"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "页面窗口内容加载和 WindowStage 关系最直接。其它选项属于数据持久化、网络请求或数据库事务，不负责 UIAbility 窗口创建。",
+    "knowledgePoints": [
+      "WindowStage",
+      "页面加载",
+      "UIAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   },
   {
     "id": "ability-lifecycle-001",
@@ -399,6 +1359,224 @@
     "order": 4
   },
   {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-005",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "UIAbility 从后台重新回到前台时，通常更应该关注哪个生命周期阶段？",
+    "options": [
+      {
+        "id": "a",
+        "text": "onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onWindowStageDestroy"
+      },
+      {
+        "id": "c",
+        "text": "removePreferencesFromCache"
+      },
+      {
+        "id": "d",
+        "text": "commit"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility 前后台切换有对应生命周期。回到前台时应关注 onForeground，用于恢复界面相关状态或刷新必要数据。",
+    "knowledgePoints": [
+      "UIAbility 生命周期",
+      "onForeground",
+      "前后台切换"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-006",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "UIAbility 进入后台时，可以考虑在后台阶段暂停前台动画、定位刷新等与界面强相关的工作。",
+    "answerBoolean": true,
+    "explanation": "前后台生命周期用于处理资源占用和状态切换。进入后台后暂停与界面强相关的刷新，有利于资源控制和用户体验。",
+    "knowledgePoints": [
+      "onBackground",
+      "资源管理",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-007",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 UIAbility 生命周期中的资源处理，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "创建窗口阶段加载页面内容"
+      },
+      {
+        "id": "b",
+        "text": "进入后台时暂停不必要的前台刷新"
+      },
+      {
+        "id": "c",
+        "text": "销毁窗口阶段释放窗口强相关资源"
+      },
+      {
+        "id": "d",
+        "text": "在任意生命周期中无条件重复创建所有全局对象"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "生命周期的意义是按阶段处理初始化、前后台切换和销毁。无条件重复创建全局对象会增加资源浪费和状态混乱风险。",
+    "knowledgePoints": [
+      "生命周期资源管理",
+      "窗口阶段",
+      "后台处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-008",
+    "categoryId": "ability-lifecycle",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 UIAbility 进入后台和重新回到前台时，刷题 App 可以分别做哪些处理。",
+    "referenceAnswer": "进入后台时可暂停计时器、动画或非必要刷新，并保存必要练习状态；回到前台时可刷新学习记录、恢复页面状态或检查本地缓存。处理时要避免重复初始化和阻塞主流程。",
+    "scoringPoints": [
+      "提到后台暂停不必要任务",
+      "提到保存练习状态",
+      "提到前台恢复或刷新数据",
+      "提到避免重复初始化或阻塞"
+    ],
+    "explanation": "这道题考察生命周期与业务结合。刷题 App 的答题状态、记录刷新和资源占用都应跟随 UIAbility 前后台变化做合理处理。",
+    "knowledgePoints": [
+      "onBackground",
+      "onForeground",
+      "业务状态恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-009",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "UIAbility 窗口销毁阶段，更适合处理哪类事情？",
+    "options": [
+      {
+        "id": "a",
+        "text": "释放与该窗口直接相关的资源"
+      },
+      {
+        "id": "b",
+        "text": "声明工程签名证书"
+      },
+      {
+        "id": "c",
+        "text": "新增题库分类"
+      },
+      {
+        "id": "d",
+        "text": "把 HTTP 状态码改成权限结果"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "窗口销毁阶段与当前 UIAbility 的窗口资源释放相关。工程签名、题库分类和权限结果都不是窗口销毁阶段的职责。",
+    "knowledgePoints": [
+      "窗口销毁",
+      "资源释放",
+      "UIAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "ability-lifecycle-010",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "UIAbility 生命周期设计的目的之一，是让应用按创建、前后台切换、窗口销毁等阶段管理状态和资源。",
+    "answerBoolean": true,
+    "explanation": "UIAbility 生命周期提供不同阶段的回调，帮助应用在创建、前后台切换和销毁时管理页面、状态和资源。",
+    "knowledgePoints": [
+      "UIAbility 生命周期",
+      "状态管理",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
+  },
+  {
     "id": "component-communication-001",
     "categoryId": "component-communication",
     "type": "single",
@@ -559,6 +1737,224 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-005",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "父组件向子组件传递只读展示数据时，最贴近的状态装饰器是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "@Prop"
+      },
+      {
+        "id": "b",
+        "text": "@Link"
+      },
+      {
+        "id": "c",
+        "text": "@Provide"
+      },
+      {
+        "id": "d",
+        "text": "@Consume"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@Prop 适合父组件向子组件做单向数据传递。子组件需要反向同步修改时再考虑 @Link；跨层级共享再考虑 @Provide/@Consume。",
+    "knowledgePoints": [
+      "@Prop",
+      "父子组件",
+      "单向传递"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-006",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "@Provide 和 @Consume 更适合跨层级共享状态，不应滥用来替代所有简单父子传值。",
+    "answerBoolean": true,
+    "explanation": "@Provide/@Consume 适合跨层级状态传递。简单父子组件单向或双向传值，通常 @Prop 或 @Link 更直接、可读性更好。",
+    "knowledgePoints": [
+      "@Provide",
+      "@Consume",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-007",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "设计答题页组件通信时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "题目标题、选项等展示数据可由父组件传给子组件"
+      },
+      {
+        "id": "b",
+        "text": "子组件需要修改父组件状态时使用合适的双向同步机制"
+      },
+      {
+        "id": "c",
+        "text": "跨多层级共享的主题或用户状态可考虑 Provide/Consume"
+      },
+      {
+        "id": "d",
+        "text": "所有子组件都直接修改任意全局变量"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "组件通信要按数据方向和作用域选择机制。全局变量式随意修改会让状态来源不清晰，不利于维护和调试。",
+    "knowledgePoints": [
+      "组件通信",
+      "数据方向",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-008",
+    "categoryId": "component-communication",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 @Prop、@Link、@Provide/@Consume 的典型使用区别。",
+    "referenceAnswer": "@Prop 适合父到子的单向展示数据；@Link 适合父子之间需要双向同步的状态；@Provide/@Consume 适合跨组件层级共享状态，避免逐层透传。",
+    "scoringPoints": [
+      "说明 @Prop 单向传递",
+      "说明 @Link 双向同步",
+      "说明 @Provide/@Consume 跨层级共享",
+      "能提到按作用域选择"
+    ],
+    "explanation": "这道题是组件通信基础题。回答要体现数据方向和状态作用域，而不是只背装饰器名称。",
+    "knowledgePoints": [
+      "@Prop",
+      "@Link",
+      "@Provide/@Consume"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-009",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个筛选面板需要把用户选择同步回父页面刷新题目列表，优先考虑哪种通信方向？",
+    "options": [
+      {
+        "id": "a",
+        "text": "子组件的选择变化同步回父组件状态"
+      },
+      {
+        "id": "b",
+        "text": "子组件只展示固定文本，不产生事件"
+      },
+      {
+        "id": "c",
+        "text": "把筛选条件写进 build-profile.json5"
+      },
+      {
+        "id": "d",
+        "text": "让路由栈保存每个按钮颜色"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "筛选面板的交互结果会影响父页面列表，因此需要把子组件选择同步回父组件状态，或通过回调/双向状态机制表达数据变化。",
+    "knowledgePoints": [
+      "筛选组件",
+      "父子同步",
+      "交互状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "component-communication-010",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "选择组件通信方式时，应先判断数据是单向展示、双向编辑，还是跨层级共享。",
+    "answerBoolean": true,
+    "explanation": "数据方向和作用域决定通信方式。先判断场景，再选择 @Prop、@Link 或 @Provide/@Consume，能降低状态混乱风险。",
+    "knowledgePoints": [
+      "通信方式选择",
+      "数据方向",
+      "作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   },
   {
     "id": "state-management-001",
@@ -729,6 +2125,224 @@
     "order": 4
   },
   {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "state-management-005",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "组件内部点击后会影响自身 UI 刷新的计数值，最常用哪类本地状态？",
+    "options": [
+      {
+        "id": "a",
+        "text": "@State"
+      },
+      {
+        "id": "b",
+        "text": "@Prop"
+      },
+      {
+        "id": "c",
+        "text": "@Consume"
+      },
+      {
+        "id": "d",
+        "text": "HttpRequest"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@State 适合组件内部持有并驱动 UI 刷新的本地状态。@Prop 更偏父到子传值，HttpRequest 是网络请求对象。",
+    "knowledgePoints": [
+      "@State",
+      "本地状态",
+      "UI 刷新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "state-management-006",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "状态作用域越大越好，因此所有页面状态都应直接放到应用级全局状态中。",
+    "answerBoolean": false,
+    "explanation": "状态应按作用域设计。组件内部状态放组件内，父子共享用合适的父子通信，跨页面或全局状态才考虑更大作用域。滥用全局状态会增加维护成本。",
+    "knowledgePoints": [
+      "状态作用域",
+      "全局状态",
+      "局部状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "state-management-007",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于刷题 App 的状态设计，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "当前题号、已选选项等可作为答题页局部状态"
+      },
+      {
+        "id": "b",
+        "text": "跨页面使用的练习记录可通过统一数据层读取"
+      },
+      {
+        "id": "c",
+        "text": "收藏和错题状态变化后应通知相关页面刷新"
+      },
+      {
+        "id": "d",
+        "text": "所有页面都各自维护一份互不关联的正确率副本"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "局部交互状态、跨页面数据和事件刷新应分层处理。各页面维护互不关联的统计副本容易导致数据不同步。",
+    "knowledgePoints": [
+      "状态分层",
+      "练习记录",
+      "页面刷新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "state-management-008",
+    "categoryId": "state-management",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述为什么状态管理要关注“状态作用域”。",
+    "referenceAnswer": "状态作用域决定数据应放在哪里以及谁能修改。组件内部状态应保持局部，父子共享用父子通信，跨层级或跨页面共享再考虑更大作用域。合理作用域可以减少重复数据、意外修改和页面不同步。",
+    "scoringPoints": [
+      "说明状态作用域含义",
+      "能区分局部、父子、跨层级或全局状态",
+      "提到减少重复和不同步",
+      "能结合页面状态举例"
+    ],
+    "explanation": "状态管理不是把所有数据放在一起，而是按数据生命周期、使用范围和修改来源设计。",
+    "knowledgePoints": [
+      "状态作用域",
+      "状态同步",
+      "架构设计"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "state-management-009",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "收藏状态在答题页改变后，首页和收藏列表也需要更新，工程上更应关注什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "统一数据源和状态变化通知"
+      },
+      {
+        "id": "b",
+        "text": "每个页面各自猜测收藏数量"
+      },
+      {
+        "id": "c",
+        "text": "把收藏数量写死在标题里"
+      },
+      {
+        "id": "d",
+        "text": "禁用收藏入口"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "跨页面共享的业务数据需要统一数据源，并在状态变化后通知相关页面刷新。否则收藏列表、首页统计和答题页会出现不一致。",
+    "knowledgePoints": [
+      "跨页面状态",
+      "收藏状态",
+      "数据一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "state-management-010",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "组件状态变化会驱动 UI 重新渲染，因此状态设计会直接影响页面性能和可维护性。",
+    "answerBoolean": true,
+    "explanation": "ArkUI 声明式 UI 与状态绑定紧密。状态粒度、作用域和更新频率都会影响页面刷新范围、性能和代码可维护性。",
+    "knowledgePoints": [
+      "状态驱动 UI",
+      "性能",
+      "可维护性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
+  },
+  {
     "id": "routing-001",
     "categoryId": "routing",
     "type": "single",
@@ -890,6 +2504,154 @@
     "order": 4
   },
   {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-005",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "页面 A 跳转到答题页并希望传入 questionId，通常应使用路由跳转时的哪个能力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "params 参数"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore 表结构"
+      },
+      {
+        "id": "c",
+        "text": "PermissionRequestResult"
+      },
+      {
+        "id": "d",
+        "text": "HiLog 过滤条件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "页面跳转时携带 questionId、mode 等轻量参数，应使用路由参数能力。数据库表结构和权限结果不是页面跳转传参能力。",
+    "knowledgePoints": [
+      "路由参数",
+      "页面跳转",
+      "questionId"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-006",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "路由参数适合传递页面定位信息，但不适合承载完整题库大对象或大量业务数据。",
+    "answerBoolean": true,
+    "explanation": "路由参数应用于页面定位和轻量上下文。完整题库、练习记录等大量数据应由数据层或服务端接口获取，避免路由栈承担业务数据存储职责。",
+    "knowledgePoints": [
+      "路由参数设计",
+      "轻量参数",
+      "数据层"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-007",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于刷题 App 的路由设计，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "训练页传 questionId 到答题页"
+      },
+      {
+        "id": "b",
+        "text": "答题页用 questionIds 表示本轮题目顺序"
+      },
+      {
+        "id": "c",
+        "text": "路由参数只传必要上下文，详情数据按 id 加载"
+      },
+      {
+        "id": "d",
+        "text": "把所有题目解析 JSON 全部塞进路由参数"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "路由参数应轻量、明确、可恢复。大量解析和完整题目对象应通过题目 id 再加载，避免路由参数过重。",
+    "knowledgePoints": [
+      "路由设计",
+      "题目详情",
+      "轻量参数"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-008",
+    "categoryId": "routing",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述路由参数在答题页中的合理使用方式。",
+    "referenceAnswer": "路由参数可传递 questionId、questionIds、questionIndex、练习模式等轻量上下文；答题页根据这些参数加载题目详情和恢复本轮顺序。不要把完整题库、答案解析等大对象直接塞进路由参数。",
+    "scoringPoints": [
+      "提到 questionId 等轻量参数",
+      "提到根据参数加载详情",
+      "提到本轮题目顺序或索引",
+      "说明不应传大对象"
+    ],
+    "explanation": "这道题考察路由参数边界。合理做法是参数用于定位和上下文，业务数据仍由数据层加载。",
+    "knowledgePoints": [
+      "路由参数",
+      "答题页",
+      "数据加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
     "id": "network-001",
     "categoryId": "network",
     "type": "single",
@@ -1049,6 +2811,155 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-005",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "使用 @ohos.net.http 发起请求后，为避免资源长期占用，通常应在请求结束后调用哪个方法释放请求对象？",
+    "options": [
+      {
+        "id": "a",
+        "text": "destroy()"
+      },
+      {
+        "id": "b",
+        "text": "flush()"
+      },
+      {
+        "id": "c",
+        "text": "rollback()"
+      },
+      {
+        "id": "d",
+        "text": "getParams()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "HttpRequest 对象使用完后应调用 destroy 释放资源。flush 属于首选项持久化，rollback 属于数据库事务，getParams 属于路由参数读取。",
+    "knowledgePoints": [
+      "HttpRequest",
+      "destroy",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-006",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "网络请求失败时只在页面上显示“加载失败”即可，不需要记录错误信息或区分超时、状态码等原因。",
+    "answerBoolean": false,
+    "explanation": "可靠的网络请求处理应关注错误信息、响应码、超时和用户提示。只显示泛化失败会影响定位，也不利于用户理解和重试。",
+    "knowledgePoints": [
+      "网络错误处理",
+      "状态码",
+      "超时"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-007",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "题库 App 请求远程题目列表时，哪些处理更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "设置合理超时时间"
+      },
+      {
+        "id": "b",
+        "text": "检查响应码或业务返回状态"
+      },
+      {
+        "id": "c",
+        "text": "请求完成后释放 HttpRequest 对象"
+      },
+      {
+        "id": "d",
+        "text": "失败时静默吞掉，不给用户任何反馈"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "远程题库请求需要处理超时、响应状态和资源释放。失败时应给用户可理解的反馈或重试入口，而不是静默失败。",
+    "knowledgePoints": [
+      "远程题库",
+      "超时",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "network-008",
+    "categoryId": "network",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 HarmonyOS App 中封装 REST API 客户端时应注意的几个点。",
+    "referenceAnswer": "应统一创建和释放 HttpRequest，设置合理超时和请求头，检查 HTTP 响应码和业务数据结构，对异常做统一提示或日志记录，并避免把 API Key 等敏感信息放在客户端。",
+    "scoringPoints": [
+      "提到 HttpRequest 创建和释放",
+      "提到超时和请求头",
+      "提到响应码或业务结构校验",
+      "提到异常处理或日志",
+      "提到敏感信息不要放客户端"
+    ],
+    "explanation": "REST API 客户端封装既要符合 HarmonyOS HTTP 请求流程，也要考虑真实产品的错误处理和安全边界。",
+    "knowledgePoints": [
+      "REST API",
+      "HttpRequest",
+      "错误处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
   },
   {
     "id": "permissions-001",

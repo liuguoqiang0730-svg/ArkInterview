@@ -68,5 +68,340 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 2
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-003",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Stage 模型中，一个 HAP 包加载时与模块级初始化更相关的类是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "AbilityStage"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore"
+      },
+      {
+        "id": "c",
+        "text": "HttpRequest"
+      },
+      {
+        "id": "d",
+        "text": "Preferences"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "AbilityStage 是 Stage 模型中与 HAP 加载、模块级初始化相关的运行时类。其它选项分别属于数据库、网络和首选项存储。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "AbilityStage",
+      "HAP 加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 3
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-004",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Stage 模型下 UIAbility 负责承载具体 UI 页面窗口，AbilityStage 更偏模块级初始化，两者职责不应混淆。",
+    "answerBoolean": true,
+    "explanation": "AbilityStage 和 UIAbility 都属于 Stage 模型，但关注层级不同。AbilityStage 更偏 HAP 级生命周期，UIAbility 与具体用户界面能力和窗口阶段关联更紧密。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "UIAbility",
+      "职责边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-005",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Stage 模型工程组织，哪些理解更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "AbilityStage 适合放模块级初始化逻辑"
+      },
+      {
+        "id": "b",
+        "text": "UIAbility 负责具体界面能力的生命周期"
+      },
+      {
+        "id": "c",
+        "text": "页面 UI 构建全部写在 AbilityStage 中"
+      },
+      {
+        "id": "d",
+        "text": "窗口创建和页面加载通常与 UIAbility 的 WindowStage 阶段相关"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "Stage 模型强调不同层级的职责划分。AbilityStage 不应承担所有页面 UI 构建；UIAbility 和 WindowStage 才更贴近页面窗口创建和加载。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "UIAbility",
+      "WindowStage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-006",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "创建 Stage 模型 ArkTS 应用后，工程中用于承载页面能力的常见运行时类是哪一个？",
+    "options": [
+      {
+        "id": "a",
+        "text": "UIAbility"
+      },
+      {
+        "id": "b",
+        "text": "HttpRequestOptions"
+      },
+      {
+        "id": "c",
+        "text": "PermissionRequestResult"
+      },
+      {
+        "id": "d",
+        "text": "StoreConfig"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "UIAbility 是 Stage 模型中面向 UI 的 Ability 类型。HTTP、权限结果和数据库配置分别属于其它系统能力。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "UIAbility",
+      "页面能力"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-007",
+    "categoryId": "stage-model",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 Stage 模型中 AbilityStage 和 UIAbility 的典型职责差异。",
+    "referenceAnswer": "AbilityStage 更偏 HAP 或模块级运行时初始化，例如模块加载期间的资源准备；UIAbility 更贴近具体 UI 能力，负责界面生命周期、窗口阶段和页面加载。工程中应按层级拆分初始化、窗口和页面逻辑。",
+    "scoringPoints": [
+      "说明 AbilityStage 偏模块级",
+      "说明 UIAbility 偏界面能力",
+      "提到 WindowStage 或页面加载",
+      "能说明职责拆分意义"
+    ],
+    "explanation": "这道题考察 Stage 模型的职责边界。回答应避免把所有逻辑都塞进一个生命周期回调。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "UIAbility",
+      "职责拆分"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-008",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "在 UIAbility 还没有创建 WindowStage 前，通常不应该直接依赖页面窗口对象完成页面加载。",
+    "answerBoolean": true,
+    "explanation": "页面窗口相关操作应放在对应窗口阶段处理。将窗口对象尚未创建时的逻辑提前执行，容易导致页面加载失败或上下文错误。",
+    "knowledgePoints": [
+      "WindowStage",
+      "UIAbility",
+      "页面加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-009",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "一个刷题 App 基于 Stage 模型设计时，哪些逻辑放置更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "模块级初始化放在 AbilityStage 相关阶段"
+      },
+      {
+        "id": "b",
+        "text": "首页窗口加载放在 UIAbility 的窗口阶段"
+      },
+      {
+        "id": "c",
+        "text": "题目列表 UI 写在 ArkUI 页面组件中"
+      },
+      {
+        "id": "d",
+        "text": "数据库查询结果直接写入 build-profile.json5"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Stage 模型、UIAbility 和 ArkUI 页面应各司其职。build-profile.json5 是工程配置文件，不用于保存运行期数据库查询结果。",
+    "knowledgePoints": [
+      "工程分层",
+      "Stage 模型",
+      "ArkUI 页面"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "ArkUI 简介",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/arkui-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "stage-model-010",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "页面首次显示时加载首页路由和窗口内容，通常应关注 UIAbility 的哪个阶段？",
+    "options": [
+      {
+        "id": "a",
+        "text": "WindowStage 创建相关阶段"
+      },
+      {
+        "id": "b",
+        "text": "Preferences flush 阶段"
+      },
+      {
+        "id": "c",
+        "text": "HTTP destroy 阶段"
+      },
+      {
+        "id": "d",
+        "text": "RDB 事务回滚阶段"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "页面窗口内容加载和 WindowStage 关系最直接。其它选项属于数据持久化、网络请求或数据库事务，不负责 UIAbility 窗口创建。",
+    "knowledgePoints": [
+      "WindowStage",
+      "页面加载",
+      "UIAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

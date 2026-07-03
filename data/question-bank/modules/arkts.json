@@ -88,5 +88,315 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 2
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-003",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "从 TypeScript 迁移到 ArkTS 时，处理动态对象数据更推荐哪种方式？",
+    "options": [
+      {
+        "id": "a",
+        "text": "把对象结构声明为 interface 或 class 后再使用"
+      },
+      {
+        "id": "b",
+        "text": "把所有对象都声明成 any，减少类型声明"
+      },
+      {
+        "id": "c",
+        "text": "用字符串拼接代替对象字段访问"
+      },
+      {
+        "id": "d",
+        "text": "删除编译配置，跳过 ArkTS 静态检查"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 比 TypeScript 更强调静态类型和可分析性。动态对象数据应通过接口或类描述结构，让对象字段、请求体和缓存记录在编译期被检查。",
+    "knowledgePoints": [
+      "ArkTS 迁移",
+      "静态类型",
+      "接口建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 3
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-004",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "ArkTS 迁移中，保留 TypeScript 中所有动态写法通常比显式建模更稳妥。",
+    "answerBoolean": false,
+    "explanation": "ArkTS 适配目标是让代码更静态、更可分析。遇到动态对象、隐式 any、难以推断的数据结构时，应优先显式建模，而不是保留所有动态写法。",
+    "knowledgePoints": [
+      "ArkTS 迁移",
+      "动态写法",
+      "显式建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-005",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "在 ArkTS 项目中设计 REST API 请求体时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "为请求体声明明确的接口或类"
+      },
+      {
+        "id": "b",
+        "text": "让对象字段名称和服务端契约保持一致"
+      },
+      {
+        "id": "c",
+        "text": "所有请求都传 any，业务层不描述字段"
+      },
+      {
+        "id": "d",
+        "text": "在提交前通过编译期类型检查减少字段错误"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "请求体属于结构化数据。ArkTS 中用明确类型约束请求字段，有利于减少字段拼写、类型不一致和后续维护风险。",
+    "knowledgePoints": [
+      "API 请求体",
+      "接口类型",
+      "编译期检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-006",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ArkTS 中维护页面状态数组时，为什么更推荐显式复制数组而不是依赖不清晰的动态展开？",
+    "options": [
+      {
+        "id": "a",
+        "text": "可以让元素类型和更新过程更清楚，便于通过静态检查"
+      },
+      {
+        "id": "b",
+        "text": "因为 ArkTS 不支持任何数组"
+      },
+      {
+        "id": "c",
+        "text": "因为 UI 状态不能使用数组保存"
+      },
+      {
+        "id": "d",
+        "text": "因为数组只能通过后端接口创建"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "页面状态更新需要可读、可检查。显式复制数组、逐项 push 或遍历生成新数组，比不清晰的动态展开更符合 ArkTS 静态检查和维护要求。",
+    "knowledgePoints": [
+      "数组更新",
+      "状态管理",
+      "ArkTS 静态检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-007",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 ArkTS 相比 TypeScript 在工程代码风格上的一个重要变化。",
+    "referenceAnswer": "ArkTS 更强调静态类型、结构清晰和编译期可分析。迁移时应减少隐式 any、动态对象和难以推断的写法，使用 interface、class、明确数组元素类型等方式表达数据结构。",
+    "scoringPoints": [
+      "提到静态类型更严格",
+      "提到减少隐式 any 或动态对象",
+      "提到用 interface/class 显式建模",
+      "能结合工程场景说明"
+    ],
+    "explanation": "这道题考察迁移理解，而不是背 API。面试回答应能把 ArkTS 规则落实到请求体、缓存记录、页面状态等真实代码上。",
+    "knowledgePoints": [
+      "ArkTS 迁移",
+      "工程规范",
+      "类型建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-008",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "遇到 ArkTS 编译提示对象字面量缺少明确类型时，第一步更应该做什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "补充接口、类或变量类型，让对象字面量有明确目标类型"
+      },
+      {
+        "id": "b",
+        "text": "把报错文件从项目中删除"
+      },
+      {
+        "id": "c",
+        "text": "把所有字段名改成单个字母"
+      },
+      {
+        "id": "d",
+        "text": "把业务逻辑迁移到字符串中执行"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "对象字面量没有明确结构时，ArkTS 难以进行静态分析。补充目标类型是更稳妥的修复方式，也能让 IDE 和编译器提前发现问题。",
+    "knowledgePoints": [
+      "对象字面量",
+      "类型声明",
+      "编译错误修复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-009",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Android 或前端开发者转 HarmonyOS 时，学习 ArkTS 应重点关注哪些差异？",
+    "options": [
+      {
+        "id": "a",
+        "text": "ArkTS 对动态类型和对象结构的约束更强"
+      },
+      {
+        "id": "b",
+        "text": "ArkTS 工程中应重视编译期类型错误"
+      },
+      {
+        "id": "c",
+        "text": "ArkTS 与 TypeScript 完全无关，不需要迁移理解"
+      },
+      {
+        "id": "d",
+        "text": "ArkTS 代码应结合 ArkUI 和 Stage 模型工程实践理解"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "转 HarmonyOS 不只是换语法。ArkTS 迁移、ArkUI 声明式 UI、Stage 模型生命周期会一起影响工程组织和问题排查。",
+    "knowledgePoints": [
+      "转鸿蒙",
+      "ArkTS 差异",
+      "Stage 模型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 9
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "arkts-010",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "ArkTS 中为服务端返回数据建立模型，有助于减少页面层直接依赖松散 JSON 字段带来的风险。",
+    "answerBoolean": true,
+    "explanation": "题库、练习记录、错题等服务端数据都有稳定结构。建立模型能让字段含义、可选性和类型更清晰，也更符合 ArkTS 静态类型实践。",
+    "knowledgePoints": [
+      "数据模型",
+      "服务端 JSON",
+      "类型安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 10
   }
 ]

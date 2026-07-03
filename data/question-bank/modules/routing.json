@@ -159,5 +159,153 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 4
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-005",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "页面 A 跳转到答题页并希望传入 questionId，通常应使用路由跳转时的哪个能力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "params 参数"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore 表结构"
+      },
+      {
+        "id": "c",
+        "text": "PermissionRequestResult"
+      },
+      {
+        "id": "d",
+        "text": "HiLog 过滤条件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "页面跳转时携带 questionId、mode 等轻量参数，应使用路由参数能力。数据库表结构和权限结果不是页面跳转传参能力。",
+    "knowledgePoints": [
+      "路由参数",
+      "页面跳转",
+      "questionId"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 5
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-006",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "路由参数适合传递页面定位信息，但不适合承载完整题库大对象或大量业务数据。",
+    "answerBoolean": true,
+    "explanation": "路由参数应用于页面定位和轻量上下文。完整题库、练习记录等大量数据应由数据层或服务端接口获取，避免路由栈承担业务数据存储职责。",
+    "knowledgePoints": [
+      "路由参数设计",
+      "轻量参数",
+      "数据层"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 6
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-007",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于刷题 App 的路由设计，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "训练页传 questionId 到答题页"
+      },
+      {
+        "id": "b",
+        "text": "答题页用 questionIds 表示本轮题目顺序"
+      },
+      {
+        "id": "c",
+        "text": "路由参数只传必要上下文，详情数据按 id 加载"
+      },
+      {
+        "id": "d",
+        "text": "把所有题目解析 JSON 全部塞进路由参数"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "路由参数应轻量、明确、可恢复。大量解析和完整题目对象应通过题目 id 再加载，避免路由参数过重。",
+    "knowledgePoints": [
+      "路由设计",
+      "题目详情",
+      "轻量参数"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 7
+  },
+  {
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "id": "routing-008",
+    "categoryId": "routing",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述路由参数在答题页中的合理使用方式。",
+    "referenceAnswer": "路由参数可传递 questionId、questionIds、questionIndex、练习模式等轻量上下文；答题页根据这些参数加载题目详情和恢复本轮顺序。不要把完整题库、答案解析等大对象直接塞进路由参数。",
+    "scoringPoints": [
+      "提到 questionId 等轻量参数",
+      "提到根据参数加载详情",
+      "提到本轮题目顺序或索引",
+      "说明不应传大对象"
+    ],
+    "explanation": "这道题考察路由参数边界。合理做法是参数用于定位和上下文，业务数据仍由数据层加载。",
+    "knowledgePoints": [
+      "路由参数",
+      "答题页",
+      "数据加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "order": 8
   }
 ]
