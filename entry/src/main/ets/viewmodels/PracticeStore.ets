@@ -38,6 +38,14 @@ export class PracticeStore {
     return this.api.getQuestion(questionId);
   }
 
+  async loadWrongs(): Promise<Question[]> {
+    return this.api.getWrongs();
+  }
+
+  async loadFavorites(): Promise<Question[]> {
+    return this.api.getFavorites();
+  }
+
   async submitAnswer(payload: SubmitAnswerRequest): Promise<SubmitAnswerResponse> {
     return this.api.submitAnswer(payload);
   }

@@ -76,22 +76,20 @@ export struct BottomNavBar {
     }
     if (target === 'wrongs') {
       router.pushUrl({
-        url: 'pages/PracticePage',
+        url: 'pages/ReviewListPage',
         params: {
           mode: 'wrongs',
-          categoryId: '',
-          title: '错题练习'
+          title: '错题本'
         }
       });
       return;
     }
     if (target === 'favorites') {
       router.pushUrl({
-        url: 'pages/PracticePage',
+        url: 'pages/ReviewListPage',
         params: {
           mode: 'favorites',
-          categoryId: '',
-          title: '收藏练习'
+          title: '收藏题目'
         }
       });
     }
