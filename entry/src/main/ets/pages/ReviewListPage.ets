@@ -224,6 +224,29 @@ struct ReviewListPage {
         .borderRadius(8)
         .margin({ top: 12 })
         .onClick(() => this.openReviewAt(0))
+
+      if (this.hasActiveFilters()) {
+        Row() {
+          Text(this.activeFilterText())
+            .fontSize(12)
+            .fontColor(COLOR_BLUE)
+            .layoutWeight(1)
+          Button('清空')
+            .height(30)
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_GREEN)
+            .backgroundColor(COLOR_SOFT_GREEN)
+            .borderRadius(8)
+            .onClick(() => this.resetFilters())
+        }
+        .width('100%')
+        .padding({ left: 10, right: 8, top: 8, bottom: 8 })
+        .margin({ top: 10 })
+        .backgroundColor(COLOR_SOFT_BLUE)
+        .borderRadius(8)
+        .border({ width: 1, color: COLOR_BLUE })
+      }
     }
     .width('100%')
     .padding(14)
@@ -575,6 +598,48 @@ struct ReviewListPage {
     this.difficultyFilter = 'all';
     this.sortMode = this.mode === 'wrongs' ? 'wrongCount' : 'default';
     this.wrongScope = this.mode === 'wrongs' ? 'active' : 'all';
+  }
+
+  hasActiveFilters(): boolean {
+    if (this.keyword.trim().length > 0) {
+      return true;
+    }
+    if (this.categoryFilter !== 'all') {
+      return true;
+    }
+    if (this.typeFilter !== 'all') {
+      return true;
+    }
+    if (this.difficultyFilter !== 'all') {
+      return true;
+    }
+    if (this.mode === 'wrongs' && this.wrongScope !== 'active') {
+      return true;
+    }
+    return this.sortMode !== (this.mode === 'wrongs' ? 'wrongCount' : 'default');
+  }
+
+  activeFilterText(): string {
+    let count = 0;
+    if (this.keyword.trim().length > 0) {
+      count++;
+    }
+    if (this.categoryFilter !== 'all') {
+      count++;
+    }
+    if (this.typeFilter !== 'all') {
+      count++;
+    }
+    if (this.difficultyFilter !== 'all') {
+      count++;
+    }
+    if (this.mode === 'wrongs' && this.wrongScope !== 'active') {
+      count++;
+    }
+    if (this.sortMode !== (this.mode === 'wrongs' ? 'wrongCount' : 'default')) {
+      count++;
+    }
+    return `已启用 ${count} 个筛选条件`;
   }
 
   reviewToolSummary(): string {
