@@ -242,6 +242,19 @@ struct PracticePage {
   FilterBar() {
     Column() {
       Row() {
+        Text('筛选工具')
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+          .layoutWeight(1)
+        Text(`显示 ${this.filteredQuestions().length}/${this.session?.items.length ?? 0}`)
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+      }
+      .width('100%')
+      .margin({ bottom: 10 })
+
+      Row() {
         this.FilterChip('模块', this.categoryFilterLabel(), COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextCategoryFilter())
         this.FilterChip('题型', this.typeFilterLabel(), COLOR_GREEN, COLOR_SOFT_GREEN, () => this.nextTypeFilter())
         if (this.mode === 'wrongs') {
@@ -250,14 +263,14 @@ struct PracticePage {
       }
       .width('100%')
 
-      Text(`当前显示 ${this.filteredQuestions().length}/${this.session?.items.length ?? 0} 题`)
+      Text(this.filterSummaryText())
         .fontSize(12)
         .fontColor(COLOR_MUTED)
         .margin({ top: 8 })
         .width('100%')
     }
     .width('100%')
-    .padding({ left: this.isTablet ? 0 : 16, right: this.isTablet ? 0 : 16, top: this.isTablet ? 0 : 12, bottom: 10 })
+    .padding({ left: this.isTablet ? 0 : 16, right: this.isTablet ? 0 : 16, top: this.isTablet ? 0 : 12, bottom: 12 })
   }
 
   @Builder
@@ -338,6 +351,23 @@ struct PracticePage {
           .lineHeight(18)
           .margin({ top: 8 })
           .width('100%')
+
+        Row() {
+          Text(this.categoryName(question.categoryId))
+            .fontSize(12)
+            .fontColor(COLOR_BLUE)
+            .backgroundColor(COLOR_SOFT_BLUE)
+            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .borderRadius(8)
+          Text('去答题 >')
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.typeColor(question.type))
+            .layoutWeight(1)
+            .textAlign(TextAlign.End)
+        }
+        .width('100%')
+        .margin({ top: 12 })
       }
       .layoutWeight(1)
     }
@@ -568,6 +598,22 @@ struct PracticePage {
       return '简答';
     }
     return '全部题型';
+  }
+
+  filterSummaryText(): string {
+    if (this.filteredQuestions().length === 0) {
+      return '当前筛选没有题目，可以切换模块或题型。';
+    }
+    if (this.mode === 'wrongs') {
+      return '优先处理未掌握题目，答对后可在解析中标记掌握。';
+    }
+    if (this.mode === 'favorites') {
+      return '集中复习收藏题目，适合考前快速回看。';
+    }
+    if (this.mode === 'interview') {
+      return '按面试节奏抽题，建议完整完成一轮后再复盘。';
+    }
+    return '选择题目开始练习，答题后会自动记录进度。';
   }
 
   wrongScopeLabel(): string {
