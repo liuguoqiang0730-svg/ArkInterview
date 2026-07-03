@@ -17,6 +17,24 @@
 5. 运行 `npm run questions:build` 生成聚合题库。
 6. 运行 `npm run questions:check` 或 `npm test` 做查重和字段校验。
 
+## 入库质量闸门
+
+每道题入库前必须满足：
+
+- `sourceRefs` 指向鸿蒙官方文档、OpenHarmony 官方文档或 OpenHarmony 官方仓库文档。
+- `verifiedAt` 使用 `YYYY-MM-DD`，表示人工核验日期。
+- `reviewStatus` 必须是 `verified`。
+- 选择题必须有正确答案；判断题必须有布尔答案；简答题必须有参考答案和评分点。
+- 解析必须解释“为什么正确”，不能只复述答案。
+- 知识点必须贴近鸿蒙开发面试场景，避免泛 JavaScript、泛前端、泛 Android 题。
+
+## 禁止事项
+
+- 不要直接搬运 CSDN、掘金、公众号、面经网站的题库或答案。
+- 不要把 AI 生成但未核验的题标为 `verified`。
+- 不要为了凑数量制造只有措辞不同、考察角度相同的重复题。
+- 不要直接编辑 `data/seed/questions.json` 修题，所有修改都必须回到模块文件。
+
 ## 去重口径
 
 脚本会拦截：
