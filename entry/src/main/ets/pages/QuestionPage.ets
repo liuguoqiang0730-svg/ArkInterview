@@ -238,6 +238,26 @@ struct QuestionPage {
       .width('100%')
       .margin({ top: 10 })
 
+      Column() {
+        Text(this.completionAdviceTitle())
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+          .width('100%')
+        Text(this.completionAdviceText())
+          .fontSize(13)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(20)
+          .margin({ top: 6 })
+          .width('100%')
+      }
+      .width('100%')
+      .padding(14)
+      .margin({ top: 14 })
+      .backgroundColor(COLOR_SOFT_BLUE)
+      .borderRadius(8)
+      .border({ width: 1, color: '#d6e4f2' })
+
       Text('题号总览')
         .fontSize(15)
         .fontWeight(FontWeight.Bold)
@@ -1281,6 +1301,26 @@ struct QuestionPage {
       return '建议先复盘红色题号，再回到对应解析补齐薄弱点。';
     }
     return '还有未答题目，可以从下方题号继续补做。';
+  }
+
+  completionAdviceTitle(): string {
+    if (this.unansweredCount() > 0) {
+      return '先补齐未答题';
+    }
+    if (this.wrongCount() > 0) {
+      return '优先复盘错题';
+    }
+    return '本轮状态很好';
+  }
+
+  completionAdviceText(): string {
+    if (this.unansweredCount() > 0) {
+      return `还有 ${this.unansweredCount()} 道未答题，建议先补完再看整体正确率。`;
+    }
+    if (this.wrongCount() > 0) {
+      return `本轮有 ${this.wrongCount()} 道错题，可以点击红色题号回到解析页复盘。`;
+    }
+    return '可以返回题单继续下一组练习，或者回首页查看学习记录变化。';
   }
 
   completionToneColor(): string {
