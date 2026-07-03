@@ -393,6 +393,14 @@ struct HomePage {
             .fontWeight(FontWeight.Bold)
             .fontColor(COLOR_TEXT)
             .layoutWeight(1)
+          Text(this.categoryStateLabel(category.id))
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.categoryColor(category.order))
+            .backgroundColor(this.categorySoftColor(category.order))
+            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .borderRadius(8)
+            .margin({ right: 6 })
           Text(this.categoryProgress(category.id))
             .fontSize(12)
             .fontColor(this.categoryColor(category.order))
@@ -423,7 +431,7 @@ struct HomePage {
         .margin({ top: 10 })
 
         Row() {
-          Text(this.categoryStatusText(category.id))
+          Text(`模块 ${category.order} · ${this.categoryStatusText(category.id)}`)
             .fontSize(12)
             .fontColor(COLOR_MUTED)
             .layoutWeight(1)
@@ -487,6 +495,27 @@ struct HomePage {
       }
     }
     return '尚未开始';
+  }
+
+  categoryStateLabel(categoryId: string): string {
+    if (!this.stats) {
+      return '待练';
+    }
+    for (const item of this.stats.categories) {
+      if (item.categoryId === categoryId) {
+        if (item.totalPublished === 0) {
+          return '待上新';
+        }
+        if (item.completionRate >= 1) {
+          return '已完成';
+        }
+        if (item.attempts > 0) {
+          return '进行中';
+        }
+        return '待练';
+      }
+    }
+    return '待练';
   }
 
   categoryColor(order: number): string {
