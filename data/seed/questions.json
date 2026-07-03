@@ -1233,6 +1233,155 @@
     "order": 4
   },
   {
+    "id": "storage-001",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "保存主题、是否首次启动这类应用配置时，优先选择哪种本地数据形态更合适？",
+    "options": [
+      {
+        "id": "a",
+        "text": "用户首选项 Preferences"
+      },
+      {
+        "id": "b",
+        "text": "关系型数据库 RDB"
+      },
+      {
+        "id": "c",
+        "text": "页面路由参数"
+      },
+      {
+        "id": "d",
+        "text": "AbilityStage 生命周期回调"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方应用数据持久化概述说明，用户首选项通常用于保存应用的配置信息。主题、首次启动标记、简单开关值属于轻量配置，优先用 Preferences 更贴合场景。",
+    "knowledgePoints": [
+      "数据存储",
+      "Preferences",
+      "配置数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "storage-002",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "HarmonyOS 标准系统支持的典型应用数据持久化形态包括哪些？",
+    "options": [
+      {
+        "id": "a",
+        "text": "用户首选项 Preferences"
+      },
+      {
+        "id": "b",
+        "text": "键值型数据库 KV-Store"
+      },
+      {
+        "id": "c",
+        "text": "关系型数据库 RDB Store"
+      },
+      {
+        "id": "d",
+        "text": "页面栈 Router Stack"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "官方概述列出的典型存储数据形态包括用户首选项、键值型数据库和关系型数据库。页面栈属于导航运行状态，不是应用数据持久化形态。",
+    "knowledgePoints": [
+      "数据持久化",
+      "KV-Store",
+      "RDB Store"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "storage-003",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "键值型数据库 KV-Store 属于非关系型数据库，数据以键值对形式组织、索引和存储。",
+    "answerBoolean": true,
+    "explanation": "官方说明 KV-Store 是一种非关系型数据库，数据以“键值”对形式组织、索引和存储。因此它适合键值模型的数据，而不是复杂 SQL 关系查询。",
+    "knowledgePoints": [
+      "KV-Store",
+      "非关系型数据库",
+      "键值数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "storage-004",
+    "categoryId": "storage",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 Preferences、KV-Store、RDB Store 在应用数据存储选型上的典型区别。",
+    "referenceAnswer": "Preferences 适合轻量配置和简单键值；KV-Store 适合以键值对组织、索引和存储的非关系型数据；RDB Store 适合结构化表数据、条件查询和更复杂的数据关系。选型应由数据规模、结构复杂度和查询方式决定。",
+    "scoringPoints": [
+      "能说明 Preferences 适合配置类数据",
+      "能说明 KV-Store 是键值型非关系存储",
+      "能说明 RDB Store 适合结构化关系数据和查询",
+      "能结合数据规模和查询方式做选型"
+    ],
+    "explanation": "官方将应用数据持久化分为用户首选项、键值型数据库和关系型数据库。面试中应能按数据形态和访问模式说明选型，而不是所有数据都放一种存储。",
+    "knowledgePoints": [
+      "存储选型",
+      "Preferences",
+      "KV-Store",
+      "RDB Store"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  },
+  {
     "id": "preferences-001",
     "categoryId": "preferences",
     "type": "single",
@@ -1648,5 +1797,643 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 5
+  },
+  {
+    "id": "napi-001",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在 HarmonyOS 中需要实现 ArkTS/JS 与 C++ 的跨语言交互时，官方文档中对应的常见机制是什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "Node-API"
+      },
+      {
+        "id": "b",
+        "text": "router.pushUrl"
+      },
+      {
+        "id": "c",
+        "text": "Preferences.flush"
+      },
+      {
+        "id": "d",
+        "text": "UIAbility.onForeground"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方“使用Node-API实现跨语言交互开发流程”说明，Node-API 用于实现 ArkTS/JS 与 C++ 的跨语言交互。其它选项分别属于路由、数据持久化或生命周期能力。",
+    "knowledgePoints": [
+      "Node-API",
+      "ArkTS 与 C++ 交互",
+      "Native 模块"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "napi-002",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "使用 Node-API 做跨语言交互时，Native 模块需要按 Node-API 机制完成注册和加载，ArkTS/JS 侧再 import 模块并调用 C++ 方法。",
+    "answerBoolean": true,
+    "explanation": "官方流程说明首先要按照 Node-API 机制实现模块注册和加载；ArkTS/JS 侧通过 import 调用 C++ 方法。这是 Native 能力暴露给 ArkTS 的基本流程。",
+    "knowledgePoints": [
+      "模块注册",
+      "模块加载",
+      "ArkTS 调用 Native"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "napi-003",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于在项目中引入 Node-API Native 能力，哪些说法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "适合把已有 C/C++ 能力封装后提供给 ArkTS 调用"
+      },
+      {
+        "id": "b",
+        "text": "需要关注 Native 模块注册、加载以及 ArkTS 侧导入调用"
+      },
+      {
+        "id": "c",
+        "text": "所有 UI 状态同步都必须改成 Node-API 实现"
+      },
+      {
+        "id": "d",
+        "text": "Native 回调和线程场景要特别关注与 ArkTS 侧交互方式"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "Node-API 常用于封装 Native 能力并供 ArkTS/JS 调用。它不是 UI 状态管理的替代品；涉及回调或线程时，要根据官方 FAQ 和开发流程处理 Native 与 ArkTS 的交互边界。",
+    "knowledgePoints": [
+      "Native 封装",
+      "Node-API 模块",
+      "跨线程回调"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Node-API常见问题",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-faqs-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "napi-004",
+    "categoryId": "napi",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述 ArkTS 调用 C++ Native 能力的一般接入流程。",
+    "referenceAnswer": "一般先在 Native 侧按 Node-API 机制实现模块注册、加载和导出函数；再在 ArkTS/JS 侧 import 对应模块，调用导出的 C++ 方法；如果涉及 Native 回调 ArkTS 或子线程交互，还需要按官方 FAQ 处理线程与回调边界。",
+    "scoringPoints": [
+      "提到 Node-API 模块注册和加载",
+      "提到 Native 侧导出函数",
+      "提到 ArkTS/JS 侧 import 并调用",
+      "提到回调或线程场景需要额外关注"
+    ],
+    "explanation": "这道题考察的是 Node-API 接入流程，而不是具体 C++ 语法。回答应覆盖 Native 模块注册和加载、ArkTS 导入调用，以及复杂回调场景的边界处理。",
+    "knowledgePoints": [
+      "Node-API 流程",
+      "Native 模块",
+      "ArkTS 调用 C++"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Node-API常见问题",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-faqs-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  },
+  {
+    "id": "performance-001",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "长列表页面如果一次性循环渲染所有列表元素，官方更推荐采用哪类方式优化启动体验？",
+    "options": [
+      {
+        "id": "a",
+        "text": "使用懒加载方式按需加载列表项"
+      },
+      {
+        "id": "b",
+        "text": "把所有列表项都放进 aboutToAppear 中同步构造"
+      },
+      {
+        "id": "c",
+        "text": "把列表数据写进路由参数再渲染"
+      },
+      {
+        "id": "d",
+        "text": "取消滚动容器，让页面一次性撑开"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方长列表性能优化说明，直接循环渲染会一次性加载所有列表元素，导致页面启动时间过长，推荐通过懒加载方式改善体验。",
+    "knowledgePoints": [
+      "长列表性能",
+      "懒加载",
+      "启动耗时"
+    ],
+    "sourceRefs": [
+      {
+        "title": "长列表性能优化",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/cta-use-of-list-and-grid-components-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "performance-002",
+    "categoryId": "performance",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "延迟加载 lazy import 可以让待加载文件在冷启动阶段不加载，等实际需要时再按需同步加载，从而缩短冷启动耗时。",
+    "answerBoolean": true,
+    "explanation": "官方延迟加载文档说明，lazy import 的作用就是让待加载文件在冷启动阶段不被加载，运行过程中需要用到时再按需加载，因此可用于冷启动优化。",
+    "knowledgePoints": [
+      "lazy import",
+      "冷启动优化",
+      "模块加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-lazy-import-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "performance-003",
+    "categoryId": "performance",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "分析 AppFreeze 或界面卡顿问题时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "关注主线程近期耗时较长的任务和事件队列"
+      },
+      {
+        "id": "b",
+        "text": "把耗时计算、IO 等任务从 UI 主流程中拆出去"
+      },
+      {
+        "id": "c",
+        "text": "只增加动画时长，避免用户察觉卡顿"
+      },
+      {
+        "id": "d",
+        "text": "结合日志和性能工具定位具体耗时点"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "AppFreeze 分析要围绕主线程耗时任务、事件队列和具体日志或工具信息定位。单纯拉长动画不能解决主线程被阻塞或任务过重的问题。",
+    "knowledgePoints": [
+      "AppFreeze",
+      "主线程",
+      "性能分析"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分析AppFreeze（应用无响应）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/appfreeze-guidelines-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "performance-004",
+    "categoryId": "performance",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述一个题库 App 的长列表页面可以从哪些方面做性能优化。",
+    "referenceAnswer": "题库列表应避免一次性渲染所有题目，优先使用懒加载列表；重数据处理和筛选排序要避免阻塞主线程；非首屏模块可结合 lazy import 推迟加载；出现卡顿或 AppFreeze 时应结合日志、事件队列和性能工具定位耗时任务。",
+    "scoringPoints": [
+      "提到长列表懒加载",
+      "提到避免主线程耗时任务",
+      "提到可用 lazy import 优化冷启动",
+      "提到结合日志或性能工具定位卡顿"
+    ],
+    "explanation": "题库 App 常见瓶颈是长列表渲染、筛选排序和冷启动加载。官方文档分别给出了长列表懒加载、lazy import 和 AppFreeze 分析思路，可以组合成面试回答。",
+    "knowledgePoints": [
+      "长列表优化",
+      "冷启动",
+      "AppFreeze"
+    ],
+    "sourceRefs": [
+      {
+        "title": "长列表性能优化",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/cta-use-of-list-and-grid-components-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-lazy-import-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "分析AppFreeze（应用无响应）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/appfreeze-guidelines-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  },
+  {
+    "id": "debug-release-001",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "工程级编译、签名和产品配置通常主要查看哪个配置文件？",
+    "options": [
+      {
+        "id": "a",
+        "text": "build-profile.json5"
+      },
+      {
+        "id": "b",
+        "text": "pages.json"
+      },
+      {
+        "id": "c",
+        "text": "question-bank.json"
+      },
+      {
+        "id": "d",
+        "text": "router-map.json"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方快速入门说明 build-profile.json5 是工程级配置信息，包含 signingConfigs、products 等配置。编译 SDK、签名和产品配置问题应优先检查该文件。",
+    "knowledgePoints": [
+      "build-profile.json5",
+      "签名配置",
+      "产品配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "构建第一个ArkTS应用（Stage模型）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/start-with-ets-stage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "debug-release-002",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "HarmonyOS 运行环境下，build-profile.json5 中 compileSdkVersion 等 SDK 版本字段按官方说明应使用字符串形式。",
+    "answerBoolean": true,
+    "explanation": "build-profile.json5 配置说明中，HarmonyOS 运行环境的 SDK 版本字段类型为 string，并给出类似 4.1.0(11) 的配置示例。把它写成数字容易触发 schema 校验错误。",
+    "knowledgePoints": [
+      "compileSdkVersion",
+      "build-profile.json5",
+      "Schema 校验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "debug-release-003",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 DevEco Studio 中查看设备实时日志，常用哪个窗口？",
+    "options": [
+      {
+        "id": "a",
+        "text": "Log > HiLog"
+      },
+      {
+        "id": "b",
+        "text": "Database Inspector"
+      },
+      {
+        "id": "c",
+        "text": "Router Preview"
+      },
+      {
+        "id": "d",
+        "text": "Question Bank"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方 HiLog 配置文档说明，DevEco Studio 提供“Log > HiLog”窗口查看设备当前所有应用实时打印的日志信息。",
+    "knowledgePoints": [
+      "HiLog",
+      "DevEco Studio",
+      "调试日志"
+    ],
+    "sourceRefs": [
+      {
+        "title": "配置HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-setup-hilog-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "debug-release-004",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "遇到工程同步或构建失败时，简述你会优先检查哪些配置和信息。",
+    "referenceAnswer": "优先检查 build-profile.json5 的 products、SDK 版本字段和 signingConfigs；确认 SDK 版本写法符合当前 HarmonyOS 运行环境要求；构建或运行问题再结合 DevEco Studio 的 Log/HiLog、Hvigor 输出和具体错误位置定位。",
+    "scoringPoints": [
+      "提到 build-profile.json5",
+      "提到 SDK 版本字段和字符串写法",
+      "提到签名配置 signingConfigs",
+      "提到结合 Hvigor 输出或 HiLog 定位"
+    ],
+    "explanation": "同步和构建失败通常不一定是业务代码问题，先看工程级配置、SDK 版本、签名配置和构建日志。官方文档明确 build-profile.json5 的职责以及 HiLog 的日志查看入口。",
+    "knowledgePoints": [
+      "构建排障",
+      "Hvigor",
+      "HiLog",
+      "签名"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "配置HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-setup-hilog-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  },
+  {
+    "id": "next-adaptation-001",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "适配平板、折叠屏和 2in1 等设备时，官方兼容性体验建议中特别强调哪类场景不能出现功能异常？",
+    "options": [
+      {
+        "id": "a",
+        "text": "设备多窗口模式下的页面功能"
+      },
+      {
+        "id": "b",
+        "text": "只在单一手机宽度下运行"
+      },
+      {
+        "id": "c",
+        "text": "只支持竖屏且不响应窗口变化"
+      },
+      {
+        "id": "d",
+        "text": "把布局尺寸全部写死为同一个像素值"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方应用基础功能和兼容性体验建议中提到，应用或元服务在设备多窗口模式下应无功能异常和兼容性问题。平板和折叠屏适配不能只按单一手机尺寸设计。",
+    "knowledgePoints": [
+      "多窗口适配",
+      "平板适配",
+      "兼容性体验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "next-adaptation-002",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "HarmonyOS NEXT 适配时，只要手机竖屏页面可用，就可以忽略平板、多窗口和折叠屏布局体验。",
+    "answerBoolean": false,
+    "explanation": "官方兼容性体验建议覆盖手机、折叠屏、平板、2in1 等设备，并强调多窗口模式下不能有功能异常。只验证手机竖屏不符合多设备体验要求。",
+    "knowledgePoints": [
+      "多设备适配",
+      "响应式布局",
+      "兼容性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "next-adaptation-003",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "做 HarmonyOS NEXT 适配和上架前检查时，哪些事项更应该纳入清单？",
+    "options": [
+      {
+        "id": "a",
+        "text": "检查平板、折叠屏、多窗口下的布局和功能"
+      },
+      {
+        "id": "b",
+        "text": "检查 build-profile.json5 中 SDK 版本和产品配置是否符合当前环境"
+      },
+      {
+        "id": "c",
+        "text": "处理 ArkTS 严格语法和 TypeScript 迁移差异"
+      },
+      {
+        "id": "d",
+        "text": "只要 Android 旧代码能编译，就不需要再核验 HarmonyOS 行为"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "NEXT 适配应覆盖多设备和多窗口体验、构建 SDK 配置以及 ArkTS 语法迁移差异。直接沿用旧平台代码而不核验 HarmonyOS 行为，会留下兼容性和构建风险。",
+    "knowledgePoints": [
+      "NEXT 适配",
+      "build-profile.json5",
+      "ArkTS 迁移"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "next-adaptation-004",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述一个刷题 App 做 HarmonyOS NEXT 适配时，你会重点验证哪些方面。",
+    "referenceAnswer": "应重点验证 ArkTS 严格语法、Stage 模型页面和生命周期、build-profile.json5 的 SDK/产品/签名配置，以及手机、平板、折叠屏和多窗口下的布局与功能。刷题 App 还要重点检查长列表、答题页、底部导航和记录页在不同窗口尺寸下是否可用。",
+    "scoringPoints": [
+      "提到 ArkTS 严格语法或迁移差异",
+      "提到 Stage 模型和生命周期",
+      "提到 build-profile.json5 配置",
+      "提到平板、折叠屏、多窗口适配",
+      "能结合刷题 App 页面场景说明"
+    ],
+    "explanation": "这类问题考察系统化适配思路。官方文档分别覆盖 ArkTS 适配、工程构建配置和多设备兼容性体验，回答应把它们落到具体 App 页面和交互上。",
+    "knowledgePoints": [
+      "NEXT 适配策略",
+      "多窗口",
+      "ArkTS",
+      "Stage 模型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
   }
 ]

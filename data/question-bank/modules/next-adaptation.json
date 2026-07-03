@@ -1,1 +1,172 @@
-[]
+[
+  {
+    "id": "next-adaptation-001",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "适配平板、折叠屏和 2in1 等设备时，官方兼容性体验建议中特别强调哪类场景不能出现功能异常？",
+    "options": [
+      {
+        "id": "a",
+        "text": "设备多窗口模式下的页面功能"
+      },
+      {
+        "id": "b",
+        "text": "只在单一手机宽度下运行"
+      },
+      {
+        "id": "c",
+        "text": "只支持竖屏且不响应窗口变化"
+      },
+      {
+        "id": "d",
+        "text": "把布局尺寸全部写死为同一个像素值"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方应用基础功能和兼容性体验建议中提到，应用或元服务在设备多窗口模式下应无功能异常和兼容性问题。平板和折叠屏适配不能只按单一手机尺寸设计。",
+    "knowledgePoints": [
+      "多窗口适配",
+      "平板适配",
+      "兼容性体验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "next-adaptation-002",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "HarmonyOS NEXT 适配时，只要手机竖屏页面可用，就可以忽略平板、多窗口和折叠屏布局体验。",
+    "answerBoolean": false,
+    "explanation": "官方兼容性体验建议覆盖手机、折叠屏、平板、2in1 等设备，并强调多窗口模式下不能有功能异常。只验证手机竖屏不符合多设备体验要求。",
+    "knowledgePoints": [
+      "多设备适配",
+      "响应式布局",
+      "兼容性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "next-adaptation-003",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "做 HarmonyOS NEXT 适配和上架前检查时，哪些事项更应该纳入清单？",
+    "options": [
+      {
+        "id": "a",
+        "text": "检查平板、折叠屏、多窗口下的布局和功能"
+      },
+      {
+        "id": "b",
+        "text": "检查 build-profile.json5 中 SDK 版本和产品配置是否符合当前环境"
+      },
+      {
+        "id": "c",
+        "text": "处理 ArkTS 严格语法和 TypeScript 迁移差异"
+      },
+      {
+        "id": "d",
+        "text": "只要 Android 旧代码能编译，就不需要再核验 HarmonyOS 行为"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "NEXT 适配应覆盖多设备和多窗口体验、构建 SDK 配置以及 ArkTS 语法迁移差异。直接沿用旧平台代码而不核验 HarmonyOS 行为，会留下兼容性和构建风险。",
+    "knowledgePoints": [
+      "NEXT 适配",
+      "build-profile.json5",
+      "ArkTS 迁移"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "next-adaptation-004",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述一个刷题 App 做 HarmonyOS NEXT 适配时，你会重点验证哪些方面。",
+    "referenceAnswer": "应重点验证 ArkTS 严格语法、Stage 模型页面和生命周期、build-profile.json5 的 SDK/产品/签名配置，以及手机、平板、折叠屏和多窗口下的布局与功能。刷题 App 还要重点检查长列表、答题页、底部导航和记录页在不同窗口尺寸下是否可用。",
+    "scoringPoints": [
+      "提到 ArkTS 严格语法或迁移差异",
+      "提到 Stage 模型和生命周期",
+      "提到 build-profile.json5 配置",
+      "提到平板、折叠屏、多窗口适配",
+      "能结合刷题 App 页面场景说明"
+    ],
+    "explanation": "这类问题考察系统化适配思路。官方文档分别覆盖 ArkTS 适配、工程构建配置和多设备兼容性体验，回答应把它们落到具体 App 页面和交互上。",
+    "knowledgePoints": [
+      "NEXT 适配策略",
+      "多窗口",
+      "ArkTS",
+      "Stage 模型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "TypeScript 到 ArkTS 适配指南",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/typescript-to-arkts-migration-guide-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

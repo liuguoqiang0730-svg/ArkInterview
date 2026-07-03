@@ -1,1 +1,151 @@
-[]
+[
+  {
+    "id": "storage-001",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "保存主题、是否首次启动这类应用配置时，优先选择哪种本地数据形态更合适？",
+    "options": [
+      {
+        "id": "a",
+        "text": "用户首选项 Preferences"
+      },
+      {
+        "id": "b",
+        "text": "关系型数据库 RDB"
+      },
+      {
+        "id": "c",
+        "text": "页面路由参数"
+      },
+      {
+        "id": "d",
+        "text": "AbilityStage 生命周期回调"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方应用数据持久化概述说明，用户首选项通常用于保存应用的配置信息。主题、首次启动标记、简单开关值属于轻量配置，优先用 Preferences 更贴合场景。",
+    "knowledgePoints": [
+      "数据存储",
+      "Preferences",
+      "配置数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "storage-002",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "HarmonyOS 标准系统支持的典型应用数据持久化形态包括哪些？",
+    "options": [
+      {
+        "id": "a",
+        "text": "用户首选项 Preferences"
+      },
+      {
+        "id": "b",
+        "text": "键值型数据库 KV-Store"
+      },
+      {
+        "id": "c",
+        "text": "关系型数据库 RDB Store"
+      },
+      {
+        "id": "d",
+        "text": "页面栈 Router Stack"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "官方概述列出的典型存储数据形态包括用户首选项、键值型数据库和关系型数据库。页面栈属于导航运行状态，不是应用数据持久化形态。",
+    "knowledgePoints": [
+      "数据持久化",
+      "KV-Store",
+      "RDB Store"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "storage-003",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "键值型数据库 KV-Store 属于非关系型数据库，数据以键值对形式组织、索引和存储。",
+    "answerBoolean": true,
+    "explanation": "官方说明 KV-Store 是一种非关系型数据库，数据以“键值”对形式组织、索引和存储。因此它适合键值模型的数据，而不是复杂 SQL 关系查询。",
+    "knowledgePoints": [
+      "KV-Store",
+      "非关系型数据库",
+      "键值数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "storage-004",
+    "categoryId": "storage",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 Preferences、KV-Store、RDB Store 在应用数据存储选型上的典型区别。",
+    "referenceAnswer": "Preferences 适合轻量配置和简单键值；KV-Store 适合以键值对组织、索引和存储的非关系型数据；RDB Store 适合结构化表数据、条件查询和更复杂的数据关系。选型应由数据规模、结构复杂度和查询方式决定。",
+    "scoringPoints": [
+      "能说明 Preferences 适合配置类数据",
+      "能说明 KV-Store 是键值型非关系存储",
+      "能说明 RDB Store 适合结构化关系数据和查询",
+      "能结合数据规模和查询方式做选型"
+    ],
+    "explanation": "官方将应用数据持久化分为用户首选项、键值型数据库和关系型数据库。面试中应能按数据形态和访问模式说明选型，而不是所有数据都放一种存储。",
+    "knowledgePoints": [
+      "存储选型",
+      "Preferences",
+      "KV-Store",
+      "RDB Store"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-data-persistence-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

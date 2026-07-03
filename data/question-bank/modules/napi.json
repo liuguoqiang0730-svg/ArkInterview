@@ -1,1 +1,160 @@
-[]
+[
+  {
+    "id": "napi-001",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在 HarmonyOS 中需要实现 ArkTS/JS 与 C++ 的跨语言交互时，官方文档中对应的常见机制是什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "Node-API"
+      },
+      {
+        "id": "b",
+        "text": "router.pushUrl"
+      },
+      {
+        "id": "c",
+        "text": "Preferences.flush"
+      },
+      {
+        "id": "d",
+        "text": "UIAbility.onForeground"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方“使用Node-API实现跨语言交互开发流程”说明，Node-API 用于实现 ArkTS/JS 与 C++ 的跨语言交互。其它选项分别属于路由、数据持久化或生命周期能力。",
+    "knowledgePoints": [
+      "Node-API",
+      "ArkTS 与 C++ 交互",
+      "Native 模块"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "napi-002",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "使用 Node-API 做跨语言交互时，Native 模块需要按 Node-API 机制完成注册和加载，ArkTS/JS 侧再 import 模块并调用 C++ 方法。",
+    "answerBoolean": true,
+    "explanation": "官方流程说明首先要按照 Node-API 机制实现模块注册和加载；ArkTS/JS 侧通过 import 调用 C++ 方法。这是 Native 能力暴露给 ArkTS 的基本流程。",
+    "knowledgePoints": [
+      "模块注册",
+      "模块加载",
+      "ArkTS 调用 Native"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "napi-003",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于在项目中引入 Node-API Native 能力，哪些说法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "适合把已有 C/C++ 能力封装后提供给 ArkTS 调用"
+      },
+      {
+        "id": "b",
+        "text": "需要关注 Native 模块注册、加载以及 ArkTS 侧导入调用"
+      },
+      {
+        "id": "c",
+        "text": "所有 UI 状态同步都必须改成 Node-API 实现"
+      },
+      {
+        "id": "d",
+        "text": "Native 回调和线程场景要特别关注与 ArkTS 侧交互方式"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "Node-API 常用于封装 Native 能力并供 ArkTS/JS 调用。它不是 UI 状态管理的替代品；涉及回调或线程时，要根据官方 FAQ 和开发流程处理 Native 与 ArkTS 的交互边界。",
+    "knowledgePoints": [
+      "Native 封装",
+      "Node-API 模块",
+      "跨线程回调"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Node-API常见问题",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-faqs-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "napi-004",
+    "categoryId": "napi",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述 ArkTS 调用 C++ Native 能力的一般接入流程。",
+    "referenceAnswer": "一般先在 Native 侧按 Node-API 机制实现模块注册、加载和导出函数；再在 ArkTS/JS 侧 import 对应模块，调用导出的 C++ 方法；如果涉及 Native 回调 ArkTS 或子线程交互，还需要按官方 FAQ 处理线程与回调边界。",
+    "scoringPoints": [
+      "提到 Node-API 模块注册和加载",
+      "提到 Native 侧导出函数",
+      "提到 ArkTS/JS 侧 import 并调用",
+      "提到回调或线程场景需要额外关注"
+    ],
+    "explanation": "这道题考察的是 Node-API 接入流程，而不是具体 C++ 语法。回答应覆盖 Native 模块注册和加载、ArkTS 导入调用，以及复杂回调场景的边界处理。",
+    "knowledgePoints": [
+      "Node-API 流程",
+      "Native 模块",
+      "ArkTS 调用 C++"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-process-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Node-API常见问题",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/use-napi-faqs-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

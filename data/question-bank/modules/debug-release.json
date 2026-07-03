@@ -1,1 +1,154 @@
-[]
+[
+  {
+    "id": "debug-release-001",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "工程级编译、签名和产品配置通常主要查看哪个配置文件？",
+    "options": [
+      {
+        "id": "a",
+        "text": "build-profile.json5"
+      },
+      {
+        "id": "b",
+        "text": "pages.json"
+      },
+      {
+        "id": "c",
+        "text": "question-bank.json"
+      },
+      {
+        "id": "d",
+        "text": "router-map.json"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方快速入门说明 build-profile.json5 是工程级配置信息，包含 signingConfigs、products 等配置。编译 SDK、签名和产品配置问题应优先检查该文件。",
+    "knowledgePoints": [
+      "build-profile.json5",
+      "签名配置",
+      "产品配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "构建第一个ArkTS应用（Stage模型）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-v5/start-with-ets-stage-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "debug-release-002",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "HarmonyOS 运行环境下，build-profile.json5 中 compileSdkVersion 等 SDK 版本字段按官方说明应使用字符串形式。",
+    "answerBoolean": true,
+    "explanation": "build-profile.json5 配置说明中，HarmonyOS 运行环境的 SDK 版本字段类型为 string，并给出类似 4.1.0(11) 的配置示例。把它写成数字容易触发 schema 校验错误。",
+    "knowledgePoints": [
+      "compileSdkVersion",
+      "build-profile.json5",
+      "Schema 校验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "debug-release-003",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 DevEco Studio 中查看设备实时日志，常用哪个窗口？",
+    "options": [
+      {
+        "id": "a",
+        "text": "Log > HiLog"
+      },
+      {
+        "id": "b",
+        "text": "Database Inspector"
+      },
+      {
+        "id": "c",
+        "text": "Router Preview"
+      },
+      {
+        "id": "d",
+        "text": "Question Bank"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方 HiLog 配置文档说明，DevEco Studio 提供“Log > HiLog”窗口查看设备当前所有应用实时打印的日志信息。",
+    "knowledgePoints": [
+      "HiLog",
+      "DevEco Studio",
+      "调试日志"
+    ],
+    "sourceRefs": [
+      {
+        "title": "配置HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-setup-hilog-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "debug-release-004",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "遇到工程同步或构建失败时，简述你会优先检查哪些配置和信息。",
+    "referenceAnswer": "优先检查 build-profile.json5 的 products、SDK 版本字段和 signingConfigs；确认 SDK 版本写法符合当前 HarmonyOS 运行环境要求；构建或运行问题再结合 DevEco Studio 的 Log/HiLog、Hvigor 输出和具体错误位置定位。",
+    "scoringPoints": [
+      "提到 build-profile.json5",
+      "提到 SDK 版本字段和字符串写法",
+      "提到签名配置 signingConfigs",
+      "提到结合 Hvigor 输出或 HiLog 定位"
+    ],
+    "explanation": "同步和构建失败通常不一定是业务代码问题，先看工程级配置、SDK 版本、签名配置和构建日志。官方文档明确 build-profile.json5 的职责以及 HiLog 的日志查看入口。",
+    "knowledgePoints": [
+      "构建排障",
+      "Hvigor",
+      "HiLog",
+      "签名"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "配置HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-setup-hilog-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]

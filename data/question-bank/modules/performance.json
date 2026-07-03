@@ -1,1 +1,160 @@
-[]
+[
+  {
+    "id": "performance-001",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "长列表页面如果一次性循环渲染所有列表元素，官方更推荐采用哪类方式优化启动体验？",
+    "options": [
+      {
+        "id": "a",
+        "text": "使用懒加载方式按需加载列表项"
+      },
+      {
+        "id": "b",
+        "text": "把所有列表项都放进 aboutToAppear 中同步构造"
+      },
+      {
+        "id": "c",
+        "text": "把列表数据写进路由参数再渲染"
+      },
+      {
+        "id": "d",
+        "text": "取消滚动容器，让页面一次性撑开"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方长列表性能优化说明，直接循环渲染会一次性加载所有列表元素，导致页面启动时间过长，推荐通过懒加载方式改善体验。",
+    "knowledgePoints": [
+      "长列表性能",
+      "懒加载",
+      "启动耗时"
+    ],
+    "sourceRefs": [
+      {
+        "title": "长列表性能优化",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/cta-use-of-list-and-grid-components-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 1
+  },
+  {
+    "id": "performance-002",
+    "categoryId": "performance",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "延迟加载 lazy import 可以让待加载文件在冷启动阶段不加载，等实际需要时再按需同步加载，从而缩短冷启动耗时。",
+    "answerBoolean": true,
+    "explanation": "官方延迟加载文档说明，lazy import 的作用就是让待加载文件在冷启动阶段不被加载，运行过程中需要用到时再按需加载，因此可用于冷启动优化。",
+    "knowledgePoints": [
+      "lazy import",
+      "冷启动优化",
+      "模块加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-lazy-import-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 2
+  },
+  {
+    "id": "performance-003",
+    "categoryId": "performance",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "分析 AppFreeze 或界面卡顿问题时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "关注主线程近期耗时较长的任务和事件队列"
+      },
+      {
+        "id": "b",
+        "text": "把耗时计算、IO 等任务从 UI 主流程中拆出去"
+      },
+      {
+        "id": "c",
+        "text": "只增加动画时长，避免用户察觉卡顿"
+      },
+      {
+        "id": "d",
+        "text": "结合日志和性能工具定位具体耗时点"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "AppFreeze 分析要围绕主线程耗时任务、事件队列和具体日志或工具信息定位。单纯拉长动画不能解决主线程被阻塞或任务过重的问题。",
+    "knowledgePoints": [
+      "AppFreeze",
+      "主线程",
+      "性能分析"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分析AppFreeze（应用无响应）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/appfreeze-guidelines-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 3
+  },
+  {
+    "id": "performance-004",
+    "categoryId": "performance",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述一个题库 App 的长列表页面可以从哪些方面做性能优化。",
+    "referenceAnswer": "题库列表应避免一次性渲染所有题目，优先使用懒加载列表；重数据处理和筛选排序要避免阻塞主线程；非首屏模块可结合 lazy import 推迟加载；出现卡顿或 AppFreeze 时应结合日志、事件队列和性能工具定位耗时任务。",
+    "scoringPoints": [
+      "提到长列表懒加载",
+      "提到避免主线程耗时任务",
+      "提到可用 lazy import 优化冷启动",
+      "提到结合日志或性能工具定位卡顿"
+    ],
+    "explanation": "题库 App 常见瓶颈是长列表渲染、筛选排序和冷启动加载。官方文档分别给出了长列表懒加载、lazy import 和 AppFreeze 分析思路，可以组合成面试回答。",
+    "knowledgePoints": [
+      "长列表优化",
+      "冷启动",
+      "AppFreeze"
+    ],
+    "sourceRefs": [
+      {
+        "title": "长列表性能优化",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/cta-use-of-list-and-grid-components-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-lazy-import-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "分析AppFreeze（应用无响应）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/appfreeze-guidelines-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-03",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 4
+  }
+]
