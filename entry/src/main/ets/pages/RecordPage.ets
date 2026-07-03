@@ -309,14 +309,22 @@ struct RecordPage {
           .fontSize(12)
           .fontColor(COLOR_MUTED)
           .margin({ left: 10 })
+      }
+      .width('100%')
+      .margin({ top: 8 })
+
+      Row() {
+        Text(this.categoryPracticeHint(item))
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .layoutWeight(1)
         Text('去练习 >')
           .fontSize(12)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.progressColor(item.completionRate))
-          .margin({ left: 10 })
       }
       .width('100%')
-      .margin({ top: 8 })
+      .margin({ top: 7 })
     }
     .width('100%')
     .padding(14)
@@ -360,6 +368,16 @@ struct RecordPage {
       return '进行中';
     }
     return '未开始';
+  }
+
+  categoryPracticeHint(item: CategoryStats): string {
+    if (item.attempts === 0) {
+      return '从这个模块开始第一轮';
+    }
+    if (item.completionRate >= 1) {
+      return '继续巩固这个模块';
+    }
+    return '补齐这个模块的覆盖度';
   }
 
   isEmptyRecord(): boolean {
