@@ -33,6 +33,8 @@ struct ReviewListPage {
   @State private keyword: string = '';
   @State private categoryFilter: string = 'all';
   @State private typeFilter: string = 'all';
+  @State private difficultyFilter: string = 'all';
+  @State private sortMode: string = 'default';
   @State private wrongScope: string = 'active';
   @State private busyQuestionId: string = '';
 
@@ -170,6 +172,13 @@ struct ReviewListPage {
       Row() {
         this.FilterChip('模块', this.categoryFilterLabel(), COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextCategoryFilter())
         this.FilterChip('题型', this.typeFilterLabel(), COLOR_GREEN, COLOR_SOFT_GREEN, () => this.nextTypeFilter())
+        this.FilterChip('难度', this.difficultyFilterLabel(), COLOR_ORANGE, COLOR_SOFT_ORANGE, () => this.nextDifficultyFilter())
+      }
+      .width('100%')
+      .margin({ top: 10 })
+
+      Row() {
+        this.FilterChip('排序', this.sortModeLabel(), COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextSortMode())
         if (this.mode === 'wrongs') {
           this.FilterChip('范围', this.wrongScopeLabel(), COLOR_ORANGE, COLOR_SOFT_ORANGE, () => this.nextWrongScope())
         }
@@ -243,6 +252,22 @@ struct ReviewListPage {
           .padding({ left: 8, right: 8, top: 4, bottom: 4 })
           .borderRadius(8)
           .margin({ left: 6 })
+        Text(this.difficultyLabel(question.difficulty))
+          .fontSize(12)
+          .fontColor(COLOR_ORANGE)
+          .backgroundColor(COLOR_SOFT_ORANGE)
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .borderRadius(8)
+          .margin({ left: 6 })
+        if (question.wrong) {
+          Text(`错 ${question.wrong.wrongCount} 次`)
+            .fontSize(12)
+            .fontColor(COLOR_RED)
+            .backgroundColor(COLOR_SOFT_RED)
+            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .borderRadius(8)
+            .margin({ left: 6 })
+        }
         if (question.wrong && question.wrong.mastered === true) {
           Text('已掌握')
             .fontSize(12)
@@ -367,6 +392,9 @@ struct ReviewListPage {
       if (this.typeFilter !== 'all' && question.type !== this.typeFilter) {
         continue;
       }
+      if (this.difficultyFilter !== 'all' && question.difficulty !== this.difficultyFilter) {
+        continue;
+      }
       if (this.mode === 'wrongs' && this.wrongScope === 'active' && question.wrong?.mastered === true) {
         continue;
       }
@@ -375,7 +403,50 @@ struct ReviewListPage {
       }
       result.push(question);
     }
-    return result;
+    return this.sortQuestions(result);
+  }
+
+  sortQuestions(items: Question[]): Question[] {
+    const sorted: Question[] = [];
+    for (const item of items) {
+      sorted.push(item);
+    }
+    sorted.sort((left: Question, right: Question) => {
+      if (this.sortMode === 'difficulty') {
+        return this.difficultyRank(right.difficulty) - this.difficultyRank(left.difficulty);
+      }
+      if (this.sortMode === 'type') {
+        return this.typeRank(left.type) - this.typeRank(right.type);
+      }
+      if (this.sortMode === 'wrongCount') {
+        return (right.wrong?.wrongCount ?? 0) - (left.wrong?.wrongCount ?? 0);
+      }
+      return (left.order ?? 0) - (right.order ?? 0);
+    });
+    return sorted;
+  }
+
+  difficultyRank(difficulty: string): number {
+    if (difficulty === 'hard') {
+      return 3;
+    }
+    if (difficulty === 'medium') {
+      return 2;
+    }
+    return 1;
+  }
+
+  typeRank(type: string): number {
+    if (type === 'single') {
+      return 1;
+    }
+    if (type === 'multiple') {
+      return 2;
+    }
+    if (type === 'boolean') {
+      return 3;
+    }
+    return 4;
   }
 
   matchesKeyword(question: Question, keyword: string): boolean {
@@ -434,6 +505,32 @@ struct ReviewListPage {
     return '全部题型';
   }
 
+  difficultyFilterLabel(): string {
+    if (this.difficultyFilter === 'hard') {
+      return '困难';
+    }
+    if (this.difficultyFilter === 'medium') {
+      return '中等';
+    }
+    if (this.difficultyFilter === 'easy') {
+      return '基础';
+    }
+    return '全部难度';
+  }
+
+  sortModeLabel(): string {
+    if (this.sortMode === 'difficulty') {
+      return '按难度';
+    }
+    if (this.sortMode === 'type') {
+      return '按题型';
+    }
+    if (this.sortMode === 'wrongCount') {
+      return '错题次数';
+    }
+    return '默认顺序';
+  }
+
   wrongScopeLabel(): string {
     return this.wrongScope === 'all' ? '全部错题' : '未掌握';
   }
@@ -468,6 +565,30 @@ struct ReviewListPage {
       this.typeFilter = 'short';
     } else {
       this.typeFilter = 'all';
+    }
+  }
+
+  nextDifficultyFilter(): void {
+    if (this.difficultyFilter === 'all') {
+      this.difficultyFilter = 'easy';
+    } else if (this.difficultyFilter === 'easy') {
+      this.difficultyFilter = 'medium';
+    } else if (this.difficultyFilter === 'medium') {
+      this.difficultyFilter = 'hard';
+    } else {
+      this.difficultyFilter = 'all';
+    }
+  }
+
+  nextSortMode(): void {
+    if (this.sortMode === 'default') {
+      this.sortMode = 'difficulty';
+    } else if (this.sortMode === 'difficulty') {
+      this.sortMode = 'type';
+    } else if (this.sortMode === 'type') {
+      this.sortMode = this.mode === 'wrongs' ? 'wrongCount' : 'default';
+    } else {
+      this.sortMode = 'default';
     }
   }
 
@@ -578,6 +699,16 @@ struct ReviewListPage {
       return '判断题';
     }
     return '简答题';
+  }
+
+  difficultyLabel(difficulty: string): string {
+    if (difficulty === 'hard') {
+      return '困难';
+    }
+    if (difficulty === 'medium') {
+      return '中等';
+    }
+    return '基础';
   }
 
   typeColor(type: string): string {
