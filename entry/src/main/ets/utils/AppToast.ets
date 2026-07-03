@@ -2,6 +2,10 @@ import promptAction from '@ohos.promptAction';
 
 export class AppToast {
   static show(message: string): void {
-    promptAction.showToast({ message });
+    try {
+      promptAction.showToast({ message });
+    } catch (error) {
+      console.error(`toast failed: ${String(error)}`);
+    }
   }
 }
