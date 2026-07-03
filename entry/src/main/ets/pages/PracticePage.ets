@@ -112,6 +112,7 @@ struct PracticePage {
         .constraintSize({ maxWidth: this.pageMaxWidth() })
         .alignSelf(ItemAlign.Center)
         .margin({ top: this.isTablet ? 20 : 0 })
+        .shadow({ radius: 16, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
 
         if (this.loading) {
           Column() {
@@ -138,14 +139,25 @@ struct PracticePage {
               .lineHeight(19)
               .textAlign(TextAlign.Center)
               .margin({ top: 8 })
+            Button('返回首页')
+              .height(38)
+              .fontSize(13)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#ffffff')
+              .backgroundColor(COLOR_GREEN)
+              .borderRadius(8)
+              .margin({ top: 16 })
+              .onClick(() => AppRouter.push('pages/HomePage'))
           }
           .width('100%')
           .padding(20)
           .margin({ left: 16, right: 16, top: 20 })
           .backgroundColor(COLOR_SURFACE)
           .borderRadius(8)
+          .border({ width: 1, color: COLOR_LINE })
           .constraintSize({ maxWidth: this.pageMaxWidth() })
           .alignSelf(ItemAlign.Center)
+          .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: 7 })
         } else {
           if (this.isTablet) {
             this.TabletPracticeWorkspace()
@@ -215,12 +227,22 @@ struct PracticePage {
           .fontColor(COLOR_MUTED)
           .lineHeight(18)
           .margin({ top: 6 })
+        Button('清空筛选')
+          .height(36)
+          .fontSize(13)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#ffffff')
+          .backgroundColor(COLOR_GREEN)
+          .borderRadius(8)
+          .margin({ top: 14 })
+          .onClick(() => this.resetFilters())
       }
       .width('100%')
       .padding(18)
       .backgroundColor(COLOR_SURFACE)
       .borderRadius(8)
       .border({ width: 1, color: COLOR_LINE })
+      .shadow({ radius: 10, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
     } else {
       List() {
         ForEach(this.filteredQuestions(), (question: Question) => {
