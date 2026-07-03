@@ -173,7 +173,17 @@ struct QuestionPage {
   @Builder
   ProgressButton() {
     Row() {
-      Text('题卡')
+      Text(this.questionCardStateMark())
+        .fontSize(10)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.showProgressPanel ? COLOR_BLUE : '#ffffff')
+        .textAlign(TextAlign.Center)
+        .width(18)
+        .height(18)
+        .backgroundColor(this.showProgressPanel ? '#ffffff' : this.questionCardToneColor())
+        .borderRadius(9)
+        .margin({ right: 7 })
+      Text(this.questionCardTitle())
         .fontSize(13)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.showProgressPanel ? '#ffffff' : COLOR_BLUE)
@@ -1186,6 +1196,33 @@ struct QuestionPage {
 
   questionCardSummary(): string {
     return `${this.answeredCount()}/${this.questionIds.length || 1}`;
+  }
+
+  questionCardTitle(): string {
+    if (this.showProgressPanel) {
+      return '收起';
+    }
+    if (this.unansweredCount() === 0) {
+      return '完成';
+    }
+    return '题卡';
+  }
+
+  questionCardStateMark(): string {
+    if (this.showProgressPanel) {
+      return '↑';
+    }
+    if (this.unansweredCount() === 0) {
+      return '✓';
+    }
+    return String(this.unansweredCount());
+  }
+
+  questionCardToneColor(): string {
+    if (this.unansweredCount() === 0) {
+      return COLOR_GREEN;
+    }
+    return COLOR_BLUE;
   }
 
   answeredCount(): number {
