@@ -69,6 +69,13 @@ async function runChecks() {
   const publishedQuestions = await getJson('/api/questions?pageSize=20');
   assert(publishedQuestions.total === seedPublishedTotal + 4, 'verified smoke questions should be added');
 
+  const secondPage = await getJson('/api/questions?page=2&pageSize=5');
+  assert(secondPage.page === 2, 'questions pagination should keep requested page');
+  assert(secondPage.pageSize === 5, 'questions pagination should keep requested page size');
+  assert(secondPage.items.length === 5, 'questions pagination should return page-sized items');
+  assert(secondPage.total === seedPublishedTotal + 4, 'questions pagination should preserve total');
+  assert(secondPage.totalPages >= 2, 'questions pagination should include total pages');
+
   const questionDetail = await getJson('/api/questions/q-smoke-single');
   assert(questionDetail.item.sourceRefs.length > 0, 'question detail should include official sources');
 
@@ -84,6 +91,12 @@ async function runChecks() {
     selectedOptionIds: ['b']
   });
   assert(correctAnswer.isCorrect === true, 'correct answer should be accepted');
+
+  const missingAnswer = await postJson('/api/answers/submit', {
+    questionId: 'q-missing',
+    selectedOptionIds: ['a']
+  }, false);
+  assert(missingAnswer.status === 404, 'submitting a missing question should return 404');
 
   await postJson('/api/answers/submit', {
     questionId: 'q-smoke-single',
