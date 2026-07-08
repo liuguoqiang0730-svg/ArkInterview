@@ -86,7 +86,6 @@ struct HomePage {
         this.HomeHeader()
         this.OverviewPanel()
         this.ActionGrid()
-        this.InterviewShareEntry()
       }
       .layoutWeight(4)
       .height('100%')
@@ -95,6 +94,7 @@ struct HomePage {
       .justifyContent(FlexAlign.Start)
 
       Column() {
+        this.InterviewShareSection()
         this.CategoryHeader()
         if (this.loading) {
           LoadingProgress()
@@ -129,7 +129,7 @@ struct HomePage {
       this.HomeHeader()
       this.OverviewPanel()
       this.ActionGrid()
-      this.InterviewShareEntry()
+      this.InterviewShareSection()
       this.CategorySection()
     }
     .width('100%')
@@ -290,6 +290,27 @@ struct HomePage {
     }
     .width('100%')
     .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 16 })
+  }
+
+  @Builder
+  InterviewShareSection() {
+    Column() {
+      Row() {
+        Text('面试专题')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+          .layoutWeight(1)
+        Text('高频开放题 · 16 题')
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+      }
+      .width('100%')
+      .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 10 })
+
+      this.InterviewShareEntry()
+    }
+    .width('100%')
   }
 
   @Builder
