@@ -86,6 +86,7 @@ struct HomePage {
         this.HomeHeader()
         this.OverviewPanel()
         this.ActionGrid()
+        this.InterviewShareEntry()
       }
       .layoutWeight(4)
       .height('100%')
@@ -128,6 +129,7 @@ struct HomePage {
       this.HomeHeader()
       this.OverviewPanel()
       this.ActionGrid()
+      this.InterviewShareEntry()
       this.CategorySection()
     }
     .width('100%')
@@ -288,6 +290,73 @@ struct HomePage {
     }
     .width('100%')
     .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 16 })
+  }
+
+  @Builder
+  InterviewShareEntry() {
+    Column() {
+      Row() {
+        Text('面')
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_BLUE)
+          .textAlign(TextAlign.Center)
+          .width(38)
+          .height(38)
+          .backgroundColor(COLOR_SOFT_BLUE)
+          .borderRadius(8)
+          .margin({ right: 12 })
+
+        Column() {
+          Text('常见面试题分享')
+            .fontSize(17)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+            .width('100%')
+          Text('16 个高频开放题，按官方口径整理答案和图解')
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .lineHeight(18)
+            .margin({ top: 5 })
+            .width('100%')
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        Text('>')
+          .fontSize(18)
+          .fontColor(COLOR_BLUE)
+      }
+      .width('100%')
+
+      Row() {
+        this.ShareTag('Stage')
+        this.ShareTag('ArkUI')
+        this.ShareTag('状态管理')
+        this.ShareTag('一多适配')
+      }
+      .width('100%')
+      .margin({ top: 14 })
+    }
+    .width('100%')
+    .padding(14)
+    .margin({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 16 })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 12, color: COLOR_SHADOW, offsetX: 0, offsetY: 6 })
+    .onClick(() => this.openInterviewExperience())
+  }
+
+  @Builder
+  ShareTag(label: string) {
+    Text(label)
+      .fontSize(12)
+      .fontColor(COLOR_BLUE)
+      .backgroundColor(COLOR_SOFT_BLUE)
+      .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+      .borderRadius(8)
+      .margin({ right: 6 })
   }
 
   @Builder
@@ -641,5 +710,9 @@ struct HomePage {
       categoryId: category?.id ?? '',
       title: category?.name ?? ''
     });
+  }
+
+  openInterviewExperience(): void {
+    AppRouter.push('pages/InterviewExperiencePage');
   }
 }
