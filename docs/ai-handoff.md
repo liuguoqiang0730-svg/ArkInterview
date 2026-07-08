@@ -64,7 +64,7 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 22. 新增错题/收藏管理页：底部导航进入列表管理，可搜索、按模块/题型筛选、按当前筛选复习；收藏支持取消收藏，错题支持标记掌握。
 23. 错题/收藏管理页增加难度筛选和排序：支持默认、按难度、按题型排序；错题页额外支持按错误次数排序。
 24. 路由和 Toast 已统一封装到 `entry/src/main/ets/utils/AppRouter.ets` 和 `entry/src/main/ets/utils/AppToast.ets`，页面层不再直接调用 `router` / `promptAction.showToast`。
-25. 新增“常见面试题分享”独立页面：`entry/src/main/ets/pages/InterviewExperiencePage.ets`，首页单独入口，包含 16 个高频开放面试题、解释答案、面试要点、官方依据和按官方结构重绘的图解卡片。
+25. 新增“常见面试题分享”独立页面：`entry/src/main/ets/pages/InterviewExperiencePage.ets`，首页单独入口，包含 16 个高频开放面试题、解释答案、面试要点、官方依据；可匹配的题目会直接展示华为开发者文档官方 CDN 图片，纯文字 API 题保留结构化学习图。
 
 题库当前状态：
 

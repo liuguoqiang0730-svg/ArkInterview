@@ -450,6 +450,7 @@ struct InterviewExperiencePage {
       this.AnswerHeader()
       this.AnswerBlock()
       this.KeyPointBlock()
+      this.OfficialImageBlock()
       this.VisualBlock()
       this.SourceBlock()
     }
@@ -560,6 +561,38 @@ struct InterviewExperiencePage {
   }
 
   @Builder
+  OfficialImageBlock() {
+    if (this.officialImageUrl().length > 0) {
+      Column() {
+        Row() {
+          Text('官方原图')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+            .layoutWeight(1)
+          Text(this.officialImageSource())
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+        }
+        .width('100%')
+        .margin({ bottom: 12 })
+
+        Image(this.officialImageUrl())
+          .width('100%')
+          .constraintSize({ maxHeight: this.isTablet ? 360 : 260 })
+          .objectFit(ImageFit.Contain)
+          .backgroundColor('#ffffff')
+          .borderRadius(8)
+      }
+      .width('100%')
+      .padding(14)
+      .margin({ top: 20 })
+      .backgroundColor('#f6f8fb')
+      .borderRadius(8)
+      .border({ width: 1, color: COLOR_LINE })
+    }
+  }
+  @Builder
   VisualBlock() {
     Column() {
       Text(this.currentQuestion().visualTitle)
@@ -654,7 +687,7 @@ struct InterviewExperiencePage {
         .border({ width: { bottom: 1 }, color: COLOR_LINE })
       }, (source: string) => source)
 
-      Text('说明：页面中的图解为按官方文档结构重绘的学习图，不直接搬运官方图片。')
+      Text('说明：上方优先展示可匹配到的官方原图；部分纯文字 API 文档没有官方配图时，继续使用结构化学习图辅助理解。')
         .fontSize(12)
         .fontColor(COLOR_MUTED)
         .lineHeight(19)
@@ -676,6 +709,56 @@ struct InterviewExperiencePage {
     return INTERVIEW_QUESTIONS[this.selectedIndex];
   }
 
+  officialImageUrl(): string {
+    const id = this.currentQuestion().id;
+    const stageMain = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165516.12511130782831718348495875756103:50001231000000:2800:25673E33B577E82BA10148CF87375F37ED12B69A57471FE00704C97F33AE674D.png';
+    const stageSecond = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165516.10191332575616953294548628096297:50001231000000:2800:23C96AC1F14E16DF27C917B54D2A690EFB9661085C5DFBC0B3C4F8E84F289A9D.png';
+    const stagePackage = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165517.49393395611960099920348597179424:50001231000000:2800:79E3C97EF4B10DDF61C72A8868E7024AC40FAE9E3988C896692F3A52B54A8B0E.png';
+    const arkuiOverview = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165850.23829896734382038425938112575418:50001231000000:2800:C6AD3F1F7067B0AF1232FC17BD679295B618205B13E668370FCCDA25FF74D238.png';
+    const stateOverview = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165524.39349138882082066526555706903094:50001231000000:2800:DD1A2B36D857E0B900B7762467DD7B988B40AD275B499A8ACFAA394BF47140AC.png';
+    const stateFlow = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165524.86996992020281498568724616556632:50001231000000:2800:E1927FA58BEDF1B3A8DA836B2F63D33D0378C75801D3706C74918ED5D764E5B4.png';
+    const stateObject = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165524.17771775163729110118782028788845:50001231000000:2800:A8F9214C0CD5F2D39CBBD74D9F948C1127E01A6CF5643E9D7734879586981720.png';
+    const stateDecorator = 'https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250314165524.11990269869709231553847522300893:50001231000000:2800:59A2B35262B6B77D30C6FD74FCFCC1F9CA9FCDD3A4088031790ED2D8E529A2E1.png';
+    if (id === 'stage-model-basic') {
+      return stageMain;
+    }
+    if (id === 'package-difference' || id === 'cross-module-message') {
+      return stagePackage;
+    }
+    if (id === 'lifecycle-flow') {
+      return stageSecond;
+    }
+    if (id === 'arkts-ts' || id === 'responsive-declarative' || id === 'one-code-multi-device') {
+      return arkuiOverview;
+    }
+    if (id === 'data-sharing' || id === 'ancestor-descendant-refresh') {
+      return stateFlow;
+    }
+    if (id === 'realtime-refresh-sync' || id === 'dark-light-mode') {
+      return stateOverview;
+    }
+    if (id === 'decorator-v1-v2') {
+      return stateObject;
+    }
+    if (id === 'common-decorators') {
+      return stateDecorator;
+    }
+    return '';
+  }
+
+  officialImageSource(): string {
+    const id = this.currentQuestion().id;
+    if (id === 'stage-model-basic' || id === 'package-difference' || id === 'cross-module-message' || id === 'lifecycle-flow') {
+      return '华为开发者文档 · Stage 模型';
+    }
+    if (id === 'arkts-ts' || id === 'responsive-declarative' || id === 'one-code-multi-device') {
+      return '华为开发者文档 · ArkUI';
+    }
+    if (id === 'data-sharing' || id === 'ancestor-descendant-refresh' || id === 'realtime-refresh-sync' || id === 'dark-light-mode' || id === 'decorator-v1-v2' || id === 'common-decorators') {
+      return '华为开发者文档 · 状态管理';
+    }
+    return '';
+  }
   visualNote(index: number): string {
     const notes = this.currentQuestion().visualNotes;
     if (index < 0 || index >= notes.length) {
