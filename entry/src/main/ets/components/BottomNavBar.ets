@@ -19,6 +19,7 @@ export struct BottomNavBar {
       this.NavItem('错', '错题', '复盘', 'wrongs')
       this.NavItem('藏', '收藏', '重点', 'favorites')
       this.NavItem('记', '记录', '进度', 'records')
+      this.NavItem('我', '我的', '账户', 'profile')
     }
     .width('100%')
     .height(this.isTablet ? 72 : 64)
@@ -84,6 +85,10 @@ export struct BottomNavBar {
     }
     if (target === 'records') {
       AppRouter.push(this.getUIContext(), 'pages/RecordPage');
+      return;
+    }
+    if (target === 'profile') {
+      AppRouter.push(this.getUIContext(), 'pages/MyPage');
       return;
     }
     if (target === 'wrongs') {

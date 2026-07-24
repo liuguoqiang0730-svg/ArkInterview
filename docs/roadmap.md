@@ -34,6 +34,7 @@
 - 保持匿名模式完整可用，不强制登录。
 - 已完成服务端华为 Authorization Code 验证和 ArkInterview 会话签发，不自建密码体系。
 - 已完成首次登录合并匿名收藏、错题和答题记录。
-- 待接入 HarmonyOS Account Kit 客户端和“我的”页面。
+- 已接入 HarmonyOS Account Kit 客户端、“我的”页面、AssetStore 会话恢复和 Token 自动刷新。
+- 待完成 AGC 正式 Client ID、生产 HTTPS 和真实账号联调。
 - 登录用户可选择是否参与周榜、总榜和分类榜。
 - 排行榜只统计服务端确认的客观题有效作答。

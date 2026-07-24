@@ -11,6 +11,12 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
+    "metadata": [
+      {
+        "name": "client_id",
+        "value": "HUAWEI_CLIENT_ID_PENDING"
+      }
+    ],
     "abilities": [
       {
         "name": "EntryAbility",

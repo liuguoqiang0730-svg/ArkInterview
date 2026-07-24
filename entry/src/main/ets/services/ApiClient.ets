@@ -1,6 +1,15 @@
 import http from '@ohos.net.http';
 import { API_BASE_URL } from '../app/AppConfig';
 import {
+  ApiErrorResponse,
+  AuthStatusResponse,
+  AuthTokenResponse,
+  HuaweiLoginRequest,
+  RefreshTokenRequest,
+  SuccessResponse,
+  UserProfileResponse
+} from '../models/AccountModels';
+import {
   Category,
   ItemResult,
   ListResult,
@@ -14,6 +23,17 @@ import {
   UserStats
 } from '../models/QuestionModels';
 import { DeviceIdentity } from '../utils/DeviceIdentity';
+import { AuthSessionStore } from './AuthSessionStore';
+
+export class ApiRequestError extends Error {
+  readonly statusCode: number;
+
+  constructor(statusCode: number, message: string) {
+    super(message);
+    this.name = 'ApiRequestError';
+    this.statusCode = statusCode;
+  }
+}
 
 export class ApiClient {
   private baseUrl: string;
@@ -22,6 +42,38 @@ export class ApiClient {
   constructor(baseUrl: string = API_BASE_URL, deviceId?: string) {
     this.baseUrl = baseUrl;
     this.deviceIdOverride = deviceId;
+  }
+
+  isSecureAuthTransport(): boolean {
+    return this.baseUrl.toLowerCase().startsWith('https://');
+  }
+
+  async getAuthStatus(): Promise<AuthStatusResponse> {
+    return this.request<AuthStatusResponse>('/auth/status', 'GET', undefined, false, false);
+  }
+
+  async loginWithHuawei(authorizationCode: string): Promise<AuthTokenResponse> {
+    this.requireSecureAuthTransport();
+    const payload: HuaweiLoginRequest = {
+      authorizationCode: authorizationCode
+    };
+    const response = await this.request<AuthTokenResponse>('/auth/huawei', 'POST', payload, false, false);
+    await AuthSessionStore.save(response);
+    return response;
+  }
+
+  async getProfile(): Promise<UserProfileResponse> {
+    return this.request<UserProfileResponse>('/users/me/profile');
+  }
+
+  async logout(): Promise<void> {
+    try {
+      if (this.isSecureAuthTransport() && AuthSessionStore.accessToken().length > 0) {
+        await this.request<SuccessResponse>('/auth/logout', 'POST');
+      }
+    } finally {
+      await AuthSessionStore.clear();
+    }
   }
 
   async getCategories(): Promise<Category[]> {
@@ -88,7 +140,10 @@ export class ApiClient {
   }
 
   async removeFavorite(questionId: string): Promise<string[]> {
-    const result = await this.request<ListResult<string>>(`/users/me/favorites/${encodeURIComponent(questionId)}`, 'DELETE');
+    const result = await this.request<ListResult<string>>(
+      `/users/me/favorites/${encodeURIComponent(questionId)}`,
+      'DELETE'
+    );
     return result.items;
   }
 
@@ -96,31 +151,119 @@ export class ApiClient {
     await this.request<ItemResult<object>>(`/users/me/wrongs/${encodeURIComponent(questionId)}/mastered`, 'POST');
   }
 
-  private async request<T>(path: string, method: HttpMethod = 'GET', body?: object): Promise<T> {
+  private async request<T>(
+    path: string,
+    method: HttpMethod = 'GET',
+    body?: object,
+    allowRefresh: boolean = true,
+    includeAuth: boolean = true
+  ): Promise<T> {
+    try {
+      return await this.performRequest<T>(path, method, body, includeAuth);
+    } catch (error) {
+      if (error instanceof ApiRequestError &&
+        error.statusCode === 401 &&
+        allowRefresh &&
+        includeAuth &&
+        this.isSecureAuthTransport() &&
+        AuthSessionStore.refreshToken().length > 0) {
+        await this.refreshSession();
+        return this.performRequest<T>(path, method, body, true);
+      }
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(String(error));
+    }
+  }
+
+  private async refreshSession(): Promise<void> {
+    this.requireSecureAuthTransport();
+    const payload: RefreshTokenRequest = {
+      refreshToken: AuthSessionStore.refreshToken()
+    };
+    try {
+      const response = await this.performRequest<AuthTokenResponse>('/auth/refresh', 'POST', payload, false);
+      await AuthSessionStore.save(response);
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.statusCode === 401) {
+        await AuthSessionStore.clear();
+      }
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(String(error));
+    }
+  }
+
+  private async performRequest<T>(
+    path: string,
+    method: HttpMethod,
+    body: object | undefined,
+    includeAuth: boolean
+  ): Promise<T> {
     const request = http.createHttp();
     const url = `${this.baseUrl}${path}`;
+    const token = includeAuth && this.isSecureAuthTransport() ? AuthSessionStore.accessToken() : '';
     try {
-      const response = await request.request(url, {
-        method: this.toRequestMethod(method),
-        header: {
-          'Content-Type': 'application/json',
-          'X-Device-Id': this.deviceIdOverride ?? DeviceIdentity.getId()
-        },
-        extraData: body ? JSON.stringify(body) : undefined,
-        connectTimeout: 10000,
-        readTimeout: 10000
-      });
+      let options: http.HttpRequestOptions;
+      if (token.length > 0) {
+        options = {
+          method: this.toRequestMethod(method),
+          header: {
+            'Content-Type': 'application/json',
+            'X-Device-Id': this.deviceIdOverride ?? DeviceIdentity.getId(),
+            'Authorization': `Bearer ${token}`
+          },
+          extraData: body ? JSON.stringify(body) : undefined,
+          connectTimeout: 10000,
+          readTimeout: 10000
+        };
+      } else {
+        options = {
+          method: this.toRequestMethod(method),
+          header: {
+            'Content-Type': 'application/json',
+            'X-Device-Id': this.deviceIdOverride ?? DeviceIdentity.getId()
+          },
+          extraData: body ? JSON.stringify(body) : undefined,
+          connectTimeout: 10000,
+          readTimeout: 10000
+        };
+      }
 
+      const response = await request.request(url, options);
       const code = response.responseCode;
       const text = response.result ? String(response.result) : '{}';
       if (code < 200 || code >= 300) {
-        throw new Error(`HTTP ${code}: ${text}`);
+        throw new ApiRequestError(code, this.errorMessage(code, text));
       }
       return JSON.parse(text) as T;
     } catch (error) {
-      throw new Error(`请求失败：${url}。请确认后端已启动，并且设备能访问该地址。${String(error)}`);
+      if (error instanceof ApiRequestError) {
+        throw error;
+      }
+      throw new Error(`请求失败：${url}。请确认网络正常且后端服务可以访问。${String(error)}`);
     } finally {
       request.destroy();
+    }
+  }
+
+  private errorMessage(statusCode: number, responseText: string): string {
+    try {
+      const payload = JSON.parse(responseText) as ApiErrorResponse;
+      const message = payload.error ?? payload.message;
+      if (message && message.trim().length > 0) {
+        return message;
+      }
+    } catch (error) {
+    }
+    return `服务请求失败（HTTP ${statusCode}）`;
+  }
+
+  private requireSecureAuthTransport(): void {
+    if (!this.isSecureAuthTransport()) {
+      throw new Error('登录仅支持 HTTPS 服务地址，当前配置不会发送任何账号凭证');
     }
   }
 

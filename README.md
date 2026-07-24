@@ -46,7 +46,7 @@ npm run questions:sync-db
 
 ## 可选华为账号登录
 
-后端已经支持华为 Authorization Code 验证、匿名学习记录合并、ArkInterview 访问/刷新令牌轮换和退出登录。匿名刷题不受影响；HarmonyOS Account Kit 客户端和“我的”页面尚未接入。
+后端已经支持华为 Authorization Code 验证、匿名学习记录合并、ArkInterview 访问/刷新令牌轮换和退出登录。HarmonyOS 客户端已增加 Account Kit 官方登录按钮、“我的”页面、AssetStore 加密会话保存和 Token 自动刷新；匿名刷题始终可用。
 
 启用登录前，在服务端同时配置以下三个变量，缺少任意一个时服务会拒绝以不完整配置启动：
 
@@ -57,6 +57,8 @@ export HUAWEI_REDIRECT_URI="<registered redirect uri>"
 ```
 
 可选令牌有效期变量为 `AUTH_ACCESS_TTL_SECONDS` 和 `AUTH_REFRESH_TTL_SECONDS`，默认分别为 `900` 秒和 `2592000` 秒。`HUAWEI_CLIENT_SECRET`、华为授权码和所有明文令牌都不能写入仓库或日志，公网登录接口必须使用 HTTPS。
+
+客户端还需要填写 AGC OAuth Client ID，并把 API 地址切换为 HTTPS。完整步骤和验收项见 [`docs/huawei-account-setup.md`](docs/huawei-account-setup.md)。当前仓库使用 `HUAWEI_CLIENT_ID_PENDING` 占位符且公网 API 仍是 HTTP，因此登录入口会安全禁用，不影响匿名使用。
 
 ## 发布远程题库
 

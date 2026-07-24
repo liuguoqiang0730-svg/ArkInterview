@@ -5,6 +5,7 @@
     "pages/QuestionPage",
     "pages/InterviewExperiencePage",
     "pages/ReviewListPage",
-    "pages/RecordPage"
+    "pages/RecordPage",
+    "pages/MyPage"
   ]
 }
