@@ -430,6 +430,14 @@ export class SqliteStore {
     save();
   }
 
+  saveUserProfile(user, metadata) {
+    const save = this.database.transaction(() => {
+      this.saveMetadataRecord(metadata);
+      this.saveUserRecord(user);
+    });
+    save();
+  }
+
   recordAnswer(user, answer, wrong, metadata) {
     const save = this.database.transaction(() => {
       this.saveMetadataRecord(metadata);

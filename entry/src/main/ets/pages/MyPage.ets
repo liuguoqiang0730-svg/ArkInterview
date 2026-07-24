@@ -39,6 +39,7 @@ struct MyPage {
   @State private refreshing: boolean = false;
   @State private loginBusy: boolean = false;
   @State private logoutBusy: boolean = false;
+  @State private preferenceBusy: boolean = false;
   @State private agreementAccepted: boolean = false;
   @State private authenticated: boolean = false;
   @State private currentUser: AuthUser | undefined = undefined;
@@ -191,6 +192,29 @@ struct MyPage {
     this.loginButtonController.setAgreementStatus(accepted ?
       loginComponentManager.AgreementStatus.ACCEPTED :
       loginComponentManager.AgreementStatus.NOT_ACCEPTED);
+  }
+
+  private async updateLeaderboardPreference(enabled: boolean): Promise<void> {
+    if (this.preferenceBusy) {
+      return;
+    }
+    if (!this.authenticated || !api.isSecureAuthTransport()) {
+      AppToast.show(this.getUIContext(), '排行榜设置需要登录并使用 HTTPS 服务');
+      return;
+    }
+
+    this.preferenceBusy = true;
+    try {
+      this.currentUser = await api.updateLeaderboardPreference(enabled);
+      AppToast.show(
+        this.getUIContext(),
+        enabled ? '已同意参与排行榜' : '已退出排行榜'
+      );
+    } catch (error) {
+      AppToast.show(this.getUIContext(), `排行榜设置失败：${this.readableError(error)}`);
+    } finally {
+      this.preferenceBusy = false;
+    }
   }
 
   private updateLoginButtonState(): void {
@@ -402,7 +426,7 @@ struct MyPage {
       if (this.authenticated) {
         this.AccountInfoRow('登录方式', '华为账号', COLOR_GREEN)
         this.AccountInfoRow('云端档案', '已连接', COLOR_GREEN)
-        this.AccountInfoRow('排行榜', this.currentUser?.leaderboardOptIn ? '已参与' : '未参与', COLOR_MUTED)
+        this.LeaderboardPreferenceRow()
 
         Button(this.logoutBusy ? '正在退出' : '退出登录')
           .width('100%')
@@ -506,6 +530,42 @@ struct MyPage {
     }
     .width('100%')
     .height(32)
+  }
+
+  @Builder
+  LeaderboardPreferenceRow() {
+    Row() {
+      Column() {
+        Text('参与排行榜')
+          .fontSize(13)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+        Text('允许使用有效客观题成绩，默认关闭')
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 3 })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      if (this.preferenceBusy) {
+        LoadingProgress()
+          .width(22)
+          .height(22)
+          .color(COLOR_GREEN)
+          .margin({ right: 8 })
+      }
+
+      Toggle({
+        type: ToggleType.Switch,
+        isOn: this.currentUser?.leaderboardOptIn ?? false
+      })
+        .selectedColor(COLOR_GREEN)
+        .enabled(!this.preferenceBusy && api.isSecureAuthTransport())
+        .onChange((enabled: boolean) => this.updateLeaderboardPreference(enabled))
+    }
+    .width('100%')
+    .padding({ top: 10, bottom: 8 })
   }
 
   @Builder

@@ -71,6 +71,22 @@ async function runChecks() {
   assert(anonymousProfile.authenticated === false, 'anonymous profile should not be authenticated');
   assert(anonymousProfile.user === null, 'anonymous profile should not expose an account profile');
 
+  const anonymousLeaderboardPreference = await fetch(
+    `${baseUrl}/api/users/me/leaderboard-preference`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Device-Id': 'smoke-test'
+      },
+      body: JSON.stringify({ enabled: true })
+    }
+  );
+  assert(
+    anonymousLeaderboardPreference.status === 401,
+    'anonymous users should not change leaderboard participation'
+  );
+
   const disabledHuaweiLogin = await postJson('/api/auth/huawei', {
     authorizationCode: 'smoke-authorization-code'
   }, false);

@@ -91,6 +91,29 @@ try {
   assert.equal(signedIn.authenticated, true, 'issued access token should authenticate');
   assert.equal(signedIn.user.id, firstLogin.user.id, 'access token should resolve the login user');
   assert.throws(
+    () => auth.updateLeaderboardPreference(anonymousAfterLogin, true),
+    (error) => error instanceof AuthError && error.status === 401,
+    'anonymous users must not opt into the leaderboard'
+  );
+  assert.throws(
+    () => auth.updateLeaderboardPreference(signedIn, 'true'),
+    (error) => error instanceof AuthError && error.status === 400,
+    'leaderboard preference must use a boolean value'
+  );
+  const leaderboardProfile = auth.updateLeaderboardPreference(signedIn, true);
+  assert.equal(
+    leaderboardProfile.user.leaderboardOptIn,
+    true,
+    'authenticated users should be able to explicitly opt into the leaderboard'
+  );
+  assert.equal(
+    opened.store.database.prepare(
+      'SELECT leaderboard_opt_in FROM users WHERE id = ?'
+    ).get(firstLogin.user.id).leaderboard_opt_in,
+    1,
+    'leaderboard preference should persist immediately'
+  );
+  assert.throws(
     () => auth.resolvePrincipal('Basic invalid', 'device-phone'),
     (error) => error instanceof AuthError && error.status === 401,
     'unsupported authorization headers should be rejected'
@@ -176,6 +199,7 @@ try {
     'linked account should only use an internal account anchor'
   );
   assert.equal(persistedAccount.answers.length, 2, 'merged answers should persist');
+  assert.equal(persistedAccount.leaderboardOptIn, true, 'leaderboard preference should survive account merges');
   const storedSession = opened.store.database.prepare(
     'SELECT access_token_hash, refresh_token_hash FROM auth_sessions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1'
   ).get(mergedLogin.user.id);

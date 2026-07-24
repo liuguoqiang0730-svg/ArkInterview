@@ -180,6 +180,22 @@ export class AuthService {
     };
   }
 
+  updateLeaderboardPreference(principal, enabled) {
+    if (!principal.authenticated) {
+      throw new AuthError(401, '请先登录后再设置排行榜参与状态');
+    }
+    if (typeof enabled !== 'boolean') {
+      throw new AuthError(400, 'enabled 必须是布尔值');
+    }
+
+    const now = this.nowIso();
+    principal.user.leaderboardOptIn = enabled;
+    principal.user.updatedAt = now;
+    this.db.meta.updatedAt = now;
+    this.store.saveUserProfile(principal.user, this.db.meta);
+    return this.profile(principal);
+  }
+
   nowIso() {
     const value = this.now();
     return (value instanceof Date ? value : new Date(value)).toISOString();

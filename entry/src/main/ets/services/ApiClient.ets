@@ -4,7 +4,9 @@ import {
   ApiErrorResponse,
   AuthStatusResponse,
   AuthTokenResponse,
+  AuthUser,
   HuaweiLoginRequest,
+  LeaderboardPreferenceRequest,
   RefreshTokenRequest,
   SuccessResponse,
   UserProfileResponse
@@ -64,6 +66,23 @@ export class ApiClient {
 
   async getProfile(): Promise<UserProfileResponse> {
     return this.request<UserProfileResponse>('/users/me/profile');
+  }
+
+  async updateLeaderboardPreference(enabled: boolean): Promise<AuthUser> {
+    this.requireSecureAuthTransport();
+    const payload: LeaderboardPreferenceRequest = {
+      enabled: enabled
+    };
+    const response = await this.request<UserProfileResponse>(
+      '/users/me/leaderboard-preference',
+      'PUT',
+      payload
+    );
+    if (!response.authenticated || response.user === null) {
+      throw new ApiRequestError(401, '当前登录状态无效');
+    }
+    await AuthSessionStore.updateUser(response.user);
+    return response.user;
   }
 
   async logout(): Promise<void> {
@@ -284,6 +303,9 @@ export class ApiClient {
     if (method === 'DELETE') {
       return http.RequestMethod.DELETE;
     }
+    if (method === 'PUT') {
+      return http.RequestMethod.PUT;
+    }
     return http.RequestMethod.GET;
   }
 }
@@ -298,4 +320,4 @@ interface FavoriteQuestionRequest {
   questionId: string;
 }
 
-type HttpMethod = 'GET' | 'POST' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';

@@ -45,21 +45,27 @@ export class AuthSessionStore {
       user: response.user
     };
     AuthSessionStore.validate(stored);
-
-    const attributes: asset.AssetMap = new Map<asset.Tag, asset.Value>();
-    attributes.set(asset.Tag.ALIAS, AuthSessionStore.toBytes(SESSION_ALIAS));
-    attributes.set(asset.Tag.SECRET, AuthSessionStore.toBytes(JSON.stringify(stored)));
-    attributes.set(asset.Tag.ACCESSIBILITY, asset.Accessibility.DEVICE_FIRST_UNLOCKED);
-    attributes.set(asset.Tag.CONFLICT_RESOLUTION, asset.ConflictResolution.OVERWRITE);
-    try {
-      await asset.add(attributes);
-    } catch (error) {
-      const businessError = error as BusinessError;
-      throw new Error(`登录凭证安全保存失败：${businessError.message}`);
-    }
-
+    await AuthSessionStore.persist(stored);
     AuthSessionStore.session = stored;
     AuthSessionStore.initialized = true;
+  }
+
+  static async updateUser(user: AuthUser): Promise<void> {
+    const current = AuthSessionStore.session;
+    if (current === undefined || current.user.id !== user.id) {
+      throw new Error('当前登录会话与用户资料不匹配');
+    }
+    const updated: StoredAuthSession = {
+      tokenType: current.tokenType,
+      accessToken: current.accessToken,
+      accessExpiresAt: current.accessExpiresAt,
+      refreshToken: current.refreshToken,
+      refreshExpiresAt: current.refreshExpiresAt,
+      user: user
+    };
+    AuthSessionStore.validate(updated);
+    await AuthSessionStore.persist(updated);
+    AuthSessionStore.session = updated;
   }
 
   static async clear(): Promise<void> {
@@ -127,6 +133,20 @@ export class AuthSessionStore {
       !value.user ||
       value.user.id.trim().length === 0) {
       throw new Error('登录会话格式无效');
+    }
+  }
+
+  private static async persist(stored: StoredAuthSession): Promise<void> {
+    const attributes: asset.AssetMap = new Map<asset.Tag, asset.Value>();
+    attributes.set(asset.Tag.ALIAS, AuthSessionStore.toBytes(SESSION_ALIAS));
+    attributes.set(asset.Tag.SECRET, AuthSessionStore.toBytes(JSON.stringify(stored)));
+    attributes.set(asset.Tag.ACCESSIBILITY, asset.Accessibility.DEVICE_FIRST_UNLOCKED);
+    attributes.set(asset.Tag.CONFLICT_RESOLUTION, asset.ConflictResolution.OVERWRITE);
+    try {
+      await asset.add(attributes);
+    } catch (error) {
+      const businessError = error as BusinessError;
+      throw new Error(`登录凭证安全保存失败：${businessError.message}`);
     }
   }
 

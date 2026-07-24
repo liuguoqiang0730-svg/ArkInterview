@@ -32,6 +32,10 @@ export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
+export interface LeaderboardPreferenceRequest {
+  enabled: boolean;
+}
+
 export interface StoredAuthSession {
   tokenType: string;
   accessToken: string;

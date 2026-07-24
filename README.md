@@ -46,7 +46,7 @@ npm run questions:sync-db
 
 ## 可选华为账号登录
 
-后端已经支持华为 Authorization Code 验证、匿名学习记录合并、ArkInterview 访问/刷新令牌轮换和退出登录。HarmonyOS 客户端已增加 Account Kit 官方登录按钮、“我的”页面、AssetStore 加密会话保存和 Token 自动刷新；匿名刷题始终可用。
+后端已经支持华为 Authorization Code 验证、匿名学习记录合并、ArkInterview 访问/刷新令牌轮换、退出登录和排行榜参与授权。HarmonyOS 客户端已增加 Account Kit 官方登录按钮、“我的”页面、AssetStore 加密会话保存、Token 自动刷新及默认关闭的排行榜参与开关；匿名刷题始终可用。
 
 启用登录前，在服务端同时配置以下三个变量，缺少任意一个时服务会拒绝以不完整配置启动：
 

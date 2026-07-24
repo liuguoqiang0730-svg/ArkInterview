@@ -56,6 +56,18 @@ App 通过 Account Kit 获取 Authorization Code 后，将授权码和当前 `X-
 
 匿名请求返回 `authenticated: false`；携带有效访问令牌时返回 ArkInterview 内部用户 ID、展示名、头像和排行榜参与设置。
 
+### PUT /api/users/me/leaderboard-preference
+
+仅允许已登录用户修改是否参与排行榜，匿名请求返回 `401`。该设置默认关闭，客户端必须由用户主动操作开启。
+
+```json
+{
+  "enabled": true
+}
+```
+
+`enabled` 必须是 JSON 布尔值。成功后返回最新的登录用户资料，客户端应同步更新本地用户快照。关闭后，后续排行榜查询不得再公开该用户；历史答题记录本身不会被删除。
+
 访问令牌默认有效期 15 分钟，刷新令牌默认有效期 30 天。数据库只保存两类令牌的 SHA-256 哈希，不保存明文令牌，也不保存华为 access token 或 refresh token。
 
 ## 题库

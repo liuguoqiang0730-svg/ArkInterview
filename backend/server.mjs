@@ -519,7 +519,7 @@ function sendJson(res, status, data, extraHeaders = {}) {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device-Id',
-    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     ...extraHeaders
   });
   res.end(JSON.stringify(data, null, 2));
@@ -607,6 +607,13 @@ async function routeApi(req, res, db, url, store, authService) {
 
   if (method === 'GET' && pathname === '/api/users/me/profile') {
     sendJson(res, 200, authService.profile(principal), { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'PUT' && pathname === '/api/users/me/leaderboard-preference') {
+    const payload = await parseBody(req);
+    const result = authService.updateLeaderboardPreference(principal, payload.enabled);
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
     return;
   }
 
