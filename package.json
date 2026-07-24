@@ -11,13 +11,17 @@
     "questions:sync-db:dry": "npm run questions:build && node scripts/sync-question-db.mjs --dry-run",
     "questions:publish": "npm run questions:build && node scripts/publish-question-bank.mjs",
     "questions:publish:dry": "npm run questions:build && node scripts/publish-question-bank.mjs --dry-run",
-    "dev": "npm run questions:build && node backend/server.mjs",
+    "dev": "npm run questions:sync-db && node backend/server.mjs",
     "start": "node backend/server.mjs",
-    "start:prod": "npm run questions:build && node backend/server.mjs",
+    "start:prod": "npm run questions:sync-db && node backend/server.mjs",
     "seed": "npm run questions:build && node backend/server.mjs --seed-only",
-    "test": "npm run questions:check && node backend/smoke-test.mjs"
+    "test:storage": "node backend/sqlite-store-test.mjs",
+    "test": "npm run questions:check && npm run test:storage && node backend/smoke-test.mjs"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20.17.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.11.1"
   }
 }

@@ -1,16 +1,15 @@
 import http from 'node:http';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
+import { openSqliteStore, resolveDatabasePaths } from './sqlite-store.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const defaultStorageDir = path.join(__dirname, 'storage');
-const dbFile = process.env.DB_FILE ? path.resolve(process.env.DB_FILE) : path.join(defaultStorageDir, 'db.json');
-const storageDir = path.dirname(dbFile);
+const { dbFile, legacyDbFile } = resolveDatabasePaths(defaultStorageDir);
 const seedCategoriesFile = path.join(rootDir, 'data', 'seed', 'categories.json');
 const seedQuestionsFile = path.join(rootDir, 'data', 'seed', 'questions.json');
 const adminDir = path.join(rootDir, 'admin');
@@ -54,21 +53,6 @@ async function createSeedDb() {
   };
 }
 
-async function ensureDb() {
-  await mkdir(storageDir, { recursive: true });
-  if (!existsSync(dbFile)) {
-    const db = await createSeedDb();
-    await writeJson(db);
-    return db;
-  }
-  return readJson(dbFile);
-}
-
-async function writeJson(db) {
-  db.meta.updatedAt = nowIso();
-  await writeFile(dbFile, `${JSON.stringify(db, null, 2)}\n`, 'utf8');
-}
-
 function getDeviceId(req) {
   return req.headers['x-device-id'] || 'demo-device';
 }
@@ -100,14 +84,28 @@ function safeSecretEqual(left, right) {
 
 function ensureUser(db, deviceId) {
   if (!db.users[deviceId]) {
+    const now = nowIso();
     db.users[deviceId] = {
+      id: `user-${randomUUID()}`,
       deviceId,
+      deviceIds: [deviceId],
+      displayName: '',
+      avatarUrl: '',
+      leaderboardOptIn: false,
+      status: 'active',
+      createdAt: now,
+      updatedAt: now,
       favorites: [],
       wrongs: {},
       answers: []
     };
   }
   return db.users[deviceId];
+}
+
+function touchMetadata(db, timestamp = nowIso()) {
+  db.meta.updatedAt = timestamp;
+  return db.meta;
 }
 
 function publicQuestion(question, { includeAnswer = false } = {}) {
@@ -560,7 +558,7 @@ async function sendStatic(req, res, pathname) {
   }
 }
 
-async function routeApi(req, res, db, url) {
+async function routeApi(req, res, db, url, store) {
   const { pathname, searchParams } = url;
   const method = req.method || 'GET';
   const deviceId = getDeviceId(req);
@@ -620,25 +618,30 @@ async function routeApi(req, res, db, url) {
 
     const feedback = evaluateAnswer(question, payload);
     const submittedAt = nowIso();
-    user.answers.push({
+    const answer = {
+      id: `attempt-${randomUUID()}`,
       questionId: question.id,
       categoryId: question.categoryId,
       type: question.type,
       isCorrect: feedback.isCorrect,
       submittedAt
-    });
+    };
+    user.answers.push(answer);
 
+    let wrong;
     if (feedback.isCorrect === false) {
       const existing = user.wrongs[question.id];
-      user.wrongs[question.id] = {
+      wrong = {
         questionId: question.id,
         wrongCount: existing ? existing.wrongCount + 1 : 1,
         mastered: false,
         updatedAt: submittedAt
       };
+      user.wrongs[question.id] = wrong;
     }
 
-    await writeJson(db);
+    user.updatedAt = submittedAt;
+    store.recordAnswer(user, answer, wrong, touchMetadata(db, submittedAt));
     sendJson(res, 200, {
       questionId: question.id,
       ...feedback,
@@ -671,8 +674,10 @@ async function routeApi(req, res, db, url) {
       throw httpError(404, '错题不存在');
     }
     wrong.mastered = true;
-    wrong.updatedAt = nowIso();
-    await writeJson(db);
+    const updatedAt = nowIso();
+    wrong.updatedAt = updatedAt;
+    user.updatedAt = updatedAt;
+    store.setWrong(user, wrong, touchMetadata(db, updatedAt));
     sendJson(res, 200, { item: wrong });
     return;
   }
@@ -695,7 +700,8 @@ async function routeApi(req, res, db, url) {
     if (!user.favorites.includes(question.id)) {
       user.favorites.push(question.id);
     }
-    await writeJson(db);
+    user.updatedAt = nowIso();
+    store.addFavorite(user, question.id, touchMetadata(db, user.updatedAt));
     sendJson(res, 201, { items: user.favorites });
     return;
   }
@@ -703,20 +709,21 @@ async function routeApi(req, res, db, url) {
   const favoriteMatch = pathname.match(/^\/api\/users\/me\/favorites\/([^/]+)$/);
   if (method === 'DELETE' && favoriteMatch) {
     user.favorites = user.favorites.filter((id) => id !== favoriteMatch[1]);
-    await writeJson(db);
+    user.updatedAt = nowIso();
+    store.removeFavorite(user, favoriteMatch[1], touchMetadata(db, user.updatedAt));
     sendJson(res, 200, { items: user.favorites });
     return;
   }
 
   if (pathname.startsWith('/api/admin/')) {
-    await routeAdmin(req, res, db, url);
+    await routeAdmin(req, res, db, url, store);
     return;
   }
 
   notFound(res);
 }
 
-async function routeAdmin(req, res, db, url) {
+async function routeAdmin(req, res, db, url, store) {
   const { pathname } = url;
   const method = req.method || 'GET';
   authorizeAdmin(req);
@@ -734,7 +741,7 @@ async function routeAdmin(req, res, db, url) {
       throw httpError(409, '分类 ID 已存在');
     }
     db.categories.push(item);
-    await writeJson(db);
+    store.saveCategory(item, touchMetadata(db));
     sendJson(res, 201, { item });
     return;
   }
@@ -750,7 +757,7 @@ async function routeAdmin(req, res, db, url) {
     const updated = normalizeCategoryPayload(payload, category, category.order);
     validateCategory(updated);
     Object.assign(category, updated, { id: category.id });
-    await writeJson(db);
+    store.saveCategory(category, touchMetadata(db));
     sendJson(res, 200, { item: category });
     return;
   }
@@ -765,7 +772,7 @@ async function routeAdmin(req, res, db, url) {
     const item = normalizeQuestionPayload(payload);
     validateQuestion(item, db);
     db.questions.push(item);
-    await writeJson(db);
+    store.saveQuestion(item, touchMetadata(db));
     sendJson(res, 201, { item });
     return;
   }
@@ -795,7 +802,7 @@ async function routeAdmin(req, res, db, url) {
     for (let index = 0; index < questions.length; index += 1) {
       Object.assign(questions[index], updates[index], { id: questions[index].id });
     }
-    await writeJson(db);
+    store.saveQuestions(questions, touchMetadata(db));
     sendJson(res, 200, { items: questions });
     return;
   }
@@ -811,7 +818,7 @@ async function routeAdmin(req, res, db, url) {
     const updated = normalizeQuestionPayload(payload, question);
     validateQuestion(updated, db, { allowExistingId: true });
     Object.assign(question, updated, { id: question.id });
-    await writeJson(db);
+    store.saveQuestion(question, touchMetadata(db));
     sendJson(res, 200, { item: question });
     return;
   }
@@ -848,9 +855,19 @@ function slugify(input) {
 
 async function main() {
   assertValidServerConfig();
-  const db = await ensureDb();
+  const {
+    store,
+    snapshot: db,
+    importedLegacy
+  } = await openSqliteStore({
+    dbFile,
+    legacyDbFile,
+    createInitialData: createSeedDb
+  });
+
   if (process.argv.includes('--seed-only')) {
-    await writeJson(await createSeedDb());
+    store.replaceAll(await createSeedDb());
+    store.close();
     console.log(`Seeded ${dbFile}`);
     return;
   }
@@ -863,7 +880,7 @@ async function main() {
         return;
       }
       if (url.pathname.startsWith('/api/')) {
-        await routeApi(req, res, db, url);
+        await routeApi(req, res, db, url, store);
         return;
       }
       if (url.pathname === '/') {
@@ -887,6 +904,10 @@ async function main() {
     const localHost = host === '0.0.0.0' ? '127.0.0.1' : host;
     console.log(`ArkInterview API running at http://${localHost}:${port}`);
     console.log(`Admin console running at http://${localHost}:${port}/admin/`);
+    console.log(`SQLite storage: ${dbFile}`);
+    if (importedLegacy) {
+      console.log(`Imported legacy JSON storage: ${legacyDbFile}`);
+    }
     console.log(adminToken
       ? 'Admin API authentication enabled.'
       : 'Admin API disabled: configure ADMIN_TOKEN to enable management access.');
@@ -894,6 +915,21 @@ async function main() {
       console.log(`LAN access enabled. Use http://<your-computer-ip>:${port}/api from a device.`);
     }
   });
+
+  let shuttingDown = false;
+  const shutdown = (signal) => {
+    if (shuttingDown) {
+      return;
+    }
+    shuttingDown = true;
+    console.log(`Received ${signal}; closing ArkInterview API.`);
+    server.close(() => {
+      store.close();
+      process.exit(0);
+    });
+  };
+  process.once('SIGINT', () => shutdown('SIGINT'));
+  process.once('SIGTERM', () => shutdown('SIGTERM'));
 }
 
 main().catch((error) => {

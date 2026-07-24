@@ -1,13 +1,18 @@
-﻿import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  openSqliteStore,
+  readSqliteSnapshot,
+  resolveDatabasePaths
+} from '../backend/sqlite-store.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
-const defaultDbFile = path.join(rootDir, 'backend', 'storage', 'db.json');
-const dbFile = process.env.DB_FILE ? path.resolve(process.env.DB_FILE) : defaultDbFile;
+const defaultStorageDir = path.join(rootDir, 'backend', 'storage');
+const { dbFile, legacyDbFile } = resolveDatabasePaths(defaultStorageDir);
 const categoriesFile = path.join(rootDir, 'data', 'seed', 'categories.json');
 const questionsFile = path.join(rootDir, 'data', 'seed', 'questions.json');
 
@@ -21,11 +26,14 @@ const [seedCategories, seedQuestions] = await Promise.all([
 ]);
 
 const db = existsSync(dbFile)
-  ? await readJson(dbFile)
-  : createEmptyDb();
+  ? readSqliteSnapshot(dbFile)
+  : existsSync(legacyDbFile)
+    ? await readJson(legacyDbFile)
+    : createEmptyDb();
 
 const summary = {
   dbFile,
+  legacyDbFile,
   categoriesAdded: 0,
   categoriesUpdated: 0,
   questionsAdded: 0,
@@ -51,8 +59,13 @@ db.users = db.users && typeof db.users === 'object' ? db.users : {};
 db.meta.updatedAt = now;
 
 if (!dryRun) {
-  await mkdir(path.dirname(dbFile), { recursive: true });
-  await writeFile(dbFile, `${JSON.stringify(db, null, 2)}\n`, 'utf8');
+  const { store } = await openSqliteStore({
+    dbFile,
+    legacyDbFile,
+    createInitialData: createEmptyDb
+  });
+  store.saveCatalog(db);
+  store.close();
 }
 
 console.log(JSON.stringify(summary, null, 2));

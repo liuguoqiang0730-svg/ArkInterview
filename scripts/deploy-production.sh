@@ -5,7 +5,8 @@ umask 077
 
 APP_DIR="${APP_DIR:-/opt/arkinterview}"
 API_URL="${API_URL:-http://127.0.0.1:8787/api}"
-DB_FILE="${DB_FILE:-${APP_DIR}/backend/storage/db.json}"
+DB_FILE="${DB_FILE:-${APP_DIR}/backend/storage/arkinterview.sqlite}"
+LEGACY_DB_FILE="${LEGACY_DB_FILE:-${APP_DIR}/backend/storage/db.json}"
 BACKUP_DIR="${BACKUP_DIR:-${APP_DIR}/.deploy-backups}"
 
 if [[ -z "${ADMIN_TOKEN:-}" || ${#ADMIN_TOKEN} -lt 32 ]]; then
@@ -27,6 +28,14 @@ fi
 
 cd "${APP_DIR}"
 
+node -e '
+  const [major, minor] = process.versions.node.split(".").map(Number);
+  if (major < 20 || (major === 20 && minor < 17)) {
+    console.error(`Node.js >= 20.17.0 is required, current version: ${process.versions.node}`);
+    process.exit(1);
+  }
+'
+
 if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   if [[ "${ALLOW_DIRTY_DEPLOY:-0}" != "1" ]] && {
     ! git diff --quiet || ! git diff --cached --quiet;
@@ -36,23 +45,41 @@ if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/n
   fi
 fi
 
-backup_file=""
-if [[ -f "${DB_FILE}" ]]; then
-  mkdir -p "${BACKUP_DIR}"
-  chmod 700 "${BACKUP_DIR}"
-  backup_file="${BACKUP_DIR}/db-$(date -u +%Y%m%dT%H%M%SZ).json"
-  cp "${DB_FILE}" "${backup_file}"
-  chmod 600 "${backup_file}"
-fi
+npm ci --omit=dev
 
 export NODE_ENV=production
 export HOST="${HOST:-0.0.0.0}"
 export PORT="${PORT:-8787}"
 export DB_FILE
+export LEGACY_DB_FILE
 export ADMIN_TOKEN
 
 npm test
-npm run questions:build
+
+legacy_migration=0
+if [[ ! -f "${DB_FILE}" && -f "${LEGACY_DB_FILE}" ]]; then
+  legacy_migration=1
+  if pm2 describe arkinterview >/dev/null 2>&1; then
+    pm2 stop arkinterview
+  fi
+fi
+
+backup_file=""
+if [[ -f "${DB_FILE}" ]]; then
+  mkdir -p "${BACKUP_DIR}"
+  chmod 700 "${BACKUP_DIR}"
+  backup_file="${BACKUP_DIR}/arkinterview-$(date -u +%Y%m%dT%H%M%SZ).sqlite"
+  node scripts/backup-sqlite.mjs "${DB_FILE}" "${backup_file}"
+  chmod 600 "${backup_file}"
+elif [[ -f "${LEGACY_DB_FILE}" ]]; then
+  mkdir -p "${BACKUP_DIR}"
+  chmod 700 "${BACKUP_DIR}"
+  backup_file="${BACKUP_DIR}/legacy-db-$(date -u +%Y%m%dT%H%M%SZ).json"
+  cp "${LEGACY_DB_FILE}" "${backup_file}"
+  chmod 600 "${backup_file}"
+fi
+
+npm run questions:sync-db
 pm2 startOrReload ecosystem.config.cjs --update-env
 pm2 save
 
@@ -78,6 +105,9 @@ if [[ "${authorized_status}" != "200" ]]; then
 fi
 
 echo "Deployment verified: public API is healthy and admin authentication is enabled."
+if [[ "${legacy_migration}" == "1" ]]; then
+  echo "Legacy JSON data migrated to SQLite: ${DB_FILE}"
+fi
 if [[ -n "${backup_file}" ]]; then
   echo "Database backup: ${backup_file}"
 fi

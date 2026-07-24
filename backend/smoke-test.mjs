@@ -157,6 +157,15 @@ async function runChecks() {
   const questionDetail = await getJson('/api/questions/q-smoke-single');
   assert(questionDetail.item.sourceRefs.length > 0, 'question detail should include official sources');
 
+  const concurrentDeviceId = 'smoke-test-concurrent';
+  await Promise.all(Array.from({ length: 12 }, () => postJson('/api/answers/submit', {
+    questionId: 'q-smoke-single',
+    selectedOptionIds: ['b']
+  }, true, concurrentDeviceId)));
+  const concurrentStats = await getJson('/api/users/me/stats', concurrentDeviceId);
+  assert(concurrentStats.totalAnswers === 12, 'concurrent answer writes should not lose attempts');
+  assert(concurrentStats.correctAnswers === 12, 'concurrent answer writes should preserve grading');
+
   const randomPractice = await getJson('/api/practice/session?mode=random&count=3');
   assert(randomPractice.total === 3, 'random practice should return 3 questions');
   assert(randomPractice.items.every((item) => item.correctOptionIds === undefined), 'practice list should not expose answers');
@@ -294,10 +303,10 @@ async function getJson(pathname, deviceId = 'smoke-test') {
   return parseResponse(response);
 }
 
-async function postJson(pathname, body, expectOk = true) {
+async function postJson(pathname, body, expectOk = true, deviceId = 'smoke-test') {
   const response = await fetch(`${baseUrl}${pathname}`, {
     method: 'POST',
-    headers: requestHeaders(pathname, { 'Content-Type': 'application/json' }),
+    headers: requestHeaders(pathname, { 'Content-Type': 'application/json' }, deviceId),
     body: JSON.stringify(body)
   });
   if (!expectOk) {

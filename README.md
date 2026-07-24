@@ -8,7 +8,7 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 
 ## 当前仓库内容
 
-- `backend/`：零依赖 Node.js REST API，提供题库、答题、收藏、错题和管理接口。
+- `backend/`：Node.js REST API 和 SQLite 数据层，提供题库、答题、收藏、错题和管理接口。
 - `admin/`：静态管理后台，可通过后端服务访问 `/admin/`，支持题目浏览、新增、发布/下架和难度调整。
 - `data/question-bank/modules/`：按模块维护的题库源数据。
 - `data/seed/`：由题库构建脚本生成的服务端聚合数据。
@@ -19,7 +19,7 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 
 ## 本地启动
 
-需要 Node.js 18 或更高版本。
+需要 Node.js 20.17 或更高版本。
 
 ```powershell
 $env:ADMIN_TOKEN = (node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))")
@@ -33,7 +33,9 @@ npm run dev
 
 进入管理后台时输入当前 shell 中的 `ADMIN_TOKEN`。令牌只保存在当前浏览器标签页的 `sessionStorage`，关闭标签页后需要重新输入。服务端要求令牌至少 32 个字符；未配置时公开刷题 API 仍可用，但所有 `/api/admin/*` 管理接口会关闭。
 
-服务首次启动会从 `data/seed/` 生成本地运行库 `backend/storage/db.json`。该文件是本地运行状态，不纳入版本控制。题库新增后，使用以下命令增量同步本地数据库；该命令会保留用户、收藏、错题和练习记录：
+服务首次启动会从 `data/seed/` 生成 SQLite 运行库 `backend/storage/arkinterview.sqlite`。该文件是本地运行状态，不纳入版本控制。若检测到旧版 `backend/storage/db.json`，服务会自动导入分类、题目、匿名用户、收藏、错题和答题记录，且不会修改或删除旧 JSON。
+
+题库新增后，使用以下命令增量同步本地数据库；该命令会保留用户、收藏、错题和练习记录：
 
 ```powershell
 npm run questions:sync-db:dry
@@ -65,9 +67,9 @@ export ADMIN_TOKEN="$(openssl rand -hex 32)"
 bash scripts/deploy-production.sh
 ```
 
-脚本会拒绝脏 Git 工作区，备份 `backend/storage/db.json`，运行 `npm test`，通过 PM2 重载服务，并验证公开 API、未授权 `401` 和授权 `200`。脚本不会自动执行 `git pull` 或覆盖题库。若服务端使用自定义目录、端口或数据库路径，可通过 `APP_DIR`、`API_URL`、`PORT` 和 `DB_FILE` 环境变量覆盖。
+脚本会拒绝脏 Git 工作区，使用锁文件安装生产依赖，在线备份 SQLite，运行 `npm test`，通过 PM2 重载服务，并验证公开 API、未授权 `401` 和授权 `200`。首次迁移时如果 SQLite 尚不存在，脚本会先备份旧版 `db.json`。脚本不会自动执行 `git pull` 或覆盖题库。若服务端使用自定义目录、端口或数据库路径，可通过 `APP_DIR`、`API_URL`、`PORT`、`DB_FILE` 和 `LEGACY_DB_FILE` 环境变量覆盖。
 
-部署成功后应妥善保存令牌并立即配置 HTTPS。需要回滚代码时，先切回上一条已验证提交并重新执行部署脚本；若确实需要恢复数据，再停止服务后使用脚本输出的 `.deploy-backups/db-*.json` 备份文件。
+部署成功后应妥善保存令牌并立即配置 HTTPS。需要回滚代码时，先切回上一条已验证提交并重新执行部署脚本；若确实需要恢复数据，再停止服务后使用脚本输出的 `.deploy-backups/*.sqlite` 或首次迁移产生的旧 JSON 备份。
 
 ## 验证
 
@@ -75,7 +77,7 @@ bash scripts/deploy-production.sh
 npm test
 ```
 
-测试会使用 `.tmp/smoke-db.json` 启动临时后端，覆盖管理员鉴权、分类、题目、随机练习、错题练习、收藏练习、答题提交和基础模拟面试接口。
+测试会创建临时 SQLite 数据库，验证旧 JSON 迁移、数据重启恢复和数据库完整性，并覆盖管理员鉴权、分类、题目、随机练习、错题练习、收藏练习、答题提交和基础模拟面试接口。
 
 ## DevEco Studio
 

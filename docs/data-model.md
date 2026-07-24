@@ -1,5 +1,15 @@
 # 数据模型
 
+运行时数据保存在 `backend/storage/arkinterview.sqlite`。题库源文件仍按模块维护在 `data/question-bank/modules/*.json`，构建后同步到 SQLite；用户私有数据不进入 Git。
+
+SQLite 当前使用以下业务表：
+
+- `categories`、`questions`：分类和题目。
+- `users`、`anonymous_devices`：应用内部用户与一个或多个匿名安装设备的映射。
+- `favorites`、`wrong_questions`、`answer_attempts`：用户学习数据。
+- `user_identities`：后续保存华为账号等外部身份与内部用户的映射。
+- `auth_sessions`：后续保存 ArkInterview 自己签发的登录会话，只保存刷新令牌哈希。
+
 ## Category
 
 ```json
@@ -62,7 +72,15 @@
 
 ```json
 {
+  "id": "user-uuid",
   "deviceId": "demo-device",
+  "deviceIds": ["demo-device"],
+  "displayName": "",
+  "avatarUrl": "",
+  "leaderboardOptIn": false,
+  "status": "active",
+  "createdAt": "2026-07-02T00:00:00.000Z",
+  "updatedAt": "2026-07-02T00:00:00.000Z",
   "favorites": ["q-arkts-001"],
   "wrongs": {
     "q-arkts-001": {
@@ -74,6 +92,7 @@
   },
   "answers": [
     {
+      "id": "attempt-uuid",
       "questionId": "q-arkts-001",
       "categoryId": "arkts",
       "type": "single",
@@ -83,3 +102,5 @@
   ]
 }
 ```
+
+匿名设备 ID 不是公开用户 ID。后续接入华为账号时，服务端应继续使用内部 `users.id` 关联学习数据，并通过 `user_identities` 保存服务端验证后的 OpenID/UnionID 映射，不能直接信任客户端上报的外部账号标识。
