@@ -41,7 +41,7 @@ struct ReviewListPage {
 
   aboutToAppear(): void {
     this.updateLayoutMode();
-    const params = AppRouter.params();
+    const params = AppRouter.params(this.getUIContext());
     this.mode = params.mode || 'wrongs';
     this.title = params.title || (this.mode === 'favorites' ? '收藏题目' : '错题本');
     this.wrongScope = this.mode === 'wrongs' ? 'active' : 'all';
@@ -57,7 +57,7 @@ struct ReviewListPage {
         this.questions = await store.loadWrongs();
       }
     } catch (error) {
-      AppToast.show(`加载失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -116,7 +116,7 @@ struct ReviewListPage {
           .fontColor(COLOR_NAVY)
           .backgroundColor('#eef2f6')
           .borderRadius(8)
-          .onClick(() => AppRouter.back())
+          .onClick(() => AppRouter.back(this.getUIContext()))
         Text(this.title)
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
@@ -585,7 +585,7 @@ struct ReviewListPage {
 
   handleEmptyAction(): void {
     if (this.questions.length === 0) {
-      AppRouter.push('pages/HomePage');
+      AppRouter.push(this.getUIContext(), 'pages/HomePage');
       return;
     }
     this.resetFilters();
@@ -835,7 +835,7 @@ struct ReviewListPage {
     for (const item of items) {
       ids.push(item.id);
     }
-    AppRouter.push('pages/QuestionPage', {
+    AppRouter.push(this.getUIContext(), 'pages/QuestionPage', {
       questionId: items[index].id,
       questionIds: ids.join(','),
       questionIndex: String(index),
@@ -851,9 +851,9 @@ struct ReviewListPage {
     try {
       await store.removeFavorite(questionId);
       this.removeQuestionFromList(questionId);
-      AppToast.show('已取消收藏');
+      AppToast.show(this.getUIContext(), '已取消收藏');
     } catch (error) {
-      AppToast.show(`操作失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
     } finally {
       this.busyQuestionId = '';
     }
@@ -867,9 +867,9 @@ struct ReviewListPage {
     try {
       await store.markWrongMastered(questionId);
       this.markQuestionMastered(questionId);
-      AppToast.show('已标记掌握');
+      AppToast.show(this.getUIContext(), '已标记掌握');
     } catch (error) {
-      AppToast.show(`操作失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
     } finally {
       this.busyQuestionId = '';
     }

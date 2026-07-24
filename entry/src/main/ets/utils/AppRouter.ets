@@ -1,4 +1,5 @@
 import router from '@ohos.router';
+import { UIContext } from '@kit.ArkUI';
 
 export interface AppRouteParams {
   mode?: string;
@@ -11,34 +12,33 @@ export interface AppRouteParams {
 }
 
 export class AppRouter {
-  static push(url: string, params?: AppRouteParams): void {
+  static push(uiContext: UIContext, url: string, params?: AppRouteParams): void {
     try {
-      if (params) {
-        router.pushUrl({
-          url,
-          params
-        });
-        return;
-      }
-      router.pushUrl({
+      const options: router.RouterOptions = {
         url
+      };
+      if (params !== undefined) {
+        options.params = params;
+      }
+      uiContext.getRouter().pushUrl(options).catch((error: Error) => {
+        console.error(`route push failed: ${String(error)}`);
       });
     } catch (error) {
       console.error(`route push failed: ${String(error)}`);
     }
   }
 
-  static back(): void {
+  static back(uiContext: UIContext): void {
     try {
-      router.back();
+      uiContext.getRouter().back();
     } catch (error) {
       console.error(`route back failed: ${String(error)}`);
     }
   }
 
-  static params(): Record<string, string> {
+  static params(uiContext: UIContext): Record<string, string> {
     try {
-      return router.getParams() as Record<string, string>;
+      return uiContext.getRouter().getParams() as Record<string, string>;
     } catch (error) {
       console.error(`route params failed: ${String(error)}`);
       return {};

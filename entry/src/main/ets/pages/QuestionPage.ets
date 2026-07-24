@@ -54,17 +54,16 @@ struct QuestionPage {
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
   @State private masteringWrong: boolean = false;
-  @State private autoMoveToken: number = 0;
   @State private navActive: string = 'home';
   @State private showCompletionSummary: boolean = false;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
-    const params = AppRouter.params();
+    const params = AppRouter.params(this.getUIContext());
     const questionId = params.questionId;
     if (!questionId) {
-      AppToast.show('题目参数缺失');
-      AppRouter.back();
+      AppToast.show(this.getUIContext(), '题目参数缺失');
+      AppRouter.back(this.getUIContext());
       return;
     }
     this.navActive = params.navActive || 'home';
@@ -82,7 +81,7 @@ struct QuestionPage {
       this.question = await store.loadQuestion(questionId);
       this.restoreAnswerState(questionId);
     } catch (error) {
-      AppToast.show(`加载失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -99,7 +98,7 @@ struct QuestionPage {
             .fontColor(COLOR_NAVY)
             .backgroundColor('#eef2f6')
             .borderRadius(8)
-            .onClick(() => AppRouter.back())
+            .onClick(() => AppRouter.back(this.getUIContext()))
           Column() {
             Text('训练答题')
               .fontSize(22)
@@ -324,7 +323,7 @@ struct QuestionPage {
         .backgroundColor(COLOR_SOFT_GREEN)
         .borderRadius(8)
         .margin({ top: 12 })
-        .onClick(() => AppRouter.back())
+        .onClick(() => AppRouter.back(this.getUIContext()))
     }
     .width('100%')
     .padding(18)
@@ -402,7 +401,9 @@ struct QuestionPage {
         this.QuestionCard()
         this.QuestionNavigator()
         this.AnswerArea()
-        this.SubmitButton()
+        if (!this.feedback) {
+          this.SubmitButton()
+        }
         if (this.feedback) {
           this.FeedbackPanel()
         }
@@ -423,7 +424,9 @@ struct QuestionPage {
         this.QuestionCard()
         this.QuestionNavigator()
         this.AnswerArea()
-        this.SubmitButton()
+        if (!this.feedback) {
+          this.SubmitButton()
+        }
         if (this.feedback) {
           this.FeedbackPanel()
         }
@@ -439,15 +442,29 @@ struct QuestionPage {
 
   @Builder
   ProgressOverlay() {
-    Column() {
-      this.ProgressPanel()
+    Stack({ alignContent: Alignment.Top }) {
+      Column()
+        .width('100%')
+        .height('100%')
+        .backgroundColor('#10203314')
+        .onClick(() => this.showProgressPanel = false)
+
+      Column() {
+        Column() {
+          this.ProgressPanel()
+        }
+        .width('100%')
+        .constraintSize({ maxWidth: this.pageMaxWidth() })
+        .alignItems(HorizontalAlign.End)
+        .padding({ right: 16 })
+      }
+      .width('100%')
+      .height('100%')
+      .padding({ top: this.isTablet ? 90 : 66 })
+      .alignItems(HorizontalAlign.Center)
     }
     .width('100%')
     .height('100%')
-    .padding({ top: this.isTablet ? 74 : 58, right: this.isTablet ? 28 : 16 })
-    .alignItems(HorizontalAlign.End)
-    .backgroundColor('#00000000')
-    .onClick(() => this.showProgressPanel = false)
   }
 
   @Builder
@@ -459,9 +476,14 @@ struct QuestionPage {
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_NAVY)
           .layoutWeight(1)
-        Text('绿=正确  红=错误  蓝=待自评')
-          .fontSize(11)
+        Button('×')
+          .width(30)
+          .height(30)
+          .fontSize(18)
           .fontColor(COLOR_MUTED)
+          .backgroundColor('#eef2f6')
+          .borderRadius(8)
+          .onClick(() => this.showProgressPanel = false)
       }
       .width('100%')
       .margin({ bottom: 10 })
@@ -546,84 +568,6 @@ struct QuestionPage {
   }
 
   @Builder
-  SessionStatusPanel() {
-    Column() {
-      Text('本轮状态')
-        .fontSize(18)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(COLOR_NAVY)
-        .width('100%')
-
-      Row() {
-        this.StatusMetric('已答', String(this.answeredCount()), COLOR_SOFT_BLUE, COLOR_BLUE)
-        this.StatusMetric('正确', String(this.correctCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
-        this.StatusMetric('错误', String(this.wrongCount()), COLOR_SOFT_RED, COLOR_RED)
-      }
-      .width('100%')
-      .margin({ top: 14 })
-
-      Text('题号状态')
-        .fontSize(13)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(COLOR_TEXT)
-        .width('100%')
-        .margin({ top: 18 })
-
-      Grid() {
-        ForEach(this.answerProgress, (item: AnswerProgressItem) => {
-          GridItem() {
-            Text(String(item.order + 1))
-              .fontSize(12)
-              .fontWeight(this.currentIndex === item.order ? FontWeight.Bold : FontWeight.Normal)
-              .fontColor(this.progressTextColor(item))
-              .textAlign(TextAlign.Center)
-              .width('100%')
-              .height(32)
-              .backgroundColor(this.progressBgColor(item))
-              .borderRadius(8)
-              .border({ width: 1, color: this.currentIndex === item.order ? COLOR_NAVY : this.progressBorderColor(item) })
-          }
-          .onClick(() => this.goQuestionAt(item.order))
-        }, (item: AnswerProgressItem) => item.questionId)
-      }
-      .columnsTemplate('1fr 1fr 1fr 1fr')
-      .columnsGap(8)
-      .rowsGap(8)
-      .width('100%')
-      .margin({ top: 10 })
-
-      Text((this.question?.knowledgePoints || []).join(' / '))
-        .fontSize(13)
-        .fontColor(COLOR_MUTED)
-        .lineHeight(20)
-        .margin({ top: 18 })
-        .width('100%')
-
-      if (this.question?.wrong && this.question.wrong.mastered !== true) {
-        Row() {
-          Text('错题本')
-            .fontSize(12)
-            .fontColor(COLOR_ORANGE)
-            .backgroundColor(COLOR_SOFT_ORANGE)
-            .padding({ left: 9, right: 9, top: 5, bottom: 5 })
-            .borderRadius(8)
-          Text(`已错 ${this.question.wrong.wrongCount} 次`)
-            .fontSize(12)
-            .fontColor(COLOR_MUTED)
-            .margin({ left: 8 })
-        }
-        .width('100%')
-        .margin({ top: 14 })
-      }
-    }
-    .width('100%')
-    .padding(16)
-    .backgroundColor(COLOR_SURFACE)
-    .borderRadius(8)
-    .border({ width: 1, color: COLOR_LINE })
-  }
-
-  @Builder
   ProgressLegend(label: string, bgColor: string, borderColor: string) {
     Row() {
       Text('')
@@ -662,14 +606,14 @@ struct QuestionPage {
 
   @Builder
   SubmitButton() {
-    Button(this.feedback ? '已提交' : '提交答案')
+    Button('提交答案')
       .width('100%')
       .height(46)
       .fontSize(16)
       .fontWeight(FontWeight.Bold)
       .fontColor('#ffffff')
-      .enabled(!this.feedback)
-      .backgroundColor(this.feedback ? '#aab3bd' : COLOR_GREEN)
+      .enabled(this.canSubmit())
+      .backgroundColor(this.canSubmit() ? COLOR_GREEN : '#aab3bd')
       .borderRadius(8)
       .margin({ top: 16 })
       .onClick(() => this.submit())
@@ -913,17 +857,6 @@ struct QuestionPage {
   @Builder
   FeedbackActions() {
     Row() {
-      Button(this.feedbackPrimaryActionLabel())
-        .layoutWeight(1)
-        .height(42)
-        .fontSize(15)
-        .fontWeight(FontWeight.Bold)
-        .fontColor('#ffffff')
-        .backgroundColor(COLOR_NAVY)
-        .borderRadius(8)
-        .margin({ right: this.hasPrevious() ? 8 : 0 })
-        .onClick(() => this.handleFeedbackPrimaryAction())
-
       if (this.hasPrevious()) {
         Button('上一题')
           .layoutWeight(1)
@@ -933,9 +866,20 @@ struct QuestionPage {
           .fontColor(COLOR_NAVY)
           .backgroundColor('#eef2f6')
           .borderRadius(8)
-          .margin({ left: 8 })
+          .margin({ right: 8 })
           .onClick(() => this.goPreviousQuestion())
       }
+
+      Button(this.feedbackPrimaryActionLabel())
+        .layoutWeight(1)
+        .height(42)
+        .fontSize(15)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#ffffff')
+        .backgroundColor(COLOR_NAVY)
+        .borderRadius(8)
+        .margin({ left: this.hasPrevious() ? 8 : 0 })
+        .onClick(() => this.handleFeedbackPrimaryAction())
     }
     .width('100%')
     .margin({ top: 16 })
@@ -1403,6 +1347,19 @@ struct QuestionPage {
     return this.currentIndex < this.questionIds.length - 1;
   }
 
+  canSubmit(): boolean {
+    if (!this.question || this.feedback) {
+      return false;
+    }
+    if (this.question.type === 'single' || this.question.type === 'multiple') {
+      return this.selectedOptionIds.length > 0;
+    }
+    if (this.question.type === 'boolean') {
+      return this.answerBoolean !== undefined;
+    }
+    return this.shortAnswer.trim().length > 0;
+  }
+
   goPreviousQuestion(): void {
     this.goQuestionAt(this.currentIndex - 1);
   }
@@ -1415,7 +1372,6 @@ struct QuestionPage {
     if (index < 0 || index >= this.questionIds.length) {
       return;
     }
-    this.autoMoveToken++;
     this.showCompletionSummary = false;
     this.showProgressPanel = false;
     this.currentIndex = index;
@@ -1496,6 +1452,10 @@ struct QuestionPage {
     if (!this.question) {
       return;
     }
+    if (!this.canSubmit()) {
+      AppToast.show(this.getUIContext(), '请先完成作答');
+      return;
+    }
     try {
       this.feedback = await store.submitAnswer({
         questionId: this.question.id,
@@ -1506,12 +1466,12 @@ struct QuestionPage {
       this.updateAnswerProgress(this.feedback);
       PracticeEvents.markStatsChanged();
       if (this.answeredCount() === this.questionIds.length) {
-        this.scheduleCompletionSummary(this.feedback.questionId);
+        AppToast.show(this.getUIContext(), '本轮已完成，可查看结果');
       } else {
-        AppToast.show('已提交');
+        AppToast.show(this.getUIContext(), '已提交');
       }
     } catch (error) {
-      AppToast.show(`提交失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `提交失败：${String(error)}`);
     }
   }
 
@@ -1544,34 +1504,6 @@ struct QuestionPage {
     this.answerProgress = next;
   }
 
-  scheduleAutoNext(questionId: string): void {
-    if (!this.hasNext()) {
-      this.scheduleCompletionSummary(questionId);
-      return;
-    }
-    this.autoMoveToken++;
-    const token = this.autoMoveToken;
-    const message = this.feedback?.isCorrect === false ? '已记录，切到下一题' : '已提交，切到下一题';
-    AppToast.show(message);
-    setTimeout(() => {
-      if (this.autoMoveToken === token && this.question?.id === questionId) {
-        this.goNextQuestion();
-      }
-    }, 800);
-  }
-
-  scheduleCompletionSummary(questionId: string): void {
-    this.autoMoveToken++;
-    const token = this.autoMoveToken;
-    AppToast.show('本轮已完成');
-    setTimeout(() => {
-      if (this.autoMoveToken === token && this.question?.id === questionId) {
-        this.showProgressPanel = false;
-        this.showCompletionSummary = true;
-      }
-    }, 700);
-  }
-
   async toggleFavorite() {
     if (!this.question) {
       return;
@@ -1586,7 +1518,7 @@ struct QuestionPage {
       }
       PracticeEvents.markStatsChanged();
     } catch (error) {
-      AppToast.show(`操作失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
     }
   }
 
@@ -1603,9 +1535,9 @@ struct QuestionPage {
       }
       this.question = current;
       PracticeEvents.markStatsChanged();
-      AppToast.show('已标记掌握');
+      AppToast.show(this.getUIContext(), '已标记掌握');
     } catch (error) {
-      AppToast.show(`操作失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
     } finally {
       this.masteringWrong = false;
     }

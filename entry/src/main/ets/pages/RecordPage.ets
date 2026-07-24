@@ -49,7 +49,7 @@ struct RecordPage {
       this.stats = await store.loadStats();
       this.observedStatsVersion = PracticeEvents.currentStatsVersion();
     } catch (error) {
-      AppToast.show(`加载失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -65,7 +65,7 @@ struct RecordPage {
             .fontColor(COLOR_NAVY)
             .backgroundColor('#eef2f6')
             .borderRadius(8)
-            .onClick(() => AppRouter.back())
+            .onClick(() => AppRouter.back(this.getUIContext()))
           Text('练习记录')
             .fontSize(22)
             .fontWeight(FontWeight.Bold)
@@ -221,7 +221,7 @@ struct RecordPage {
         .backgroundColor(COLOR_GREEN)
         .borderRadius(8)
         .margin({ top: 14 })
-        .onClick(() => AppRouter.push('pages/PracticePage', {
+        .onClick(() => AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
           mode: 'random',
           categoryId: '',
           title: '随机练习'
@@ -392,7 +392,7 @@ struct RecordPage {
   }
 
   openCategoryPractice(item: CategoryStats): void {
-    AppRouter.push('pages/PracticePage', {
+    AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
       mode: 'category',
       categoryId: item.categoryId,
       title: item.name

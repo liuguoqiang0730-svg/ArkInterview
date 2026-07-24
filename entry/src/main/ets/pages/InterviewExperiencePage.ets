@@ -293,7 +293,7 @@ struct InterviewExperiencePage {
         .fontColor(COLOR_NAVY)
         .backgroundColor('#eef2f6')
         .borderRadius(8)
-        .onClick(() => AppRouter.back())
+        .onClick(() => AppRouter.back(this.getUIContext()))
 
       Column() {
         Text('常见面试题分享')

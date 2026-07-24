@@ -1,5 +1,5 @@
 import http from '@ohos.net.http';
-import { API_BASE_URL, DEFAULT_DEVICE_ID } from '../app/AppConfig';
+import { API_BASE_URL } from '../app/AppConfig';
 import {
   Category,
   ItemResult,
@@ -13,14 +13,15 @@ import {
   SubmitAnswerResponse,
   UserStats
 } from '../models/QuestionModels';
+import { DeviceIdentity } from '../utils/DeviceIdentity';
 
 export class ApiClient {
   private baseUrl: string;
-  private deviceId: string;
+  private deviceIdOverride: string | undefined;
 
-  constructor(baseUrl: string = API_BASE_URL, deviceId: string = DEFAULT_DEVICE_ID) {
+  constructor(baseUrl: string = API_BASE_URL, deviceId?: string) {
     this.baseUrl = baseUrl;
-    this.deviceId = deviceId;
+    this.deviceIdOverride = deviceId;
   }
 
   async getCategories(): Promise<Category[]> {
@@ -103,7 +104,7 @@ export class ApiClient {
         method: this.toRequestMethod(method),
         header: {
           'Content-Type': 'application/json',
-          'X-Device-Id': this.deviceId
+          'X-Device-Id': this.deviceIdOverride ?? DeviceIdentity.getId()
         },
         extraData: body ? JSON.stringify(body) : undefined,
         connectTimeout: 10000,

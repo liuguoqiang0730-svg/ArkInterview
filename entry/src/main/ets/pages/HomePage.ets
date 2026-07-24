@@ -53,7 +53,7 @@ struct HomePage {
       this.stats = snapshot.stats;
       this.observedStatsVersion = PracticeEvents.currentStatsVersion();
     } catch (error) {
-      AppToast.show(`加载失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -681,7 +681,8 @@ struct HomePage {
 
   handleQuickPractice(mode: string): void {
     if (!this.quickPracticeEnabled(mode)) {
-      AppToast.show(mode === 'wrongs' ? '还没有错题，先完成一组练习' : '还没有收藏题目，先收藏重点题');
+      AppToast.show(this.getUIContext(),
+        mode === 'wrongs' ? '还没有错题，先完成一组练习' : '还没有收藏题目，先收藏重点题');
       return;
     }
     this.openPractice(mode);
@@ -719,14 +720,14 @@ struct HomePage {
 
   openPractice(mode: string, category?: Category) {
     if (mode === 'interview') {
-      AppRouter.push('pages/PracticePage', {
+      AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
         mode: 'interview',
         categoryId: '',
         title: '基础模拟面试'
       });
       return;
     }
-    AppRouter.push('pages/PracticePage', {
+    AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
       mode,
       categoryId: category?.id ?? '',
       title: category?.name ?? ''
@@ -734,6 +735,6 @@ struct HomePage {
   }
 
   openInterviewExperience(): void {
-    AppRouter.push('pages/InterviewExperiencePage');
+    AppRouter.push(this.getUIContext(), 'pages/InterviewExperiencePage');
   }
 }

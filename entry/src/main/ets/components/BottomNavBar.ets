@@ -79,22 +79,22 @@ export struct BottomNavBar {
       return;
     }
     if (target === 'home') {
-      AppRouter.push('pages/HomePage');
+      AppRouter.push(this.getUIContext(), 'pages/HomePage');
       return;
     }
     if (target === 'records') {
-      AppRouter.push('pages/RecordPage');
+      AppRouter.push(this.getUIContext(), 'pages/RecordPage');
       return;
     }
     if (target === 'wrongs') {
-      AppRouter.push('pages/ReviewListPage', {
+      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
         mode: 'wrongs',
         title: '错题本'
       });
       return;
     }
     if (target === 'favorites') {
-      AppRouter.push('pages/ReviewListPage', {
+      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
         mode: 'favorites',
         title: '收藏题目'
       });

@@ -1,9 +1,11 @@
-import promptAction from '@ohos.promptAction';
+import { UIContext } from '@kit.ArkUI';
 
 export class AppToast {
-  static show(message: string): void {
+  static show(uiContext: UIContext, message: string): void {
     try {
-      promptAction.showToast({ message });
+      uiContext.getPromptAction().openToast({ message }).catch((error: Error) => {
+        console.error(`toast failed: ${String(error)}`);
+      });
     } catch (error) {
       console.error(`toast failed: ${String(error)}`);
     }

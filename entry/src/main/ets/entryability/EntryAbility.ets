@@ -1,6 +1,7 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { DeviceIdentity } from '../utils/DeviceIdentity';
 
 const DOMAIN: number = 0x0001;
 
@@ -14,6 +15,16 @@ export default class EntryAbility extends UIAbility {
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
+    DeviceIdentity.initialize(this.context).then(() => {
+      this.loadHomePage(windowStage);
+    }).catch((error: Error) => {
+      DeviceIdentity.getId();
+      hilog.error(DOMAIN, 'ArkInterview', 'Anonymous identity persistence failed: %{public}s', String(error));
+      this.loadHomePage(windowStage);
+    });
+  }
+
+  private loadHomePage(windowStage: window.WindowStage): void {
     windowStage.loadContent('pages/HomePage', (error) => {
       if (error.code) {
         hilog.error(DOMAIN, 'ArkInterview', 'Failed to load content: %{public}s', JSON.stringify(error));

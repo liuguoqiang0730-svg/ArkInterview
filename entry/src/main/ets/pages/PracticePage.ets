@@ -40,7 +40,7 @@ struct PracticePage {
   }
 
   async loadSession() {
-    const params = AppRouter.params();
+    const params = AppRouter.params(this.getUIContext());
     const mode = params.mode || 'random';
     const categoryId = params.categoryId || undefined;
     this.mode = mode;
@@ -63,7 +63,7 @@ struct PracticePage {
         this.selectedQuestion = undefined;
       }
     } catch (error) {
-      AppToast.show(`加载失败：${String(error)}`);
+      AppToast.show(this.getUIContext(), `加载失败：${String(error)}`);
     } finally {
       this.loading = false;
     }
@@ -80,7 +80,7 @@ struct PracticePage {
               .fontColor(COLOR_NAVY)
               .backgroundColor('#eef2f6')
               .borderRadius(8)
-              .onClick(() => AppRouter.back())
+              .onClick(() => AppRouter.back(this.getUIContext()))
             Text(this.title)
               .fontSize(22)
               .fontWeight(FontWeight.Bold)
@@ -147,7 +147,7 @@ struct PracticePage {
               .backgroundColor(COLOR_GREEN)
               .borderRadius(8)
               .margin({ top: 16 })
-              .onClick(() => AppRouter.push('pages/HomePage'))
+              .onClick(() => AppRouter.push(this.getUIContext(), 'pages/HomePage'))
           }
           .width('100%')
           .padding(20)
@@ -838,7 +838,7 @@ struct PracticePage {
   }
 
   openQuestion(question: Question): void {
-    AppRouter.push('pages/QuestionPage', {
+    AppRouter.push(this.getUIContext(), 'pages/QuestionPage', {
       questionId: question.id,
       questionIds: this.sessionQuestionIds(),
       questionIndex: String(this.questionIndex(question)),
