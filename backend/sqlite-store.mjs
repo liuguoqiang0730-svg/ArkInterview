@@ -4,7 +4,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-const schemaVersion = 1;
+const schemaVersion = 2;
 
 export function resolveDatabasePaths(defaultStorageDir) {
   const configuredDbFile = process.env.DB_FILE
@@ -66,7 +66,7 @@ export function readSqliteSnapshot(dbFile) {
   const database = new Database(dbFile, { readonly: true, fileMustExist: true });
   try {
     const store = new SqliteStore(database, dbFile);
-    store.assertSupportedSchema();
+    store.assertReadableSchema();
     return store.loadSnapshot();
   } finally {
     database.close();
@@ -160,6 +160,8 @@ export class SqliteStore {
         CREATE TABLE IF NOT EXISTS auth_sessions (
           id TEXT PRIMARY KEY,
           user_id TEXT NOT NULL,
+          access_token_hash TEXT UNIQUE,
+          access_expires_at TEXT,
           refresh_token_hash TEXT NOT NULL UNIQUE,
           expires_at TEXT NOT NULL,
           revoked_at TEXT,
@@ -170,6 +172,8 @@ export class SqliteStore {
 
         CREATE INDEX IF NOT EXISTS idx_auth_sessions_user
           ON auth_sessions(user_id, revoked_at, expires_at);
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_auth_sessions_access_token
+          ON auth_sessions(access_token_hash);
 
         CREATE TABLE IF NOT EXISTS favorites (
           user_id TEXT NOT NULL,
@@ -214,12 +218,28 @@ export class SqliteStore {
       `);
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
+    if (currentVersion === 1) {
+      this.database.exec(`
+        ALTER TABLE auth_sessions ADD COLUMN access_token_hash TEXT;
+        ALTER TABLE auth_sessions ADD COLUMN access_expires_at TEXT;
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_auth_sessions_access_token
+          ON auth_sessions(access_token_hash);
+      `);
+      this.database.pragma(`user_version = ${schemaVersion}`);
+    }
     this.assertSupportedSchema();
   }
 
   assertSupportedSchema() {
     const currentVersion = this.database.pragma('user_version', { simple: true });
     if (currentVersion !== schemaVersion) {
+      throw new Error(`Unsupported SQLite schema version: ${currentVersion}`);
+    }
+  }
+
+  assertReadableSchema() {
+    const currentVersion = this.database.pragma('user_version', { simple: true });
+    if (currentVersion < 1 || currentVersion > schemaVersion) {
       throw new Error(`Unsupported SQLite schema version: ${currentVersion}`);
     }
   }
@@ -455,6 +475,92 @@ export class SqliteStore {
     save();
   }
 
+  findIdentity(provider, providerSubject) {
+    const row = this.database.prepare(
+      `SELECT id, user_id, provider, provider_subject, union_id, created_at, updated_at
+       FROM user_identities
+       WHERE provider = ? AND provider_subject = ?`
+    ).get(provider, providerSubject);
+    return row ? mapIdentity(row) : undefined;
+  }
+
+  hasIdentityForUser(userId) {
+    return Boolean(this.database.prepare(
+      'SELECT 1 AS present FROM user_identities WHERE user_id = ? LIMIT 1'
+    ).get(userId));
+  }
+
+  findActiveAccessSession(accessTokenHash, now) {
+    const row = this.database.prepare(
+      `SELECT id, user_id, access_expires_at, expires_at, revoked_at, created_at, updated_at
+       FROM auth_sessions
+       WHERE access_token_hash = ?
+         AND revoked_at IS NULL
+         AND access_expires_at > ?`
+    ).get(accessTokenHash, now);
+    return row ? mapSession(row) : undefined;
+  }
+
+  findActiveRefreshSession(refreshTokenHash, now) {
+    const row = this.database.prepare(
+      `SELECT id, user_id, access_expires_at, expires_at, revoked_at, created_at, updated_at
+       FROM auth_sessions
+       WHERE refresh_token_hash = ?
+         AND revoked_at IS NULL
+         AND expires_at > ?`
+    ).get(refreshTokenHash, now);
+    return row ? mapSession(row) : undefined;
+  }
+
+  authenticateUser({ user, mergedUserId, identity, session, metadata }) {
+    const authenticate = this.database.transaction(() => {
+      this.saveMetadataRecord(metadata);
+      this.saveUserRecords(user);
+
+      if (mergedUserId && mergedUserId !== user.id) {
+        this.database.prepare(
+          'UPDATE user_identities SET user_id = ?, updated_at = ? WHERE user_id = ?'
+        ).run(user.id, session.updatedAt, mergedUserId);
+        this.database.prepare(
+          'UPDATE auth_sessions SET user_id = ?, updated_at = ? WHERE user_id = ?'
+        ).run(user.id, session.updatedAt, mergedUserId);
+        this.database.prepare('DELETE FROM users WHERE id = ?').run(mergedUserId);
+      }
+
+      this.saveIdentityRecord(identity);
+      this.saveSessionRecord(session);
+    });
+    authenticate();
+  }
+
+  rotateSession(session) {
+    const result = this.database.prepare(
+      `UPDATE auth_sessions
+       SET access_token_hash = ?,
+           access_expires_at = ?,
+           refresh_token_hash = ?,
+           expires_at = ?,
+           updated_at = ?
+       WHERE id = ? AND revoked_at IS NULL`
+    ).run(
+      session.accessTokenHash,
+      session.accessExpiresAt,
+      session.refreshTokenHash,
+      session.refreshExpiresAt,
+      session.updatedAt,
+      session.id
+    );
+    return result.changes === 1;
+  }
+
+  revokeSession(sessionId, revokedAt) {
+    this.database.prepare(
+      `UPDATE auth_sessions
+       SET revoked_at = ?, updated_at = ?
+       WHERE id = ? AND revoked_at IS NULL`
+    ).run(revokedAt, revokedAt, sessionId);
+  }
+
   integrityCheck() {
     return this.database.pragma('integrity_check', { simple: true });
   }
@@ -526,6 +632,48 @@ export class SqliteStore {
     );
   }
 
+  saveIdentityRecord(identity) {
+    const existing = this.findIdentity(identity.provider, identity.providerSubject);
+    if (existing && existing.userId !== identity.userId) {
+      throw new Error('External identity is already linked to another user');
+    }
+    this.database.prepare(
+      `INSERT INTO user_identities (
+         id, user_id, provider, provider_subject, union_id, created_at, updated_at
+       ) VALUES (?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(provider, provider_subject) DO UPDATE SET
+         union_id = excluded.union_id,
+         updated_at = excluded.updated_at`
+    ).run(
+      identity.id,
+      identity.userId,
+      identity.provider,
+      identity.providerSubject,
+      identity.unionId || null,
+      identity.createdAt,
+      identity.updatedAt
+    );
+  }
+
+  saveSessionRecord(session) {
+    this.database.prepare(
+      `INSERT INTO auth_sessions (
+         id, user_id, access_token_hash, access_expires_at,
+         refresh_token_hash, expires_at, revoked_at, created_at, updated_at
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      session.id,
+      session.userId,
+      session.accessTokenHash,
+      session.accessExpiresAt,
+      session.refreshTokenHash,
+      session.refreshExpiresAt,
+      null,
+      session.createdAt,
+      session.updatedAt
+    );
+  }
+
   saveUserRecords(user) {
     normalizeUser(user);
     this.saveUserRecord(user);
@@ -572,6 +720,9 @@ export class SqliteStore {
       user.updatedAt
     );
 
+    this.database.prepare(
+      'DELETE FROM anonymous_devices WHERE user_id = ?'
+    ).run(user.id);
     const upsertDevice = this.database.prepare(
       `INSERT INTO anonymous_devices (device_id, user_id, created_at, updated_at)
        VALUES (?, ?, ?, ?)
@@ -677,4 +828,28 @@ function normalizeUser(user) {
   user.favorites = Array.isArray(user.favorites) ? [...new Set(user.favorites)] : [];
   user.wrongs = user.wrongs && typeof user.wrongs === 'object' ? user.wrongs : {};
   user.answers = Array.isArray(user.answers) ? user.answers : [];
+}
+
+function mapIdentity(row) {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    provider: row.provider,
+    providerSubject: row.provider_subject,
+    unionId: row.union_id || '',
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+}
+
+function mapSession(row) {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    accessExpiresAt: row.access_expires_at,
+    refreshExpiresAt: row.expires_at,
+    revokedAt: row.revoked_at,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }

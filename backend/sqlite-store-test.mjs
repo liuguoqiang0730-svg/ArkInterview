@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
+import Database from 'better-sqlite3';
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { openSqliteStore } from './sqlite-store.mjs';
+import { openSqliteStore, readSqliteSnapshot } from './sqlite-store.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,6 +61,13 @@ try {
   opened.store.saveUser(migratedUser, opened.snapshot.meta);
   opened.store.close();
   activeStore = undefined;
+  downgradeAuthSchemaForMigrationTest(dbFile);
+  const schemaV1Snapshot = readSqliteSnapshot(dbFile);
+  assert.equal(
+    schemaV1Snapshot.users['legacy-device'].answers.length,
+    1,
+    'read-only catalog sync should remain compatible with schema v1 before migration'
+  );
 
   const reopened = await openSqliteStore({
     dbFile,
@@ -87,6 +95,16 @@ try {
     'answer history should survive a database restart'
   );
   assert.equal(reopened.store.integrityCheck(), 'ok', 'reopened SQLite database should pass integrity check');
+  assert.equal(
+    reopened.store.database.pragma('user_version', { simple: true }),
+    2,
+    'opening a schema v1 database should migrate it to schema v2'
+  );
+  const authSessionColumns = reopened.store.database
+    .pragma('table_info(auth_sessions)')
+    .map((column) => column.name);
+  assert(authSessionColumns.includes('access_token_hash'), 'schema v2 should add access token hashes');
+  assert(authSessionColumns.includes('access_expires_at'), 'schema v2 should add access token expiry');
   assert.equal(await readFile(legacyDbFile, 'utf8'), legacyText, 'migration must not modify legacy JSON');
   assert.equal(existsSync(dbFile), true, 'migration should create the SQLite database file');
 
@@ -133,6 +151,34 @@ function createLegacySnapshot(categories, questions, question) {
       }
     }
   };
+}
+
+function downgradeAuthSchemaForMigrationTest(file) {
+  const database = new Database(file);
+  try {
+    database.pragma('foreign_keys = OFF');
+    database.exec(`
+      DROP INDEX IF EXISTS idx_auth_sessions_user;
+      DROP INDEX IF EXISTS idx_auth_sessions_access_token;
+      ALTER TABLE auth_sessions RENAME TO auth_sessions_v2;
+      CREATE TABLE auth_sessions (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        refresh_token_hash TEXT NOT NULL UNIQUE,
+        expires_at TEXT NOT NULL,
+        revoked_at TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      );
+      CREATE INDEX idx_auth_sessions_user
+        ON auth_sessions(user_id, revoked_at, expires_at);
+      DROP TABLE auth_sessions_v2;
+      PRAGMA user_version = 1;
+    `);
+  } finally {
+    database.close();
+  }
 }
 
 async function readJson(file) {

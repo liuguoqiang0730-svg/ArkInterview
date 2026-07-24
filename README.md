@@ -44,6 +44,20 @@ npm run questions:sync-db
 
 不要把真实 `ADMIN_TOKEN` 写进仓库、截图或日志。
 
+## 可选华为账号登录
+
+后端已经支持华为 Authorization Code 验证、匿名学习记录合并、ArkInterview 访问/刷新令牌轮换和退出登录。匿名刷题不受影响；HarmonyOS Account Kit 客户端和“我的”页面尚未接入。
+
+启用登录前，在服务端同时配置以下三个变量，缺少任意一个时服务会拒绝以不完整配置启动：
+
+```bash
+export HUAWEI_CLIENT_ID="<AGC OAuth client id>"
+export HUAWEI_CLIENT_SECRET="<server-only client secret>"
+export HUAWEI_REDIRECT_URI="<registered redirect uri>"
+```
+
+可选令牌有效期变量为 `AUTH_ACCESS_TTL_SECONDS` 和 `AUTH_REFRESH_TTL_SECONDS`，默认分别为 `900` 秒和 `2592000` 秒。`HUAWEI_CLIENT_SECRET`、华为授权码和所有明文令牌都不能写入仓库或日志，公网登录接口必须使用 HTTPS。
+
 ## 发布远程题库
 
 远程服务部署最新后端并配置相同的 `ADMIN_TOKEN` 后，可以从本仓库按题目 ID 增量发布：
@@ -67,7 +81,7 @@ export ADMIN_TOKEN="$(openssl rand -hex 32)"
 bash scripts/deploy-production.sh
 ```
 
-脚本会拒绝脏 Git 工作区，使用锁文件安装生产依赖，在线备份 SQLite，运行 `npm test`，通过 PM2 重载服务，并验证公开 API、未授权 `401` 和授权 `200`。首次迁移时如果 SQLite 尚不存在，脚本会先备份旧版 `db.json`。脚本不会自动执行 `git pull` 或覆盖题库。若服务端使用自定义目录、端口或数据库路径，可通过 `APP_DIR`、`API_URL`、`PORT`、`DB_FILE` 和 `LEGACY_DB_FILE` 环境变量覆盖。
+脚本会拒绝脏 Git 工作区，使用锁文件安装生产依赖，在线备份 SQLite，运行 `npm test`，通过 PM2 重载服务，并验证公开 API、登录能力状态、未授权 `401` 和授权 `200`。首次迁移时如果 SQLite 尚不存在，脚本会先备份旧版 `db.json`。脚本不会自动执行 `git pull` 或覆盖题库。若服务端使用自定义目录、端口或数据库路径，可通过 `APP_DIR`、`API_URL`、`PORT`、`DB_FILE` 和 `LEGACY_DB_FILE` 环境变量覆盖。
 
 部署成功后应妥善保存令牌并立即配置 HTTPS。需要回滚代码时，先切回上一条已验证提交并重新执行部署脚本；若确实需要恢复数据，再停止服务后使用脚本输出的 `.deploy-backups/*.sqlite` 或首次迁移产生的旧 JSON 备份。
 
@@ -77,7 +91,7 @@ bash scripts/deploy-production.sh
 npm test
 ```
 
-测试会创建临时 SQLite 数据库，验证旧 JSON 迁移、数据重启恢复和数据库完整性，并覆盖管理员鉴权、分类、题目、随机练习、错题练习、收藏练习、答题提交和基础模拟面试接口。
+测试会创建临时 SQLite 数据库，验证旧 JSON 迁移、Schema 升级、数据重启恢复和数据库完整性，并覆盖管理员鉴权、可选登录、会话轮换、匿名记录合并、账户数据隔离、分类、题目、随机练习、错题练习、收藏练习、答题提交和基础模拟面试接口。
 
 ## DevEco Studio
 

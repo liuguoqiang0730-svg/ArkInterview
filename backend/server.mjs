@@ -3,6 +3,8 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
+import { AuthService } from './auth-service.mjs';
+import { HuaweiAccountClient } from './huawei-account-client.mjs';
 import { openSqliteStore, resolveDatabasePaths } from './sqlite-store.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -61,6 +63,17 @@ function assertValidServerConfig() {
   if (adminToken && adminToken.length < minimumAdminTokenLength) {
     throw new Error(`ADMIN_TOKEN must contain at least ${minimumAdminTokenLength} characters`);
   }
+  const huaweiConfig = [
+    process.env.HUAWEI_CLIENT_ID,
+    process.env.HUAWEI_CLIENT_SECRET,
+    process.env.HUAWEI_REDIRECT_URI
+  ].map((value) => String(value || '').trim());
+  const configuredHuaweiFields = huaweiConfig.filter(Boolean).length;
+  if (configuredHuaweiFields > 0 && configuredHuaweiFields < huaweiConfig.length) {
+    throw new Error(
+      'HUAWEI_CLIENT_ID, HUAWEI_CLIENT_SECRET, and HUAWEI_REDIRECT_URI must be configured together'
+    );
+  }
 }
 
 function authorizeAdmin(req) {
@@ -80,27 +93,6 @@ function safeSecretEqual(left, right) {
   const leftDigest = createHash('sha256').update(left).digest();
   const rightDigest = createHash('sha256').update(right).digest();
   return timingSafeEqual(leftDigest, rightDigest);
-}
-
-function ensureUser(db, deviceId) {
-  if (!db.users[deviceId]) {
-    const now = nowIso();
-    db.users[deviceId] = {
-      id: `user-${randomUUID()}`,
-      deviceId,
-      deviceIds: [deviceId],
-      displayName: '',
-      avatarUrl: '',
-      leaderboardOptIn: false,
-      status: 'active',
-      createdAt: now,
-      updatedAt: now,
-      favorites: [],
-      wrongs: {},
-      answers: []
-    };
-  }
-  return db.users[deviceId];
 }
 
 function touchMetadata(db, timestamp = nowIso()) {
@@ -497,7 +489,12 @@ function statsFor(db, user) {
 
 async function parseBody(req) {
   const chunks = [];
+  let totalBytes = 0;
   for await (const chunk of req) {
+    totalBytes += chunk.length;
+    if (totalBytes > 1024 * 1024) {
+      throw httpError(413, '请求体不能超过 1 MB');
+    }
     chunks.push(chunk);
   }
   const raw = Buffer.concat(chunks).toString('utf8');
@@ -517,12 +514,13 @@ function httpError(status, message) {
   return error;
 }
 
-function sendJson(res, status, data) {
+function sendJson(res, status, data, extraHeaders = {}) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device-Id',
-    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS'
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+    ...extraHeaders
   });
   res.end(JSON.stringify(data, null, 2));
 }
@@ -558,14 +556,57 @@ async function sendStatic(req, res, pathname) {
   }
 }
 
-async function routeApi(req, res, db, url, store) {
+async function routeApi(req, res, db, url, store, authService) {
   const { pathname, searchParams } = url;
   const method = req.method || 'GET';
   const deviceId = getDeviceId(req);
-  const user = ensureUser(db, deviceId);
 
   if (method === 'OPTIONS') {
     sendJson(res, 204, {});
+    return;
+  }
+
+  if (pathname.startsWith('/api/admin/')) {
+    await routeAdmin(req, res, db, url, store);
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/auth/status') {
+    sendJson(res, 200, {
+      huaweiLoginEnabled: authService.isHuaweiConfigured(),
+      anonymousUsageEnabled: true
+    });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/auth/huawei') {
+    const payload = await parseBody(req);
+    const result = await authService.loginWithHuawei({
+      authorizationCode: payload.authorizationCode,
+      deviceId
+    });
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/auth/refresh') {
+    const payload = await parseBody(req);
+    const result = authService.refresh(payload.refreshToken);
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  const principal = authService.resolvePrincipal(req.headers.authorization, deviceId);
+  const user = principal.user;
+
+  if (method === 'POST' && pathname === '/api/auth/logout') {
+    authService.logout(principal);
+    sendJson(res, 200, { success: true }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/users/me/profile') {
+    sendJson(res, 200, authService.profile(principal), { 'Cache-Control': 'no-store' });
     return;
   }
 
@@ -715,11 +756,6 @@ async function routeApi(req, res, db, url, store) {
     return;
   }
 
-  if (pathname.startsWith('/api/admin/')) {
-    await routeAdmin(req, res, db, url, store);
-    return;
-  }
-
   notFound(res);
 }
 
@@ -864,6 +900,18 @@ async function main() {
     legacyDbFile,
     createInitialData: createSeedDb
   });
+  const huaweiClient = new HuaweiAccountClient({
+    clientId: process.env.HUAWEI_CLIENT_ID,
+    clientSecret: process.env.HUAWEI_CLIENT_SECRET,
+    redirectUri: process.env.HUAWEI_REDIRECT_URI
+  });
+  const authService = new AuthService({
+    store,
+    db,
+    huaweiClient,
+    accessTtlSeconds: process.env.AUTH_ACCESS_TTL_SECONDS,
+    refreshTtlSeconds: process.env.AUTH_REFRESH_TTL_SECONDS
+  });
 
   if (process.argv.includes('--seed-only')) {
     store.replaceAll(await createSeedDb());
@@ -880,7 +928,7 @@ async function main() {
         return;
       }
       if (url.pathname.startsWith('/api/')) {
-        await routeApi(req, res, db, url, store);
+        await routeApi(req, res, db, url, store, authService);
         return;
       }
       if (url.pathname === '/') {
@@ -892,7 +940,10 @@ async function main() {
     } catch (error) {
       const status = error.status || 500;
       if (status === 401) {
-        res.setHeader('WWW-Authenticate', 'Bearer realm="ArkInterview Admin"');
+        const realm = url.pathname.startsWith('/api/admin/')
+          ? 'ArkInterview Admin'
+          : 'ArkInterview';
+        res.setHeader('WWW-Authenticate', `Bearer realm="${realm}"`);
       }
       sendJson(res, status, {
         error: error.message || 'Internal Server Error'
@@ -911,6 +962,9 @@ async function main() {
     console.log(adminToken
       ? 'Admin API authentication enabled.'
       : 'Admin API disabled: configure ADMIN_TOKEN to enable management access.');
+    console.log(authService.isHuaweiConfigured()
+      ? 'Huawei Account login enabled.'
+      : 'Huawei Account login disabled: configure HUAWEI_CLIENT_ID, HUAWEI_CLIENT_SECRET, and HUAWEI_REDIRECT_URI.');
     if (host === '0.0.0.0') {
       console.log(`LAN access enabled. Use http://<your-computer-ip>:${port}/api from a device.`);
     }

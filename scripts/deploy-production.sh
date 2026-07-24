@@ -14,6 +14,12 @@ if [[ -z "${ADMIN_TOKEN:-}" || ${#ADMIN_TOKEN} -lt 32 ]]; then
   exit 1
 fi
 
+if [[ -n "${HUAWEI_CLIENT_ID:-}${HUAWEI_CLIENT_SECRET:-}${HUAWEI_REDIRECT_URI:-}" ]] &&
+  [[ -z "${HUAWEI_CLIENT_ID:-}" || -z "${HUAWEI_CLIENT_SECRET:-}" || -z "${HUAWEI_REDIRECT_URI:-}" ]]; then
+  echo "HUAWEI_CLIENT_ID, HUAWEI_CLIENT_SECRET, and HUAWEI_REDIRECT_URI must be configured together." >&2
+  exit 1
+fi
+
 for command_name in node npm pm2 curl; do
   if ! command -v "${command_name}" >/dev/null 2>&1; then
     echo "Missing required command: ${command_name}" >&2
@@ -53,6 +59,11 @@ export PORT="${PORT:-8787}"
 export DB_FILE
 export LEGACY_DB_FILE
 export ADMIN_TOKEN
+export HUAWEI_CLIENT_ID="${HUAWEI_CLIENT_ID:-}"
+export HUAWEI_CLIENT_SECRET="${HUAWEI_CLIENT_SECRET:-}"
+export HUAWEI_REDIRECT_URI="${HUAWEI_REDIRECT_URI:-}"
+export AUTH_ACCESS_TTL_SECONDS="${AUTH_ACCESS_TTL_SECONDS:-900}"
+export AUTH_REFRESH_TTL_SECONDS="${AUTH_REFRESH_TTL_SECONDS:-2592000}"
 
 npm test
 
@@ -84,6 +95,7 @@ pm2 startOrReload ecosystem.config.cjs --update-env
 pm2 save
 
 curl --fail --silent --show-error "${API_URL}/categories" >/dev/null
+curl --fail --silent --show-error "${API_URL}/auth/status" >/dev/null
 
 unauthorized_status="$(
   curl --silent --show-error --output /dev/null --write-out "%{http_code}" \
@@ -104,7 +116,7 @@ if [[ "${authorized_status}" != "200" ]]; then
   exit 1
 fi
 
-echo "Deployment verified: public API is healthy and admin authentication is enabled."
+echo "Deployment verified: public API, auth status, and admin authentication are healthy."
 if [[ "${legacy_migration}" == "1" ]]; then
   echo "Legacy JSON data migrated to SQLite: ${DB_FILE}"
 fi

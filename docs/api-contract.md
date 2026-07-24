@@ -10,7 +10,53 @@ X-Device-Id: <anonymous-device-id>
 
 如果未传入，开发服务会使用 `demo-device`。
 
-App 首次启动时使用安全随机 UUID 生成 `ark-<uuid>` 格式的匿名设备 ID，并保存到应用私有 Preferences。后续启动继续使用同一个 ID，因此答题记录、错题和收藏可以在本机持续关联；不同安装的数据相互隔离。清除应用数据或卸载重装后会生成新的 ID，MVP 暂不提供跨设备同步。
+App 首次启动时使用安全随机 UUID 生成 `ark-<uuid>` 格式的匿名设备 ID，并保存到应用私有 Preferences。后续启动继续使用同一个 ID，因此答题记录、错题和收藏可以在本机持续关联；不同安装的数据相互隔离。清除应用数据或卸载重装后会生成新的 ID。登录用户可通过华为账号合并不同设备的匿名学习记录。
+
+## 可选登录
+
+匿名模式始终可用。登录后，客户端在需要读取或写入用户数据的请求中携带 ArkInterview 访问令牌：
+
+```http
+Authorization: Bearer <ark_access_token>
+```
+
+不允许把华为 OpenID、华为 access token 或客户端自行生成的用户 ID 当作 ArkInterview 登录凭证。
+
+### GET /api/auth/status
+
+返回服务端是否已启用华为账号登录。未配置华为凭据时 `huaweiLoginEnabled` 为 `false`，匿名模式不受影响。
+
+### POST /api/auth/huawei
+
+App 通过 Account Kit 获取 Authorization Code 后，将授权码和当前 `X-Device-Id` 发给 ArkInterview 服务端：
+
+```json
+{
+  "authorizationCode": "<authorization-code>"
+}
+```
+
+服务端使用华为凭据兑换并验证账号身份，随后在一个事务中创建或查找内部用户、合并当前匿名学习记录并签发 ArkInterview 自己的访问令牌和刷新令牌。服务端未完整配置华为凭据时返回 `503`。
+
+### POST /api/auth/refresh
+
+```json
+{
+  "refreshToken": "<ark_refresh_token>"
+}
+```
+
+刷新成功后访问令牌和刷新令牌都会轮换，旧令牌立即失效。
+
+### POST /api/auth/logout
+
+需要携带有效的 ArkInterview 访问令牌。服务端吊销当前会话；客户端应删除访问令牌和刷新令牌，后续请求恢复为匿名模式。
+
+### GET /api/users/me/profile
+
+匿名请求返回 `authenticated: false`；携带有效访问令牌时返回 ArkInterview 内部用户 ID、展示名、头像和排行榜参与设置。
+
+访问令牌默认有效期 15 分钟，刷新令牌默认有效期 30 天。数据库只保存两类令牌的 SHA-256 哈希，不保存明文令牌，也不保存华为 access token 或 refresh token。
 
 ## 题库
 

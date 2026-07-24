@@ -23,7 +23,10 @@ const server = spawn(process.execPath, [path.join(rootDir, 'backend', 'server.mj
     ...process.env,
     PORT: String(port),
     DB_FILE: dbFile,
-    ADMIN_TOKEN: adminToken
+    ADMIN_TOKEN: adminToken,
+    HUAWEI_CLIENT_ID: '',
+    HUAWEI_CLIENT_SECRET: '',
+    HUAWEI_REDIRECT_URI: ''
   },
   stdio: ['ignore', 'pipe', 'pipe']
 });
@@ -60,6 +63,36 @@ async function waitForServer() {
 }
 
 async function runChecks() {
+  const authStatus = await getJson('/api/auth/status');
+  assert(authStatus.huaweiLoginEnabled === false, 'Huawei login should be disabled without server credentials');
+  assert(authStatus.anonymousUsageEnabled === true, 'anonymous usage should remain enabled');
+
+  const anonymousProfile = await getJson('/api/users/me/profile');
+  assert(anonymousProfile.authenticated === false, 'anonymous profile should not be authenticated');
+  assert(anonymousProfile.user === null, 'anonymous profile should not expose an account profile');
+
+  const disabledHuaweiLogin = await postJson('/api/auth/huawei', {
+    authorizationCode: 'smoke-authorization-code'
+  }, false);
+  assert(disabledHuaweiLogin.status === 503, 'Huawei login should fail closed when credentials are missing');
+
+  const invalidRefresh = await postJson('/api/auth/refresh', {
+    refreshToken: 'invalid-refresh-token'
+  }, false);
+  assert(invalidRefresh.status === 401, 'invalid refresh tokens should be rejected');
+
+  const invalidUserToken = await fetch(`${baseUrl}/api/users/me/profile`, {
+    headers: {
+      Authorization: 'Bearer ark_access_invalid',
+      'X-Device-Id': 'smoke-test'
+    }
+  });
+  assert(invalidUserToken.status === 401, 'invalid user access tokens should be rejected');
+  assert(
+    invalidUserToken.headers.get('www-authenticate') === 'Bearer realm="ArkInterview"',
+    'user API should advertise the ArkInterview Bearer realm'
+  );
+
   const missingTokenResponse = await fetch(`${baseUrl}/api/admin/questions`);
   assert(missingTokenResponse.status === 401, 'admin API should reject requests without a token');
   assert(

@@ -1,14 +1,16 @@
 # 数据模型
 
-运行时数据保存在 `backend/storage/arkinterview.sqlite`。题库源文件仍按模块维护在 `data/question-bank/modules/*.json`，构建后同步到 SQLite；用户私有数据不进入 Git。
+运行时数据保存在 `backend/storage/arkinterview.sqlite`，当前 Schema 版本为 `2`。题库源文件仍按模块维护在 `data/question-bank/modules/*.json`，构建后同步到 SQLite；用户私有数据不进入 Git。
 
 SQLite 当前使用以下业务表：
 
 - `categories`、`questions`：分类和题目。
 - `users`、`anonymous_devices`：应用内部用户与一个或多个匿名安装设备的映射。
 - `favorites`、`wrong_questions`、`answer_attempts`：用户学习数据。
-- `user_identities`：后续保存华为账号等外部身份与内部用户的映射。
-- `auth_sessions`：后续保存 ArkInterview 自己签发的登录会话，只保存刷新令牌哈希。
+- `user_identities`：保存经过服务端验证的华为账号等外部身份与内部用户的映射。
+- `auth_sessions`：保存 ArkInterview 自己签发的登录会话，包括访问令牌哈希、刷新令牌哈希、各自过期时间和吊销时间。
+
+已关联外部身份的用户使用 `account/<users.id>` 形式的内部设备锚点加载运行时状态；该格式不符合客户端设备 ID 约束，不能通过请求头使用。真实匿名设备 ID 不再直接映射到账户用户，因此客户端漏传访问令牌或退出登录后，只能进入独立匿名空间，不能依靠设备 ID 读取账户数据。
 
 ## Category
 

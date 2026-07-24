@@ -14,9 +14,18 @@ ArkInterview 必须保留自己的内部用户 ID，不能把匿名设备 ID 或
 - `users.id`：ArkInterview 内部用户 ID。
 - `anonymous_devices`：一个内部用户可关联多个安装设备，保存匿名设备 ID 与 `users.id` 的映射。
 - `user_identities`：外部身份映射，保存 `provider`、`provider_subject` 和可选 `union_id`。
-- `auth_sessions`：ArkInterview 自己的登录会话，只保存刷新令牌哈希、过期时间和吊销时间。
+- `auth_sessions`：ArkInterview 自己的登录会话，只保存访问令牌与刷新令牌哈希、各自过期时间和吊销时间。
 
 华为账号授权码和 Client Secret 必须在服务端完成兑换与验证。App 登录成功后使用 ArkInterview 后端签发的访问令牌，不直接把客户端上报的 OpenID 当成已登录凭证。
+
+服务端实现依据华为官方 Authorization Code 流程：后端向 `oauth2/v3/token` 兑换授权码，再使用服务端获得的 access token 调用官方用户信息接口。华为 access token 和 refresh token 只用于本次身份验证，不写入 ArkInterview 数据库。
+
+官方依据：
+
+- [Account Kit](https://developer.huawei.com/consumer/cn/sdk/account-kit)
+- [Authorization Code 登录示例](https://developer.huawei.com/consumer/en/codelab/HMSAccounts/index.html)
+- [获取用户信息 REST API](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/account-api-otherscene-getuserinfo-V5)
+- [获取应用级 Access Token](https://developer.huawei.com/consumer/en/doc/harmonyos-references/account-api-obtain-app-token)
 
 ## 首次登录合并
 
@@ -44,9 +53,9 @@ ArkInterview 必须保留自己的内部用户 ID，不能把匿名设备 ID 或
 
 ## 实施顺序
 
-1. SQLite 分表存储和旧 JSON 迁移。
-2. 华为 Account Kit 客户端授权。
-3. 服务端授权码验证与内部会话。
-4. 匿名记录事务合并。
-5. “我的”页面、退出登录和账号注销。
-6. 排行榜统计与展示。
+1. 已完成：SQLite 分表存储、旧 JSON 迁移和 Schema v1 到 v2 升级。
+2. 已完成：服务端授权码验证、内部访问/刷新会话和令牌轮换。
+3. 已完成：匿名收藏、错题和答题记录事务合并，以及登录账户与匿名设备隔离。
+4. 待完成：HarmonyOS Account Kit 客户端授权。
+5. 待完成：“我的”页面、登录状态恢复、退出登录和账号注销。
+6. 待完成：排行榜统计与展示。

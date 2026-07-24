@@ -16,7 +16,8 @@
     "start:prod": "npm run questions:sync-db && node backend/server.mjs",
     "seed": "npm run questions:build && node backend/server.mjs --seed-only",
     "test:storage": "node backend/sqlite-store-test.mjs",
-    "test": "npm run questions:check && npm run test:storage && node backend/smoke-test.mjs"
+    "test:auth": "node backend/auth-service-test.mjs",
+    "test": "npm run questions:check && npm run test:storage && npm run test:auth && node backend/smoke-test.mjs"
   },
   "engines": {
     "node": ">=20.17.0"
