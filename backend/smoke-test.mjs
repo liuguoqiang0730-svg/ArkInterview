@@ -12,6 +12,7 @@ const tempDir = path.join(tempRoot, `smoke-${process.pid}-${Date.now()}`);
 const dbFile = path.join(tempDir, 'smoke-db.json');
 const port = 8791;
 const baseUrl = `http://127.0.0.1:${port}`;
+const adminToken = 'arkinterview-smoke-admin-token-2026-07-23';
 
 await mkdir(tempRoot, { recursive: true });
 await mkdir(tempDir, { recursive: true });
@@ -21,7 +22,8 @@ const server = spawn(process.execPath, [path.join(rootDir, 'backend', 'server.mj
   env: {
     ...process.env,
     PORT: String(port),
-    DB_FILE: dbFile
+    DB_FILE: dbFile,
+    ADMIN_TOKEN: adminToken
   },
   stdio: ['ignore', 'pipe', 'pipe']
 });
@@ -58,13 +60,89 @@ async function waitForServer() {
 }
 
 async function runChecks() {
+  const missingTokenResponse = await fetch(`${baseUrl}/api/admin/questions`);
+  assert(missingTokenResponse.status === 401, 'admin API should reject requests without a token');
+  assert(
+    missingTokenResponse.headers.get('www-authenticate')?.includes('Bearer'),
+    'admin API should advertise Bearer authentication'
+  );
+
+  const invalidTokenResponse = await fetch(`${baseUrl}/api/admin/questions`, {
+    headers: {
+      Authorization: 'Bearer invalid-admin-token'
+    }
+  });
+  assert(invalidTokenResponse.status === 401, 'admin API should reject an invalid token');
+
+  const preflightResponse = await fetch(`${baseUrl}/api/admin/questions`, {
+    method: 'OPTIONS',
+    headers: {
+      Origin: 'http://127.0.0.1:8787',
+      'Access-Control-Request-Headers': 'authorization,content-type',
+      'Access-Control-Request-Method': 'POST'
+    }
+  });
+  assert(preflightResponse.status === 204, 'admin API preflight should remain available');
+  assert(
+    preflightResponse.headers.get('access-control-allow-headers')?.toLowerCase().includes('authorization'),
+    'admin API preflight should allow the Authorization header'
+  );
+
   const categories = await getJson('/api/categories');
   assert(categories.items.length === 16, 'categories count should be 16');
+
+  await postJson('/api/admin/categories', {
+    id: 'smoke-category',
+    name: 'Smoke Category',
+    order: 99,
+    description: 'Category used by the backend smoke test.'
+  });
+  const updatedCategory = await patchJson('/api/admin/categories/smoke-category', {
+    name: 'Updated Smoke Category',
+    order: 100
+  });
+  assert(updatedCategory.item.name === 'Updated Smoke Category', 'admin category PATCH should update fields');
+  assert(updatedCategory.item.order === 100, 'admin category PATCH should preserve numeric order');
 
   const questions = await getJson('/api/questions?pageSize=20');
   const seedPublishedTotal = questions.total;
 
   await createVerifiedSmokeQuestions();
+
+  const adminQuestions = await getJson('/api/admin/questions');
+  const orderedQuestion = adminQuestions.items.find((item) => item.id === 'q-smoke-single');
+  assert(orderedQuestion.order === 9001, 'admin question create should preserve explicit order');
+
+  const missingBatchQuestion = await patchJson('/api/admin/questions/batch-status', {
+    questionIds: ['q-smoke-single', 'q-smoke-missing'],
+    status: 'offline'
+  }, false);
+  assert(missingBatchQuestion.status === 404, 'batch status should reject a missing question atomically');
+  const afterRejectedBatch = await getJson('/api/admin/questions');
+  assert(
+    afterRejectedBatch.items.find((item) => item.id === 'q-smoke-single').status === 'published',
+    'a rejected batch should not update existing questions'
+  );
+
+  const invalidBatchStatus = await patchJson('/api/admin/questions/batch-status', {
+    questionIds: ['q-smoke-single'],
+    status: 'draft'
+  }, false);
+  assert(invalidBatchStatus.status === 400, 'batch status should only allow publish or offline actions');
+
+  const offlineBatch = await patchJson('/api/admin/questions/batch-status', {
+    questionIds: ['q-smoke-single', 'q-smoke-multiple'],
+    status: 'offline'
+  });
+  assert(offlineBatch.items.every((item) => item.status === 'offline'), 'batch offline should update every selected question');
+  const afterOffline = await getJson('/api/questions?pageSize=20');
+  assert(afterOffline.total === seedPublishedTotal + 2, 'offline questions should leave the public question bank');
+
+  const publishedBatch = await patchJson('/api/admin/questions/batch-status', {
+    questionIds: ['q-smoke-single', 'q-smoke-multiple'],
+    status: 'published'
+  });
+  assert(publishedBatch.items.every((item) => item.status === 'published'), 'batch publish should restore every selected question');
 
   const publishedQuestions = await getJson('/api/questions?pageSize=20');
   assert(publishedQuestions.total === seedPublishedTotal + 4, 'verified smoke questions should be added');
@@ -110,6 +188,13 @@ async function runChecks() {
   assert(favoritePractice.total === 1, 'favorite practice should include favorite question');
   assert(favoritePractice.items[0].isFavorite === true, 'favorite practice should include favorite marker');
 
+  const isolatedStats = await getJson('/api/users/me/stats', 'smoke-test-secondary');
+  assert(isolatedStats.totalAnswers === 0, 'a second anonymous device should have isolated answer stats');
+  const isolatedWrongs = await getJson('/api/users/me/wrongs', 'smoke-test-secondary');
+  assert(isolatedWrongs.items.length === 0, 'a second anonymous device should not inherit wrong questions');
+  const isolatedFavorites = await getJson('/api/users/me/favorites', 'smoke-test-secondary');
+  assert(isolatedFavorites.items.length === 0, 'a second anonymous device should not inherit favorites');
+
   const interview = await getJson('/api/interviews/basic?count=4');
   assert(interview.total === 4, 'basic interview should return 4 questions');
 
@@ -149,6 +234,7 @@ async function createVerifiedSmokeQuestions() {
   await postJson('/api/admin/questions', {
     ...common,
     id: 'q-smoke-single',
+    order: 9001,
     categoryId: 'arkts',
     type: 'single',
     title: '已核验单选测试题',
@@ -201,11 +287,9 @@ async function createVerifiedSmokeQuestions() {
   });
 }
 
-async function getJson(pathname) {
+async function getJson(pathname, deviceId = 'smoke-test') {
   const response = await fetch(`${baseUrl}${pathname}`, {
-    headers: {
-      'X-Device-Id': 'smoke-test'
-    }
+    headers: requestHeaders(pathname, {}, deviceId)
   });
   return parseResponse(response);
 }
@@ -213,10 +297,7 @@ async function getJson(pathname) {
 async function postJson(pathname, body, expectOk = true) {
   const response = await fetch(`${baseUrl}${pathname}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Device-Id': 'smoke-test'
-    },
+    headers: requestHeaders(pathname, { 'Content-Type': 'application/json' }),
     body: JSON.stringify(body)
   });
   if (!expectOk) {
@@ -231,10 +312,7 @@ async function postJson(pathname, body, expectOk = true) {
 async function patchJson(pathname, body, expectOk = true) {
   const response = await fetch(`${baseUrl}${pathname}`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Device-Id': 'smoke-test'
-    },
+    headers: requestHeaders(pathname, { 'Content-Type': 'application/json' }),
     body: JSON.stringify(body)
   });
   if (!expectOk) {
@@ -244,6 +322,14 @@ async function patchJson(pathname, body, expectOk = true) {
     };
   }
   return parseResponse(response);
+}
+
+function requestHeaders(pathname, extraHeaders = {}, deviceId = 'smoke-test') {
+  return {
+    'X-Device-Id': deviceId,
+    ...(pathname.startsWith('/api/admin/') ? { Authorization: `Bearer ${adminToken}` } : {}),
+    ...extraHeaders
+  };
 }
 
 async function parseResponse(response) {

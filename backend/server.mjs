@@ -3,7 +3,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +17,8 @@ const adminDir = path.join(rootDir, 'admin');
 
 const port = Number(process.env.PORT || 8787);
 const host = process.env.HOST || '0.0.0.0';
+const adminToken = String(process.env.ADMIN_TOKEN || '').trim();
+const minimumAdminTokenLength = 32;
 
 async function readJson(file) {
   return JSON.parse(await readFile(file, 'utf8'));
@@ -69,6 +71,31 @@ async function writeJson(db) {
 
 function getDeviceId(req) {
   return req.headers['x-device-id'] || 'demo-device';
+}
+
+function assertValidServerConfig() {
+  if (adminToken && adminToken.length < minimumAdminTokenLength) {
+    throw new Error(`ADMIN_TOKEN must contain at least ${minimumAdminTokenLength} characters`);
+  }
+}
+
+function authorizeAdmin(req) {
+  if (!adminToken) {
+    throw httpError(503, '管理接口未启用，请先配置 ADMIN_TOKEN');
+  }
+
+  const authorization = req.headers.authorization;
+  const value = Array.isArray(authorization) ? authorization[0] : authorization;
+  const match = typeof value === 'string' ? value.match(/^Bearer\s+(.+)$/i) : null;
+  if (!match || !safeSecretEqual(match[1].trim(), adminToken)) {
+    throw httpError(401, '管理员令牌无效或缺失');
+  }
+}
+
+function safeSecretEqual(left, right) {
+  const leftDigest = createHash('sha256').update(left).digest();
+  const rightDigest = createHash('sha256').update(right).digest();
+  return timingSafeEqual(leftDigest, rightDigest);
 }
 
 function ensureUser(db, deviceId) {
@@ -166,6 +193,7 @@ function evaluateAnswer(question, payload) {
 function normalizeQuestionPayload(payload, existing = {}) {
   const now = nowIso();
   const type = payload.type ?? existing.type;
+  const orderValue = payload.order ?? existing.order;
   const question = {
     id: existing.id || payload.id || `q-${randomUUID()}`,
     categoryId: payload.categoryId ?? existing.categoryId,
@@ -183,6 +211,7 @@ function normalizeQuestionPayload(payload, existing = {}) {
     verifiedAt: payload.verifiedAt ?? existing.verifiedAt ?? null,
     reviewStatus: payload.reviewStatus ?? existing.reviewStatus ?? 'needs_review',
     status: payload.status ?? existing.status ?? 'draft',
+    order: orderValue === undefined ? undefined : Number(orderValue),
     createdAt: existing.createdAt || now,
     updatedAt: now
   };
@@ -250,6 +279,9 @@ function validateQuestion(question, db, { allowExistingId = false } = {}) {
   }
   if (!reviewStatuses.has(question.reviewStatus)) {
     throw httpError(400, '审核状态必须是 needs_review、verified 或 rejected');
+  }
+  if (question.order !== undefined && (!Number.isInteger(question.order) || question.order < 0)) {
+    throw httpError(400, '题目顺序必须是非负整数');
   }
   if (!allowExistingId && db.questions.some((item) => item.id === question.id)) {
     throw httpError(409, '题目 ID 已存在');
@@ -491,7 +523,7 @@ function sendJson(res, status, data) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type, X-Device-Id',
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device-Id',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS'
   });
   res.end(JSON.stringify(data, null, 2));
@@ -676,12 +708,18 @@ async function routeApi(req, res, db, url) {
     return;
   }
 
-  await routeAdmin(req, res, db, url);
+  if (pathname.startsWith('/api/admin/')) {
+    await routeAdmin(req, res, db, url);
+    return;
+  }
+
+  notFound(res);
 }
 
 async function routeAdmin(req, res, db, url) {
   const { pathname } = url;
   const method = req.method || 'GET';
+  authorizeAdmin(req);
 
   if (method === 'GET' && pathname === '/api/admin/categories') {
     sendJson(res, 200, { items: db.categories.sort((a, b) => a.order - b.order) });
@@ -690,21 +728,30 @@ async function routeAdmin(req, res, db, url) {
 
   if (method === 'POST' && pathname === '/api/admin/categories') {
     const payload = await parseBody(req);
-    if (!payload.name) {
-      throw httpError(400, '分类名称不能为空');
-    }
-    const item = {
-      id: payload.id || slugify(payload.name),
-      name: payload.name,
-      order: Number(payload.order || db.categories.length + 1),
-      description: payload.description || ''
-    };
+    const item = normalizeCategoryPayload(payload, {}, db.categories.length + 1);
+    validateCategory(item);
     if (db.categories.some((category) => category.id === item.id)) {
       throw httpError(409, '分类 ID 已存在');
     }
     db.categories.push(item);
     await writeJson(db);
     sendJson(res, 201, { item });
+    return;
+  }
+
+  const adminCategoryMatch = pathname.match(/^\/api\/admin\/categories\/([^/]+)$/);
+  if (method === 'PATCH' && adminCategoryMatch) {
+    const category = db.categories.find((item) => item.id === adminCategoryMatch[1]);
+    if (!category) {
+      notFound(res);
+      return;
+    }
+    const payload = await parseBody(req);
+    const updated = normalizeCategoryPayload(payload, category, category.order);
+    validateCategory(updated);
+    Object.assign(category, updated, { id: category.id });
+    await writeJson(db);
+    sendJson(res, 200, { item: category });
     return;
   }
 
@@ -720,6 +767,36 @@ async function routeAdmin(req, res, db, url) {
     db.questions.push(item);
     await writeJson(db);
     sendJson(res, 201, { item });
+    return;
+  }
+
+  if (method === 'PATCH' && pathname === '/api/admin/questions/batch-status') {
+    const payload = await parseBody(req);
+    const requestedIds = Array.isArray(payload.questionIds) ? payload.questionIds : [];
+    const questionIds = [...new Set(requestedIds.map((id) => String(id).trim()).filter(Boolean))];
+    const status = payload.status;
+    if (questionIds.length === 0 || questionIds.length > 500) {
+      throw httpError(400, '批量操作必须包含 1 至 500 个题目 ID');
+    }
+    if (status !== 'published' && status !== 'offline') {
+      throw httpError(400, '批量状态只能是 published 或 offline');
+    }
+
+    const questions = questionIds.map((id) => db.questions.find((question) => question.id === id));
+    const missingIndex = questions.findIndex((question) => !question);
+    if (missingIndex >= 0) {
+      throw httpError(404, `题目不存在：${questionIds[missingIndex]}`);
+    }
+
+    const updates = questions.map((question) => normalizeQuestionPayload({ status }, question));
+    for (const updated of updates) {
+      validateQuestion(updated, db, { allowExistingId: true });
+    }
+    for (let index = 0; index < questions.length; index += 1) {
+      Object.assign(questions[index], updates[index], { id: questions[index].id });
+    }
+    await writeJson(db);
+    sendJson(res, 200, { items: questions });
     return;
   }
 
@@ -742,6 +819,25 @@ async function routeAdmin(req, res, db, url) {
   notFound(res);
 }
 
+function normalizeCategoryPayload(payload, existing = {}, defaultOrder = 1) {
+  const name = payload.name ?? existing.name;
+  return {
+    id: existing.id || payload.id || slugify(name || ''),
+    name: typeof name === 'string' ? name.trim() : '',
+    order: Number(payload.order ?? existing.order ?? defaultOrder),
+    description: String(payload.description ?? existing.description ?? '').trim()
+  };
+}
+
+function validateCategory(category) {
+  if (!category.id || !category.name) {
+    throw httpError(400, '分类 ID 和名称不能为空');
+  }
+  if (!Number.isInteger(category.order) || category.order < 0) {
+    throw httpError(400, '分类顺序必须是非负整数');
+  }
+}
+
 function slugify(input) {
   return String(input)
     .trim()
@@ -751,6 +847,7 @@ function slugify(input) {
 }
 
 async function main() {
+  assertValidServerConfig();
   const db = await ensureDb();
   if (process.argv.includes('--seed-only')) {
     await writeJson(await createSeedDb());
@@ -777,6 +874,9 @@ async function main() {
       notFound(res);
     } catch (error) {
       const status = error.status || 500;
+      if (status === 401) {
+        res.setHeader('WWW-Authenticate', 'Bearer realm="ArkInterview Admin"');
+      }
       sendJson(res, status, {
         error: error.message || 'Internal Server Error'
       });
@@ -787,6 +887,9 @@ async function main() {
     const localHost = host === '0.0.0.0' ? '127.0.0.1' : host;
     console.log(`ArkInterview API running at http://${localHost}:${port}`);
     console.log(`Admin console running at http://${localHost}:${port}/admin/`);
+    console.log(adminToken
+      ? 'Admin API authentication enabled.'
+      : 'Admin API disabled: configure ADMIN_TOKEN to enable management access.');
     if (host === '0.0.0.0') {
       console.log(`LAN access enabled. Use http://<your-computer-ip>:${port}/api from a device.`);
     }

@@ -18,6 +18,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -74,6 +78,48 @@ h2 {
 
 .icon-button:hover {
   border-color: var(--brand);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-layout {
+  display: grid;
+  min-height: calc(100vh - 92px);
+  place-items: center;
+  padding: 32px 16px;
+}
+
+.auth-panel {
+  width: min(420px, 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 24px;
+}
+
+.auth-panel h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-form .primary-button {
+  margin-top: 4px;
+}
+
+.auth-message {
+  min-height: 20px;
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .layout {
@@ -178,6 +224,7 @@ textarea {
 
 .primary-button,
 .secondary-button,
+.danger-button,
 .small-button {
   min-height: 36px;
   border: 1px solid var(--line);
@@ -185,6 +232,11 @@ textarea {
   padding: 0 12px;
   font: inherit;
   cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .primary-button {
@@ -197,6 +249,12 @@ textarea {
 .small-button {
   background: var(--surface);
   color: var(--text);
+}
+
+.danger-button {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
 }
 
 .small-button:hover,
@@ -218,6 +276,80 @@ textarea {
   min-height: 58px;
   padding: 14px 16px;
   border-bottom: 1px solid var(--line);
+}
+
+.question-heading {
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.heading-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.visible-count {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.filter-controls select {
+  width: auto;
+  min-width: 124px;
+}
+
+.batch-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #f2f8f7;
+}
+
+.select-visible {
+  display: flex;
+  grid-template-columns: none;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.select-visible input,
+.question-selector {
+  width: 18px;
+  min-height: 18px;
+  margin: 0;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+
+.selection-summary {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.selection-summary strong {
+  color: var(--brand-strong);
+}
+
+.batch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
 }
 
 .category-list,
@@ -266,11 +398,20 @@ textarea {
   padding: 14px;
 }
 
+.question-item.selected {
+  border-color: var(--brand);
+  background: #f2f8f7;
+}
+
 .question-topline {
-  display: flex;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 12px;
+}
+
+.question-copy {
+  min-width: 0;
 }
 
 .question-controls {
@@ -351,6 +492,20 @@ textarea {
   .content-grid {
     grid-template-columns: 1fr;
   }
+
+  .category-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .batch-toolbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .batch-actions {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 480px) {
@@ -366,12 +521,23 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .category-list {
+    grid-template-columns: 1fr;
+  }
+
   .question-topline {
-    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
   }
 
   .question-controls {
+    grid-column: 2;
     justify-content: stretch;
+  }
+
+  .filter-controls,
+  .filter-controls select,
+  .batch-actions button {
+    width: 100%;
   }
 
   .question-controls select,

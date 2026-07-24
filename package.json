@@ -7,6 +7,10 @@
   "scripts": {
     "questions:build": "node scripts/build-question-bank.mjs",
     "questions:check": "node scripts/build-question-bank.mjs --check",
+    "questions:sync-db": "npm run questions:build && node scripts/sync-question-db.mjs",
+    "questions:sync-db:dry": "npm run questions:build && node scripts/sync-question-db.mjs --dry-run",
+    "questions:publish": "npm run questions:build && node scripts/publish-question-bank.mjs",
+    "questions:publish:dry": "npm run questions:build && node scripts/publish-question-bank.mjs --dry-run",
     "dev": "npm run questions:build && node backend/server.mjs",
     "start": "node backend/server.mjs",
     "start:prod": "npm run questions:build && node backend/server.mjs",

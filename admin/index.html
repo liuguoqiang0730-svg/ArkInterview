@@ -12,10 +12,34 @@
         <p class="eyebrow">ArkInterview Admin</p>
         <h1>题库管理</h1>
       </div>
-      <button id="refreshButton" class="icon-button" title="刷新题库" aria-label="刷新题库">↻</button>
+      <div class="topbar-actions">
+        <button id="refreshButton" class="icon-button" title="刷新题库" aria-label="刷新题库" hidden>↻</button>
+        <button id="logoutButton" class="secondary-button" type="button" hidden>退出</button>
+      </div>
     </header>
 
-    <main class="layout">
+    <main id="authView" class="auth-layout">
+      <section class="auth-panel" aria-labelledby="authTitle">
+        <p class="eyebrow">Protected Console</p>
+        <h2 id="authTitle">管理员验证</h2>
+        <form id="authForm" class="auth-form">
+          <label for="adminTokenInput">管理员令牌</label>
+          <input
+            id="adminTokenInput"
+            name="adminToken"
+            type="password"
+            minlength="32"
+            autocomplete="current-password"
+            spellcheck="false"
+            required
+          >
+          <button class="primary-button" type="submit">进入后台</button>
+          <p id="authMessage" class="auth-message" role="alert"></p>
+        </form>
+      </section>
+    </main>
+
+    <main id="adminView" class="layout" hidden>
       <section class="panel stats-panel" aria-label="概览">
         <div>
           <span class="metric-label">分类</span>
@@ -148,15 +172,44 @@
         </aside>
 
         <section class="panel question-panel">
-          <div class="panel-heading">
-            <h2>题目</h2>
-            <select id="typeFilter" aria-label="题型筛选">
-              <option value="">全部题型</option>
-              <option value="single">单选题</option>
-              <option value="multiple">多选题</option>
-              <option value="boolean">判断题</option>
-              <option value="short">简答题</option>
-            </select>
+          <div class="panel-heading question-heading">
+            <div class="heading-title">
+              <h2>题目</h2>
+              <span id="visibleQuestionCount" class="visible-count">0 条</span>
+            </div>
+            <div class="filter-controls">
+              <select id="typeFilter" aria-label="题型筛选">
+                <option value="">全部题型</option>
+                <option value="single">单选题</option>
+                <option value="multiple">多选题</option>
+                <option value="boolean">判断题</option>
+                <option value="short">简答题</option>
+              </select>
+              <select id="reviewStatusFilter" aria-label="审核状态筛选">
+                <option value="">全部审核状态</option>
+                <option value="needs_review">待核验</option>
+                <option value="verified">已核验</option>
+                <option value="rejected">已驳回</option>
+              </select>
+              <select id="publishStatusFilter" aria-label="发布状态筛选">
+                <option value="">全部发布状态</option>
+                <option value="draft">草稿</option>
+                <option value="published">已发布</option>
+                <option value="offline">已下架</option>
+              </select>
+            </div>
+          </div>
+          <div id="batchToolbar" class="batch-toolbar">
+            <label class="select-visible">
+              <input id="selectVisibleQuestions" type="checkbox">
+              全选当前筛选
+            </label>
+            <span class="selection-summary">已选择 <strong id="selectedQuestionCount">0</strong> 道</span>
+            <div class="batch-actions">
+              <button id="batchPublishButton" class="primary-button" type="button" disabled>批量发布</button>
+              <button id="batchOfflineButton" class="danger-button" type="button" disabled>批量下架</button>
+              <button id="clearSelectionButton" class="secondary-button" type="button" disabled>取消选择</button>
+            </div>
           </div>
           <div id="questionList" class="question-list"></div>
         </section>

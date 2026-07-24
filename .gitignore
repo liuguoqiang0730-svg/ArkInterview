@@ -4,6 +4,9 @@ npm-debug.log*
 backend/storage/*.json
 !backend/storage/.gitkeep
 .tmp/
+.env
+.env.*
+.deploy-backups/
 
 # HarmonyOS / DevEco
 .hvigor/

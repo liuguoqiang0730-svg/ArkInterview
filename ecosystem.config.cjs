@@ -7,7 +7,9 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         HOST: '0.0.0.0',
-        PORT: '8787'
+        PORT: '8787',
+        DB_FILE: process.env.DB_FILE || '/opt/arkinterview/backend/storage/db.json',
+        ADMIN_TOKEN: process.env.ADMIN_TOKEN || ''
       }
     }
   ]

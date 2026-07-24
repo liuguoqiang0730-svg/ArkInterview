@@ -1,6 +1,6 @@
 # AI 工作交接
 
-更新时间：2026-07-08
+更新时间：2026-07-23
 
 本文档用于后续 AI / 开发者接手 ArkInterview 时快速了解项目目标、当前状态、开发规则和下一步任务。每次完成较大的功能、修复或产品方向变化后，都应该同步更新本文档。
 
@@ -34,7 +34,7 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 - 展示名：Ark 面试通
 - 包名：com.lgq.arkinterview
 - API 地址：`entry/src/main/ets/app/AppConfig.ets` 中的 `API_BASE_URL`
-- 当前调试地址：`http://192.168.62.105:8787/api`
+- 当前服务器地址：`http://47.97.45.170:8787/api`
 
 ## 当前项目状态
 
@@ -56,22 +56,35 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 14. 答题页平板双栏布局：左侧题干和作答，右侧答题提示或解析反馈。
 15. 题库模块覆盖清单：`docs/question-bank-coverage.md`。
 16. 首页平板布局右侧题库模块独立滚动，左侧学习概览和快捷训练保持稳定。
-17. 答题页支持连续刷题上下文：上一题/下一题、提交后自动切下一题、右上角答题进度、题号状态面板。
+17. 答题页支持连续刷题上下文：上一题/下一题、提交后停留当前题查看解析、右上角答题进度、题号状态面板；切题完全由用户操作。
 18. 底部导航增加切换动效；答题页会继承练习来源导航状态，普通训练/分类训练高亮首页，错题和收藏高亮对应入口。
 19. 答题页平板右侧从“答题提示”改为本轮状态面板，展示已答、正确、错误和题号状态。
-20. 答题页增加本轮完成总结页：最后一题提交后自动进入总结，可复盘错题、查看未答、返回题单。
+20. 答题页增加本轮完成总结页：本轮答完后由用户点击“查看本轮结果”进入，可复盘错题、查看未答、返回题单。
 21. 练习页增加题单筛选：按模块、题型筛选；错题练习支持未掌握/全部错题切换，筛选后的题单会进入连续答题上下文。
 22. 新增错题/收藏管理页：底部导航进入列表管理，可搜索、按模块/题型筛选、按当前筛选复习；收藏支持取消收藏，错题支持标记掌握。
 23. 错题/收藏管理页增加难度筛选和排序：支持默认、按难度、按题型排序；错题页额外支持按错误次数排序。
 24. 路由和 Toast 已统一封装到 `entry/src/main/ets/utils/AppRouter.ets` 和 `entry/src/main/ets/utils/AppToast.ets`，页面层不再直接调用 `router` / `promptAction.showToast`。
 25. 新增“常见面试题分享”独立页面：`entry/src/main/ets/pages/InterviewExperiencePage.ets`，首页单独入口，包含 16 个高频开放面试题、解释答案、面试要点、官方依据；可匹配的题目会直接展示华为开发者文档官方 CDN 图片，纯文字 API 题保留结构化学习图。
+26. 新增题库数据库同步脚本：`scripts/sync-question-db.mjs`，支持增量 upsert、预演和可选下架缺失题目，不会清空用户、收藏、错题和答题记录。
+27. 题库已完成新一轮 100 道模块化扩充，16 个模块全部覆盖，新增题均包含 OpenHarmony 官方来源、核验日期和正确答案/参考答案。
+28. 本地聚合题库、本地后端数据库和线上服务器题库均已同步到 360 道；线上 `/api/questions` 已核对总数和代表性新增 ID。
+29. 管理 API 已实现 Bearer Token 鉴权：服务端从 `ADMIN_TOKEN` 读取至少 32 字符的令牌，未配置时管理接口失败关闭；管理后台使用当前标签页会话保存令牌。
+30. 新增远程题库增量发布脚本 `scripts/publish-question-bank.mjs`，通过 `ADMIN_API_URL` 和 `ADMIN_TOKEN` 对比并发布分类与题目，默认保留线上额外数据。
+31. 新增生产部署脚本 `scripts/deploy-production.sh`：检查令牌和 Git 状态、备份数据库、运行测试、PM2 重载并验证公开 API 与管理鉴权。
+32. 答题页已移除自动切题和自动跳转总结逻辑；提交后停留解析，隐藏重复的“已提交”按钮，未作答时禁止提交。
+33. 路由与 Toast 已迁移到页面级 `UIContext`：路由使用 `getRouter()`，Toast 使用 `getPromptAction().openToast()`，当前构建已无应用代码 ArkTS deprecated 警告。
+34. 平板答题页题卡浮层已与主内容右边缘对齐，点击遮罩关闭且面板交互不会误关闭；解析区导航顺序统一为左侧上一题、右侧下一题或查看结果。
+35. 匿名设备 ID 已改为首次启动生成安全随机 UUID 并写入应用私有 Preferences；所有 REST 请求通过 `X-Device-Id` 使用该 ID，不同安装的练习数据相互隔离。
+36. 管理后台已增加题型、审核状态、发布状态联合筛选，支持按当前筛选多选题目并批量发布/下架；批量接口采用整批校验、整批写入，已通过桌面、平板和手机响应式浏览器检查。
 
 题库当前状态：
 
 - 模块数：16
-- 题目数：160
+- 题目数：360
 - 模块文件目录：`data/question-bank/modules/*.json`
 - 构建输出：`data/seed/questions.json`
+- 当前模块题量：ArkTS/ArkUI 各 25 道；NAPI/性能/调试发布/NEXT 适配各 24 道；Stage 模型、组件通信、状态管理、relationalStore 各 22 道；其余模块各 21 道。
+- 最近一次题库核验与线上同步：2026-07-23，本批新增 100 道，线上总数 360。
 
 ## 题库规则
 
@@ -98,10 +111,28 @@ Ark 面试通是面向鸿蒙开发者的原生刷题与面试训练 App。第一
 ```bash
 npm run questions:build
 npm run questions:check
+npm run questions:sync-db:dry
+npm run questions:sync-db
+npm run questions:publish:dry
+npm run questions:publish
 npm test
 ```
 
 新增或修改题库后至少运行 `npm run questions:build`。提交前优先运行 `npm run questions:check` 或 `npm test`。
+
+### 题库发布流程
+
+题库源数据、后端和 App 当前位于同一个仓库，不需要为了题库再新建后端工程：
+
+1. 只修改 `data/question-bank/modules/*.json`。
+2. 运行 `npm run questions:build` 生成 `data/seed/questions.json`。
+3. 先运行 `npm run questions:sync-db:dry` 查看新增、更新和保留数据数量。
+4. 确认目标服务器的 `DB_FILE` 指向实际数据库文件后，运行 `npm run questions:sync-db`。
+5. 重启或重新加载服务器后，通过 `/api/categories` 和 `/api/questions` 验证线上题量。
+
+同步脚本按题目 ID 和分类 ID 增量更新，默认保留数据库中已有但本次聚合文件缺失的题目；只有显式增加 `--offline-missing` 时才会把缺失题标为下架。
+
+跨机器发布线上题库时，不要直接改服务器 JSON。先配置 `ADMIN_API_URL` 和 `ADMIN_TOKEN`，运行 `npm run questions:publish:dry` 核对差异，再运行 `npm run questions:publish`。令牌只能通过环境变量注入，不能写入仓库。
 
 ## UI 方向
 
@@ -143,11 +174,10 @@ $env:DEVECO_SDK_HOME="E:\DevEco Studio11\sdk"
 & "E:\DevEco Studio11\tools\hvigor\bin\hvigorw.bat" assembleApp --no-daemon
 ```
 
-当前已知构建警告：
+当前构建状态：
 
-- `app_name` 在 AppScope 和 entry resources 中重复声明。
-- ArkTS 对 `router.pushUrl`、`router.back`、`router.getParams`、`promptAction.showToast` 有 deprecated 警告。
-- 这些目前不阻塞构建，但后续可以统一迁移。
+- 应用 ArkTS 代码当前无 deprecated 警告。
+- DevEco 打包工具仍会输出 Java `sun.misc.Unsafe` 终止弃用提示，来源是 SDK 自带 `app_packing_tool.jar`，不影响 HAP 构建和签名。
 
 ## Git 规则
 
@@ -177,16 +207,16 @@ git diff --cached --stat
 
 优先级 P0：
 
-1. 继续对齐平板真实 UI 和预览方向，重点检查首页右侧滚动、答题页右侧状态面板、完成总结页、底部导航动效和自动切题节奏。
-2. 真机检查平板底部导航是否遮挡内容，尤其是练习页、答题页和记录页。
-3. 继续处理 ArkUI deprecated API 警告；路由和 Toast 已收口，后续优先在封装层迁移到推荐 API。
-4. 按 `docs/question-bank-coverage.md` 优先补空模块题库，入库前必须逐题核验官方来源。
+1. 将本轮鉴权代码部署到线上，生成并注入高强度 `ADMIN_TOKEN`；部署前线上旧管理接口仍未受保护。
+2. 为公网 API 配置 HTTPS 和正式域名，之后再通过远程发布脚本传输管理员令牌。
+3. 继续对齐平板真实 UI 和预览方向，重点检查首页右侧滚动、答题页右侧状态面板、完成总结页和底部导航动效。
+4. 真机检查平板底部导航是否遮挡内容，尤其是练习页、答题页和记录页。
 
 优先级 P1：
 
-1. 继续扩充题库，但必须按官方文档确认。
-2. 为每个模块建立“已覆盖知识点”和“待补知识点”清单，防止重复出题。
-3. 管理后台增加题目审核状态筛选。
+1. 继续扩充题库，但必须按官方文档确认；下一批优先并发异常治理、ArkUI 布局与手势、RDB 索引/分页、崩溃与包体分析、折叠状态和字体缩放。
+2. 每轮扩题后同步更新“已覆盖知识点”和“待补知识点”清单，防止重复出题。
+3. 管理后台增加题目全文搜索、详情编辑和审核备注。
 4. 练习记录页补 UI 和接口联调。
 5. 错题/收藏管理页继续增强，例如批量操作和题卡更密集的平板布局。
 
@@ -221,7 +251,7 @@ git diff --cached --stat
 ## 当前风险
 
 1. 平板 UI 仍需真机反馈，当前只能通过构建验证，无法完全替代设备视觉检查。
-2. 当前题库数量还偏少，MVP 需要持续扩充。
-3. 部分 ArkUI API 已 deprecated，后续需要集中处理。
-4. API 地址是局域网 IP，换网络或真机环境后需要调整。
-5. 匿名设备 ID 目前是开发默认值，后续需要生成真实设备匿名 ID。
+2. 当前题库已有 360 道，数量达到 MVP 基线，但仍需持续补充真实面试场景并定期复核过时 API。
+3. API 当前使用公网 HTTP 地址，线上尚未部署本轮鉴权代码；必须先部署鉴权，再补齐 TLS 和正式域名。
+4. 清除应用数据或卸载重装会生成新的匿名设备 ID，MVP 暂不支持跨设备恢复；后续账号系统上线后再做迁移和云同步。
+5. 当前开发机没有服务器 SSH 私钥或已配置的 SSH Agent，无法直接执行线上部署；需在服务器内运行 `scripts/deploy-production.sh`，或先为开发机配置受控的 SSH 登录方式。

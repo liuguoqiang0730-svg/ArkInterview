@@ -10,6 +10,8 @@ X-Device-Id: <anonymous-device-id>
 
 如果未传入，开发服务会使用 `demo-device`。
 
+App 首次启动时使用安全随机 UUID 生成 `ark-<uuid>` 格式的匿名设备 ID，并保存到应用私有 Preferences。后续启动继续使用同一个 ID，因此答题记录、错题和收藏可以在本机持续关联；不同安装的数据相互隔离。清除应用数据或卸载重装后会生成新的 ID，MVP 暂不提供跨设备同步。
+
 ## 题库
 
 ### GET /api/categories
@@ -144,6 +146,17 @@ GET /api/practice/session?mode=favorites&count=20
 
 ## 管理后台
 
+所有 `/api/admin/*` 请求都必须携带服务端环境变量 `ADMIN_TOKEN` 对应的 Bearer Token：
+
+```http
+Authorization: Bearer <ADMIN_TOKEN>
+```
+
+- 未携带或令牌错误：返回 `401`。
+- 服务端未配置 `ADMIN_TOKEN`：返回 `503`，管理接口关闭。
+- `ADMIN_TOKEN` 至少 32 个字符，不能写入仓库或前端源码。
+- 公网调用必须使用 HTTPS。
+
 ### GET /api/admin/categories
 
 管理端分类列表。
@@ -151,6 +164,10 @@ GET /api/practice/session?mode=favorites&count=20
 ### POST /api/admin/categories
 
 新增分类。
+
+### PATCH /api/admin/categories/{id}
+
+更新分类名称、排序或说明，不允许修改分类 ID。
 
 ### GET /api/admin/questions
 
@@ -192,7 +209,24 @@ GET /api/practice/session?mode=favorites&count=20
 ```
 
 保存题目入库时，后端会要求 `sourceRefs` 至少包含一个官方来源，`reviewStatus` 为 `verified`，且 `verifiedAt` 已填写。
+模块化题库还会携带非负整数 `order`，用于保持模块内题目顺序。
 
 ### PATCH /api/admin/questions/{id}
 
 更新题目，包括发布/下架、难度、知识点、解析等字段。
+
+### PATCH /api/admin/questions/batch-status
+
+批量发布或下架题目。
+
+```json
+{
+  "questionIds": ["arkts-001", "arkts-002"],
+  "status": "published"
+}
+```
+
+- `questionIds` 必须包含 1 至 500 个有效题目 ID，重复 ID 会自动去重。
+- `status` 仅允许 `published` 或 `offline`。
+- 后端会对整批题目重新执行题库质量校验；任一题不存在或校验失败时整批拒绝，不写入部分结果。
+- 成功后返回更新后的 `items` 数组。
