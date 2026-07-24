@@ -50,6 +50,7 @@ export class AuthService {
         displayName: '',
         avatarUrl: '',
         leaderboardOptIn: false,
+        leaderboardOptedInAt: null,
         status: 'active',
         createdAt: now,
         updatedAt: now,
@@ -189,6 +190,9 @@ export class AuthService {
     }
 
     const now = this.nowIso();
+    if (enabled && !principal.user.leaderboardOptedInAt) {
+      principal.user.leaderboardOptedInAt = now;
+    }
     principal.user.leaderboardOptIn = enabled;
     principal.user.updatedAt = now;
     this.db.meta.updatedAt = now;
@@ -300,7 +304,8 @@ function publicUser(user) {
     id: user.id,
     displayName: user.displayName,
     avatarUrl: user.avatarUrl,
-    leaderboardOptIn: user.leaderboardOptIn
+    leaderboardOptIn: user.leaderboardOptIn,
+    leaderboardOptedInAt: user.leaderboardOptedInAt || null
   };
 }
 

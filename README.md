@@ -46,7 +46,7 @@ npm run questions:sync-db
 
 ## 可选华为账号登录
 
-后端已经支持华为 Authorization Code 验证、匿名学习记录合并、ArkInterview 访问/刷新令牌轮换、退出登录和排行榜参与授权。HarmonyOS 客户端已增加 Account Kit 官方登录按钮、“我的”页面、AssetStore 加密会话保存、Token 自动刷新及默认关闭的排行榜参与开关；匿名刷题始终可用。
+后端已经支持华为 Authorization Code 验证、匿名学习记录合并、ArkInterview 访问/刷新令牌轮换、退出登录和排行榜参与授权。HarmonyOS 客户端已增加 Account Kit 官方登录按钮、“我的”页面、AssetStore 加密会话保存、Token 自动刷新及默认关闭的排行榜参与开关；周榜、总榜和模块分类榜也已接入，匿名刷题始终可用。
 
 启用登录前，在服务端同时配置以下三个变量，缺少任意一个时服务会拒绝以不完整配置启动：
 
@@ -93,7 +93,7 @@ bash scripts/deploy-production.sh
 npm test
 ```
 
-测试会创建临时 SQLite 数据库，验证旧 JSON 迁移、Schema 升级、数据重启恢复和数据库完整性，并覆盖管理员鉴权、可选登录、会话轮换、匿名记录合并、账户数据隔离、分类、题目、随机练习、错题练习、收藏练习、答题提交和基础模拟面试接口。
+测试会创建临时 SQLite 数据库，验证旧 JSON 迁移、Schema 升级、数据重启恢复和数据库完整性，并覆盖管理员鉴权、可选登录、会话轮换、匿名记录合并、账户数据隔离、排行榜授权与计分、周榜和分类榜、分类、题目、随机练习、错题练习、收藏练习、答题提交和基础模拟面试接口。
 
 ## DevEco Studio
 

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { AuthService } from './auth-service.mjs';
 import { HuaweiAccountClient } from './huawei-account-client.mjs';
+import { LeaderboardService } from './leaderboard-service.mjs';
 import { openSqliteStore, resolveDatabasePaths } from './sqlite-store.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -556,7 +557,7 @@ async function sendStatic(req, res, pathname) {
   }
 }
 
-async function routeApi(req, res, db, url, store, authService) {
+async function routeApi(req, res, db, url, store, authService, leaderboardService) {
   const { pathname, searchParams } = url;
   const method = req.method || 'GET';
   const deviceId = getDeviceId(req);
@@ -617,6 +618,17 @@ async function routeApi(req, res, db, url, store, authService) {
     return;
   }
 
+  if (method === 'GET' && pathname === '/api/leaderboards') {
+    const result = leaderboardService.getLeaderboard({
+      scope: searchParams.get('scope'),
+      categoryId: searchParams.get('categoryId'),
+      limit: searchParams.get('limit'),
+      currentUserId: principal.authenticated ? user.id : ''
+    });
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
   if (method === 'GET' && pathname === '/api/categories') {
     sendJson(res, 200, { items: db.categories.sort((a, b) => a.order - b.order) });
     return;
@@ -672,6 +684,9 @@ async function routeApi(req, res, db, url, store, authService) {
       categoryId: question.categoryId,
       type: question.type,
       isCorrect: feedback.isCorrect,
+      leaderboardEligible: principal.authenticated &&
+        user.leaderboardOptIn &&
+        Boolean(user.leaderboardOptedInAt),
       submittedAt
     };
     user.answers.push(answer);
@@ -919,6 +934,10 @@ async function main() {
     accessTtlSeconds: process.env.AUTH_ACCESS_TTL_SECONDS,
     refreshTtlSeconds: process.env.AUTH_REFRESH_TTL_SECONDS
   });
+  const leaderboardService = new LeaderboardService({
+    store,
+    db
+  });
 
   if (process.argv.includes('--seed-only')) {
     store.replaceAll(await createSeedDb());
@@ -935,7 +954,7 @@ async function main() {
         return;
       }
       if (url.pathname.startsWith('/api/')) {
-        await routeApi(req, res, db, url, store, authService);
+        await routeApi(req, res, db, url, store, authService, leaderboardService);
         return;
       }
       if (url.pathname === '/') {

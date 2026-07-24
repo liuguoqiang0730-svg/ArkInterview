@@ -3,6 +3,7 @@ export interface AuthUser {
   displayName: string;
   avatarUrl: string;
   leaderboardOptIn: boolean;
+  leaderboardOptedInAt?: string | null;
 }
 
 export interface AuthStatusResponse {

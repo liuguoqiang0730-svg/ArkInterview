@@ -68,6 +68,46 @@ App 通过 Account Kit 获取 Authorization Code 后，将授权码和当前 `X-
 
 `enabled` 必须是 JSON 布尔值。成功后返回最新的登录用户资料，客户端应同步更新本地用户快照。关闭后，后续排行榜查询不得再公开该用户；历史答题记录本身不会被删除。
 
+### GET /api/leaderboards
+
+读取公开排行榜，匿名用户也可以查看；登录用户使用 HTTPS 携带有效访问令牌时，响应会标记自己的榜单项并返回 `me`。支持参数：
+
+- `scope`：`weekly` 或 `overall`，默认 `weekly`。
+- `categoryId`：可选；为空时统计全部模块，传值时生成对应分类榜。
+- `limit`：可选，默认 `50`，范围 `1` 到 `100`。
+
+```json
+{
+  "scope": "weekly",
+  "categoryId": "arkts",
+  "categoryName": "ArkTS",
+  "periodStart": "2026-07-19T16:00:00.000Z",
+  "generatedAt": "2026-07-24T09:00:00.000Z",
+  "scoringRule": "first_correct_after_opt_in_per_verified_objective_question",
+  "totalParticipants": 2,
+  "entries": [
+    {
+      "rank": 1,
+      "displayName": "Ark开发者·A1B2",
+      "score": 12,
+      "lastScoredAt": "2026-07-23T08:00:00.000Z",
+      "isCurrentUser": false
+    }
+  ],
+  "me": null
+}
+```
+
+计分规则：
+
+- 只有已绑定外部身份、状态正常且主动参与排行榜的用户进入榜单。
+- 开启参与时记录 `leaderboardOptedInAt`，并在每次作答时固化是否具备榜单资格；匿名历史和退出排行榜期间的答题不计分。
+- 仅统计当前仍为已发布、已核验状态的单选题、多选题和判断题。
+- 每个用户、每道题只取参与后的首次正确作答，每题最多 `1` 分。
+- 周榜按北京时间周一 `00:00` 开始，只统计本周产生的合规首次正确作答。
+- 同分时，越早完成最后一道得分题的用户排名越靠前。
+- 响应只提供稳定脱敏昵称，不提供华为账号资料、头像或 ArkInterview 内部用户 ID。
+
 访问令牌默认有效期 15 分钟，刷新令牌默认有效期 30 天。数据库只保存两类令牌的 SHA-256 哈希，不保存明文令牌，也不保存华为 access token 或 refresh token。
 
 ## 题库

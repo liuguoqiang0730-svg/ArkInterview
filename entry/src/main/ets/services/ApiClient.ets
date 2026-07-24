@@ -24,6 +24,10 @@ import {
   SubmitAnswerResponse,
   UserStats
 } from '../models/QuestionModels';
+import {
+  LeaderboardResponse,
+  LeaderboardScope
+} from '../models/LeaderboardModels';
 import { DeviceIdentity } from '../utils/DeviceIdentity';
 import { AuthSessionStore } from './AuthSessionStore';
 
@@ -83,6 +87,18 @@ export class ApiClient {
     }
     await AuthSessionStore.updateUser(response.user);
     return response.user;
+  }
+
+  async getLeaderboard(
+    scope: LeaderboardScope,
+    categoryId: string = '',
+    limit: number = 50
+  ): Promise<LeaderboardResponse> {
+    const pairs: string[] = [];
+    this.appendQueryParam(pairs, 'scope', scope);
+    this.appendQueryParam(pairs, 'categoryId', categoryId);
+    this.appendQueryParam(pairs, 'limit', String(limit));
+    return this.request<LeaderboardResponse>(`/leaderboards${this.queryString(pairs)}`);
   }
 
   async logout(): Promise<void> {

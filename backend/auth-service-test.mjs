@@ -107,6 +107,18 @@ try {
     'authenticated users should be able to explicitly opt into the leaderboard'
   );
   assert.equal(
+    leaderboardProfile.user.leaderboardOptedInAt,
+    '2026-07-24T09:00:00.000Z',
+    'first opt-in should establish the leaderboard scoring baseline'
+  );
+  auth.updateLeaderboardPreference(signedIn, false);
+  const reenabledLeaderboardProfile = auth.updateLeaderboardPreference(signedIn, true);
+  assert.equal(
+    reenabledLeaderboardProfile.user.leaderboardOptedInAt,
+    leaderboardProfile.user.leaderboardOptedInAt,
+    'opting out and back in must not reset the scoring baseline'
+  );
+  assert.equal(
     opened.store.database.prepare(
       'SELECT leaderboard_opt_in FROM users WHERE id = ?'
     ).get(firstLogin.user.id).leaderboard_opt_in,

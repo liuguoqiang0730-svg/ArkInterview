@@ -8,6 +8,7 @@ import { AuthStatusResponse, AuthUser, UserProfileResponse } from '../models/Acc
 import { UserStats } from '../models/QuestionModels';
 import { ApiClient, ApiRequestError } from '../services/ApiClient';
 import { AuthSessionStore } from '../services/AuthSessionStore';
+import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
 
@@ -285,6 +286,7 @@ struct MyPage {
                 this.StatsPanel()
               }
 
+              this.LeaderboardEntryPanel()
               this.DataStatusPanel()
             }
             .width('100%')
@@ -654,6 +656,50 @@ struct MyPage {
         .margin({ top: 4 })
     }
     .layoutWeight(1)
+  }
+
+  @Builder
+  LeaderboardEntryPanel() {
+    Row() {
+      Text('榜')
+        .width(42)
+        .height(42)
+        .fontSize(16)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_ORANGE)
+        .textAlign(TextAlign.Center)
+        .backgroundColor(COLOR_SOFT_ORANGE)
+        .borderRadius(8)
+        .margin({ right: 12 })
+
+      Column() {
+        Text('开发者排行榜')
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+        Text('查看本周、总榜和模块排名')
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 4 })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      Button('查看')
+        .height(36)
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_GREEN)
+        .backgroundColor(COLOR_SOFT_GREEN)
+        .borderRadius(8)
+        .onClick(() => AppRouter.push(this.getUIContext(), 'pages/LeaderboardPage'))
+    }
+    .width('100%')
+    .padding(16)
+    .margin({ top: 16 })
+    .backgroundColor(COLOR_SURFACE)
+    .border({ width: 1, color: COLOR_LINE })
+    .borderRadius(8)
   }
 
   @Builder

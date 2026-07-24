@@ -56,6 +56,8 @@ try {
 
   migratedUser.deviceIds.push('legacy-tablet');
   migratedUser.favorites.push(secondQuestion.id);
+  migratedUser.leaderboardOptIn = true;
+  migratedUser.leaderboardOptedInAt = null;
   migratedUser.updatedAt = '2026-07-24T08:00:00.000Z';
   opened.snapshot.meta.updatedAt = migratedUser.updatedAt;
   opened.store.saveUser(migratedUser, opened.snapshot.meta);
@@ -97,14 +99,32 @@ try {
   assert.equal(reopened.store.integrityCheck(), 'ok', 'reopened SQLite database should pass integrity check');
   assert.equal(
     reopened.store.database.pragma('user_version', { simple: true }),
-    2,
-    'opening a schema v1 database should migrate it to schema v2'
+    3,
+    'opening a schema v1 database should migrate it to schema v3'
   );
   const authSessionColumns = reopened.store.database
     .pragma('table_info(auth_sessions)')
     .map((column) => column.name);
   assert(authSessionColumns.includes('access_token_hash'), 'schema v2 should add access token hashes');
   assert(authSessionColumns.includes('access_expires_at'), 'schema v2 should add access token expiry');
+  const userColumns = reopened.store.database
+    .pragma('table_info(users)')
+    .map((column) => column.name);
+  assert(
+    userColumns.includes('leaderboard_opted_in_at'),
+    'schema v3 should add the leaderboard opt-in timestamp'
+  );
+  const answerColumns = reopened.store.database
+    .pragma('table_info(answer_attempts)')
+    .map((column) => column.name);
+  assert(
+    answerColumns.includes('leaderboard_eligible'),
+    'schema v3 should record whether an answer was eligible when it was submitted'
+  );
+  assert(
+    reopened.snapshot.users['legacy-device'].leaderboardOptedInAt,
+    'schema v3 migration should establish a safe scoring baseline for existing opt-in users'
+  );
   assert.equal(await readFile(legacyDbFile, 'utf8'), legacyText, 'migration must not modify legacy JSON');
   assert.equal(existsSync(dbFile), true, 'migration should create the SQLite database file');
 

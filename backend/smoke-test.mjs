@@ -71,6 +71,18 @@ async function runChecks() {
   assert(anonymousProfile.authenticated === false, 'anonymous profile should not be authenticated');
   assert(anonymousProfile.user === null, 'anonymous profile should not expose an account profile');
 
+  const weeklyLeaderboard = await getJson('/api/leaderboards?scope=weekly&limit=10');
+  assert(weeklyLeaderboard.scope === 'weekly', 'weekly leaderboard should return its scope');
+  assert(Array.isArray(weeklyLeaderboard.entries), 'leaderboard entries should be an array');
+  assert(weeklyLeaderboard.entries.length === 0, 'anonymous smoke data should not enter the leaderboard');
+  assert(
+    weeklyLeaderboard.scoringRule === 'first_correct_after_opt_in_per_verified_objective_question',
+    'leaderboard should publish its scoring rule'
+  );
+
+  const invalidLeaderboard = await fetch(`${baseUrl}/api/leaderboards?scope=daily`);
+  assert(invalidLeaderboard.status === 400, 'unsupported leaderboard scopes should be rejected');
+
   const anonymousLeaderboardPreference = await fetch(
     `${baseUrl}/api/users/me/leaderboard-preference`,
     {

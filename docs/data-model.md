@@ -1,6 +1,6 @@
 # 数据模型
 
-运行时数据保存在 `backend/storage/arkinterview.sqlite`，当前 Schema 版本为 `2`。题库源文件仍按模块维护在 `data/question-bank/modules/*.json`，构建后同步到 SQLite；用户私有数据不进入 Git。
+运行时数据保存在 `backend/storage/arkinterview.sqlite`，当前 Schema 版本为 `3`。题库源文件仍按模块维护在 `data/question-bank/modules/*.json`，构建后同步到 SQLite；用户私有数据不进入 Git。
 
 SQLite 当前使用以下业务表：
 
@@ -80,6 +80,7 @@ SQLite 当前使用以下业务表：
   "displayName": "",
   "avatarUrl": "",
   "leaderboardOptIn": false,
+  "leaderboardOptedInAt": null,
   "status": "active",
   "createdAt": "2026-07-02T00:00:00.000Z",
   "updatedAt": "2026-07-02T00:00:00.000Z",
@@ -99,6 +100,7 @@ SQLite 当前使用以下业务表：
       "categoryId": "arkts",
       "type": "single",
       "isCorrect": false,
+      "leaderboardEligible": false,
       "submittedAt": "2026-07-02T00:00:00.000Z"
     }
   ]
@@ -106,3 +108,5 @@ SQLite 当前使用以下业务表：
 ```
 
 匿名设备 ID 不是公开用户 ID。后续接入华为账号时，服务端应继续使用内部 `users.id` 关联学习数据，并通过 `user_identities` 保存服务端验证后的 OpenID/UnionID 映射，不能直接信任客户端上报的外部账号标识。
+
+`leaderboardOptedInAt` 在用户第一次主动参与排行榜时写入，退出排行榜时保留，重新参与不会重置。每次作答还会固化 `leaderboardEligible`：只有已登录且答题当时处于参与状态时为 `true`。排行榜同时校验授权时间和该标记，因此匿名历史及退出排行榜期间的作答不会被补算。

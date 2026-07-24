@@ -6,6 +6,7 @@
     "pages/InterviewExperiencePage",
     "pages/ReviewListPage",
     "pages/RecordPage",
-    "pages/MyPage"
+    "pages/MyPage",
+    "pages/LeaderboardPage"
   ]
 }
