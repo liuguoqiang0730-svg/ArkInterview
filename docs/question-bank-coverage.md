@@ -1,391 +1,83 @@
 # 题库模块覆盖清单
 
-更新时间：2026-07-02
+更新时间：2026-07-23
 
-本文档用于规划后续题库扩充，避免重复生成相同题干、相同 ID 或相同考察角度。新增题目前必须先阅读对应模块条目，再打开 `data/question-bank/modules/<categoryId>.json` 确认细节。
+本文档用于规划 Ark 面试通后续题库扩充，避免重复 ID、重复题干和重复考察角度。事实依据仍以每道题的 `sourceRefs` 为准，本清单只负责记录覆盖范围和下一批方向。
 
-重要规则：
-
-1. 本文档只记录覆盖情况和补题方向，不等同于题目事实来源。
-2. 每道新增题仍必须按 `docs/question-authoring-guidelines.md` 对照官方文档核验。
-3. 待补方向中的每个知识点，入库前都要找到官方来源并填写 `sourceRefs`。
-4. 不要直接写入 `data/seed/questions.json`，只维护 `data/question-bank/modules/*.json`。
-
-## 总览
+## 当前总览
 
 - 分类模块：16
-- 当前题目：40
-- 已有题目的模块：11
-- 暂无题目的模块：5
+- 已发布题目：360
+- 所有模块均已有题目
+- 题库源目录：`data/question-bank/modules/*.json`
+- 聚合输出：`data/seed/questions.json`
 
-暂无题目的模块：
+新增题目前必须：
 
-- `storage` 数据存储
-- `napi` NAPI
-- `performance` 性能优化
-- `debug-release` 调试与发布
-- `next-adaptation` HarmonyOS NEXT 适配
+1. 查看本清单中的 ID 范围、已覆盖和待补方向。
+2. 打开目标模块 JSON，逐题检查题干与考察角度。
+3. 全局搜索相同 API、装饰器和关键词，避免跨模块重复。
+4. 找到华为开发者或 OpenHarmony 官方文档，确认答案后再设置 `reviewStatus: "verified"`。
+5. 运行 `npm run questions:build` 和 `npm run questions:check`。
 
 ## 模块明细
 
-### ArkTS (`arkts`)
-
-当前题数：2
-
-已覆盖：
-
-- ArkTS 类型系统
-- 对象字面量
-- 接口建模
-- ArkTS 编译规则
-- 数组状态更新
-- 静态类型检查
-
-已覆盖题型：单选题
-
-下一批建议补题：
-
-- `let` / `const`、空安全、联合类型等基础语法在 ArkTS 严格模式下的使用边界。
-- 装饰器、类、接口、泛型在 ArkTS 中的常见限制和面试误区。
-- TypeScript 迁移 ArkTS 时常见不兼容写法，例如 `any` 滥用、动态对象、隐式类型。
-- 简答题：让候选人说明为什么 ArkTS 更强调静态类型和可分析性。
-
-### ArkUI (`arkui`)
-
-当前题数：2
-
-已覆盖：
-
-- ArkUI
-- 自定义组件生命周期
-- `aboutToAppear`
-- `aboutToDisappear`
-- 状态变量
-- `@Link`
-
-已覆盖题型：单选题、判断题
-
-下一批建议补题：
-
-- 声明式 UI 基本结构：`@Entry`、`@Component`、`build()`。
-- 常用基础组件布局：`Column`、`Row`、`List`、`Scroll`、`Button`、`Text`。
-- 条件渲染和 `ForEach` 的稳定 key 设计。
-- 事件处理和状态驱动 UI 更新。
-- 简答题：解释 ArkUI 声明式 UI 与传统命令式 UI 的差异。
-
-### Stage 模型 (`stage-model`)
-
-当前题数：2
-
-已覆盖：
-
-- Stage 模型
-- `AbilityStage`
-- HAP 初始化
-- `onCreate`
-- 同步生命周期
-
-已覆盖题型：单选题、判断题
-
-下一批建议补题：
-
-- Stage 模型工程结构：module、ability、page、resources 的关系。
-- `UIAbility` 与 `AbilityStage` 的职责边界。
-- 多 HAP 或多模块场景下初始化逻辑如何拆分。
-- Stage 模型下应用启动链路。
-- 简答题：说明为什么不应该把页面 UI 初始化放到 `AbilityStage`。
-
-### Ability 生命周期 (`ability-lifecycle`)
-
-当前题数：4
-
-已覆盖：
-
-- `UIAbility`
-- 冷启动
-- `onCreate`
-- `WindowStage`
-- 页面加载
-- `onForeground`
-- `onBackground`
-- 资源管理
-- `onWindowStageCreate`
-
-已覆盖题型：单选题、多选题、简答题
-
-下一批建议补题：
-
-- `onWindowStageDestroy` 与窗口资源释放。
-- 前后台切换时网络请求、定时器、定位等资源处理。
-- 启动参数和 `want` 的处理。
-- 多窗口或多实例相关生命周期问题。
-- 判断题：区分 ability 生命周期和页面生命周期。
-
-### 组件通信 (`component-communication`)
-
-当前题数：4
-
-已覆盖：
-
-- 组件通信
-- `@Prop`
-- 父子组件传值
-- `@Link`
-- 双向同步
-- `@Provide`
-- `@Consume`
-- 跨层级通信
-
-已覆盖题型：单选题、多选题、判断题
-
-下一批建议补题：
-
-- `@Observed` / `@ObjectLink` 复杂对象变化观察。
-- 父组件回调函数传递和子组件事件上报。
-- 跨页面通信和组件通信的边界。
-- 状态所有权设计题：什么时候应该上提状态。
-- 简答题：解释 `@Prop` 与 `@Link` 的适用场景差异。
-
-### 状态管理 (`state-management`)
-
-当前题数：4
-
-已覆盖：
-
-- 状态管理
-- `@State`
-- UI 刷新
-- `AppStorage`
-- 应用级状态
-- 状态所有权
-- 作用域
-- `@Prop`
-- `@Link`
-
-已覆盖题型：单选题、多选题、简答题
-
-下一批建议补题：
-
-- `LocalStorage` 与 `AppStorage` 的差异。
-- `PersistentStorage` 适用场景和限制。
-- 状态更新粒度和性能。
-- 嵌套对象状态变化无法触发预期刷新时的处理。
-- 简答题：如何设计一个页面内、跨组件、跨页面都清晰的状态流。
-
-### 路由导航 (`routing`)
-
-当前题数：4
-
-已覆盖：
-
-- 路由导航
-- `pushUrl`
-- 页面栈
-- 参数传递
-- `getParams`
-- `back`
-- 职责边界
-- 页面职责
-
-已覆盖题型：单选题、多选题、判断题
-
-下一批建议补题：
-
-- 页面返回栈和重复打开页面的处理。
-- 路由参数校验和缺失参数兜底。
-- 页面间传参不应承载复杂业务对象的原因。
-- 路由 API deprecated 迁移方向，入库前必须确认官方最新推荐。
-- 简答题：如何设计刷题 App 的路由层级。
-
-### 网络请求 (`network`)
-
-当前题数：4
-
-已覆盖：
-
-- 网络请求
-- `HttpRequest`
-- `createHttp`
-- 超时
-- `HttpRequestOptions`
-- `HttpResponse`
-- `responseCode`
-- 资源释放
-
-已覆盖题型：单选题、多选题、判断题
-
-下一批建议补题：
-
-- 请求头、设备 ID、鉴权 token 的统一封装。
-- JSON 解析失败、HTTP 非 2xx、网络超时的错误分层。
-- 真机不能访问 `127.0.0.1` 的调试问题。
-- 请求取消、页面销毁后的异步回调处理。
-- 简答题：设计一个可复用 API Client 的关键点。
-
-### 权限申请 (`permissions`)
-
-当前题数：4
-
-已覆盖：
-
-- 权限申请
-- `AtManager`
-- `createAtManager`
-- 权限检查
-- `checkAccessToken`
-- 动态授权
-- `requestPermissionsFromUser`
-- `PermissionRequestResult`
-- `authResults`
-
-已覆盖题型：单选题、多选题
-
-下一批建议补题：
-
-- `module.json5` 中权限声明和运行时申请的关系。
-- 用户拒绝权限后的交互和降级策略。
-- 只在真正需要时申请权限的产品设计。
-- 不同权限类型的申请时机。
-- 简答题：如何设计拍照 / 定位功能的权限申请流程。
-
-### 数据存储 (`storage`)
-
-当前题数：0
-
-已覆盖：暂无
-
-下一批建议补题：
-
-- 本地缓存、持久化、服务端同步的边界。
-- Preferences、relationalStore、文件存储的选择。
-- 离线缓存、收藏、错题、练习记录的数据边界。
-- 数据迁移和版本升级策略。
-- 简答题：刷题 App 中哪些数据适合本地存，哪些必须服务端存。
-
-### Preferences (`preferences`)
-
-当前题数：5
-
-已覆盖：
-
-- `Preferences`
-- `getPreferences`
-- 轻量键值存储
-- 键值读写
-- 本地存储
-- 内存缓存
-- `removePreferencesFromCache`
-- `flush`
-- 持久化
-- `deletePreferences`
-- 缓存管理
-
-已覆盖题型：单选题、多选题、判断题
-
-下一批建议补题：
-
-- Preferences 适合存储的数据大小和结构边界。
-- 多处读写同一 preferences 时的一致性设计。
-- 异步读写错误处理。
-- 与关系型数据库的取舍。
-- 简答题：用 Preferences 实现设置页时要注意什么。
-
-### relationalStore (`relational-store`)
-
-当前题数：5
-
-已覆盖：
-
-- `relationalStore`
-- `RdbStore`
-- `getRdbStore`
-- `StoreConfig`
-- `SecurityLevel`
-- CRUD
-- `executeSql`
-- 建表
-- 事务
-- `commit`
-- `rollback`
-
-已覆盖题型：单选题、多选题、判断题
-
-下一批建议补题：
-
-- 数据库版本升级和表结构迁移。
-- 查询条件、分页和排序。
-- 事务失败后的回滚场景。
-- 数据库安全等级选择。
-- 简答题：如何用 relationalStore 设计错题表和答题记录表。
-
-### NAPI (`napi`)
-
-当前题数：0
-
-已覆盖：暂无
-
-下一批建议补题：
-
-- NAPI 的适用场景：性能、复用 C/C++ 能力、系统能力封装。
-- JS / ArkTS 与 Native 层参数传递和类型转换。
-- Native 模块初始化和导出函数。
-- 异步 NAPI 调用和线程安全。
-- 简答题：什么时候不应该为了“性能”引入 NAPI。
-
-### 性能优化 (`performance`)
-
-当前题数：0
-
-已覆盖：暂无
-
-下一批建议补题：
-
-- 启动优化：初始化延迟、首屏加载、资源预加载边界。
-- 列表性能：懒加载、稳定 key、减少不必要刷新。
-- 网络性能：缓存、分页、超时、重试策略。
-- 内存泄漏：生命周期与资源释放。
-- 简答题：分析刷题列表卡顿时的排查步骤。
-
-### 调试与发布 (`debug-release`)
-
-当前题数：0
-
-已覆盖：暂无
-
-下一批建议补题：
-
-- 日志分级和敏感信息处理。
-- DevEco 调试、真机调试、断点调试。
-- 签名配置、证书、profile 和包名关系。
-- 构建产物、HAP / APP 打包差异。
-- 简答题：无法安装到真机时如何排查签名和 SDK 兼容问题。
-
-### HarmonyOS NEXT 适配 (`next-adaptation`)
-
-当前题数：0
-
-已覆盖：暂无
-
-下一批建议补题：
-
-- HarmonyOS NEXT 与传统 Android 兼容思路的差异。
-- API 版本、SDK 版本、兼容 SDK 的选择。
-- 三方库、Native 能力和系统能力适配。
-- 废弃 API 迁移。
-- 简答题：Android / 前端开发者转 HarmonyOS NEXT 时最容易踩哪些坑。
-
-## 下一轮题库扩充建议
-
-优先补空模块，建议顺序：
-
-1. `storage`
-2. `performance`
-3. `debug-release`
-4. `next-adaptation`
-5. `napi`
-
-原因：
-
-- `storage`、`performance`、`debug-release` 是真实面试和项目落地中很常见的能力点。
-- `next-adaptation` 符合产品定位，但容易受官方版本变化影响，必须严格核验。
-- `napi` 更偏进阶，适合在基础模块题量稳定后补充。
+| 模块 | 当前题数 | 已用 ID | 已覆盖重点 | 下一批优先方向 |
+| --- | ---: | --- | --- | --- |
+| ArkTS | 25 | `arkts-001` - `arkts-025` | 静态类型、TS 迁移、Promise、TaskPool/Worker、Sendable、结构化克隆、AsyncLock、共享模块 | 错误类型、集合容器、模块懒加载、并发异常治理 |
+| ArkUI | 25 | `arkui-001` - `arkui-025` | 组件生命周期、声明式 UI、ForEach/LazyForEach/Repeat、模板复用、@ReusableV2 | 布局测量、转场动画、手势冲突、组件复用性能分析 |
+| Stage 模型 | 22 | `stage-model-001` - `stage-model-022` | AbilityStage、UIAbility、WindowStage、AppStartup、Context、HAP/HAR/HSP、多模块启动依赖 | 进程模型、ExtensionAbility、跨进程场景、应用故障恢复 |
+| Ability 生命周期 | 21 | `ability-lifecycle-001` - `ability-lifecycle-021` | 冷启动、窗口阶段、前后台切换、启动模式、onNewWant、状态恢复、回调顺序 | Want 参数、多实例任务管理、异常退出恢复、资源释放边界 |
+| 组件通信 | 22 | `component-communication-001` - `component-communication-022` | V1/V2 父子通信、@Param/@Event/@Once、Provider/Consumer、状态上提 | 跨页面边界、复杂对象契约、V1/V2 混用、事件总线取舍 |
+| 状态管理 | 22 | `state-management-001` - `state-management-022` | @State、@Local、@ObservedV2/@Trace、@Monitor、AppStorage、PersistenceV2 | LocalStorage、PersistentStorage、makeObserved、V1/V2 状态迁移 |
+| 路由导航 | 21 | `routing-001` - `routing-021` | router、Navigation、NavPathStack、栈操作、系统路由表、NavDestination | 自定义转场、深链、跨模块注册、路由失败恢复 |
+| 网络请求 | 21 | `network-001` - `network-021` | HttpRequest 完整生命周期、监听释放、错误分层、NetConnection、网络权限 | 证书校验、请求取消、上传下载、缓存协商、重试退避 |
+| 权限申请 | 21 | `permissions-001` - `permissions-021` | 权限声明、AtManager、运行时授权、单次授权、设置页申请、状态监听 | 特殊权限、隐私弹窗、重复拒绝策略、权限组边界 |
+| 数据存储 | 21 | `storage-001` - `storage-021` | Preferences/KV/RDB 选型、应用沙箱文件、文件 I/O、备份恢复、缓存边界 | 数据加密、跨版本迁移、空间治理、文件并发访问 |
+| Preferences | 21 | `preferences-001` - `preferences-021` | get/put/flush、has/getAll、XML/GSKV、多进程限制、删除与缓存 | 观察器、加密数据、容量边界、异常恢复 |
+| relationalStore | 22 | `relational-store-001` - `relational-store-022` | CRUD、谓词、ResultSet、事务、版本迁移、备份、StoreConfig | 分页排序、索引设计、加密数据库、慢查询分析 |
+| NAPI | 24 | `napi-001` - `napi-024` | 模块注册、参数解析、异步任务、Promise、ArrayBuffer、线程安全函数、引用生命周期 | Native 异常映射、资源清理、并发取消、性能测量 |
+| 性能优化 | 24 | `performance-001` - `performance-024` | 长列表、稳定 key、缓存、冷启动阶段、Profiler Self Time、精准刷新范围 | 内存泄漏、图片资源、网络性能、布局与帧率分析 |
+| 调试与发布 | 24 | `debug-release-001` - `debug-release-024` | SDK/签名、HiLog、HAP/HAR/HSP、同签名要求、混淆、发布流水线 | 崩溃日志、自动化测试、包体分析、可复现构建 |
+| HarmonyOS NEXT 适配 | 24 | `next-adaptation-001` - `next-adaptation-024` | 多窗口、媒体查询、GridRow、深浅色、无障碍、安全区、键鼠与 PC 适配 | 折叠状态、字体缩放、2in1 悬停、自由窗口极限尺寸 |
+
+## 最近批次
+
+2026-07-23 新增 100 道（总数 260 -> 360）：
+
+- ArkTS：`arkts-020` - `arkts-025`
+- ArkUI：`arkui-020` - `arkui-025`
+- Stage 模型：`stage-model-016` - `stage-model-022`
+- Ability 生命周期：`ability-lifecycle-016` - `ability-lifecycle-021`
+- 组件通信：`component-communication-016` - `component-communication-022`
+- 状态管理：`state-management-016` - `state-management-022`
+- 路由、网络、权限、数据存储、Preferences：各 `016` - `021`
+- relationalStore：`relational-store-016` - `relational-store-022`
+- NAPI、性能优化、调试与发布、HarmonyOS NEXT 适配：各 `019` - `024`
+
+本批题型分布：单选 38、多选 30、判断 16、简答 16。全部题目已按 OpenHarmony 官方文档核验，并带正确答案或参考答案、解析和评分点。
+
+上一批新增 50 道：
+
+- ArkTS：`arkts-011` - `arkts-019`
+- ArkUI：`arkui-011` - `arkui-019`
+- NAPI：`napi-011` - `napi-018`
+- 性能优化：`performance-011` - `performance-018`
+- 调试与发布：`debug-release-011` - `debug-release-018`
+- HarmonyOS NEXT 适配：`next-adaptation-011` - `next-adaptation-018`
+
+再上一批新增 50 道：
+
+- Stage 模型、Ability 生命周期、状态管理、组件通信、路由、网络、权限、数据存储、Preferences、relationalStore 各补 5 道。
+
+## 下一轮建议
+
+下一轮不要继续平均铺量，优先补真实面试价值高且当前仍缺少的角度：
+
+1. ArkTS：错误类型、集合容器、并发取消与异常治理。
+2. ArkUI：布局测量、转场动画、手势冲突与复用性能分析。
+3. relationalStore：分页、索引、加密数据库与慢查询定位。
+4. 调试发布：崩溃日志、自动化测试、包体分析和可复现构建。
+5. NEXT 适配：折叠状态、字体缩放、2in1 悬停与自由窗口边界。
+
+每批可按 50 - 100 道规划，但必须先建立 ID 与考察角度清单；同一个官方页面可以提炼多个角度，不得只替换场景名重复同一结论。

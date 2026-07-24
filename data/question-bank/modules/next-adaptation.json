@@ -397,5 +397,637 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "next-adaptation-011",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用可能处于平板分屏或自由窗口时，响应式布局判断宽度更应优先参考什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "当前应用窗口宽度"
+      },
+      {
+        "id": "b",
+        "text": "设备型号字符串"
+      },
+      {
+        "id": "c",
+        "text": "设备物理屏幕的出厂分辨率且忽略窗口变化"
+      },
+      {
+        "id": "d",
+        "text": "用户账号注册时间"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "同一设备上应用窗口可能全屏、分屏或自由缩放，以当前窗口宽度作为响应式布局参照更通用。仅按设备型号或物理屏幕分类无法覆盖窗口动态变化。",
+    "knowledgePoints": [
+      "响应式布局",
+      "窗口宽度",
+      "多窗口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/key-features/multi-device-app-dev/responsive-layout.md",
+        "publisher": "OpenHarmony"
+      },
+      {
+        "title": "HarmonyOS多设备开发最佳实践",
+        "url": "https://developer.huawei.com/consumer/cn/best-practices/multidevice/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11
+  },
+  {
+    "id": "next-adaptation-012",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "官方多设备响应式布局常用哪些能力根据外部容器变化调整页面？",
+    "options": [
+      {
+        "id": "a",
+        "text": "断点"
+      },
+      {
+        "id": "b",
+        "text": "媒体查询"
+      },
+      {
+        "id": "c",
+        "text": "GridRow/GridCol 栅格布局"
+      },
+      {
+        "id": "d",
+        "text": "把所有页面固定成手机竖屏宽度"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "断点、媒体查询和栅格布局都可用于响应窗口宽度、方向等变化。把页面固定为手机宽度只会在大屏产生浪费或在小窗口产生截断。",
+    "knowledgePoints": [
+      "断点",
+      "媒体查询",
+      "GridRow",
+      "GridCol"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/key-features/multi-device-app-dev/responsive-layout.md",
+        "publisher": "OpenHarmony"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12
+  },
+  {
+    "id": "next-adaptation-013",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "只使用拉伸、均分等自适应能力，就一定能覆盖从窄手机窗口到宽平板窗口的所有布局变化。",
+    "answerBoolean": false,
+    "explanation": "窗口跨度很大时，仅拉伸可能导致图片异常放大、内容稀疏或留白过多。此时应结合响应式布局在断点处改变结构，例如从单列切换为列表加详情双栏。",
+    "knowledgePoints": [
+      "自适应布局",
+      "响应式布局",
+      "断点",
+      "大屏适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/key-features/multi-device-app-dev/responsive-layout.md",
+        "publisher": "OpenHarmony"
+      },
+      {
+        "title": "HarmonyOS多设备开发最佳实践",
+        "url": "https://developer.huawei.com/consumer/cn/best-practices/multidevice/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13
+  },
+  {
+    "id": "next-adaptation-014",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "使用 GridRow/GridCol 做响应式栅格时，GridCol 的 span 主要表示什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "该子组件在对应断点下占据的栅格列数"
+      },
+      {
+        "id": "b",
+        "text": "应用允许打开的窗口数量"
+      },
+      {
+        "id": "c",
+        "text": "网络请求的并发数"
+      },
+      {
+        "id": "d",
+        "text": "HAP 中 Ability 的数量"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "GridRow 定义栅格列体系，GridCol 的 span 可按不同断点配置占用列数，从而在不同窗口宽度下形成单列、多列或隐藏等布局效果。",
+    "knowledgePoints": [
+      "GridRow",
+      "GridCol",
+      "span",
+      "栅格布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/key-features/multi-device-app-dev/responsive-layout.md",
+        "publisher": "OpenHarmony"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14
+  },
+  {
+    "id": "next-adaptation-015",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "平板优先的刷题 App 做兼容性验证时，哪些场景应纳入测试矩阵？",
+    "options": [
+      {
+        "id": "a",
+        "text": "横屏与竖屏"
+      },
+      {
+        "id": "b",
+        "text": "全屏、分屏和自由窗口尺寸变化"
+      },
+      {
+        "id": "c",
+        "text": "触摸、键盘和鼠标等可用交互方式"
+      },
+      {
+        "id": "d",
+        "text": "只验证设计稿的单一固定分辨率"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "平板和 2in1 设备会经历方向、窗口模式和输入方式变化。兼容性验证需要覆盖这些真实场景，单一固定分辨率截图不能代表多设备体验。",
+    "knowledgePoints": [
+      "平板适配",
+      "多窗口",
+      "横竖屏",
+      "多模态输入"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS多设备开发最佳实践",
+        "url": "https://developer.huawei.com/consumer/cn/best-practices/multidevice/",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15
+  },
+  {
+    "id": "next-adaptation-016",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "根据设备型号硬编码“手机布局”或“平板布局”，比监听窗口尺寸更能适配分屏和自由窗口。",
+    "answerBoolean": false,
+    "explanation": "设备类型无法反映应用当前可用窗口大小。平板分屏后可能只有窄窗口，手机横屏也可能更宽；响应式结构应优先基于窗口或容器尺寸。",
+    "knowledgePoints": [
+      "设备类型",
+      "窗口尺寸",
+      "硬编码",
+      "自由窗口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/key-features/multi-device-app-dev/responsive-layout.md",
+        "publisher": "OpenHarmony"
+      },
+      {
+        "title": "HarmonyOS多设备开发最佳实践",
+        "url": "https://developer.huawei.com/consumer/cn/best-practices/multidevice/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16
+  },
+  {
+    "id": "next-adaptation-017",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "题库页面在宽屏上左右留白很大，用户还需频繁进入题目详情，哪种布局改造更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "使用列表加详情的分栏布局，并在窄窗口退化为单列"
+      },
+      {
+        "id": "b",
+        "text": "把手机单列列表无限拉宽到整个屏幕"
+      },
+      {
+        "id": "c",
+        "text": "保持内容宽度不变，在两侧加入无功能装饰"
+      },
+      {
+        "id": "d",
+        "text": "取消题目详情，只显示题目 ID"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "宽屏可利用分栏同时展示题单和详情，提高浏览与切换效率；窄窗口再回到单列导航。这符合响应式布局根据窗口范围改变页面结构的思路。",
+    "knowledgePoints": [
+      "分栏布局",
+      "列表详情",
+      "宽屏",
+      "响应式结构"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS多设备开发最佳实践",
+        "url": "https://developer.huawei.com/consumer/cn/best-practices/multidevice/",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "响应式布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/key-features/multi-device-app-dev/responsive-layout.md",
+        "publisher": "OpenHarmony"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17
+  },
+  {
+    "id": "next-adaptation-018",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述如何用“一次开发，多端部署”思路设计刷题 App 的手机、平板和自由窗口布局。",
+    "referenceAnswer": "业务数据、答题状态和服务层应尽量复用，UI 不按设备型号拆成三套完全独立代码，而是以当前窗口或容器尺寸建立断点。窄窗口采用单列题单与详情导航；中宽窗口可显示题单加题目双栏；更宽窗口再控制阅读最大宽度、侧栏比例和留白，避免内容无限拉伸。使用自适应能力处理局部拉伸、均分和隐藏，使用断点、媒体查询或 GridRow/GridCol 在跨度较大时改变结构。同时验证横竖屏、全屏/分屏/自由窗口、字体缩放、底部安全区以及触摸、键盘和鼠标交互，保证窗口变化时任务状态连续。",
+    "scoringPoints": [
+      "业务逻辑和数据层复用，避免按设备复制整套实现",
+      "按窗口或容器尺寸建立断点，而不是只看设备型号",
+      "说明窄屏单列与宽屏分栏的结构变化",
+      "区分局部自适应和跨断点响应式布局",
+      "覆盖方向、窗口模式、安全区、字体和输入方式验证"
+    ],
+    "explanation": "“一多”不是把手机界面等比例放大，而是共享业务能力，并针对窗口跨度和设备交互特征调整信息结构与操作效率。",
+    "knowledgePoints": [
+      "一次开发多端部署",
+      "响应式布局",
+      "自适应布局",
+      "多窗口",
+      "输入适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS多设备开发最佳实践",
+        "url": "https://developer.huawei.com/consumer/cn/best-practices/multidevice/",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "响应式布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/key-features/multi-device-app-dev/responsive-layout.md",
+        "publisher": "OpenHarmony"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18
+  },
+  {
+    "id": "next-adaptation-019",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用在平板分屏和自由窗口中做响应式布局时，媒体查询更应优先使用哪个特征判断当前可用宽度？",
+    "explanation": "width 表示应用页面当前可绘制区域宽度，会随窗口变化；device-width 在应用初始化时保存，不适合单独处理分屏和折叠展开后的动态窗口。",
+    "knowledgePoints": [
+      "媒体查询",
+      "width",
+      "自由窗口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "width"
+      },
+      {
+        "id": "b",
+        "text": "device-width"
+      },
+      {
+        "id": "c",
+        "text": "设备营销名称"
+      },
+      {
+        "id": "d",
+        "text": "固定屏幕对角线"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-020",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "应用跟随系统进行深浅色适配时，哪些方案符合官方建议？",
+    "explanation": "资源限定词和系统资源可让框架自动选择深浅色值；只有业务逻辑确实依赖模式时再监听配置并更新状态。",
+    "knowledgePoints": [
+      "深浅色模式",
+      "资源限定词",
+      "配置变化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用深浅色适配",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/ui-dark-light-color-adaptation.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 dark 资源限定词目录提供同名颜色或图片资源"
+      },
+      {
+        "id": "b",
+        "text": "优先使用可随模式变化的系统资源或应用资源"
+      },
+      {
+        "id": "c",
+        "text": "需要业务联动时监听配置变化并更新状态"
+      },
+      {
+        "id": "d",
+        "text": "所有颜色都硬编码为同一个浅色值"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-021",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "GridRow 的默认断点参照物是应用窗口尺寸，因此适合响应分屏或自由窗口带来的宽度变化。",
+    "explanation": "GridRow 的 BreakPoints 默认 reference 为 WindowSize，可按窗口宽度在 xs、sm、md 等断点间切换。",
+    "knowledgePoints": [
+      "GridRow",
+      "断点",
+      "WindowSize"
+    ],
+    "sourceRefs": [
+      {
+        "title": "GridRow",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-gridrow.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-022",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "一个只有图标、没有可见文字的收藏按钮，为帮助屏幕朗读识别其含义，应优先补充什么？",
+    "explanation": "accessibilityText 可为没有文字信息的组件提供可朗读名称，让无障碍服务说明当前控件的含义。",
+    "knowledgePoints": [
+      "无障碍",
+      "accessibilityText",
+      "图标按钮"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "accessibilityText"
+      },
+      {
+        "id": "b",
+        "text": "负数宽度"
+      },
+      {
+        "id": "c",
+        "text": "透明遮罩"
+      },
+      {
+        "id": "d",
+        "text": "重复的空 Text"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-023",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "面向平板和 PC/2in1 的交互适配，哪些内容应纳入实现与测试？",
+    "explanation": "多端适配不仅是页面变宽，还包括多种输入方式、动态窗口尺寸和系统窗口区域。所有路径都要保证可见、可聚焦、可操作。",
+    "knowledgePoints": [
+      "PC适配",
+      "键盘",
+      "鼠标",
+      "安全区域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "键盘快捷键事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-events-keyboardshortcut.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "安全区域扩展属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "键盘焦点顺序和常用快捷键"
+      },
+      {
+        "id": "b",
+        "text": "鼠标悬停、点击及右键等输入反馈"
+      },
+      {
+        "id": "c",
+        "text": "窗口缩放、分屏和横竖屏变化"
+      },
+      {
+        "id": "d",
+        "text": "系统安全区域与状态栏遮挡"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-024",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "为刷题 App 制定“一多”适配测试矩阵，应覆盖哪些布局、交互和可访问性场景？",
+    "explanation": "“一次开发，多端部署”需要按窗口、输入和可访问性组合验证，不能只按设备型号做一次静态截图。",
+    "knowledgePoints": [
+      "一多",
+      "响应式布局",
+      "多输入",
+      "可访问性测试"
+    ],
+    "sourceRefs": [
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "GridRow",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-gridrow.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用深浅色适配",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/ui-dark-light-color-adaptation.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "键盘快捷键事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-events-keyboardshortcut.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "安全区域扩展属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "referenceAnswer": "布局至少覆盖手机窄屏、平板横竖屏、折叠展开、分屏与自由窗口连续缩放，并按当前窗口 width 或 GridRow 断点切换单栏和双栏；检查长题干、系统大字体、软键盘、深浅色和安全区域。交互要覆盖触屏、鼠标、键盘焦点、快捷键和返回行为。可访问性要为图标按钮提供可朗读文本，检查选中状态和焦点顺序。每个尺寸都验证内容不裁切、不重叠、左右栏滚动独立且导航状态一致，并保存真机或模拟器截图做回归。",
+    "scoringPoints": [
+      "覆盖多种窗口宽度、方向、折叠和分屏",
+      "覆盖长文本、大字体、深浅色和安全区域",
+      "覆盖触屏、鼠标、键盘与返回操作",
+      "覆盖无障碍语义、焦点和截图回归"
+    ]
   }
 ]

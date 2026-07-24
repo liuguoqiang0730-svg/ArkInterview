@@ -379,5 +379,597 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "napi-011",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Node-API 模块注册信息中的 nm_modname 主要用于什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "声明模块名称，使模块系统能匹配 ArkTS 侧引入的 so"
+      },
+      {
+        "id": "b",
+        "text": "声明应用包名并替代 app.json5"
+      },
+      {
+        "id": "c",
+        "text": "设置 Native 线程数量"
+      },
+      {
+        "id": "d",
+        "text": "指定页面路由名称"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "加载 so 时会通过 napi_module_register 注册模块。nm_modname 定义模块名称，模块系统据此区分和匹配 ArkTS 侧引入的 Native so；它不负责包名、线程数或路由。",
+    "knowledgePoints": [
+      "Node-API",
+      "napi_module",
+      "nm_modname",
+      "模块注册"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-process",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11
+  },
+  {
+    "id": "napi-012",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "一个可被 ArkTS import 的 Node-API 模块通常需要完成哪些接入工作？",
+    "options": [
+      {
+        "id": "a",
+        "text": "在 CMakeLists.txt 中构建动态库并链接所需 Node-API 库"
+      },
+      {
+        "id": "b",
+        "text": "实现模块初始化并导出 Native 方法"
+      },
+      {
+        "id": "c",
+        "text": "提供 index.d.ts，并通过 oh-package.json5 关联类型声明"
+      },
+      {
+        "id": "d",
+        "text": "把 C++ 源码放入 assets 后由 ArkTS 直接解释执行"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "官方流程包含 Native 动态库构建、模块注册与方法导出、ArkTS 类型声明及包映射，ArkTS 再 import 对应 so。C++ 源码不会作为 assets 被 ArkTS 直接解释执行。",
+    "knowledgePoints": [
+      "CMakeLists",
+      "模块注册",
+      "index.d.ts",
+      "oh-package.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-process",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12
+  },
+  {
+    "id": "napi-013",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Native 导出函数需要获取 ArkTS 调用时传入的参数和 this 指针，应使用哪个 Node-API 接口？",
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_get_cb_info"
+      },
+      {
+        "id": "b",
+        "text": "napi_create_promise"
+      },
+      {
+        "id": "c",
+        "text": "napi_wrap"
+      },
+      {
+        "id": "d",
+        "text": "napi_queue_async_work"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "napi_get_cb_info 用于从 callback info 中取得参数数量、参数数组以及 this 指针等调用信息。其他选项分别面向 Promise、对象绑定和异步任务排队。",
+    "knowledgePoints": [
+      "napi_get_cb_info",
+      "参数解析",
+      "thisArg"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行函数相关开发",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-about-function",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13
+  },
+  {
+    "id": "napi-014",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Native 侧已经拿到一个 ArkTS 函数对象时，可以通过 napi_call_function 调用该函数并传递参数。",
+    "answerBoolean": true,
+    "explanation": "napi_call_function 用于在 Node-API 模块中调用 ArkTS 函数。调用前仍需确保函数值、参数和所在线程符合 Node-API 约束，并检查接口返回状态。",
+    "knowledgePoints": [
+      "napi_call_function",
+      "Native回调ArkTS",
+      "函数调用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行函数相关开发",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-about-function",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14
+  },
+  {
+    "id": "napi-015",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "使用 napi_create_async_work 封装耗时计算时，execute 与 complete 回调的合理分工是什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "execute 在工作线程处理耗时业务，complete 回到主线程封装并传递结果"
+      },
+      {
+        "id": "b",
+        "text": "execute 专门更新 ArkUI，complete 只负责睡眠等待"
+      },
+      {
+        "id": "c",
+        "text": "两个回调都必须在 UI 主线程执行"
+      },
+      {
+        "id": "d",
+        "text": "complete 在工作线程直接销毁 ArkTS 页面"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "官方异步任务流程中，第一个回调在工作线程执行具体耗时逻辑，第二个回调在主线程把结果转换为 ArkTS 可用值并 resolve/reject Promise 或调用回调，同时清理异步任务资源。",
+    "knowledgePoints": [
+      "napi_create_async_work",
+      "工作线程",
+      "complete回调",
+      "资源清理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API进行异步任务开发",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-asynchronous-task",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15
+  },
+  {
+    "id": "napi-016",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Native 侧向 ArkTS 返回 Promise 时，哪些 Node-API 接口职责匹配正确？",
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_create_promise 创建 Promise 及关联的 deferred"
+      },
+      {
+        "id": "b",
+        "text": "napi_resolve_deferred 将 Promise 转为 fulfilled"
+      },
+      {
+        "id": "c",
+        "text": "napi_reject_deferred 将 Promise 转为 rejected"
+      },
+      {
+        "id": "d",
+        "text": "napi_get_cb_info 用于强制 Promise 进入 cancelled"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Promise 相关 Node-API 通过 create_promise 创建对象与 deferred，再根据结果 resolve 或 reject。napi_get_cb_info 只负责取得调用信息，标准 Promise 也没有由它触发的 cancelled 状态。",
+    "knowledgePoints": [
+      "napi_create_promise",
+      "napi_resolve_deferred",
+      "napi_reject_deferred"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行Promise相关开发",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-about-promise",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16
+  },
+  {
+    "id": "napi-017",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "需要把一个 C++ 对象实例与 ArkTS 对象绑定，后续再从 ArkTS 对象取回 Native 指针，通常使用哪组接口？",
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_wrap 与 napi_unwrap"
+      },
+      {
+        "id": "b",
+        "text": "napi_create_promise 与 napi_is_promise"
+      },
+      {
+        "id": "c",
+        "text": "napi_queue_async_work 与 napi_cancel_async_work"
+      },
+      {
+        "id": "d",
+        "text": "napi_get_boolean 与 napi_create_int32"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "napi_wrap 可把 Native 对象实例绑定到 ArkTS 对象，napi_unwrap 用于取回此前绑定的实例；需要解除绑定时还可使用 napi_remove_wrap，并应设计清晰的内存释放策略。",
+    "knowledgePoints": [
+      "napi_wrap",
+      "napi_unwrap",
+      "对象绑定",
+      "内存管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行类相关开发",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-about-class",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17
+  },
+  {
+    "id": "napi-018",
+    "categoryId": "napi",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述把一个耗时 C++ 算法封装成 ArkTS Promise 接口时的关键步骤和资源安全点。",
+    "referenceAnswer": "先在 index.d.ts 声明清晰的 Promise 返回类型，并完成 so 构建、模块注册和导出。Native 入口通过 napi_get_cb_info 读取并校验参数，使用 napi_create_promise 得到 promise/deferred，再用 napi_create_async_work 创建任务并排队。execute 回调在工作线程只处理耗时业务和原生数据，complete 回到主线程把结果转换为 napi_value，并调用 napi_resolve_deferred 或 napi_reject_deferred。最后删除 async work、释放上下文和引用；每一步检查 napi_status，避免跨线程误用 env 或 ArkTS 对象。",
+    "scoringPoints": [
+      "说明类型声明、模块注册和方法导出",
+      "说明参数解析与校验",
+      "说明 Promise/deferred 和 async work 的创建",
+      "区分工作线程 execute 与主线程 complete 的职责",
+      "提到 napi_status 检查以及异步任务、引用和上下文释放"
+    ],
+    "explanation": "该题考察完整工程链路，而不仅是记住某个 API 名称。高质量答案应同时覆盖线程边界、错误返回和 Native 资源生命周期。",
+    "knowledgePoints": [
+      "Node-API异步任务",
+      "Promise",
+      "线程边界",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API实现跨语言交互开发流程",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-process",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "使用Node-API进行异步任务开发",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-asynchronous-task",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "使用Node-API接口进行Promise相关开发",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/use-napi-about-promise",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18
+  },
+  {
+    "id": "napi-019",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "Native 侧已经收到一个 ArkTS ArrayBuffer，要获取其底层数据指针和字节长度，应使用哪个 Node-API？",
+    "explanation": "napi_get_arraybuffer_info 用于从 ArrayBuffer 取得数据地址和 byteLength，调用前应先校验参数确实是 ArrayBuffer。",
+    "knowledgePoints": [
+      "Node-API",
+      "ArrayBuffer",
+      "napi_get_arraybuffer_info"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行ArrayBuffer相关开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-about-arraybuffer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_get_arraybuffer_info"
+      },
+      {
+        "id": "b",
+        "text": "napi_create_promise"
+      },
+      {
+        "id": "c",
+        "text": "napi_call_function"
+      },
+      {
+        "id": "d",
+        "text": "napi_wrap"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "napi-020",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "调用 napi_create_arraybuffer 时，当长度为 0 或数值过大，返回的数据指针可能为 nullptr，因此使用前需要判空。",
+    "explanation": "官方文档明确提醒不要假设 data 永远有效，Native 代码在写入前必须检查状态码和指针。",
+    "knowledgePoints": [
+      "napi_create_arraybuffer",
+      "nullptr",
+      "Native安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行ArrayBuffer相关开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-about-arraybuffer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "answerBoolean": true
+  },
+  {
+    "id": "napi-021",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 napi_create_async_work 封装耗时任务时，哪些做法正确？",
+    "explanation": "异步工作把纯 Native 计算放在 execute，把 ArkTS 值构造、Promise 完成和资源清理放在 complete。env 有线程归属，不能在工作线程随意调用。",
+    "knowledgePoints": [
+      "napi_async_work",
+      "execute",
+      "complete",
+      "线程安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "options": [
+      {
+        "id": "a",
+        "text": "execute 回调在工作线程执行耗时 Native 逻辑"
+      },
+      {
+        "id": "b",
+        "text": "execute 回调不能使用原 ArkTS 线程的 env 构造 napi_value"
+      },
+      {
+        "id": "c",
+        "text": "complete 回到对应 ArkTS 线程后再创建返回值并 resolve 或回调"
+      },
+      {
+        "id": "d",
+        "text": "complete 阶段通过 napi_delete_async_work 释放工作对象且只释放一次"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "napi-022",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "Native 异步线程需要安全地把任务投递回 ArkTS 线程执行回调，应优先使用什么？",
+    "explanation": "threadsafe function 用于从异步线程向 ArkTS 线程投递任务。直接在任意 Native 线程使用 ArkTS env 调用函数会破坏线程约束。",
+    "knowledgePoints": [
+      "threadsafe function",
+      "Native线程",
+      "ArkTS回调"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口从异步线程向ArkTS线程投递任务",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-call-threadsafe-function-with-priority.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_threadsafe_function 系列接口"
+      },
+      {
+        "id": "b",
+        "text": "直接在任意 pthread 上调用 napi_call_function"
+      },
+      {
+        "id": "c",
+        "text": "共享一个未加锁的 napi_env"
+      },
+      {
+        "id": "d",
+        "text": "反复创建 UIAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "napi-023",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Native 层不再需要长期持有某个 ArkTS 对象的强引用时，应调用什么避免对象无法回收？",
+    "explanation": "强引用会保持 ArkTS 对象存活，生命周期结束后必须通过 napi_delete_strong_reference 释放对应引用。",
+    "knowledgePoints": [
+      "强引用",
+      "napi_delete_strong_reference",
+      "内存管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用扩展的Node-API接口创建对ArkTS对象的强引用",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-about-strong-reference.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_delete_strong_reference"
+      },
+      {
+        "id": "b",
+        "text": "napi_create_strong_reference"
+      },
+      {
+        "id": "c",
+        "text": "napi_create_arraybuffer"
+      },
+      {
+        "id": "d",
+        "text": "napi_queue_async_work"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "napi-024",
+    "categoryId": "napi",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述把耗时 C++ 解析任务封装为 ArkTS Promise 接口时的线程与资源安全流程。",
+    "explanation": "这道题重点是 env 的线程归属和全路径资源释放，不能只描述“开一个子线程”。",
+    "knowledgePoints": [
+      "Node-API异步",
+      "Promise",
+      "资源安全",
+      "线程安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "使用Node-API接口从异步线程向ArkTS线程投递任务",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-call-threadsafe-function-with-priority.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "referenceAnswer": "入口函数先校验参数并提取 Native 数据，创建 deferred 与 Promise，再分配上下文并创建、排队 napi_async_work。execute 在工作线程只执行 C++ 计算，不使用 ArkTS 线程 env 构造 napi_value。complete 在 ArkTS 线程检查执行状态，创建返回值并 resolve 或 reject deferred，随后释放 Native 缓冲、引用和 async_work。所有 Node-API 调用都检查 napi_status；排队失败、取消和异常路径也必须释放一次且仅一次。若其他 Native 线程需要主动回调 ArkTS，应使用 napi_threadsafe_function。",
+    "scoringPoints": [
+      "入口创建 Promise、上下文和 async_work 并校验参数",
+      "execute 只做 Native 工作，不跨线程使用 env 构造 ArkTS 值",
+      "complete 中 resolve 或 reject 并释放所有资源",
+      "覆盖排队失败、取消、状态码和线程安全回调"
+    ]
   }
 ]

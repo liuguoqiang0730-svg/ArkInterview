@@ -403,5 +403,447 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "preferences-011",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "调用 Preferences 的 put 修改键值后，还应调用 flush 才能把修改写入持久化存储。",
+    "explanation": "官方 FAQ 提到数据持久化需要在调用 preferences.put 后调用 preferences.flush。仅修改内存中的 Preferences 不等于已经可靠写入文件。",
+    "knowledgePoints": [
+      "Preferences",
+      "put",
+      "flush",
+      "持久化落盘"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ohos.data.preferences在App退出重启后，持久化数据丢失",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-faqs/faqs-local-database-management-28",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "answerBoolean": true
+  },
+  {
+    "id": "preferences-012",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "下列哪些内容更适合放到 Preferences 这类轻量键值存储中？",
+    "explanation": "Preferences 适合轻量键值型偏好数据，不适合替代关系型数据库保存大量结构化明细。",
+    "knowledgePoints": [
+      "Preferences",
+      "用户偏好",
+      "轻量键值"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "options": [
+      {
+        "id": "a",
+        "text": "是否首次启动"
+      },
+      {
+        "id": "b",
+        "text": "深浅色模式偏好"
+      },
+      {
+        "id": "c",
+        "text": "最近一次练习的分类 ID"
+      },
+      {
+        "id": "d",
+        "text": "大量按条件查询的答题明细表"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-013",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "Preferences 中的内存修改要落盘，最应调用哪个方法？",
+    "explanation": "flush() 用于将 Preferences 中的修改写入持久化存储。request 属于 HTTP，请求跳转和 SQL 执行也不是 Preferences 落盘方法。",
+    "knowledgePoints": [
+      "Preferences",
+      "flush",
+      "数据落盘"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "options": [
+      {
+        "id": "a",
+        "text": "flush()"
+      },
+      {
+        "id": "b",
+        "text": "request()"
+      },
+      {
+        "id": "c",
+        "text": "pushUrl()"
+      },
+      {
+        "id": "d",
+        "text": "executeSql()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "preferences-014",
+    "categoryId": "preferences",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "解释 Preferences 里 put 与 flush 的职责差异。",
+    "explanation": "很多线上问题不是 API 不会用，而是忘记落盘。Preferences 题要把内存修改和文件持久化区分清楚。",
+    "knowledgePoints": [
+      "Preferences",
+      "put",
+      "flush"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ohos.data.preferences在App退出重启后，持久化数据丢失",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-faqs/faqs-local-database-management-28",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "referenceAnswer": "put 用于把键值修改写入 Preferences 实例中的数据；flush 用于把这些修改持久化到文件。只调用 put 而不 flush，应用退出或重启时可能出现修改未可靠保存的问题。",
+    "scoringPoints": [
+      "说明 put 修改键值",
+      "说明 flush 持久化落盘",
+      "说明未 flush 的风险"
+    ]
+  },
+  {
+    "id": "preferences-015",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "保存“上次选择的练习模式”这类小型用户偏好，优先使用什么？",
+    "explanation": "练习模式偏好是小型键值数据，适合 Preferences。关系型数据库更适合复杂结构化数据，静态字段不能保证进程重启后的可靠保存。",
+    "knowledgePoints": [
+      "Preferences",
+      "练习模式",
+      "用户偏好"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Preferences",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-preferences-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "options": [
+      {
+        "id": "a",
+        "text": "Preferences"
+      },
+      {
+        "id": "b",
+        "text": "relationalStore 复杂多表事务"
+      },
+      {
+        "id": "c",
+        "text": "AbilityStage 静态字段"
+      },
+      {
+        "id": "d",
+        "text": "HTTP 响应头"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "preferences-016",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "检查 Preferences 实例中是否存在指定 key，应该调用哪个方法？",
+    "explanation": "Preferences.has 用于检查缓存实例中是否包含指定 key 的键值对。",
+    "knowledgePoints": [
+      "Preferences",
+      "has",
+      "键检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.data.preferences（用户首选项）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "has"
+      },
+      {
+        "id": "b",
+        "text": "backup"
+      },
+      {
+        "id": "c",
+        "text": "querySql"
+      },
+      {
+        "id": "d",
+        "text": "pushPath"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "preferences-017",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "需要一次获取当前 Preferences 实例缓存中的全部键值数据，应使用哪个方法？",
+    "explanation": "getAll 或 getAllSync 可返回当前 Preferences 实例中的全部键值数据。",
+    "knowledgePoints": [
+      "Preferences",
+      "getAll",
+      "批量读取"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.data.preferences（用户首选项）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "options": [
+      {
+        "id": "a",
+        "text": "getAll"
+      },
+      {
+        "id": "b",
+        "text": "getRdbStore"
+      },
+      {
+        "id": "c",
+        "text": "requestPermissionsFromUser"
+      },
+      {
+        "id": "d",
+        "text": "startAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "preferences-018",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 Preferences 的 XML 与 GSKV 存储模式，哪些说法正确？",
+    "explanation": "XML 与 GSKV 的落盘策略不同，同一实例选定模式后不能中途切换。业务代码仍应按当前 SDK 能力和兼容版本选择模式。",
+    "knowledgePoints": [
+      "Preferences",
+      "XML",
+      "GSKV",
+      "flush"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.data.preferences（用户首选项）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "options": [
+      {
+        "id": "a",
+        "text": "XML 是默认存储模式"
+      },
+      {
+        "id": "b",
+        "text": "XML 模式修改内存数据后需要 flush 才能落盘"
+      },
+      {
+        "id": "c",
+        "text": "GSKV 模式的数据操作实时落盘，无需调用 flush"
+      },
+      {
+        "id": "d",
+        "text": "获取实例后可以在同一个 Preferences 文件上随时切换存储模式"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-019",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "Preferences 无法保证进程并发安全，因此不支持把同一首选项文件用于多进程并发读写。",
+    "explanation": "官方 API 文档明确指出多进程场景存在文件损坏和数据丢失风险，不支持这样使用 Preferences。",
+    "knowledgePoints": [
+      "Preferences",
+      "多进程",
+      "并发安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.data.preferences（用户首选项）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "answerBoolean": true
+  },
+  {
+    "id": "preferences-020",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Preferences 缓存和删除操作，哪些说法正确？",
+    "explanation": "移除缓存、删除文件和清空键值是三种不同操作。XML 模式下对缓存的修改需要 flush 落盘。",
+    "knowledgePoints": [
+      "Preferences缓存",
+      "deletePreferences",
+      "clear",
+      "flush"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.data.preferences（用户首选项）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "removePreferencesFromCache 只移除缓存实例，不删除持久化文件"
+      },
+      {
+        "id": "b",
+        "text": "移除缓存后再次 getPreferences 会重新读取持久化文件"
+      },
+      {
+        "id": "c",
+        "text": "deletePreferences 会同时删除缓存实例及对应持久化文件"
+      },
+      {
+        "id": "d",
+        "text": "clear 清空缓存数据后，XML 模式还需 flush 才会持久化清空结果"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "preferences-021",
+    "categoryId": "preferences",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述一个可靠的 Preferences 使用流程，并说明它不适合哪些数据。",
+    "explanation": "可靠使用不仅是会调用 put/get，还要理解内存缓存、落盘时机、数据规模和并发边界。",
+    "knowledgePoints": [
+      "Preferences流程",
+      "落盘",
+      "缓存",
+      "选型限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.data.preferences（用户首选项）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用数据持久化概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/app-data-persistence-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "referenceAnswer": "先通过合法 Context 和唯一文件名获取 Preferences 实例，读取时提供类型匹配的默认值；更新使用 put、delete 或 clear，XML 模式在完成一组修改后 await flush，并处理失败。长期订阅应在生命周期结束时取消，确定不再使用实例时可移出缓存。Preferences 适合主题、开关、上次选择等少量配置，不适合大量题库、复杂关联查询、跨多步原子写入或多进程并发访问，这些场景应选择文件、relationalStore 或其他合适存储。",
+    "scoringPoints": [
+      "说明获取实例、默认值和修改流程",
+      "说明 XML 模式需要 flush 并处理错误",
+      "说明缓存或监听的生命周期",
+      "指出大量数据、关系查询、事务和多进程场景不适合"
+    ]
   }
 ]

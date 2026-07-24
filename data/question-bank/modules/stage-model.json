@@ -403,5 +403,515 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "stage-model-011",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Stage 模型为了支撑复杂应用，多个应用组件共享 ArkTS 引擎实例带来的主要收益是什么？",
+    "explanation": "官方 Stage 模型说明强调，多个应用组件共享同一个 ArkTS 引擎实例，有利于复杂应用共享对象和状态，也能减少复杂应用运行时的内存占用。",
+    "knowledgePoints": [
+      "Stage 模型",
+      "ArkTS 引擎",
+      "应用组件共享"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "options": [
+      {
+        "id": "a",
+        "text": "方便组件间共享对象和状态，并减少复杂应用运行时的内存占用"
+      },
+      {
+        "id": "b",
+        "text": "让每个页面都必须独立启动一个新的应用进程"
+      },
+      {
+        "id": "c",
+        "text": "要求所有窗口逻辑都写到 ExtensionAbility 里面"
+      },
+      {
+        "id": "d",
+        "text": "只允许开发无界面的后台扩展能力"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "stage-model-012",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "面试中解释 Stage 模型的基本组成时，哪些描述是准确的？",
+    "explanation": "Stage 模型提供 UIAbility 和 ExtensionAbility 两类组件，UIAbility 用于包含 UI 的交互场景；AbilityStage 承担 HAP 加载期间的模块级生命周期；窗口相关阶段由 WindowStage 暴露。",
+    "knowledgePoints": [
+      "UIAbility",
+      "ExtensionAbility",
+      "AbilityStage",
+      "WindowStage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "AbilityStage",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-abilitystage-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "UIAbility",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-app-ability-uiability-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "options": [
+      {
+        "id": "a",
+        "text": "UIAbility 是包含 UI、主要用于和用户交互的应用组件"
+      },
+      {
+        "id": "b",
+        "text": "ExtensionAbility 面向特定扩展场景，不应该被当成普通页面容器"
+      },
+      {
+        "id": "c",
+        "text": "AbilityStage 更偏向 HAP 加载与模块级生命周期"
+      },
+      {
+        "id": "d",
+        "text": "WindowStage 与窗口创建和页面加载阶段完全无关"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-013",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "UIAbility 生命周期只覆盖创建、销毁、前后台等状态；与显示相关的状态可通过 WindowStage 相关事件暴露给开发者。",
+    "explanation": "官方 Stage 模型介绍说明 UIAbility 生命周期包含创建、销毁、前台、后台等状态，与显示相关的状态通过 WindowStage 的事件暴露给开发者。",
+    "knowledgePoints": [
+      "UIAbility 生命周期",
+      "WindowStage",
+      "前后台切换"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "answerBoolean": true
+  },
+  {
+    "id": "stage-model-014",
+    "categoryId": "stage-model",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "从复杂应用和多设备角度说明 Stage 模型的设计价值。",
+    "explanation": "这类问题考察的是 Stage 模型的设计出发点，不是背类名。回答时应围绕复杂应用、多设备多窗口、生命周期统一和系统管控边界展开。",
+    "knowledgePoints": [
+      "Stage 模型设计",
+      "复杂应用",
+      "一多适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "referenceAnswer": "Stage 模型通过 UIAbility、ExtensionAbility、AbilityStage、WindowStage 等概念拆分应用组件和窗口能力。多个应用组件可以共享同一个 ArkTS 引擎实例，便于共享对象和状态，减少复杂应用运行的内存占用；同时应用组件管理和窗口管理解耦，更适合多设备、多窗口形态。",
+    "scoringPoints": [
+      "说出应用组件与窗口能力拆分",
+      "说明共享 ArkTS 引擎实例带来的状态共享和内存收益",
+      "提到多设备、多窗口形态适配"
+    ]
+  },
+  {
+    "id": "stage-model-015",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "Stage 模型里承载带界面用户交互能力的应用组件类型是哪一个？",
+    "explanation": "UIAbility 是包含 UI 的应用组件，主要用于和用户交互；AbilityStage 偏 HAP 运行时生命周期，Want 用于意图参数，StoreConfig 属于数据存储配置。",
+    "knowledgePoints": [
+      "UIAbility",
+      "用户交互",
+      "Stage 模型组件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "options": [
+      {
+        "id": "a",
+        "text": "UIAbility"
+      },
+      {
+        "id": "b",
+        "text": "AbilityStage"
+      },
+      {
+        "id": "c",
+        "text": "Want"
+      },
+      {
+        "id": "d",
+        "text": "StoreConfig"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "stage-model-016",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在 Stage 模型中，AbilityStage 实例与 HAP 的对应关系是什么？",
+    "explanation": "AbilityStage 是 Module 级组件管理器，HAP 首次加载时创建对应实例，官方文档描述 AbilityStage 与 HAP 一一对应。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "HAP",
+      "Module"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage组件管理器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/abilitystage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "每个 HAP 对应一个 AbilityStage 实例"
+      },
+      {
+        "id": "b",
+        "text": "整个设备只存在一个 AbilityStage"
+      },
+      {
+        "id": "c",
+        "text": "每个页面对应一个 AbilityStage"
+      },
+      {
+        "id": "d",
+        "text": "每次路由跳转都创建一个 AbilityStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "stage-model-017",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "把复杂初始化迁移到 AppStartup 启动框架后，可以获得哪些能力？",
+    "explanation": "AppStartup 用配置统一管理执行顺序和依赖，并支持自动或手动启动及 taskPool 调度；任务之间不允许循环依赖。",
+    "knowledgePoints": [
+      "AppStartup",
+      "启动任务",
+      "依赖管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用启动框架AppStartup",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/app-startup.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "options": [
+      {
+        "id": "a",
+        "text": "在配置中声明启动任务之间的依赖关系"
+      },
+      {
+        "id": "b",
+        "text": "选择自动模式或手动模式执行任务"
+      },
+      {
+        "id": "c",
+        "text": "将合适的初始化任务调度到 taskPool"
+      },
+      {
+        "id": "d",
+        "text": "允许启动任务形成循环依赖"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-018",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "把所有初始化任务都串行放进 UIAbility.onCreate，比使用 AppStartup 管理依赖和异步调度更有利于冷启动性能。",
+    "explanation": "大量任务集中在 UIAbility.onCreate 会占用主线程、拖慢启动并使依赖关系难以维护。AppStartup 正是为统一管理和并行调度启动任务而提供。",
+    "knowledgePoints": [
+      "UIAbility",
+      "AppStartup",
+      "冷启动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用启动框架AppStartup",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/app-startup.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "answerBoolean": false
+  },
+  {
+    "id": "stage-model-019",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "代码需要调用仅由 ApplicationContext 提供的能力时，为什么不能把 UIAbilityContext 直接强制转换后使用？",
+    "explanation": "Context 类型有不同的能力边界。类型断言只影响静态类型视图，不会让对象拥有原本不存在的方法，应通过合法入口获取对应 Context。",
+    "knowledgePoints": [
+      "Context",
+      "ApplicationContext",
+      "能力边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用上下文Context",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/application-context-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "不同 Context 类型能力不同，强制类型转换不会凭空增加运行时能力"
+      },
+      {
+        "id": "b",
+        "text": "ArkTS 不允许声明任何 Context"
+      },
+      {
+        "id": "c",
+        "text": "UIAbilityContext 只能读取字符串"
+      },
+      {
+        "id": "d",
+        "text": "ApplicationContext 只存在于 FA 模型"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "stage-model-020",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 HAP、HAR 和 HSP 的定位，哪些说法正确？",
+    "explanation": "HAP 承载可安装运行模块；HAR 是静态共享包且不能独立运行；HSP 在应用内动态共享代码和资源，也不能脱离宿主应用独立发布运行。",
+    "knowledgePoints": [
+      "HAP",
+      "HAR",
+      "HSP",
+      "模块化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HAR",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/har-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HSP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/in-app-hsp.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "HAP 是应用安装和运行的基本单元"
+      },
+      {
+        "id": "b",
+        "text": "HAR 是静态共享包，随宿主编译并合入使用方"
+      },
+      {
+        "id": "c",
+        "text": "HSP 是动态共享包，可减少多个 HAP 重复打包共享代码和资源"
+      },
+      {
+        "id": "d",
+        "text": "HAR 可以像普通应用一样独立安装并从桌面启动"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-021",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "AppStartup 中一个不操作 UI 的耗时初始化任务，希望避免阻塞主线程，runOnThread 更适合配置为什么？",
+    "explanation": "runOnThread 可配置 mainThread 或 taskPool。与 UI 无关且满足并发约束的耗时初始化可放到 taskPool，减少主线程启动压力。",
+    "knowledgePoints": [
+      "AppStartup",
+      "taskPool",
+      "启动性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用启动框架AppStartup",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/app-startup.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "options": [
+      {
+        "id": "a",
+        "text": "taskPool"
+      },
+      {
+        "id": "b",
+        "text": "mainThread"
+      },
+      {
+        "id": "c",
+        "text": "renderService"
+      },
+      {
+        "id": "d",
+        "text": "windowStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "stage-model-022",
+    "categoryId": "stage-model",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "一个多模块应用有日志、数据库、网络和首页数据等初始化任务，如何基于 Stage 模型设计启动链路？",
+    "explanation": "合理的 Stage 启动设计既要保证依赖顺序，也要避免把所有工作集中到 AbilityStage 或 UIAbility 生命周期主线程。",
+    "knowledgePoints": [
+      "Stage模型",
+      "AppStartup",
+      "初始化架构",
+      "启动性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AbilityStage组件管理器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/abilitystage.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用启动框架AppStartup",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/app-startup.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "referenceAnswer": "应先按作用域拆分：HAP 级且必须在首个组件前完成的轻量初始化可放 AbilityStage；有明确依赖的初始化应定义为 AppStartup 任务，在配置中声明 dependencies，区分自动与手动任务。与 UI 无关且可并发的工作可调度到 taskPool，首页非必需任务延迟执行。UIAbility.onCreate 只保留该实例的一次性轻量逻辑，onWindowStageCreate 负责加载页面。还要禁止循环依赖、记录任务耗时并为失败和超时设计降级。",
+    "scoringPoints": [
+      "按 HAP、UIAbility 和页面作用域拆分初始化职责",
+      "使用 AppStartup 声明任务依赖与自动或手动模式",
+      "把可并发的非 UI 任务放到 taskPool，并延后非首屏任务",
+      "说明循环依赖、失败降级和耗时观测"
+    ]
   }
 ]

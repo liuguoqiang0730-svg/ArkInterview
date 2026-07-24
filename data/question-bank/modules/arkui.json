@@ -384,5 +384,617 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "arkui-011",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在一个 ArkUI 页面文件中，@Entry 装饰器的核心作用是什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "标记该自定义组件为当前 UI 页面的入口"
+      },
+      {
+        "id": "b",
+        "text": "把组件自动注册为系统服务"
+      },
+      {
+        "id": "c",
+        "text": "让组件自动获得网络权限"
+      },
+      {
+        "id": "d",
+        "text": "把组件编译为 Native 动态库"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@Entry 标记 UI 页面的入口组件，单个 UI 页面只允许存在一个由 @Entry 装饰的自定义组件。它与系统服务、权限和 Native 模块无关。",
+    "knowledgePoints": [
+      "@Entry",
+      "页面入口",
+      "自定义组件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "创建自定义组件",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-create-custom-components",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11
+  },
+  {
+    "id": "arkui-012",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "ArkUI 自定义组件必须定义 build() 函数，用它描述该组件的声明式 UI 结构。",
+    "answerBoolean": true,
+    "explanation": "官方自定义组件文档明确说明，build() 用于定义声明式 UI 描述，自定义组件必须实现 build()。状态变化后，框架会据此更新直接关联的 UI。",
+    "knowledgePoints": [
+      "build",
+      "声明式UI",
+      "自定义组件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "创建自定义组件",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-create-custom-components",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12
+  },
+  {
+    "id": "arkui-013",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "题目列表支持插入、删除和排序时，ForEach 的 keyGenerator 最适合返回什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "题目稳定且唯一的 questionId"
+      },
+      {
+        "id": "b",
+        "text": "当前数组索引 index"
+      },
+      {
+        "id": "c",
+        "text": "每次渲染随机生成的字符串"
+      },
+      {
+        "id": "d",
+        "text": "所有题目都返回同一个分类 ID"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ForEach 使用唯一且持久的 key 识别组件。会增删排序的数据应使用稳定业务 ID；索引会随位置变化，随机值无法复用，重复分类 ID 则会产生重复键。",
+    "knowledgePoints": [
+      "ForEach",
+      "keyGenerator",
+      "稳定键值",
+      "组件复用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ForEach：循环渲染",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-rendering-control-foreach",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13
+  },
+  {
+    "id": "arkui-014",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "ForEach 使用重复或不稳定键值时，可能产生哪些问题？",
+    "options": [
+      {
+        "id": "a",
+        "text": "重复键值会触发运行时警告并可能导致渲染结果异常"
+      },
+      {
+        "id": "b",
+        "text": "把 index 纳入键值可能降低插入、删除场景的复用效率"
+      },
+      {
+        "id": "c",
+        "text": "键值每次随机变化会让框架倾向于重新创建组件"
+      },
+      {
+        "id": "d",
+        "text": "键值不唯一会自动提升为数据库主键，因此没有影响"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "ForEach 依赖键值判断数据项与组件的对应关系。重复键会破坏映射，不稳定键会让已有组件无法被正确复用；框架不会替开发者把错误键值修正为业务主键。",
+    "knowledgePoints": [
+      "ForEach",
+      "重复键值",
+      "渲染性能",
+      "组件状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ForEach：循环渲染",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-rendering-control-foreach",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14
+  },
+  {
+    "id": "arkui-015",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "LazyForEach 的数据源内容变化后，正确通知界面更新的方式是什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "通过已注册的 DataChangeListener 调用对应数据变化通知"
+      },
+      {
+        "id": "b",
+        "text": "重新给 LazyForEach 的 dataSource 参数赋一个新对象"
+      },
+      {
+        "id": "c",
+        "text": "只修改 dataSource 状态变量，框架一定会自动刷新"
+      },
+      {
+        "id": "d",
+        "text": "调用 UIAbility.onForeground() 强制重建页面"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "LazyForEach 依赖 IDataSource 管理的 DataChangeListener 接收数据变化通知。官方说明不应通过重新赋值 dataSource 驱动刷新，普通状态变量变化也不会自动触发 LazyForEach 更新。",
+    "knowledgePoints": [
+      "LazyForEach",
+      "IDataSource",
+      "DataChangeListener",
+      "数据更新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "LazyForEach：数据懒加载",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-rendering-control-lazyforeach",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15
+  },
+  {
+    "id": "arkui-016",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "实现 LazyForEach 的 IDataSource 时，基础数据源应提供哪些能力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "通过 totalCount() 返回数据总数"
+      },
+      {
+        "id": "b",
+        "text": "通过 getData(index) 返回指定索引的数据"
+      },
+      {
+        "id": "c",
+        "text": "注册和注销 DataChangeListener"
+      },
+      {
+        "id": "d",
+        "text": "在每次滚动时重新创建 UIAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "IDataSource 的基础职责包括提供数量、按索引取数据，以及管理数据变化监听器。滚动和 UIAbility 生命周期不是数据源接口的职责。",
+    "knowledgePoints": [
+      "IDataSource",
+      "totalCount",
+      "getData",
+      "DataChangeListener"
+    ],
+    "sourceRefs": [
+      {
+        "title": "LazyForEach：数据懒加载",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-rendering-control-lazyforeach",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16
+  },
+  {
+    "id": "arkui-017",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "if/else 条件渲染切换到另一个分支时，框架会移除旧分支的子组件，再构建并添加新分支的子组件。",
+    "answerBoolean": true,
+    "explanation": "条件依赖的状态变化且分支发生切换时，ArkUI 会移除此前构建的子组件，然后执行新分支的构建逻辑。若条件结果仍在同一分支，则无需执行这套分支替换流程。",
+    "knowledgePoints": [
+      "if/else",
+      "条件渲染",
+      "组件生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "if/else：条件渲染",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-rendering-control-ifelse",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17
+  },
+  {
+    "id": "arkui-018",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "仅需抽取一段固定、轻量的重复 UI 结构，且不需要独立状态和生命周期时，优先考虑什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "@Builder 自定义构建函数"
+      },
+      {
+        "id": "b",
+        "text": "新建一个 UIAbility"
+      },
+      {
+        "id": "c",
+        "text": "创建一个 Native 模块"
+      },
+      {
+        "id": "d",
+        "text": "把 UI 结构存入 Preferences"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "@Builder 用于封装可复用的轻量 UI 结构，本身不定义独立状态变量或生命周期。需要复杂状态和完整生命周期时再使用 @Component 自定义组件。",
+    "knowledgePoints": [
+      "@Builder",
+      "@Component",
+      "UI复用",
+      "组件边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Builder装饰器：自定义构建函数",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-builder",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18
+  },
+  {
+    "id": "arkui-019",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "简述 @Entry、@Component 和 build() 在一个 ArkUI 页面中的分工。",
+    "referenceAnswer": "@Entry 标记页面入口，一个 UI 页面只能有一个入口组件；@Component（或 @ComponentV2）把 struct 声明为可复用的自定义组件，并决定其可使用的状态管理体系；build() 是自定义组件必须实现的声明式 UI 描述函数，用于组合系统组件和其他自定义组件。页面入口通常同时使用 @Entry 与组件装饰器，其 build() 负责组织页面结构。",
+    "scoringPoints": [
+      "说明 @Entry 用于标记页面入口且单页只能有一个",
+      "说明 @Component 用于声明可复用自定义组件",
+      "说明 build() 用于定义声明式 UI 结构且自定义组件必须实现",
+      "能描述三者在页面结构中的组合关系"
+    ],
+    "explanation": "这是一道 ArkUI 入门面试题，考察候选人是否理解页面入口、组件定义和 UI 构建函数，而不是只会照着模板写装饰器。",
+    "knowledgePoints": [
+      "@Entry",
+      "@Component",
+      "build",
+      "页面结构"
+    ],
+    "sourceRefs": [
+      {
+        "title": "创建自定义组件",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-create-custom-components",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19
+  },
+  {
+    "id": "arkui-020",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "使用 Repeat 渲染超过 30 项的长题目列表时，为避免首屏一次性创建全部子组件，最关键的配置是什么？",
+    "explanation": "Repeat 省略 virtualScroll 时会全量加载子组件；长列表应优先启用 virtualScroll，使框架按显示区域和预加载区域创建节点。",
+    "knowledgePoints": [
+      "Repeat",
+      "virtualScroll",
+      "长列表"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "启用 virtualScroll 懒加载"
+      },
+      {
+        "id": "b",
+        "text": "给每一项设置相同 key"
+      },
+      {
+        "id": "c",
+        "text": "关闭列表滚动"
+      },
+      {
+        "id": "d",
+        "text": "把所有数据转成字符串"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-021",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 Repeat 的 each、template 和 templateId，哪些理解正确？",
+    "explanation": "Repeat 的 template 能力用于同一数据源中的多类型子组件，并依赖懒加载模式；templateId 决定当前数据项采用哪个模板。",
+    "knowledgePoints": [
+      "Repeat",
+      "template",
+      "templateId"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "options": [
+      {
+        "id": "a",
+        "text": "只有一种子组件类型时可以使用 each 定义生成规则"
+      },
+      {
+        "id": "b",
+        "text": "多种子组件类型可使用 template 分别定义渲染模板"
+      },
+      {
+        "id": "c",
+        "text": "templateId 的结果用于选择对应的模板类型"
+      },
+      {
+        "id": "d",
+        "text": "template 在关闭懒加载时仍可完整使用"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-022",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Repeat 的节点复用以模板类型为边界，只有相同 template type 的节点才会互相复用。",
+    "explanation": "不同模板通常代表不同节点结构，Repeat 只会在相同 template type 的缓存池内复用节点。",
+    "knowledgePoints": [
+      "Repeat",
+      "组件复用",
+      "模板类型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-023",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "被 @ReusableV2 装饰的组件进入复用池时，会触发哪个生命周期回调？",
+    "explanation": "@ReusableV2 组件被回收时触发 aboutToRecycle，从复用池取出再次使用时触发 aboutToReuse。",
+    "knowledgePoints": [
+      "@ReusableV2",
+      "aboutToRecycle",
+      "组件生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ReusableV2装饰器：V2组件复用",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-reusableV2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "aboutToRecycle"
+      },
+      {
+        "id": "b",
+        "text": "aboutToReuse"
+      },
+      {
+        "id": "c",
+        "text": "onWindowStageDestroy"
+      },
+      {
+        "id": "d",
+        "text": "onNewWant"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-024",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 @ReusableV2 组件复用，哪些说法符合官方说明？",
+    "explanation": "@ReusableV2 面向 V2 组件，回收阶段被冻结，复用前会重置内部状态。与 V1 的 @Reusable 不同，@ReusableV2 的 aboutToReuse 没有入参。",
+    "knowledgePoints": [
+      "@ReusableV2",
+      "冻结",
+      "状态重置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ReusableV2装饰器：V2组件复用",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-reusableV2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "@ReusableV2 只能装饰 @ComponentV2 自定义组件"
+      },
+      {
+        "id": "b",
+        "text": "组件被回收期间处于冻结状态，不能触发 UI 刷新"
+      },
+      {
+        "id": "c",
+        "text": "复用前会重置组件内状态变量，并重新计算相关 @Computed 和 @Monitor"
+      },
+      {
+        "id": "d",
+        "text": "aboutToReuse 会自动接收父组件传入的所有参数作为回调入参"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-025",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "比较 ForEach、LazyForEach 和 Repeat 的典型使用场景。",
+    "explanation": "三者都能循环渲染，但数据源协议、是否按需创建、是否提供节点复用和模板能力不同，选型应根据列表规模和结构变化决定。",
+    "knowledgePoints": [
+      "ForEach",
+      "LazyForEach",
+      "Repeat",
+      "列表选型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ForEach：循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-rendering-control-foreach.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "LazyForEach：数据懒加载",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-rendering-control-lazyforeach.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "referenceAnswer": "ForEach 根据普通数组全量创建子组件，适合数据量较小、结构简单的循环渲染，并应提供稳定且唯一的 key。LazyForEach 通过 IDataSource 按需加载数据，适合传统长列表，并要求数据源在增删改时主动通知变化。Repeat 同时提供懒加载、节点复用和多模板能力，适合长列表、异构列表以及频繁滚动复用场景；启用 virtualScroll 后应合理设置 key、templateId 与缓存数量。",
+    "scoringPoints": [
+      "说明 ForEach 更适合较小数据集并依赖稳定 key",
+      "说明 LazyForEach 依赖 IDataSource 和数据变化通知",
+      "说明 Repeat 支持懒加载与节点复用",
+      "指出 Repeat 的多模板能力及其适用场景"
+    ]
   }
 ]

@@ -385,5 +385,605 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "performance-011",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "为 List 调整 cachedCount 时，最准确的性能判断是什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "适量预加载可减少快速滑动白块，但数值增大会增加 UI CPU 和内存开销"
+      },
+      {
+        "id": "b",
+        "text": "数值越大越好，并且不会占用额外内存"
+      },
+      {
+        "id": "c",
+        "text": "cachedCount 只影响网络缓存，与组件渲染无关"
+      },
+      {
+        "id": "d",
+        "text": "设置后所有列表项都会永久驻留且无法回收"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "cachedCount 用于在可视区域外预加载一定数量的列表项，可改善快速滑动体验，但会增加布局、CPU 和内存开销，需要结合真实设备与列表复杂度调优。",
+    "knowledgePoints": [
+      "List",
+      "cachedCount",
+      "预加载",
+      "内存开销"
+    ],
+    "sourceRefs": [
+      {
+        "title": "创建列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-layout-development-create-list",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11
+  },
+  {
+    "id": "performance-012",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "可增删排序的长列表想提高组件复用稳定性，key 最应该采用什么？",
+    "options": [
+      {
+        "id": "a",
+        "text": "稳定且唯一的业务 ID"
+      },
+      {
+        "id": "b",
+        "text": "当前索引加随机数"
+      },
+      {
+        "id": "c",
+        "text": "每次 build 时生成的时间戳"
+      },
+      {
+        "id": "d",
+        "text": "所有项目共用同一个字符串"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "稳定业务 ID 能让渲染框架在数据位置变化后继续识别同一数据项，减少无意义的组件重建并避免状态错位。索引、随机数和重复值都不稳定。",
+    "knowledgePoints": [
+      "长列表",
+      "稳定key",
+      "组件复用",
+      "渲染性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ForEach：循环渲染",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-rendering-control-foreach",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12
+  },
+  {
+    "id": "performance-013",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "List.cachedCount 与 Repeat.template() 中的 cachedCount 有什么核心区别？",
+    "options": [
+      {
+        "id": "a",
+        "text": "前者预加载可视区外节点，后者保存 Repeat 认为不可见的空闲节点用于复用"
+      },
+      {
+        "id": "b",
+        "text": "两者完全等价，只是参数位置不同"
+      },
+      {
+        "id": "c",
+        "text": "前者缓存 HTTP 响应，后者缓存数据库行"
+      },
+      {
+        "id": "d",
+        "text": "前者只在发布包生效，后者只在调试包生效"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "滚动容器的 cachedCount 控制可视区域外的预加载节点，这些节点仍在组件树上；Repeat 模板的 cachedCount 控制不可见空闲节点缓存池，用于后续复用。两者都需平衡流畅度与内存，但含义不同。",
+    "knowledgePoints": [
+      "Repeat",
+      "List",
+      "cachedCount",
+      "节点复用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：循环渲染",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-new-rendering-control-repeat",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13
+  },
+  {
+    "id": "performance-014",
+    "categoryId": "performance",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "lazy import 推迟的模块在首次真正使用时是同步加载的，因此也可能把耗时转移到点击等交互路径。",
+    "answerBoolean": true,
+    "explanation": "lazy import 可减少冷启动阶段不必要的模块执行，但首次使用导出对象时会同步触发加载。如果交互路径上模块较重，仍可能增加耗时甚至掉帧，所以需要结合 Trace 和场景评估。",
+    "knowledgePoints": [
+      "lazy import",
+      "冷启动",
+      "同步加载",
+      "交互性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-lazy-import",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14
+  },
+  {
+    "id": "performance-015",
+    "categoryId": "performance",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 lazy import 优化冷启动时，哪些做法更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "先用工具、日志或 Trace 找出冷启动阶段未实际使用的文件"
+      },
+      {
+        "id": "b",
+        "text": "避免依赖被延迟模块的顶层副作用完成关键初始化"
+      },
+      {
+        "id": "c",
+        "text": "检查同一模块是否又被普通 import 引入而导致延迟失效"
+      },
+      {
+        "id": "d",
+        "text": "给所有 import 盲目增加 lazy，认为一定没有运行时成本"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "官方建议先识别冷启动冗余模块，再有针对性地使用 lazy。模块副作用、同模块普通 import 和首次使用同步加载都可能影响正确性或收益，不能机械地全量添加。",
+    "knowledgePoints": [
+      "lazy import",
+      "模块副作用",
+      "冷启动分析",
+      "Trace"
+    ],
+    "sourceRefs": [
+      {
+        "title": "延迟加载（lazy import）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-lazy-import",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15
+  },
+  {
+    "id": "performance-016",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "答题页需要对大量文本做 CPU 密集型分词统计，为避免阻塞 UI，优先应如何处理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "把计算放入 TaskPool 或合适的 Worker 多线程任务"
+      },
+      {
+        "id": "b",
+        "text": "在主线程的 onClick 中同步完成全部计算"
+      },
+      {
+        "id": "c",
+        "text": "只在同步计算外层包一个已 resolve 的 Promise"
+      },
+      {
+        "id": "d",
+        "text": "提高按钮字号以减少运算量"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "TaskPool 和 Worker 提供多线程运行环境，适合处理耗时计算。仅用 Promise 包裹同步重计算不会自动把它迁移到工作线程，仍可能阻塞 UI。",
+    "knowledgePoints": [
+      "CPU密集型任务",
+      "TaskPool",
+      "Worker",
+      "主线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CPU密集型任务开发（TaskPool和Worker）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/cpu-intensive-task-development",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "TaskPool和Worker的对比",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/taskpool-vs-worker",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16
+  },
+  {
+    "id": "performance-017",
+    "categoryId": "performance",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "只要把一段 CPU 密集型同步代码放进 Promise.then，它就一定会在工作线程执行，不再阻塞 UI 主线程。",
+    "answerBoolean": false,
+    "explanation": "Promise/async-await 提供异步调度语法，但不会自动把同步 CPU 密集型代码迁移到其他线程。重计算仍可能占用宿主线程，应使用 TaskPool、Worker 或相应 Native 异步能力。",
+    "knowledgePoints": [
+      "Promise",
+      "主线程阻塞",
+      "多线程",
+      "性能误区"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步并发（Promise和async/await）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/async-concurrency-overview",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "CPU密集型任务开发（TaskPool和Worker）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/cpu-intensive-task-development",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17
+  },
+  {
+    "id": "performance-018",
+    "categoryId": "performance",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述如何为长题库列表调优 cachedCount，并判断调优是否有效。",
+    "referenceAnswer": "先在目标手机和平板上建立可复现的快速滑动场景，记录白块、掉帧、CPU 和内存基线。使用 LazyForEach 或 Repeat 虚拟滚动并保证稳定 key，再从较小 cachedCount 开始逐步调整，观察可视区外预加载是否足以覆盖快速滑动。cachedCount 增大能减少临时创建造成的白块，但会增加布局、CPU 和内存；应选择满足流畅度且资源开销可接受的最小值。调整后用相同数据量、相同设备和操作路径复测，而不是凭主观感觉判断。",
+    "scoringPoints": [
+      "建立固定设备、数据量和滑动路径的性能基线",
+      "说明懒加载或虚拟滚动与稳定 key 是前提",
+      "说明 cachedCount 对白块、CPU 和内存的双向影响",
+      "从较小值逐步调整并选择满足体验的最小值",
+      "使用相同场景复测并对比指标"
+    ],
+    "explanation": "性能参数没有脱离设备和组件复杂度的万能值。面试中应体现“测量、调整、复测”的闭环，以及对流畅度与资源占用的权衡。",
+    "knowledgePoints": [
+      "cachedCount",
+      "性能测量",
+      "长列表",
+      "CPU",
+      "内存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "创建列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-layout-development-create-list",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Repeat：循环渲染",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-new-rendering-control-repeat",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18
+  },
+  {
+    "id": "performance-019",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "从性能分析角度，什么情况属于应用冷启动？",
+    "explanation": "冷启动的关键条件是应用进程不存在，系统需要完成进程创建、Ability 初始化和首帧绘制等完整链路。",
+    "knowledgePoints": [
+      "冷启动",
+      "进程创建",
+      "启动性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "提升应用冷启动速度",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/improve-application-cold-start-speed.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "启动时后台没有该应用进程，系统需要创建新进程"
+      },
+      {
+        "id": "b",
+        "text": "应用已在前台切换一个 Tab"
+      },
+      {
+        "id": "c",
+        "text": "同一页面刷新列表"
+      },
+      {
+        "id": "d",
+        "text": "已有进程内只执行一次路由返回"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "performance-020",
+    "categoryId": "performance",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "分析应用冷启动耗时时，官方文档划分的主要阶段包括哪些？",
+    "explanation": "冷启动是跨阶段链路，优化前要先定位耗时位于进程、模块与 Ability 初始化、首帧 UI 还是网络二次刷新。",
+    "knowledgePoints": [
+      "冷启动阶段",
+      "首帧",
+      "网络刷新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "提升应用冷启动速度",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/improve-application-cold-start-speed.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "应用进程创建与初始化"
+      },
+      {
+        "id": "b",
+        "text": "Application 与 Ability 初始化及生命周期"
+      },
+      {
+        "id": "c",
+        "text": "首页加载、测量、布局和绘制"
+      },
+      {
+        "id": "d",
+        "text": "网络数据返回后的二次刷新"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "performance-021",
+    "categoryId": "performance",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "AbilityStage、UIAbility 和自定义组件首帧前的生命周期回调中，应避免执行与首屏无关的长耗时同步任务。",
+    "explanation": "这些回调位于启动和首帧关键路径。非 UI 耗时工作应按需延迟或移到合适的并发线程，并以实际测量验证收益。",
+    "knowledgePoints": [
+      "生命周期性能",
+      "首帧",
+      "主线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "提升应用冷启动速度",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/improve-application-cold-start-speed.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "减少首帧绘制时的冗余操作",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-redundant-operations-when-render-first-frame.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "answerBoolean": true
+  },
+  {
+    "id": "performance-022",
+    "categoryId": "performance",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "CPU Profiler 中，哪个指标表示函数自身执行耗时，不包含其下级函数耗时？",
+    "explanation": "Self Time 是总耗时减去下级调用耗时后的函数自身时间；Total Time 包含整个调用链下级函数耗时。",
+    "knowledgePoints": [
+      "CPU Profiler",
+      "Self Time",
+      "热点函数"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用性能分析工具CPU Profiler的使用指导",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/application-performance-analysis.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "Self Time"
+      },
+      {
+        "id": "b",
+        "text": "Total Time"
+      },
+      {
+        "id": "c",
+        "text": "responseCode"
+      },
+      {
+        "id": "d",
+        "text": "cachedCount"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "performance-023",
+    "categoryId": "performance",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "减少 ArkUI 冗余刷新时，哪些做法更合理？",
+    "explanation": "精准状态依赖可以减少无关组件刷新。优化必须用 Trace、Profiler 或可观测性数据验证，而不是把状态进一步集中扩大更新范围。",
+    "knowledgePoints": [
+      "冗余刷新",
+      "状态粒度",
+      "Profiler"
+    ],
+    "sourceRefs": [
+      {
+        "title": "精准控制组件的更新范围",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/precisely-control-render-scope.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ObservedV2装饰器和@Trace装饰器：类属性变化观测",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-observedV2-and-trace.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "拆分过大的状态对象，让组件只依赖真正使用的属性"
+      },
+      {
+        "id": "b",
+        "text": "用 @Trace 等属性级观测能力控制更新范围"
+      },
+      {
+        "id": "c",
+        "text": "通过 Trace 或 Profiler 对比优化前后的脏节点与耗时"
+      },
+      {
+        "id": "d",
+        "text": "把所有页面状态合并成一个全局大对象以保证统一刷新"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "performance-024",
+    "categoryId": "performance",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "用户反馈“冷启动慢，进入答题页后点击选项偶尔卡住”，你会如何分阶段定位？",
+    "explanation": "性能排查应从可复现指标和阶段数据开始，再针对瓶颈修改，不能先凭感觉改缓存数量或并发线程数。",
+    "knowledgePoints": [
+      "性能诊断",
+      "冷启动",
+      "卡顿",
+      "CPU Profiler"
+    ],
+    "sourceRefs": [
+      {
+        "title": "提升应用冷启动速度",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/improve-application-cold-start-speed.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "减少首帧绘制时的冗余操作",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-redundant-operations-when-render-first-frame.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用性能分析工具CPU Profiler的使用指导",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/application-performance-analysis.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "精准控制组件的更新范围",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/precisely-control-render-scope.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "referenceAnswer": "先分别定义冷启动完成点和点击响应指标，使用 Launch、Trace 或 SmartPerf 判断冷启动耗时落在模块加载、Ability 生命周期、首帧 Build/Layout/Render 还是网络二次刷新；用 CPU Profiler 查看高 Self Time/Total Time 函数。检查启动路径是否加载无关模块、执行同步数据库或大 JSON 解析，并延迟非首屏任务。点击卡顿则抓取异常帧，检查主线程同步计算、过大状态导致的冗余刷新、列表项重建和日志/I/O；必要时把纯 CPU 任务移到 TaskPool，并在修改前后用同一设备和数据集复测。",
+    "scoringPoints": [
+      "分别定义并测量冷启动和点击响应指标",
+      "定位冷启动具体阶段与热点调用链",
+      "检查主线程耗时、模块加载和冗余刷新",
+      "给出并发或延迟方案并要求前后对比验证"
+    ]
   }
 ]

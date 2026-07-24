@@ -384,5 +384,529 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "state-management-011",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "状态管理 V2 里，组件自身私有且会驱动 UI 的状态通常使用哪个装饰器？",
+    "explanation": "@Local 是状态管理 V2 中用于组件内部状态的装饰器。@Provider/@Consumer 偏跨组件层级同步，@Computed 用于计算属性。",
+    "knowledgePoints": [
+      "状态管理 V2",
+      "@Local",
+      "组件内部状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Local装饰器：组件内部状态",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-new-local",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "options": [
+      {
+        "id": "a",
+        "text": "@Local"
+      },
+      {
+        "id": "b",
+        "text": "@Provider"
+      },
+      {
+        "id": "c",
+        "text": "@Consumer"
+      },
+      {
+        "id": "d",
+        "text": "@Computed"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-012",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "多层嵌套对象属性变化要触发 UI 更新时，状态管理 V2 更应关注哪组能力？",
+    "explanation": "官方 V2 文档说明，相比仅观察对象本身的装饰器，@ObservedV2 和 @Trace 更适合处理多层嵌套、继承等复杂结构场景中的属性变化观测。",
+    "knowledgePoints": [
+      "状态管理 V2",
+      "@ObservedV2",
+      "@Trace",
+      "深度观测"
+    ],
+    "sourceRefs": [
+      {
+        "title": "MVVM模式（状态管理V2）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V13/arkts-mvvm-v2-V13",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "options": [
+      {
+        "id": "a",
+        "text": "@ObservedV2 与 @Trace"
+      },
+      {
+        "id": "b",
+        "text": "@Styles 与 @Extend"
+      },
+      {
+        "id": "c",
+        "text": "@Builder 与 @BuilderParam"
+      },
+      {
+        "id": "d",
+        "text": "@Entry 与 @Reusable"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-013",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "使用状态管理 V2 的计算属性时，哪些判断是正确的？",
+    "explanation": "@Computed 用于派生计算状态，不是网络请求工具。官方文档也提醒多个计算属性组合时要避免循环求解。",
+    "knowledgePoints": [
+      "@Computed",
+      "状态管理 V2",
+      "计算属性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Computed装饰器：计算属性",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-new-computed-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "options": [
+      {
+        "id": "a",
+        "text": "它用于从已有状态派生展示结果"
+      },
+      {
+        "id": "b",
+        "text": "它可在 @ComponentV2 或 @ObservedV2 中使用"
+      },
+      {
+        "id": "c",
+        "text": "多个计算属性组合时要避免循环求解"
+      },
+      {
+        "id": "d",
+        "text": "它的主要职责是替代 HTTP 请求封装"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-014",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "状态管理 V2 中的 @Provider 和 @Consumer 应在 @ComponentV2 中使用，不能直接当作 V1 @Component 的装饰器随意混用。",
+    "explanation": "官方文档说明 @Provider 和 @Consumer 属于状态管理 V2 装饰器，需要在 @ComponentV2 中使用。V1 和 V2 混用要遵守对应约束。",
+    "knowledgePoints": [
+      "@Provider",
+      "@Consumer",
+      "@ComponentV2",
+      "V1/V2 边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Provider装饰器和@Consumer装饰器：跨组件层级双向同步",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-new-provider-and-consumer",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "answerBoolean": true
+  },
+  {
+    "id": "state-management-015",
+    "categoryId": "state-management",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "说明 V1 与 V2 在复杂对象状态刷新上的一个关键差异。",
+    "explanation": "这道题考察的不是“哪个版本更高级”，而是能否根据数据结构复杂度选择合适的观测方式。",
+    "knowledgePoints": [
+      "状态管理 V1",
+      "状态管理 V2",
+      "深度观测"
+    ],
+    "sourceRefs": [
+      {
+        "title": "MVVM模式（状态管理V2）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V13/arkts-mvvm-v2-V13",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "referenceAnswer": "V1 常见装饰器如 @State、@Prop、@Link 更适合处理组件本地状态、父子单向或双向同步等场景；复杂对象尤其是多层嵌套属性变化时，需要关注是否能触发 UI 刷新。V2 中 @ObservedV2 与 @Trace 更适合标记可观察类和需要追踪的属性，用于处理多层嵌套、继承等复杂结构。",
+    "scoringPoints": [
+      "说明 V1 常见使用边界",
+      "说明复杂对象属性变化可能不刷新",
+      "说出 V2 的 @ObservedV2/@Trace 适用场景"
+    ]
+  },
+  {
+    "id": "state-management-016",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 @ComponentV2 中声明只能由组件内部初始化和修改的私有 UI 状态，应该使用什么？",
+    "explanation": "@Local 表示 V2 组件内部状态，必须在组件内部初始化，不能从父组件覆盖初值。",
+    "knowledgePoints": [
+      "@Local",
+      "ComponentV2",
+      "本地状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Local装饰器：组件内部状态",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-local.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "@Local"
+      },
+      {
+        "id": "b",
+        "text": "@Param"
+      },
+      {
+        "id": "c",
+        "text": "@Event"
+      },
+      {
+        "id": "d",
+        "text": "@Consumer"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-017",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 @ObservedV2 和 @Trace 的观测规则，哪些说法正确？",
+    "explanation": "@ObservedV2 建立可观测类，@Trace 明确可观测属性。未被 @Trace 标记的属性不会因为修改而触发关联 UI 更新。",
+    "knowledgePoints": [
+      "@ObservedV2",
+      "@Trace",
+      "深度观测",
+      "精准刷新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ObservedV2装饰器和@Trace装饰器：类属性变化观测",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-observedV2-and-trace.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "options": [
+      {
+        "id": "a",
+        "text": "@ObservedV2 用于装饰 class，@Trace 用于标记需要观测的成员属性"
+      },
+      {
+        "id": "b",
+        "text": "两者需要配合使用，单独使用不能获得完整观测效果"
+      },
+      {
+        "id": "c",
+        "text": "@Trace 属性变化只通知关联该属性的组件刷新"
+      },
+      {
+        "id": "d",
+        "text": "只写 @ObservedV2 就会自动深度观测类中所有未标记属性"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-018",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "一次事件中连续多次修改同一个被 @Monitor 监听的状态属性时，框架主要怎样判断是否触发回调？",
+    "explanation": "@Monitor 的回调是异步监听语义。同一事件中多次修改同一属性时，会使用初始值和最终值进行严格相等比较来判断变化。",
+    "knowledgePoints": [
+      "@Monitor",
+      "状态监听",
+      "异步回调"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Monitor装饰器：状态变量修改异步监听",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-monitor.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "options": [
+      {
+        "id": "a",
+        "text": "比较该事件中的初始值和最终值"
+      },
+      {
+        "id": "b",
+        "text": "每次赋值都同步触发一次回调"
+      },
+      {
+        "id": "c",
+        "text": "只检查属性名称是否存在"
+      },
+      {
+        "id": "d",
+        "text": "固定忽略最后一次修改"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-019",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "AppStorage 会自动把状态写入磁盘，因此应用进程退出并重启后仍能保证恢复全部 AppStorage 数据。",
+    "explanation": "AppStorage 是应用进程内共享的 UI 状态存储，不等同于磁盘持久化。需要跨重启保存 UI 状态时，应选择 PersistenceV2、Preferences 或数据库等持久化能力。",
+    "knowledgePoints": [
+      "AppStorage",
+      "进程状态",
+      "持久化边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "AppStorage：应用全局的UI状态存储",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-appstorage.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "PersistenceV2：持久化存储UI状态",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-persistencev2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "answerBoolean": false
+  },
+  {
+    "id": "state-management-020",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望状态管理 V2 的 UI 状态在应用退出重启后仍能恢复，最贴近该需求的框架能力是什么？",
+    "explanation": "PersistenceV2 是持久化 UI 状态的可选单例，可将关联状态写入设备磁盘，并在冷启动时恢复。",
+    "knowledgePoints": [
+      "PersistenceV2",
+      "UI状态",
+      "跨重启恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "PersistenceV2：持久化存储UI状态",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-persistencev2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "PersistenceV2"
+      },
+      {
+        "id": "b",
+        "text": "AppStorage"
+      },
+      {
+        "id": "c",
+        "text": "@Local"
+      },
+      {
+        "id": "d",
+        "text": "@Event"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-021",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "为不同作用域选择状态能力时，哪些对应关系合理？",
+    "explanation": "状态能力的关键区别是所有权、共享范围和生命周期。应选择最小足够作用域，只有确实需要跨重启时才引入持久化。",
+    "knowledgePoints": [
+      "状态作用域",
+      "@Local",
+      "@Param",
+      "AppStorage",
+      "PersistenceV2"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Local装饰器：组件内部状态",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-local.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@Param：组件外部输入",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-param.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "AppStorage：应用全局的UI状态存储",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-appstorage.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "PersistenceV2：持久化存储UI状态",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-persistencev2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "options": [
+      {
+        "id": "a",
+        "text": "组件内部临时状态使用 @Local"
+      },
+      {
+        "id": "b",
+        "text": "父组件输入使用 @Param"
+      },
+      {
+        "id": "c",
+        "text": "同一进程内多个页面共享 UI 状态可使用 AppStorage"
+      },
+      {
+        "id": "d",
+        "text": "需要跨应用重启保存的 UI 状态可使用 PersistenceV2"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "state-management-022",
+    "categoryId": "state-management",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "刷题页包含当前选项、题目对象、全局主题和上次练习模式，如何划分状态作用域并保证正确刷新？",
+    "explanation": "状态设计既要保证变化可观察，也要控制共享范围和刷新范围，避免全局状态膨胀。",
+    "knowledgePoints": [
+      "状态建模",
+      "作用域",
+      "复杂对象观测",
+      "持久化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Local装饰器：组件内部状态",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-local.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@Param：组件外部输入",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-param.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ObservedV2装饰器和@Trace装饰器：类属性变化观测",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-observedV2-and-trace.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "AppStorage：应用全局的UI状态存储",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-appstorage.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "PersistenceV2：持久化存储UI状态",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-persistencev2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "referenceAnswer": "当前页临时选项属于组件或页面内部状态，在 V2 中可用 @Local；父组件下发的题目用 @Param，复杂题目模型若需观察嵌套属性，应由 @ObservedV2 类和 @Trace 属性建模。全局主题若只需同进程多页面共享，可放 AppStorage 或统一状态模型；上次练习模式需要跨重启保存，可使用 PersistenceV2 或 Preferences。应避免把所有状态都放到全局，按属性粒度建立观测，减少无关组件刷新。",
+    "scoringPoints": [
+      "为当前选择使用组件或页面局部状态",
+      "为父组件题目输入使用 @Param",
+      "说明复杂对象用 @ObservedV2 与 @Trace 精准观测",
+      "区分进程共享状态和跨重启持久化状态"
+    ]
   }
 ]

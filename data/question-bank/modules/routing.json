@@ -377,5 +377,469 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "routing-011",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "面向复杂页面栈和一次开发多端部署，官方更推荐哪种导航方案？",
+    "explanation": "官方组件导航概述说明，Navigation 具备更强的一次开发多端部署能力，也支持更灵活的页面栈操作、动效和生命周期。",
+    "knowledgePoints": [
+      "Navigation",
+      "页面栈",
+      "一多适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组件导航和页面路由概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-navigation-introduction-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "options": [
+      {
+        "id": "a",
+        "text": "组件导航 Navigation"
+      },
+      {
+        "id": "b",
+        "text": "只使用字符串拼接 URL"
+      },
+      {
+        "id": "c",
+        "text": "把所有页面写在一个 if/else 中切换"
+      },
+      {
+        "id": "d",
+        "text": "把页面切换交给 Preferences"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-012",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Navigation 进行页面路由时，主要用哪个对象维护页面栈？",
+    "explanation": "Navigation 路由相关操作基于页面栈 NavPathStack 进行。每个 Navigation 通常需要创建并传入 NavPathStack 对象，用于管理页面。",
+    "knowledgePoints": [
+      "Navigation",
+      "NavPathStack",
+      "页面栈"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组件导航(Navigation) (推荐)",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-navigation-navigation",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "options": [
+      {
+        "id": "a",
+        "text": "NavPathStack"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore"
+      },
+      {
+        "id": "c",
+        "text": "AtManager"
+      },
+      {
+        "id": "d",
+        "text": "HttpRequest"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-013",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "使用 Navigation 时，通常需要为 Navigation 创建并传入 NavPathStack 对象来管理路由栈。",
+    "explanation": "官方 Navigation 文档说明路由相关操作基于 NavPathStack，Navigation 需要绑定页面栈对象来管理页面。",
+    "knowledgePoints": [
+      "Navigation",
+      "NavPathStack",
+      "路由栈"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组件导航(Navigation) (推荐)",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-navigation-navigation",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "answerBoolean": true
+  },
+  {
+    "id": "routing-014",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "在项目中选择 router 或 Navigation 时，哪些理解更准确？",
+    "explanation": "Navigation 和 router 都与页面跳转有关，但复杂导航更应关注 Navigation 的页面栈能力。路由参数应保持清晰、稳定、轻量。",
+    "knowledgePoints": [
+      "router",
+      "Navigation",
+      "路由参数"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组件导航和页面路由概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-navigation-introduction-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "options": [
+      {
+        "id": "a",
+        "text": "Navigation 更适合复杂导航结构和灵活页面栈管理"
+      },
+      {
+        "id": "b",
+        "text": "router 可用于较简单的页面跳转场景"
+      },
+      {
+        "id": "c",
+        "text": "页面参数应尽量传递定位信息，而不是塞入大量业务对象"
+      },
+      {
+        "id": "d",
+        "text": "所有页面都共享一个超大参数对象最利于维护"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-015",
+    "categoryId": "routing",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "比较 router 跳转和 Navigation 组件导航的适用场景。",
+    "explanation": "这道题常用于判断候选人是否理解页面栈，而不是只会写 push。",
+    "knowledgePoints": [
+      "router",
+      "Navigation",
+      "NavPathStack"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组件导航和页面路由概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-navigation-introduction-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "组件导航(Navigation) (推荐)",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-navigation-navigation",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "router",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-router-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "referenceAnswer": "router 更偏页面级跳转 API，适合较直接的页面跳转和返回；Navigation 是组件导航方案，以 Navigation 作为根视图容器，并通过 NavPathStack 管理页面栈，适合复杂页面栈、多端适配、动效和生命周期更丰富的场景。实际项目中应避免把完整大对象塞进路由参数，通常传递 id、mode 等定位信息。",
+    "scoringPoints": [
+      "区分 router 与 Navigation",
+      "说出 NavPathStack 页面栈",
+      "说明参数应轻量稳定"
+    ]
+  },
+  {
+    "id": "routing-016",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "Navigation 中要把一个新的 NavDestination 页面压入当前页面栈，常用哪个 NavPathStack 方法？",
+    "explanation": "Navigation 的页面跳转由 NavPathStack 管理，pushPath 或 pushPathByName 可将目标 NavDestination 信息压入栈。",
+    "knowledgePoints": [
+      "Navigation",
+      "NavPathStack",
+      "pushPath"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "pushPath"
+      },
+      {
+        "id": "b",
+        "text": "destroy"
+      },
+      {
+        "id": "c",
+        "text": "flush"
+      },
+      {
+        "id": "d",
+        "text": "request"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-017",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "下列 NavPathStack 操作与用途的对应关系，哪些正确？",
+    "explanation": "NavPathStack 提供压栈、返回、替换、清空和按条件删除等页面栈操作，应根据业务语义选择，而不是全部使用 push。",
+    "knowledgePoints": [
+      "NavPathStack",
+      "页面栈",
+      "路由操作"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "options": [
+      {
+        "id": "a",
+        "text": "pop：弹出栈顶页面并返回上一页"
+      },
+      {
+        "id": "b",
+        "text": "replacePath：用新页面替换当前栈顶页面"
+      },
+      {
+        "id": "c",
+        "text": "clear：清空 NavDestination 路由栈"
+      },
+      {
+        "id": "d",
+        "text": "removeByName：删除栈中指定名称的页面"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "routing-018",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "一个 NavPathStack 应与一个 Navigation 对应，不应把同一个 NavPathStack 对象复用给多个 Navigation 容器。",
+    "explanation": "官方文档要求 NavPathStack 与 Navigation 一一对应，每个 Navigation 管理自己的 NavDestination 页面栈。",
+    "knowledgePoints": [
+      "Navigation",
+      "NavPathStack",
+      "一一对应"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Navigation基础架构介绍",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-architecture.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "answerBoolean": true
+  },
+  {
+    "id": "routing-019",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "多个 HAP、HSP 或 HAR 模块之间希望按页面名称跳转，并减少调用方对页面文件的直接 import，优先考虑哪种方案？",
+    "explanation": "Navigation 系统路由表可在各业务模块独立配置页面映射，跳转时按名称动态加载并构建页面，从而降低模块依赖耦合。",
+    "knowledgePoints": [
+      "系统路由表",
+      "跨包路由",
+      "模块解耦"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation跨包路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-cross-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "Navigation 系统路由表"
+      },
+      {
+        "id": "b",
+        "text": "把所有页面复制到 entry 模块"
+      },
+      {
+        "id": "c",
+        "text": "只传完整页面对象"
+      },
+      {
+        "id": "d",
+        "text": "每次跳转重新创建 UIAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-020",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 Navigation、NavDestination 和 NavBar，哪些说法正确？",
+    "explanation": "Navigation 的路由栈管理 NavDestination；NavBar 是导航栏，不属于页面栈，也不能由 NavPathStack 当作普通子页操作。",
+    "knowledgePoints": [
+      "NavDestination",
+      "NavBar",
+      "Navigation架构"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation基础架构介绍",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-architecture.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Navigation子页面",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-navdestination.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "NavDestination 是 Navigation 子页面的根容器"
+      },
+      {
+        "id": "b",
+        "text": "NavDestination 可拥有页面生命周期、标题栏和工具栏"
+      },
+      {
+        "id": "c",
+        "text": "NavDestination 可配置为标准页面或 DIALOG 类型"
+      },
+      {
+        "id": "d",
+        "text": "NavBar 本身属于 NavPathStack 管理的普通页面"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-021",
+    "categoryId": "routing",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "为首页、题单、答题页和结果页设计 Navigation 路由栈时，应如何处理参数、返回和跨模块页面？",
+    "explanation": "路由设计应同时保证页面栈语义、参数可恢复性和模块解耦，避免页面之间直接持有大型可变对象。",
+    "knowledgePoints": [
+      "Navigation",
+      "路由参数",
+      "页面栈",
+      "跨模块路由"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Navigation跨包路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-cross-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "referenceAnswer": "应用应为每个 Navigation 建立独立 NavPathStack，以稳定页面名注册题单、答题和结果 NavDestination。跳转参数只携带 questionId、sessionId 等定位信息，页面再从仓储获取数据。进入答题页使用 pushPath，提交后如不希望返回到未完成状态可用 replacePath 进入结果页，普通返回使用 pop。跨 HAP/HSP/HAR 页面优先通过系统路由表按名称动态加载。需要登录拦截或未保存提示时，可使用 Navigation 的路由拦截能力统一处理。",
+    "scoringPoints": [
+      "说明每个 Navigation 使用独立 NavPathStack",
+      "参数只传稳定标识而非大型业务对象",
+      "合理区分 push、replace 和 pop",
+      "说明跨模块路由表或路由拦截设计"
+    ]
   }
 ]

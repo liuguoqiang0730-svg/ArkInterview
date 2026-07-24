@@ -378,5 +378,517 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "component-communication-011",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "状态管理 V2 中，祖先和后代跨层级双向同步共享状态时，更贴近哪组装饰器？",
+    "explanation": "@Provider 和 @Consumer 提供跨组件层级双向同步能力，适合祖先与后代之间共享状态；简单父子传值仍应优先使用更直接的传参方式。",
+    "knowledgePoints": [
+      "跨层级通信",
+      "@Provider",
+      "@Consumer",
+      "状态管理 V2"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Provider装饰器和@Consumer装饰器：跨组件层级双向同步",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-new-provider-and-consumer",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "options": [
+      {
+        "id": "a",
+        "text": "@Provider 和 @Consumer"
+      },
+      {
+        "id": "b",
+        "text": "@State 和 @Styles"
+      },
+      {
+        "id": "c",
+        "text": "@Entry 和 @Preview"
+      },
+      {
+        "id": "d",
+        "text": "@Builder 和 @Extend"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "component-communication-012",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "跨层级状态能力虽然方便，但不应替代所有简单父子传值，否则会让数据来源和修改路径变得不清晰。",
+    "explanation": "组件通信设计应优先匹配数据流方向。简单父到子展示、子到父事件反馈，不必都升级为跨层级共享状态。",
+    "knowledgePoints": [
+      "组件通信设计",
+      "数据流",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "answerBoolean": true
+  },
+  {
+    "id": "component-communication-013",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "为祖先组件和子孙组件设计数据传递方案时，哪些判断更可靠？",
+    "explanation": "组件通信方式要跟数据所有权、修改方向和作用域匹配。全局化所有状态会增加耦合，也会让刷新路径难以排查。",
+    "knowledgePoints": [
+      "父子通信",
+      "跨层级通信",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "options": [
+      {
+        "id": "a",
+        "text": "只读展示数据优先保持单向传递"
+      },
+      {
+        "id": "b",
+        "text": "后代需要修改并同步回祖先时，应设计双向同步或事件回传"
+      },
+      {
+        "id": "c",
+        "text": "跨越多层且多个后代共享时，可考虑 Provide/Consume 或 Provider/Consumer 类能力"
+      },
+      {
+        "id": "d",
+        "text": "为了少写参数，应把全部页面数据都直接放进全局状态"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "component-communication-014",
+    "categoryId": "component-communication",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "后代组件修改数据并希望祖先界面刷新时，可以如何设计通信链路？",
+    "explanation": "面试回答应先讲数据所有权，再讲具体装饰器，避免把所有场景都答成一个装饰器。",
+    "knowledgePoints": [
+      "数据所有权",
+      "UI 刷新",
+      "跨层级通信"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Provider装饰器和@Consumer装饰器：跨组件层级双向同步",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-new-provider-and-consumer",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "MVVM模式（状态管理V2）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V13/arkts-mvvm-v2-V13",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "referenceAnswer": "可以根据层级和数据所有权选择方式：简单父子关系可用双向绑定或事件回调把变化同步回父组件；跨多层共享状态可考虑 V1 的 Provide/Consume 或 V2 的 Provider/Consumer；如果数据是复杂对象且属性变化需要刷新，还要确认对象是否被合适的状态观测能力追踪，例如 V2 中 @ObservedV2/@Trace。",
+    "scoringPoints": [
+      "区分简单父子和跨层级",
+      "说明双向同步或事件回调",
+      "提到复杂对象观测能力"
+    ]
+  },
+  {
+    "id": "component-communication-015",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "子组件只负责告诉父组件“用户提交了答案”，更清晰的做法是什么？",
+    "explanation": "提交答案属于明确的子到父动作通知。更清晰的方式是把动作以事件或回调交给拥有业务状态的父层处理，避免子组件越权修改全局状态。",
+    "knowledgePoints": [
+      "事件回调",
+      "子到父通信",
+      "状态所有权"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkUI 状态管理",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "options": [
+      {
+        "id": "a",
+        "text": "把提交动作作为事件或回调交给拥有状态的父组件处理"
+      },
+      {
+        "id": "b",
+        "text": "子组件直接累计全局练习统计"
+      },
+      {
+        "id": "c",
+        "text": "子组件绕过页面层直接操作数据库文件"
+      },
+      {
+        "id": "d",
+        "text": "把按钮点击结果写进 AbilityStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "component-communication-016",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在 @ComponentV2 子组件中接收并跟随父组件状态变化的输入参数，应优先使用哪个装饰器？",
+    "explanation": "@Param 表示组件外部输入，父组件状态数据源变化时会单向同步到子组件。",
+    "knowledgePoints": [
+      "@Param",
+      "ComponentV2",
+      "父子传值"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Param：组件外部输入",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-param.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "@Param"
+      },
+      {
+        "id": "b",
+        "text": "@Local"
+      },
+      {
+        "id": "c",
+        "text": "@Event"
+      },
+      {
+        "id": "d",
+        "text": "@Monitor"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "component-communication-017",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "@Param 装饰的简单类型变量不允许在子组件中直接赋值修改；需要输出变更意图时可搭配 @Event。",
+    "explanation": "@Param 的同步方向是父到子，子组件不能直接修改该输入变量。@Event 可把更新请求作为组件输出交给父组件处理。",
+    "knowledgePoints": [
+      "@Param",
+      "@Event",
+      "单向数据流"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Param：组件外部输入",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-param.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@Event装饰器：规范组件输出",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-event.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "answerBoolean": true
+  },
+  {
+    "id": "component-communication-018",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "状态管理 V2 中，子组件要向父组件输出“提交答案”这类回调，最符合组件输入输出规范的是哪一个装饰器？",
+    "explanation": "@Event 用于装饰组件对外输出的回调方法，参数与返回值由开发者按业务定义。",
+    "knowledgePoints": [
+      "@Event",
+      "组件输出",
+      "回调"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Event装饰器：规范组件输出",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-event.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "options": [
+      {
+        "id": "a",
+        "text": "@Event"
+      },
+      {
+        "id": "b",
+        "text": "@Param"
+      },
+      {
+        "id": "c",
+        "text": "@Local"
+      },
+      {
+        "id": "d",
+        "text": "@Computed"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "component-communication-019",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 @Param 和 @Event 组合实现父子状态协作时，哪些理解正确？",
+    "explanation": "@Param 定义输入，@Event 定义输出，形成明确的单向数据流闭环。父组件拥有最终状态修改权，回传到子组件的同步在后续渲染前完成。",
+    "knowledgePoints": [
+      "@Param",
+      "@Event",
+      "组件契约",
+      "双向协作"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Param：组件外部输入",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-param.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@Event装饰器：规范组件输出",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-event.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "父组件数据源变化可以同步到子组件 @Param"
+      },
+      {
+        "id": "b",
+        "text": "子组件调用 @Event 后，由父组件决定如何修改数据源"
+      },
+      {
+        "id": "c",
+        "text": "子组件不应直接给 @Param 简单类型重新赋值"
+      },
+      {
+        "id": "d",
+        "text": "@Event 修改父数据源后，新的 @Param 值同步回子组件是异步过程"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "component-communication-020",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "子组件只想接收父组件传入的初始值，之后在本地独立编辑且不再跟随父数据源，应该怎样声明？",
+    "explanation": "@Once 必须搭配 @Param 使用，可在初始化时接收外部值，之后拦截父数据源的同步，并允许子组件本地修改该变量。",
+    "knowledgePoints": [
+      "@Once",
+      "@Param",
+      "初始化同步"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Once：初始化同步一次",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-once.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 @Param 与 @Once 组合"
+      },
+      {
+        "id": "b",
+        "text": "只使用 @Consumer"
+      },
+      {
+        "id": "c",
+        "text": "使用 @Monitor 替代状态"
+      },
+      {
+        "id": "d",
+        "text": "把值声明为常量"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "component-communication-021",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于状态管理 V2 的 @Provider 和 @Consumer，哪些说法正确？",
+    "explanation": "@Provider/@Consumer 用于 V2 跨层级双向同步，并按 aliasName 或属性名匹配最近提供方。官方也提醒应减少滥用，保持组件独立性。",
+    "knowledgePoints": [
+      "@Provider",
+      "@Consumer",
+      "跨层级通信"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider装饰器和@Consumer装饰器：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "options": [
+      {
+        "id": "a",
+        "text": "两者只能在 @ComponentV2 中使用"
+      },
+      {
+        "id": "b",
+        "text": "@Consumer 会按 key 向上寻找最近的 @Provider"
+      },
+      {
+        "id": "c",
+        "text": "建立匹配后支持跨层级双向同步"
+      },
+      {
+        "id": "d",
+        "text": "因为会增强组件层级耦合，所以不应替代所有普通父子传值"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "component-communication-022",
+    "categoryId": "component-communication",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "设计一个“答案选择器”V2 子组件：父页面持有答案，子组件展示并提交变化。应如何定义输入和输出？",
+    "explanation": "清晰的输入输出契约能避免子组件直接改父状态，也便于复用、测试和追踪数据来源。",
+    "knowledgePoints": [
+      "组件设计",
+      "@Param",
+      "@Event",
+      "单向数据流"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Param：组件外部输入",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-param.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@Event装饰器：规范组件输出",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-event.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@Once：初始化同步一次",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-once.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "referenceAnswer": "父页面用 @Local 或其他合适状态持有最终答案；子组件使用 @Param 接收当前答案，只负责根据输入渲染。用户点击选项时，子组件调用 @Event 装饰的回调并传出新答案，由父页面校验并更新自己的状态，随后框架把新值同步回子组件 @Param。若只需要把父值作为编辑初值、后续不跟随父状态，可改用 @Param @Once 和子组件本地编辑，但提交结果仍建议通过明确回调输出。",
+    "scoringPoints": [
+      "父组件持有最终状态",
+      "子组件用 @Param 定义输入",
+      "子组件用 @Event 输出变更意图",
+      "说明 @Param @Once 只适用于初始化一次的本地编辑场景"
+    ]
   }
 ]

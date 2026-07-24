@@ -398,5 +398,641 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "arkts-011",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "从 TypeScript 代码迁移到 ArkTS 时，局部变量仍使用 var，推荐如何调整？",
+    "options": [
+      {
+        "id": "a",
+        "text": "根据是否需要重新赋值改用 let 或 const"
+      },
+      {
+        "id": "b",
+        "text": "继续使用 var，并关闭 ArkTS 严格检查"
+      },
+      {
+        "id": "c",
+        "text": "把变量挂到 globalThis 上"
+      },
+      {
+        "id": "d",
+        "text": "把变量统一改成 any 类型"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 适配规则要求使用 let 代替 var；不需要重新赋值时可进一步使用 const。关闭检查、全局挂载或改成 any 都没有解决语言约束问题。",
+    "knowledgePoints": [
+      "ArkTS",
+      "let",
+      "const",
+      "TypeScript迁移"
+    ],
+    "sourceRefs": [
+      {
+        "title": "从TypeScript到ArkTS的适配规则",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/typescript-to-arkts-migration-guide",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11
+  },
+  {
+    "id": "arkts-012",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "两个互不继承的 ArkTS 类拥有相同的公开字段和方法时，若希望通过统一类型接收它们，哪种设计更合适？",
+    "options": [
+      {
+        "id": "a",
+        "text": "让两个类实现同一个显式声明的接口"
+      },
+      {
+        "id": "b",
+        "text": "仅依靠字段形状相同直接互相赋值"
+      },
+      {
+        "id": "c",
+        "text": "把其中一个对象强制转换为 any"
+      },
+      {
+        "id": "d",
+        "text": "运行时给两个对象追加同名原型"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 不支持仅凭成员形状相同完成 structural typing。需要通过共同接口或明确的继承关系建立类型关系，这也让编译器能够静态验证调用边界。",
+    "knowledgePoints": [
+      "ArkTS类型系统",
+      "structural typing",
+      "接口",
+      "继承"
+    ],
+    "sourceRefs": [
+      {
+        "title": "从TypeScript到ArkTS的适配规则",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/typescript-to-arkts-migration-guide",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12
+  },
+  {
+    "id": "arkts-013",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 ArkTS 在运行期间保持对象布局稳定，哪些操作不符合官方适配规则？",
+    "options": [
+      {
+        "id": "a",
+        "text": "给对象动态增加类中未声明的属性"
+      },
+      {
+        "id": "b",
+        "text": "使用 delete 删除对象已有属性"
+      },
+      {
+        "id": "c",
+        "text": "借助 any 绕过检查后给数值字段赋字符串"
+      },
+      {
+        "id": "d",
+        "text": "在类声明中定义字段，并在构造函数中为其赋值"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "ArkTS 要求对象布局在运行期间保持稳定，不支持动态增删属性，也不能借助 any 绕过字段类型。预先声明字段并在构造函数中初始化属于正常的静态建模。",
+    "knowledgePoints": [
+      "对象布局",
+      "静态类型",
+      "delete",
+      "字段建模"
+    ],
+    "sourceRefs": [
+      {
+        "title": "从TypeScript到ArkTS的适配规则",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/typescript-to-arkts-migration-guide",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13
+  },
+  {
+    "id": "arkts-014",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ArkTS 中需要把字符串 \"42\" 转成数值时，哪种写法更符合受限运算符语义？",
+    "options": [
+      {
+        "id": "a",
+        "text": "Number(\"42\")"
+      },
+      {
+        "id": "b",
+        "text": "+\"42\""
+      },
+      {
+        "id": "c",
+        "text": "\"42\" - 0"
+      },
+      {
+        "id": "d",
+        "text": "把字符串先转换为 any 再使用一元加号"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "ArkTS 限制一元加号等运算符的动态语义，一元加号应作用于数值类型。字符串转数值应使用 Number 等显式转换方式，避免依赖隐式类型转换。",
+    "knowledgePoints": [
+      "运算符语义",
+      "类型转换",
+      "Number"
+    ],
+    "sourceRefs": [
+      {
+        "title": "从TypeScript到ArkTS的适配规则",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/typescript-to-arkts-migration-guide",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14
+  },
+  {
+    "id": "arkts-015",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "一个 Promise 刚创建且尚未调用 resolve 或 reject 时，处于什么状态？",
+    "options": [
+      {
+        "id": "a",
+        "text": "pending"
+      },
+      {
+        "id": "b",
+        "text": "fulfilled"
+      },
+      {
+        "id": "c",
+        "text": "rejected"
+      },
+      {
+        "id": "d",
+        "text": "cancelled"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "Promise 创建后先处于 pending 状态，异步操作完成后才会转换为 fulfilled 或 rejected。标准 Promise 并没有 cancelled 这一基础状态。",
+    "knowledgePoints": [
+      "Promise",
+      "pending",
+      "异步并发"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步并发（Promise和async/await）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/async-concurrency-overview",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15
+  },
+  {
+    "id": "arkts-016",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Promise 的 then、catch 和 finally，哪些说法正确？",
+    "options": [
+      {
+        "id": "a",
+        "text": "then 可注册 fulfilled 状态的处理逻辑"
+      },
+      {
+        "id": "b",
+        "text": "catch 可处理 rejected 状态或链路中抛出的异常"
+      },
+      {
+        "id": "c",
+        "text": "finally 无论最终 fulfilled 还是 rejected 都会执行"
+      },
+      {
+        "id": "d",
+        "text": "调用 finally 会把 Promise 强制改成 fulfilled"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "then、catch、finally 分别用于成功结果、失败/异常和无论结果如何都需要执行的收尾逻辑。finally 本身不会把失败结果强制改成成功。",
+    "knowledgePoints": [
+      "Promise",
+      "then",
+      "catch",
+      "finally"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步并发（Promise和async/await）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/async-concurrency-overview",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16
+  },
+  {
+    "id": "arkts-017",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "ArkTS 中使用 async 声明的函数会返回 Promise，函数内部抛出的异常会使该 Promise 进入 rejected 状态。",
+    "answerBoolean": true,
+    "explanation": "async 是 Promise 风格异步代码的语法支持。async 函数返回 Promise；执行过程中抛出的异常会反映为返回 Promise 的 rejected 状态，可通过 catch 或 try/catch 处理。",
+    "knowledgePoints": [
+      "async",
+      "Promise",
+      "异常处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步并发（Promise和async/await）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/async-concurrency-overview",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17
+  },
+  {
+    "id": "arkts-018",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用中有大量相互独立、可能需要取消且调度点分散的计算任务，官方更推荐优先考虑哪种并发能力？",
+    "options": [
+      {
+        "id": "a",
+        "text": "TaskPool"
+      },
+      {
+        "id": "b",
+        "text": "为每个任务永久创建一个 Worker"
+      },
+      {
+        "id": "c",
+        "text": "只用 Promise 包裹同步计算"
+      },
+      {
+        "id": "d",
+        "text": "在 UI 主线程串行执行"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "TaskPool 自动管理工作线程生命周期和负载，支持任务取消、优先级、依赖等调度能力，适合大量相互独立且调度点分散的任务。Worker 更适合需要长期占据线程或依赖固定线程上下文的场景。",
+    "knowledgePoints": [
+      "TaskPool",
+      "Worker",
+      "任务取消",
+      "并发调度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TaskPool和Worker的对比",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/taskpool-vs-worker",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18
+  },
+  {
+    "id": "arkts-019",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述 Promise/async-await 异步并发与 TaskPool/Worker 多线程并发的区别，并各举一个适用场景。",
+    "referenceAnswer": "Promise/async-await 主要用于同一线程事件循环上的异步协作，适合网络请求、文件读写、定时器等 I/O 非阻塞且单次逻辑较轻的任务；它不会自动把一段 CPU 密集型同步计算迁移到其他线程。TaskPool/Worker 提供多线程运行环境，适合耗时计算或资源密集型任务，避免阻塞宿主线程。大量独立、可取消的任务通常优先 TaskPool；需要长期占据固定线程并自行管理生命周期时可考虑 Worker。",
+    "scoringPoints": [
+      "能说明 Promise/async-await 适合 I/O 异步协作，不等于自动开启工作线程",
+      "能说明 TaskPool/Worker 用于多线程处理耗时计算",
+      "能给出至少一个 I/O 场景和一个 CPU 密集型场景",
+      "能说明 TaskPool 与 Worker 在生命周期管理上的基本差异"
+    ],
+    "explanation": "这道题用于区分“异步语法”和“多线程执行环境”。面试中常见误区是认为给同步重计算套一层 Promise 就能避免阻塞主线程。",
+    "knowledgePoints": [
+      "异步并发",
+      "多线程并发",
+      "Promise",
+      "TaskPool",
+      "Worker"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步并发（Promise和async/await）",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/async-concurrency-overview",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "TaskPool和Worker的对比",
+        "url": "https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/taskpool-vs-worker",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19
+  },
+  {
+    "id": "arkts-020",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要让一个大型业务对象在 UI 主线程与 Worker 或 TaskPool 并发实例之间以引用方式传递时，优先考虑哪种 ArkTS 对象模型？",
+    "explanation": "Sendable 数据默认可在 UI 主线程、TaskPool 线程和 Worker 线程等并发实例间引用传递，适合降低大型对象的序列化与拷贝开销。普通对象字面量通常遵循结构化克隆，属于拷贝传递。",
+    "knowledgePoints": [
+      "Sendable",
+      "并发通信",
+      "引用传递"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable对象简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "Sendable 对象"
+      },
+      {
+        "id": "b",
+        "text": "普通对象字面量"
+      },
+      {
+        "id": "c",
+        "text": "JSON 字符串"
+      },
+      {
+        "id": "d",
+        "text": "未声明类型的动态对象"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-021",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于自定义 Sendable class 的约束，哪些说法符合官方文档？",
+    "explanation": "Sendable 对象要求布局和类型稳定，因此成员类型、初始化和继承关系都有明确约束，也不支持运行时增加或删除属性。",
+    "knowledgePoints": [
+      "@Sendable",
+      "类型约束",
+      "对象布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable对象简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "options": [
+      {
+        "id": "a",
+        "text": "成员属性类型必须属于 Sendable 支持的数据类型"
+      },
+      {
+        "id": "b",
+        "text": "成员属性必须显式初始化，不能用感叹号跳过初始化"
+      },
+      {
+        "id": "c",
+        "text": "Sendable class 只能继承 Sendable class"
+      },
+      {
+        "id": "d",
+        "text": "对象创建后可以随时增加或删除成员属性"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-022",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "普通对象字面量和数组字面量跨 ArkTS 并发实例传递时通常遵循结构化克隆，因此它们本身不属于 Sendable 类型。",
+    "explanation": "官方文档明确区分了普通对象或数组字面量与 Sendable 数据：前者跨并发实例通常是拷贝传递，后者可按 Sendable 协议进行引用传递。",
+    "knowledgePoints": [
+      "结构化克隆",
+      "Sendable",
+      "拷贝传递"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable对象简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-023",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "多个并发实例需要共同修改同一个 Sendable 对象时，为避免数据竞争，最合理的处理是什么？",
+    "explanation": "Sendable 解决的是跨并发实例共享与传递问题，并不会自动消除并发写入竞争。仍需修改共享数据时，应使用异步锁等同步机制；若对象只读，也可考虑冻结对象。",
+    "knowledgePoints": [
+      "异步锁",
+      "数据竞争",
+      "Sendable"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable对象简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 ArkTS 异步锁保护临界区"
+      },
+      {
+        "id": "b",
+        "text": "把修改逻辑放进 Promise.then 即可"
+      },
+      {
+        "id": "c",
+        "text": "关闭所有类型检查"
+      },
+      {
+        "id": "d",
+        "text": "只增加更多 Worker"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-024",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望一个模块在同一进程内只加载一次，并在多个线程间提供同一个可共享单例时，应使用什么机制？",
+    "explanation": "共享模块通过 \"use shared\" 指令标记，在同一进程内只加载一次，可用于跨线程进程级单例。共享模块导出的变量必须是可共享对象。",
+    "knowledgePoints": [
+      "共享模块",
+      "use shared",
+      "进程单例"
+    ],
+    "sourceRefs": [
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 \"use shared\" 标记共享模块"
+      },
+      {
+        "id": "b",
+        "text": "在每个 Worker 中分别 new 一个普通类"
+      },
+      {
+        "id": "c",
+        "text": "把模块改成 JSON 文件"
+      },
+      {
+        "id": "d",
+        "text": "使用 side-effect import 重复执行初始化"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-025",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "简述普通模块、共享模块和 Sendable 对象在多线程场景中的区别，并说明如何处理共享写入。",
+    "explanation": "这道题考察模块加载语义、数据传输模型和并发安全三个不同层面，不能把“可共享”误解为“自动线程安全”。",
+    "knowledgePoints": [
+      "模块加载",
+      "共享模块",
+      "Sendable",
+      "并发安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable对象简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "referenceAnswer": "普通模块在同一线程只加载一次，但不同线程会各自加载并产生独立模块对象；使用 \"use shared\" 的共享模块在同一进程只加载一次，可用于跨线程共享模块级状态，但导出值必须可共享。Sendable 描述可在并发实例间安全传递或共享的对象类型，默认可引用传递以减少拷贝。多个线程写同一份 Sendable 数据仍可能竞争，应缩小共享可变状态，并用异步锁保护临界区；只读数据可在初始化后冻结。",
+    "scoringPoints": [
+      "说明普通模块在不同线程中会分别加载",
+      "说明共享模块在同一进程只加载一次且导出值必须可共享",
+      "说明 Sendable 解决对象跨并发实例传递或共享",
+      "指出共享写入仍需锁或只读冻结策略"
+    ]
   }
 ]

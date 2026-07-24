@@ -374,5 +374,633 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "debug-release-011",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "HiLog 格式字符串中的 %{public}s 与 %{private}s 有什么区别？",
+    "options": [
+      {
+        "id": "a",
+        "text": "public 以明文输出参数，private 会按隐私数据进行过滤"
+      },
+      {
+        "id": "b",
+        "text": "public 只在模拟器可用，private 只在真机可用"
+      },
+      {
+        "id": "c",
+        "text": "public 表示高优先级日志，private 表示低优先级日志"
+      },
+      {
+        "id": "d",
+        "text": "两者只改变颜色，不影响输出内容"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "HiLog 的 public/private 标识控制参数隐私显示。public 会明文输出，private 会以隐私方式过滤；它与设备类型、日志级别或颜色无关。",
+    "knowledgePoints": [
+      "HiLog",
+      "public",
+      "private",
+      "日志隐私"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references/js-apis-hilog",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11
+  },
+  {
+    "id": "debug-release-012",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "HiLog 参数未显式标注 public 或 private 时，默认按 private 隐私参数处理。",
+    "answerBoolean": true,
+    "explanation": "官方 HiLog 参数格式说明中，未指定隐私标识时默认值为 private，不以明文打印。需要明文输出非敏感调试信息时才应明确使用 public。",
+    "knowledgePoints": [
+      "HiLog",
+      "默认隐私",
+      "日志格式"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references/js-apis-hilog",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12
+  },
+  {
+    "id": "debug-release-013",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "构建准备上架的正式发布包时，应使用哪类证书？",
+    "options": [
+      {
+        "id": "a",
+        "text": "发布证书"
+      },
+      {
+        "id": "b",
+        "text": "调试证书"
+      },
+      {
+        "id": "c",
+        "text": "任意自签名文本文件"
+      },
+      {
+        "id": "d",
+        "text": "无需证书"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "调试证书用于调试阶段，发布证书用于正式发布阶段。发布包需要使用与发布场景匹配的证书和 Profile 完成签名。",
+    "knowledgePoints": [
+      "发布证书",
+      "调试证书",
+      "应用签名"
+    ],
+    "sourceRefs": [
+      {
+        "title": "管理证书概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/App/agc-help-cert-overview-0000002283343885",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13
+  },
+  {
+    "id": "debug-release-014",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "手动配置 HarmonyOS 签名方案时，build-profile.json5 的 material 通常包含哪些材料？",
+    "options": [
+      {
+        "id": "a",
+        "text": "证书文件 certpath（.cer）"
+      },
+      {
+        "id": "b",
+        "text": "Profile 文件 profile（.p7b）"
+      },
+      {
+        "id": "c",
+        "text": "密钥库文件 storeFile（.p12）及对应密码/别名"
+      },
+      {
+        "id": "d",
+        "text": "题库数据文件 questions.json"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "签名 material 包含证书、Profile、密钥库以及相关密码和别名等信息。业务数据文件与签名材料无关，也不应混入工程签名配置。",
+    "knowledgePoints": [
+      "build-profile.json5",
+      "signingConfigs",
+      ".cer",
+      ".p7b",
+      ".p12"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14
+  },
+  {
+    "id": "debug-release-015",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "工程级 build-profile.json5 中，product 如何选择已定义的签名方案？",
+    "options": [
+      {
+        "id": "a",
+        "text": "通过 signingConfig 引用 signingConfigs 中对应的 name"
+      },
+      {
+        "id": "b",
+        "text": "通过 categoryId 引用题库分类"
+      },
+      {
+        "id": "c",
+        "text": "通过 compileSdkVersion 填写证书路径"
+      },
+      {
+        "id": "d",
+        "text": "通过 runtimeOS 填写密钥库密码"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "explanation": "signingConfigs 可定义多个命名签名方案，products 中的 signingConfig 字段引用对应 name。SDK 版本、runtimeOS 和业务分类都不承担签名方案选择职责。",
+    "knowledgePoints": [
+      "products",
+      "signingConfig",
+      "signingConfigs",
+      "构建配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15
+  },
+  {
+    "id": "debug-release-016",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "使用预览器或模拟器调试通常无需配置应用签名，而在真机安装运行 HAP 时需要有效签名。",
+    "answerBoolean": true,
+    "explanation": "官方入门说明指出，模拟器和预览器调试无需签名；真机调试需要对 HAP 进行签名。签名材料还需与应用和调试设备等配置匹配。",
+    "knowledgePoints": [
+      "真机调试",
+      "模拟器",
+      "HAP签名"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS开发入门",
+        "url": "https://developer.huawei.com/consumer/cn/develop-novice-guide/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16
+  },
+  {
+    "id": "debug-release-017",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "发布 HarmonyOS 应用前，哪些检查更合理？",
+    "options": [
+      {
+        "id": "a",
+        "text": "使用发布场景匹配的证书和 Profile 构建正式包"
+      },
+      {
+        "id": "b",
+        "text": "核对 compatibleSdkVersion、targetSdkVersion 与目标设备范围"
+      },
+      {
+        "id": "c",
+        "text": "执行兼容性、稳定性、性能、安全等上架前体检"
+      },
+      {
+        "id": "d",
+        "text": "把 token、设备 ID 和用户答案全部用 %{public}s 输出便于排查"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "正式发布前需要校验签名、SDK 兼容范围和核心质量专项。敏感数据不应为了调试而公开写入日志，应按隐私标识和最小必要原则处理。",
+    "knowledgePoints": [
+      "发布检查",
+      "SDK兼容",
+      "AppAnalyzer",
+      "日志安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS开发者测试服务入门",
+        "url": "https://developer.huawei.com/consumer/cn/testing/get-started/",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "HiLog",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references/js-apis-hilog",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17
+  },
+  {
+    "id": "debug-release-018",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "一个 HAP 可以成功构建但无法安装到真机，简述你的排查顺序。",
+    "referenceAnswer": "先查看 DevEco Studio/hdc 的具体安装错误码和设备日志，确认不是包已安装、版本号或空间等直接原因；再核对 bundleName、签名证书、Profile 和密钥库是否属于同一应用配置，调试 Profile 是否包含当前设备；检查 product 引用的 signingConfig 是否正确以及 HAP 是否确实已签名；随后核对 compatibleSdkVersion、targetSdkVersion、设备系统版本和所用 SDK 是否匹配。若仍失败，再清理本次构建产物后重建，并对照错误码检查证书有效期、Profile 权限和设备注册状态。",
+    "scoringPoints": [
+      "先读取明确的安装错误码和设备日志",
+      "核对 bundleName、证书、Profile、密钥库和 product 签名引用",
+      "检查调试设备是否包含在对应 Profile 中",
+      "检查 SDK 兼容版本与设备系统版本",
+      "根据错误码继续检查证书有效期、版本冲突和设备状态"
+    ],
+    "explanation": "这道题强调基于错误码分层排查。仅反复同步工程或重新配置签名可能偶然绕过问题，却无法确认真正原因。",
+    "knowledgePoints": [
+      "HAP安装",
+      "签名",
+      "Profile",
+      "SDK兼容",
+      "错误码"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "HarmonyOS开发入门",
+        "url": "https://developer.huawei.com/consumer/cn/develop-novice-guide/",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "管理证书概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/App/agc-help-cert-overview-0000002283343885",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18
+  },
+  {
+    "id": "debug-release-019",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "HarmonyOS 应用安装和运行的基本模块单元是什么？",
+    "explanation": "HAP 由代码、资源、三方库和配置等打包而成，是应用安装和运行的基本单元，常见类型为 entry 和 feature。",
+    "knowledgePoints": [
+      "HAP",
+      "应用包",
+      "entry"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "HAP"
+      },
+      {
+        "id": "b",
+        "text": "HAR"
+      },
+      {
+        "id": "c",
+        "text": "JSON"
+      },
+      {
+        "id": "d",
+        "text": "Preferences"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-020",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "发布前区分 HAP、HAR 和 HSP 时，哪些说法正确？",
+    "explanation": "三种包的运行身份和打包方式不同。HAR 会并入使用方，HSP 保留动态共享实体，HAP 承载安装运行模块。",
+    "knowledgePoints": [
+      "HAP",
+      "HAR",
+      "HSP",
+      "包结构"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HAR",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/har-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HSP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/in-app-hsp.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "HAP 可承载 UIAbility 或 ExtensionAbility，并参与安装运行"
+      },
+      {
+        "id": "b",
+        "text": "HAR 是静态共享包，不能独立安装运行"
+      },
+      {
+        "id": "c",
+        "text": "HSP 是动态共享包，随宿主应用发布并与宿主同进程"
+      },
+      {
+        "id": "d",
+        "text": "多个 HAP 引用同一 HAR 时可能产生代码和资源重复"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-021",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "同一应用的多个 HAP 和 HSP 在调试安装时应保持签名证书一致，否则可能安装失败。",
+    "explanation": "多模块应用在安装与更新时会做一致性校验，官方文档要求同一应用的 HAP、HSP 签名证书保持一致。",
+    "knowledgePoints": [
+      "多HAP",
+      "签名一致性",
+      "安装失败"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HSP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/in-app-hsp.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-022",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "开启源码混淆后，反射、序列化、动态路由或 Native 绑定依赖稳定名称时，最重要的配套工作是什么？",
+    "explanation": "混淆会改变名称。凡是运行时按字符串查找或对外暴露的标识，都要根据实际使用配置 keep 规则，并在 release 包中验证。",
+    "knowledgePoints": [
+      "源码混淆",
+      "keep规则",
+      "release验证"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkGuard源码混淆",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/source-obfuscation.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "为相关类、成员和文件名配置准确的保留规则"
+      },
+      {
+        "id": "b",
+        "text": "删除所有类型声明"
+      },
+      {
+        "id": "c",
+        "text": "关闭 release 构建"
+      },
+      {
+        "id": "d",
+        "text": "把日志全部改成 private"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-023",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "准备发布版本时，哪些检查应进入固定流水线？",
+    "explanation": "发布质量覆盖签名、功能、兼容性、安全和包体。debug 构建能运行并不能证明 release 包可安装且业务完整。",
+    "knowledgePoints": [
+      "发布检查",
+      "release",
+      "混淆",
+      "兼容测试"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ArkGuard源码混淆",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/source-obfuscation.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HiLog日志系统",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hilog.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 release 签名并核对证书与包名"
+      },
+      {
+        "id": "b",
+        "text": "运行单元、集成和真机兼容测试"
+      },
+      {
+        "id": "c",
+        "text": "验证混淆后的路由、序列化和 Native 接口"
+      },
+      {
+        "id": "d",
+        "text": "分析包体结构、敏感日志和权限声明"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-024",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "一个多模块 App 的 debug 包正常，但 release 包安装后跨模块页面打不开，应如何排查？",
+    "explanation": "debug 与 release 的差异通常集中在签名、产品配置、模块打包和混淆，排查要以实际发布产物为准。",
+    "knowledgePoints": [
+      "release排查",
+      "多模块",
+      "签名",
+      "混淆"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HSP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/in-app-hsp.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Navigation跨包路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-cross-package.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ArkGuard源码混淆",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/source-obfuscation.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HiLog日志系统",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hilog.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "referenceAnswer": "先确认实际安装的是同一产品下完整的 HAP/HSP 集合，包名、版本、SDK 和所有模块签名一致；再查看安装日志和 HiLog，区分安装一致性、模块加载还是路由构建错误。核对 HAP/HSP/HAR 依赖和各模块 router_map 配置，检查 release 混淆是否改写了页面构建函数、导出符号、文件名或 Native 注册名，并补充 keep 规则。最后用 clean release 构建在目标真机复测跨模块入口、回退和冷启动，不能只在预览器中验证。",
+    "scoringPoints": [
+      "检查完整模块集合、产品配置和签名一致性",
+      "通过安装日志与 HiLog 定位失败阶段",
+      "核对跨模块依赖和路由表",
+      "检查混淆保留规则并在真机 release 包复测"
+    ]
   }
 ]

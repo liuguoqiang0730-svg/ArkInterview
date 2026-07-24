@@ -402,5 +402,517 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "relational-store-011",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "relationalStore.getRdbStore 使用相同参数多次获取时，通常获得的是同一个数据库对象。",
+    "explanation": "官方 FAQ 说明 getRdbStore 多次执行且参数相同时，获取的是同一个数据库对象。工程上仍应管理好数据库对象生命周期和并发访问。",
+    "knowledgePoints": [
+      "getRdbStore",
+      "RdbStore",
+      "对象复用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "参数相同，获得的是同一个数据库对象吗？",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-faqs-V5/faqs-local-database-management-20-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-012",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "关系型数据库做带条件查询时，通常用哪类对象表达查询条件？",
+    "explanation": "RdbPredicates 用于构造关系型数据库查询条件；NavPathStack 属于导航栈，AtManager 属于权限管理，AbilityStage 属于 Stage 模型生命周期。",
+    "knowledgePoints": [
+      "RdbPredicates",
+      "条件查询",
+      "relationalStore"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "options": [
+      {
+        "id": "a",
+        "text": "RdbPredicates"
+      },
+      {
+        "id": "b",
+        "text": "NavPathStack"
+      },
+      {
+        "id": "c",
+        "text": "AtManager"
+      },
+      {
+        "id": "d",
+        "text": "AbilityStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-013",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "把练习记录落到 relationalStore 时，哪些表设计思路更合理？",
+    "explanation": "练习记录是结构化数据，应按查询需求建模。多步写入需要一致性时应考虑事务，避免把结构化数据退化成不可查询的大字符串。",
+    "knowledgePoints": [
+      "RDB 建模",
+      "答题记录",
+      "事务"
+    ],
+    "sourceRefs": [
+      {
+        "title": "通过关系型数据库实现数据持久化(ArkTS)",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/data-persistence-by-rdb-store",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "options": [
+      {
+        "id": "a",
+        "text": "为记录设计 questionId、categoryId、isCorrect、answeredAt 等字段"
+      },
+      {
+        "id": "b",
+        "text": "围绕常见筛选和统计需求设计查询条件"
+      },
+      {
+        "id": "c",
+        "text": "多步写入需要一致性时考虑事务"
+      },
+      {
+        "id": "d",
+        "text": "把全部记录序列化成一个超大字符串塞到单列中"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-014",
+    "categoryId": "relational-store",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "说明 relationalStore 更适合保存刷题 App 的哪些本地数据。",
+    "explanation": "这道题考察存储选型。不要把所有本地数据都塞 Preferences，也不要为了一个开关就引入复杂数据库。",
+    "knowledgePoints": [
+      "relationalStore",
+      "存储选型",
+      "练习记录"
+    ],
+    "sourceRefs": [
+      {
+        "title": "通过关系型数据库实现数据持久化(ArkTS)",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/data-persistence-by-rdb-store",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "referenceAnswer": "relationalStore 适合保存结构化、需要条件查询或统计的数据，例如答题历史、分类完成度、正确率统计明细、错题记录和练习会话记录。它比 Preferences 更适合复杂表结构和多条件查询，也更便于后续做统计页面。",
+    "scoringPoints": [
+      "说明结构化数据",
+      "举出答题历史、错题、统计等例子",
+      "说明相比 Preferences 的优势"
+    ]
+  },
+  {
+    "id": "relational-store-015",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "同时插入答题明细并更新分类统计且要求一致时，数据库层应优先考虑什么？",
+    "explanation": "多步数据库写入如果要求要么全部成功要么全部失败，应使用事务能力保证一致性，避免只写入部分数据导致统计和明细不一致。",
+    "knowledgePoints": [
+      "事务",
+      "一致性",
+      "多步写入"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-data-relationalstore-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "options": [
+      {
+        "id": "a",
+        "text": "事务"
+      },
+      {
+        "id": "b",
+        "text": "路由参数"
+      },
+      {
+        "id": "c",
+        "text": "深色模式"
+      },
+      {
+        "id": "d",
+        "text": "权限弹窗"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-016",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "RdbStore 查询返回 ResultSet 后，数据读取完成最重要的收尾操作是什么？",
+    "explanation": "ResultSet 占用系统分配的内存和数据库资源，查询完成后应及时 close，通常放在 finally 中确保异常路径也释放。",
+    "knowledgePoints": [
+      "ResultSet",
+      "close",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "通过关系型数据库实现数据持久化（ArkTS）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-persistence-by-rdb-store.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "relationalStore ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "调用 close 关闭结果集"
+      },
+      {
+        "id": "b",
+        "text": "把 ResultSet 放进 AppStorage"
+      },
+      {
+        "id": "c",
+        "text": "再次调用 getRdbStore"
+      },
+      {
+        "id": "d",
+        "text": "删除数据库文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-017",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "创建 RdbStore 时，StoreConfig 中哪些配置与数据库创建或安全直接相关？",
+    "explanation": "StoreConfig 用于描述数据库名称、路径、安全等级和加密等属性，应在首次建库前按业务要求确定。",
+    "knowledgePoints": [
+      "StoreConfig",
+      "securityLevel",
+      "encrypt",
+      "customDir"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "options": [
+      {
+        "id": "a",
+        "text": "name 指定数据库名称"
+      },
+      {
+        "id": "b",
+        "text": "securityLevel 指定数据库安全级别"
+      },
+      {
+        "id": "c",
+        "text": "encrypt 控制是否启用数据库加密"
+      },
+      {
+        "id": "d",
+        "text": "customDir 可指定数据库在沙箱数据库目录下的自定义路径"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-018",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "数据库表结构升级涉及多条 DDL 或数据迁移语句时，官方建议使用事务保证升级流程的原子性。",
+    "explanation": "升级中途失败可能留下半完成结构。事务可在全部步骤成功后提交，失败则回滚，数据库版本也应在迁移完成后更新。",
+    "knowledgePoints": [
+      "数据库迁移",
+      "事务",
+      "原子性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "通过关系型数据库实现数据持久化（ArkTS）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-persistence-by-rdb-store.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-019",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "需要表达“分类等于某值并按时间倒序”的关系型数据库查询条件，优先使用什么对象？",
+    "explanation": "RdbPredicates 用于为 query、update 和 delete 等操作构造表名、过滤、排序和分页等条件。",
+    "knowledgePoints": [
+      "RdbPredicates",
+      "条件查询",
+      "排序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "通过关系型数据库实现数据持久化（ArkTS）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-persistence-by-rdb-store.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "relationalStore RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "RdbPredicates"
+      },
+      {
+        "id": "b",
+        "text": "PermissionRequestResult"
+      },
+      {
+        "id": "c",
+        "text": "NavPathStack"
+      },
+      {
+        "id": "d",
+        "text": "HttpRequestOptions"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-020",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 createTransaction 管理多步写入时，哪些做法正确？",
+    "explanation": "事务对象提供隔离的操作上下文。提交前必须等待内部异步操作完成，失败要回滚，并应避免长时间占用唯一写事务。",
+    "knowledgePoints": [
+      "createTransaction",
+      "commit",
+      "rollback",
+      "写事务"
+    ],
+    "sourceRefs": [
+      {
+        "title": "relationalStore Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "通过关系型数据库实现数据持久化（ArkTS）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-persistence-by-rdb-store.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "通过事务对象执行需要保持一致的插入、更新或删除"
+      },
+      {
+        "id": "b",
+        "text": "所有异步数据库操作完成后再调用 commit"
+      },
+      {
+        "id": "c",
+        "text": "捕获失败后调用 rollback"
+      },
+      {
+        "id": "d",
+        "text": "缩短写事务占用时间，降低写事务冲突概率"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-021",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "普通三方应用需要手动备份当前 RdbStore 时，应调用哪个能力？",
+    "explanation": "RdbStore.backup 可创建手动备份，恢复时使用 restore。备份文件路径和生命周期应由业务明确管理。",
+    "knowledgePoints": [
+      "RdbStore",
+      "backup",
+      "restore"
+    ],
+    "sourceRefs": [
+      {
+        "title": "数据库备份与恢复（ArkTS）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-backup-and-restore.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "relationalStore RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "options": [
+      {
+        "id": "a",
+        "text": "RdbStore.backup"
+      },
+      {
+        "id": "b",
+        "text": "AppStorage.setOrCreate"
+      },
+      {
+        "id": "c",
+        "text": "router.replacePath"
+      },
+      {
+        "id": "d",
+        "text": "AtManager.on"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-022",
+    "categoryId": "relational-store",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "刷题 App 的本地数据库从版本 1 升级到版本 3，增加错题掌握状态和练习索引，应如何迁移并控制查询性能？",
+    "explanation": "数据库升级既是正确性问题也是性能问题，必须保证原子性、兼容历史数据并用实际查询验证索引价值。",
+    "knowledgePoints": [
+      "数据库版本",
+      "迁移事务",
+      "索引",
+      "分页"
+    ],
+    "sourceRefs": [
+      {
+        "title": "通过关系型数据库实现数据持久化（ArkTS）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-persistence-by-rdb-store.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "relationalStore Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "数据库备份与恢复（ArkTS）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-backup-and-restore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "referenceAnswer": "打开数据库后读取当前版本，按版本逐级执行迁移：先增加掌握状态字段并回填默认值，再为常用的 categoryId、answeredAt 等过滤排序组合建立合适索引。把 DDL、数据回填和版本号更新放进事务，全部成功后 commit，失败 rollback，不能直接跳过中间迁移。查询使用 RdbPredicates 或参数化 SQL，只选择需要的列并分页；ResultSet 必须及时 close。上线前用真实数据量验证迁移耗时、索引命中和回滚路径，并保留必要备份。",
+    "scoringPoints": [
+      "按旧版本逐级迁移而不是直接覆盖数据库",
+      "用事务包住结构变更、数据回填和版本更新",
+      "为高频过滤排序字段设计索引并分页查询",
+      "关闭 ResultSet，并验证迁移失败与备份恢复路径"
+    ]
   }
 ]

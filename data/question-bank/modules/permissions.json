@@ -399,5 +399,474 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "permissions-011",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "实现相机、定位等敏感能力前，权限链路中哪些步骤不可忽略？",
+    "explanation": "权限流程通常包括配置声明、运行时检查或申请、处理授权结果。用户拒绝后应停止敏感能力或引导用户授权。",
+    "knowledgePoints": [
+      "权限声明",
+      "运行时授权",
+      "PermissionRequestResult"
+    ],
+    "sourceRefs": [
+      {
+        "title": "module.json5配置文件",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/module-configuration-file-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 module.json5 中声明需要的权限"
+      },
+      {
+        "id": "b",
+        "text": "运行时通过 abilityAccessCtrl 获取授权管理对象并检查或申请权限"
+      },
+      {
+        "id": "c",
+        "text": "根据 PermissionRequestResult 判断是否继续执行敏感能力"
+      },
+      {
+        "id": "d",
+        "text": "用户拒绝后仍然直接调用敏感 API"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "permissions-012",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "动态申请权限返回的 PermissionRequestResult，应参与决定后续是否继续执行敏感能力。",
+    "explanation": "动态申请权限后，需要读取授权结果并据此决定是否执行相机、定位等敏感能力，不能忽略用户拒绝。",
+    "knowledgePoints": [
+      "requestPermissionsFromUser",
+      "PermissionRequestResult",
+      "用户授权"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "answerBoolean": true
+  },
+  {
+    "id": "permissions-013",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "权限申请弹窗更适合在哪种场景触发？",
+    "explanation": "运行时权限申请应结合用户操作场景，让用户理解授权目的。冷启动无上下文申请大量权限会降低体验，也不利于通过审核。",
+    "knowledgePoints": [
+      "权限申请时机",
+      "用户体验",
+      "最小必要"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "options": [
+      {
+        "id": "a",
+        "text": "用户明确触发需要该权限的功能时"
+      },
+      {
+        "id": "b",
+        "text": "应用冷启动时一次性申请所有权限"
+      },
+      {
+        "id": "c",
+        "text": "每次进入任意页面都申请"
+      },
+      {
+        "id": "d",
+        "text": "后台定时无上下文弹窗申请"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-014",
+    "categoryId": "permissions",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "说明相机或定位权限从声明到授权结果处理的完整流程。",
+    "explanation": "权限题考察的不只是 API 名称，还包括最小必要、用户上下文和拒绝后的降级处理。",
+    "knowledgePoints": [
+      "权限声明",
+      "动态授权",
+      "拒绝处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "module.json5配置文件",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/module-configuration-file-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "referenceAnswer": "先在 module.json5 中声明所需权限；进入具体功能前检查当前授权状态；若未授权，在用户明确触发功能时调用 requestPermissionsFromUser 申请；拿到 PermissionRequestResult 后判断授权结果，授权才继续执行敏感能力，拒绝则给出解释或引导设置。",
+    "scoringPoints": [
+      "说明 module.json5 声明",
+      "说明运行时检查",
+      "说明用户触发时申请",
+      "说明处理拒绝结果"
+    ]
+  },
+  {
+    "id": "permissions-015",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "创建 AtManager 权限管理实例通常会调用 abilityAccessCtrl 的哪个方法？",
+    "explanation": "abilityAccessCtrl.createAtManager() 用于创建 AtManager 实例，后续可进行权限检查或动态申请。",
+    "knowledgePoints": [
+      "abilityAccessCtrl",
+      "AtManager",
+      "权限管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "abilityAccessCtrl",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-abilityaccessctrl-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "options": [
+      {
+        "id": "a",
+        "text": "createAtManager()"
+      },
+      {
+        "id": "b",
+        "text": "createHttp()"
+      },
+      {
+        "id": "c",
+        "text": "getRdbStore()"
+      },
+      {
+        "id": "d",
+        "text": "pushPath()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-016",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "Stage 模型应用声明运行时所需权限时，应在 module.json5 的哪个字段配置？",
+    "explanation": "module.json5 的 requestPermissions 用于声明当前模块运行时需要向系统申请的权限集合。",
+    "knowledgePoints": [
+      "module.json5",
+      "requestPermissions",
+      "权限声明"
+    ],
+    "sourceRefs": [
+      {
+        "title": "module.json5配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "requestPermissions"
+      },
+      {
+        "id": "b",
+        "text": "deviceTypes"
+      },
+      {
+        "id": "c",
+        "text": "pages"
+      },
+      {
+        "id": "d",
+        "text": "routerMap"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-017",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "应用不能把“用户曾经授权”永久保存为可信结论，因为用户可能在系统设置中随时撤销权限。",
+    "explanation": "官方要求每次访问受保护能力前重新检查权限状态，不能依赖本地持久化的历史授权结果。",
+    "knowledgePoints": [
+      "权限撤销",
+      "checkAccessToken",
+      "授权状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "answerBoolean": true
+  },
+  {
+    "id": "permissions-018",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "一个 user_grant 权限的完整处理链路通常包括哪些步骤？",
+    "explanation": "声明、场景化触发、动态申请和结果处理缺一不可。用户拒绝时必须停止受保护操作并提供合理引导。",
+    "knowledgePoints": [
+      "user_grant",
+      "动态授权",
+      "PermissionRequestResult"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.abilityAccessCtrl（程序访问控制管理）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-ability-kit/js-apis-abilityAccessCtrl.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "module.json5配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 module.json5 中声明权限及必要说明"
+      },
+      {
+        "id": "b",
+        "text": "在用户触发相关功能时检查当前授权状态"
+      },
+      {
+        "id": "c",
+        "text": "未授权时调用 requestPermissionsFromUser"
+      },
+      {
+        "id": "d",
+        "text": "根据 PermissionRequestResult 决定是否执行受保护能力"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "permissions-019",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "用户首次拒绝某项动态权限后，应用需要再次引导授权，官方提供的相关能力是什么？",
+    "explanation": "用户拒绝后通常不能反复拉起首次授权弹框，可在符合条件时使用 requestPermissionOnSetting 拉起权限设置弹框，或引导用户进入系统设置。",
+    "knowledgePoints": [
+      "requestPermissionOnSetting",
+      "拒绝授权",
+      "系统设置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.abilityAccessCtrl（程序访问控制管理）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-ability-kit/js-apis-abilityAccessCtrl.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "requestPermissionOnSetting"
+      },
+      {
+        "id": "b",
+        "text": "destroy"
+      },
+      {
+        "id": "c",
+        "text": "pushPath"
+      },
+      {
+        "id": "d",
+        "text": "flush"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-020",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "需要感知本应用权限被用户授予或撤销时，哪些做法正确？",
+    "explanation": "权限状态变化订阅可帮助页面及时刷新，但不能替代访问敏感能力前的即时校验；生命周期结束时也应取消订阅。",
+    "knowledgePoints": [
+      "selfPermissionStateChange",
+      "权限监听",
+      "AtManager"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.abilityAccessCtrl（程序访问控制管理）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-ability-kit/js-apis-abilityAccessCtrl.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "通过 AtManager.on 订阅 selfPermissionStateChange"
+      },
+      {
+        "id": "b",
+        "text": "在不再监听时通过 AtManager.off 取消订阅"
+      },
+      {
+        "id": "c",
+        "text": "回调触发后仍根据最新权限状态决定功能是否可用"
+      },
+      {
+        "id": "d",
+        "text": "订阅一次后即可永久跳过所有权限检查"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "permissions-021",
+    "categoryId": "permissions",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "应用支持“允许本次使用”这类临时授权时，业务代码应如何避免误用过期权限？",
+    "explanation": "单次授权的核心是授权可能随前后台状态和系统策略失效，因此业务必须把权限视为动态状态。",
+    "knowledgePoints": [
+      "单次授权",
+      "动态权限状态",
+      "降级处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.abilityAccessCtrl（程序访问控制管理）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-ability-kit/js-apis-abilityAccessCtrl.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "referenceAnswer": "仍使用 requestPermissionsFromUser 发起系统授权，不自行模拟临时授权。每次执行受保护操作前都重新检查当前状态，不把授权结果永久缓存为真；应用进入后台、授权状态变化或重新回到功能页时，都应准备处理权限已失效的情况。失效后停止定位、相机等能力并更新 UI，再由用户明确触发重新申请。用户拒绝时给出不依赖该权限的降级路径，必要时通过系统设置引导，不循环弹窗。",
+    "scoringPoints": [
+      "说明仍使用系统权限申请接口",
+      "每次受保护操作前重新检查，不永久缓存授权",
+      "权限失效后立即停止能力并更新界面",
+      "提供拒绝后的降级和设置引导"
+    ]
   }
 ]

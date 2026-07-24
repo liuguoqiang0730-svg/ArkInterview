@@ -378,5 +378,476 @@
       }
     ],
     "order": 10
+  },
+  {
+    "id": "network-011",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "抽象 HarmonyOS HTTP 客户端时，哪些能力适合在封装层统一处理？",
+    "explanation": "HTTP 请求封装应统一处理方法、头、体、超时、状态码和异常。服务端密钥不应放在客户端代码中，应由服务端持有。",
+    "knowledgePoints": [
+      "HTTP 请求封装",
+      "超时处理",
+      "错误处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 11,
+    "options": [
+      {
+        "id": "a",
+        "text": "请求方法、请求头和请求体的组装"
+      },
+      {
+        "id": "b",
+        "text": "连接超时和读取超时的配置"
+      },
+      {
+        "id": "c",
+        "text": "响应状态码与业务错误的分类"
+      },
+      {
+        "id": "d",
+        "text": "把服务端密钥硬编码到客户端包内"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "network-012",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "通过 @ohos.net.http 收到响应后，协议层成功与否通常先看哪个字段？",
+    "explanation": "HTTP 响应码用于判断请求在协议层是否成功。客户端应先检查 responseCode，再解析响应体和业务码。",
+    "knowledgePoints": [
+      "responseCode",
+      "HTTP 响应",
+      "错误处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 12,
+    "options": [
+      {
+        "id": "a",
+        "text": "HTTP 响应码 responseCode"
+      },
+      {
+        "id": "b",
+        "text": "页面标题栏文字"
+      },
+      {
+        "id": "c",
+        "text": "设备屏幕宽度"
+      },
+      {
+        "id": "d",
+        "text": "Preferences 文件名"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-013",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "请求失败时应区分网络异常、超时、非 2xx 状态码和业务错误，而不是全部吞成同一个“加载失败”。",
+    "explanation": "真实 App 中不同失败原因会影响重试、提示和日志定位。统一封装时应保留足够错误信息，便于用户体验和问题排查。",
+    "knowledgePoints": [
+      "网络异常",
+      "超时",
+      "状态码",
+      "错误提示"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 13,
+    "answerBoolean": true
+  },
+  {
+    "id": "network-014",
+    "categoryId": "network",
+    "type": "short",
+    "difficulty": "medium",
+    "title": "远程题库 App 封装 REST API 客户端时应重点考虑什么？",
+    "explanation": "这类封装题考察工程稳定性，不能只回答“调用 request”。",
+    "knowledgePoints": [
+      "REST API",
+      "HTTP 请求",
+      "客户端安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 14,
+    "referenceAnswer": "应统一配置 baseUrl、请求路径、方法、请求头、超时和响应解析；对非 2xx 状态码、网络异常和 JSON 解析失败做明确处理；请求结束后释放 HttpRequest 资源；匿名设备 ID 等客户端标识应通过请求头传递；AI 评分等敏感密钥必须留在服务端。",
+    "scoringPoints": [
+      "统一 baseUrl 和请求配置",
+      "处理状态码、异常和解析失败",
+      "释放请求资源",
+      "敏感密钥放服务端"
+    ]
+  },
+  {
+    "id": "network-015",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "题库接口出现偶发超时时，客户端网络层最应该补齐哪种机制？",
+    "explanation": "超时场景需要可观测、可控制。封装层应提供超时配置、错误分类和有限重试策略，避免无限重试或静默吞错。",
+    "knowledgePoints": [
+      "超时处理",
+      "重试策略",
+      "API 封装"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HTTP 数据请求",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-http-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 15,
+    "options": [
+      {
+        "id": "a",
+        "text": "可配置超时、错误分类和有限重试策略"
+      },
+      {
+        "id": "b",
+        "text": "无限递归重试直到成功"
+      },
+      {
+        "id": "c",
+        "text": "把接口地址散落写死在每个页面中"
+      },
+      {
+        "id": "d",
+        "text": "忽略错误并返回空题库"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-016",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "HarmonyOS 应用通过 @ohos.net.http 发起 HTTP 请求，需要在模块中声明哪项权限？",
+    "explanation": "@ohos.net.http 的 request、requestInStream 等网络请求接口需要 ohos.permission.INTERNET。",
+    "knowledgePoints": [
+      "HTTP",
+      "INTERNET权限",
+      "module.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ohos.net.http（数据请求）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-network-kit/js-apis-http.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "module.json5配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 16,
+    "options": [
+      {
+        "id": "a",
+        "text": "ohos.permission.INTERNET"
+      },
+      {
+        "id": "b",
+        "text": "ohos.permission.CAMERA"
+      },
+      {
+        "id": "c",
+        "text": "ohos.permission.MICROPHONE"
+      },
+      {
+        "id": "d",
+        "text": "ohos.permission.READ_CALENDAR"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-017",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "一个完整的 HttpRequest 请求生命周期中，哪些处理是合理的？",
+    "explanation": "稳定的 HTTP 封装应同时处理超时、状态码、事件订阅和资源释放，不能只关注返回体。",
+    "knowledgePoints": [
+      "HttpRequestOptions",
+      "responseCode",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.net.http（数据请求）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-network-kit/js-apis-http.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 17,
+    "options": [
+      {
+        "id": "a",
+        "text": "按业务设置 connectTimeout 和 readTimeout"
+      },
+      {
+        "id": "b",
+        "text": "根据 responseCode 判断协议层结果"
+      },
+      {
+        "id": "c",
+        "text": "请求结束后取消不再需要的事件订阅"
+      },
+      {
+        "id": "d",
+        "text": "请求完成后调用 destroy 释放资源"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "network-018",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "HttpRequest 使用 on(\"headersReceive\") 订阅响应头后，如果后续不再监听，应调用 off 取消订阅，并在请求使用完毕后 destroy。",
+    "explanation": "事件订阅和请求对象都占用资源。官方示例在完成或失败分支中取消订阅并销毁 HttpRequest，以避免泄漏。",
+    "knowledgePoints": [
+      "headersReceive",
+      "off",
+      "destroy"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.net.http（数据请求）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-network-kit/js-apis-http.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 18,
+    "answerBoolean": true
+  },
+  {
+    "id": "network-019",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "使用 NetConnection 监听网络可用与丢失事件时，正确的注册顺序是什么？",
+    "explanation": "NetConnection 需要先通过 on 注册 netAvailable、netLost 等事件，再调用 register 订阅网络状态变化；不再使用时调用 unregister。",
+    "knowledgePoints": [
+      "NetConnection",
+      "register",
+      "网络状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "管理网络连接",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/net-connection-manager.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.net.connection（网络连接管理）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-network-kit/js-apis-net-connection.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 19,
+    "options": [
+      {
+        "id": "a",
+        "text": "先通过 on 注册事件回调，再调用 register"
+      },
+      {
+        "id": "b",
+        "text": "先 unregister，再创建对象"
+      },
+      {
+        "id": "c",
+        "text": "只调用 createNetConnection 即自动监听"
+      },
+      {
+        "id": "d",
+        "text": "在 destroy 后调用 on"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-020",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于默认网络状态监听，哪些做法符合官方接口语义？",
+    "explanation": "网络状态会动态变化，应用应依据 NetConnection 事件和实际请求结果处理，而不是用设备型号或静态布尔值推断。",
+    "knowledgePoints": [
+      "netAvailable",
+      "netLost",
+      "unregister"
+    ],
+    "sourceRefs": [
+      {
+        "title": "管理网络连接",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/net-connection-manager.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.net.connection（网络连接管理）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-network-kit/js-apis-net-connection.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 20,
+    "options": [
+      {
+        "id": "a",
+        "text": "netAvailable 表示匹配的网络变为可用"
+      },
+      {
+        "id": "b",
+        "text": "netLost 表示此前已连接的网络丢失"
+      },
+      {
+        "id": "c",
+        "text": "不再需要监听时调用 unregister"
+      },
+      {
+        "id": "d",
+        "text": "只根据设备型号判断网络是否可用，不必监听实际状态"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "network-021",
+    "categoryId": "network",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "远程题库请求偶发超时、断网或返回非 2xx，客户端网络层应如何设计？",
+    "explanation": "可靠网络层不仅要“能请求”，还要有明确的失败分类、重试边界、缓存降级和资源生命周期。",
+    "knowledgePoints": [
+      "HTTP封装",
+      "超时",
+      "重试",
+      "离线缓存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "@ohos.net.http（数据请求）",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-network-kit/js-apis-http.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "管理网络连接",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/net-connection-manager.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-23",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 21,
+    "referenceAnswer": "网络层应配置连接和读取超时，解析 responseCode 并区分网络异常、超时、协议错误与业务错误；在 finally 中取消事件并 destroy 请求对象。对幂等 GET 可采用有限次数、指数退避并带随机抖动的重试，非幂等提交不能盲目重试。可监听默认网络恢复后触发用户可感知的刷新，同时优先展示本地缓存并标明数据时间。日志记录错误码和请求标识，但不能输出令牌等敏感数据。",
+    "scoringPoints": [
+      "区分超时、网络异常、HTTP 状态码和业务错误",
+      "说明请求资源释放与事件取消",
+      "只对合适的幂等请求做有限退避重试",
+      "说明断网缓存、网络恢复刷新和安全日志"
+    ]
   }
 ]
