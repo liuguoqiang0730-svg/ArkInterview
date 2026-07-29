@@ -344,6 +344,10 @@ button:disabled {
   gap: 8px;
 }
 
+.filter-controls input {
+  width: min(360px, 42vw);
+}
+
 .filter-controls select {
   width: auto;
   min-width: 124px;
@@ -672,7 +676,8 @@ button:disabled {
   white-space: nowrap;
 }
 
-.moderation-dialog {
+.moderation-dialog,
+.question-editor-dialog {
   width: min(500px, calc(100% - 32px));
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -682,8 +687,28 @@ button:disabled {
   box-shadow: 0 18px 52px rgb(23 32 42 / 18%);
 }
 
-.moderation-dialog::backdrop {
+.question-editor-dialog {
+  width: min(920px, calc(100% - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.moderation-dialog::backdrop,
+.question-editor-dialog::backdrop {
   background: rgb(23 32 42 / 42%);
+}
+
+.question-edit-form {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 20px;
+}
+
+.dialog-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 4px;
 }
 
 .moderation-form {
@@ -765,7 +790,22 @@ button:disabled {
   }
 
   .category-list {
-    grid-template-columns: 1fr;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .category-panel {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .category-item {
+    flex: 0 0 210px;
+    scroll-snap-align: start;
   }
 
   .question-topline {
@@ -778,6 +818,7 @@ button:disabled {
   }
 
   .filter-controls,
+  .filter-controls input,
   .filter-controls select,
   .batch-actions button,
   .audit-filters,

@@ -329,16 +329,17 @@ Authorization: Bearer <ADMIN_TOKEN>
     }
   ],
   "verifiedAt": "2026-07-02",
-  "reviewStatus": "verified"
+  "reviewStatus": "verified",
+  "reviewNote": "已对照 ArkTS 官方文档复核，答案与当前 API 行为一致"
 }
 ```
 
-保存题目入库时，后端会要求 `sourceRefs` 至少包含一个官方来源，`reviewStatus` 为 `verified`，且 `verifiedAt` 已填写。
+`draft` 或 `offline` 题目可以使用 `needs_review` / `rejected` 审核状态保存，供后台继续整理；任何 `published` 题目必须满足 `reviewStatus=verified`、填写 `verifiedAt`，并至少包含一个官方 `sourceRefs`。`reviewNote` 最长 2000 个字符，仅供管理后台记录待核验点、复核结论或修改原因，不会返回给公开题目接口。
 模块化题库还会携带非负整数 `order`，用于保持模块内题目顺序。
 
 ### PATCH /api/admin/questions/{id}
 
-更新题目，包括发布/下架、难度、知识点、解析等字段。
+更新题目，包括分类、题型、发布状态、审核状态、难度、选项、答案、知识点、解析、官方来源、排序和审核备注等字段。题目 ID 不允许修改。
 
 ### PATCH /api/admin/questions/batch-status
 

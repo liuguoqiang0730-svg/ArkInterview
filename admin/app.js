@@ -5,6 +5,8 @@ const state = {
   activeType: '',
   activeReviewStatus: '',
   activePublishStatus: '',
+  questionQuery: '',
+  editingQuestionId: null,
   selectedQuestionIds: new Set(),
   batchPending: false,
   activeView: 'questions',
@@ -43,6 +45,7 @@ const els = {
   typeFilter: document.querySelector('#typeFilter'),
   reviewStatusFilter: document.querySelector('#reviewStatusFilter'),
   publishStatusFilter: document.querySelector('#publishStatusFilter'),
+  questionSearchInput: document.querySelector('#questionSearchInput'),
   visibleQuestionCount: document.querySelector('#visibleQuestionCount'),
   batchToolbar: document.querySelector('#batchToolbar'),
   selectVisibleQuestions: document.querySelector('#selectVisibleQuestions'),
@@ -56,6 +59,13 @@ const els = {
   categoryInput: document.querySelector('#categoryInput'),
   questionTypeInput: document.querySelector('#questionTypeInput'),
   formMessage: document.querySelector('#formMessage'),
+  questionEditorDialog: document.querySelector('#questionEditorDialog'),
+  questionEditForm: document.querySelector('#questionEditForm'),
+  editQuestionTypeInput: document.querySelector('#editQuestionTypeInput'),
+  questionEditMessage: document.querySelector('#questionEditMessage'),
+  questionEditCloseButton: document.querySelector('#questionEditCloseButton'),
+  questionEditCancelButton: document.querySelector('#questionEditCancelButton'),
+  questionEditSubmitButton: document.querySelector('#questionEditSubmitButton'),
   auditAccountCount: document.querySelector('#auditAccountCount'),
   auditOptInCount: document.querySelector('#auditOptInCount'),
   auditFlaggedCount: document.querySelector('#auditFlaggedCount'),
@@ -136,6 +146,7 @@ function lockAdmin(message = '') {
   state.adminToken = '';
   state.categories = [];
   state.questions = [];
+  state.editingQuestionId = null;
   state.audit.items = [];
   state.moderationTarget = null;
   state.selectedQuestionIds.clear();
@@ -147,6 +158,9 @@ function lockAdmin(message = '') {
   els.authMessage.textContent = message;
   if (els.moderationDialog.open) {
     els.moderationDialog.close();
+  }
+  if (els.questionEditorDialog.open) {
+    els.questionEditorDialog.close();
   }
   els.adminTokenInput.focus();
 }
@@ -361,15 +375,21 @@ function formatDate(value) {
 }
 
 function renderCategoryInput() {
-  const selected = els.categoryInput.value;
-  els.categoryInput.replaceChildren(...state.categories.map((category) => {
+  populateCategorySelect(els.categoryInput);
+  const editCategoryInput = els.questionEditForm.elements.namedItem('categoryId');
+  populateCategorySelect(editCategoryInput);
+}
+
+function populateCategorySelect(select) {
+  const selected = select.value;
+  select.replaceChildren(...state.categories.map((category) => {
     const option = document.createElement('option');
     option.value = category.id;
     option.textContent = category.name;
     return option;
   }));
   if (selected && state.categories.some((category) => category.id === selected)) {
-    els.categoryInput.value = selected;
+    select.value = selected;
   }
 }
 
@@ -414,11 +434,22 @@ function renderQuestions() {
 }
 
 function visibleQuestions() {
+  const query = normalizeSearchValue(state.questionQuery);
   return state.questions
     .filter((question) => !state.activeCategoryId || question.categoryId === state.activeCategoryId)
     .filter((question) => !state.activeType || question.type === state.activeType)
     .filter((question) => !state.activeReviewStatus || question.reviewStatus === state.activeReviewStatus)
-    .filter((question) => !state.activePublishStatus || question.status === state.activePublishStatus);
+    .filter((question) => !state.activePublishStatus || question.status === state.activePublishStatus)
+    .filter((question) => !query || questionSearchText(question).includes(query));
+}
+
+function questionSearchText(question) {
+  const category = state.categories.find((item) => item.id === question.categoryId);
+  return normalizeSearchValue(`${JSON.stringify(question)} ${category?.name || ''}`);
+}
+
+function normalizeSearchValue(value) {
+  return String(value || '').normalize('NFKC').toLocaleLowerCase('zh-CN');
 }
 
 function questionItem(question) {
@@ -437,11 +468,12 @@ function questionItem(question) {
       >
       <div class="question-copy">
         <span class="question-title">${escapeHtml(question.title)}</span>
-        <p class="question-meta">${escapeHtml(category?.name || question.categoryId)} · ${typeLabels[question.type] || question.type} · ${difficultyLabels[question.difficulty] || question.difficulty}</p>
+        <p class="question-meta">${escapeHtml(question.id)} · ${escapeHtml(category?.name || question.categoryId)} · ${typeLabels[question.type] || question.type} · ${difficultyLabels[question.difficulty] || question.difficulty}</p>
       </div>
       <div class="question-controls">
         ${selectHtml('difficulty', question.difficulty, difficultyLabels)}
         ${selectHtml('status', question.status, statusLabels)}
+        <button class="secondary-button" type="button" data-action="edit">编辑</button>
         <button class="small-button" type="button" data-action="save">保存</button>
       </div>
     </div>
@@ -449,6 +481,7 @@ function questionItem(question) {
       <span class="badge ${question.status}">${statusLabels[question.status] || question.status}</span>
       <span class="badge review-${question.reviewStatus || 'needs_review'}">${reviewStatusLabels[question.reviewStatus] || '待核验'}</span>
       <span class="badge">官方来源 ${(question.sourceRefs || []).length}</span>
+      ${question.reviewNote ? '<span class="badge">有审核备注</span>' : ''}
       ${(question.knowledgePoints || []).map((point) => `<span class="badge">${escapeHtml(point)}</span>`).join('')}
     </div>
   `;
@@ -461,6 +494,7 @@ function questionItem(question) {
     article.classList.toggle('selected', event.target.checked);
     updateBatchToolbar();
   });
+  article.querySelector('[data-action="edit"]').addEventListener('click', () => openQuestionEditor(question.id));
   article.querySelector('[data-action="save"]').addEventListener('click', () => saveQuestionPatch(question.id, article));
   return article;
 }
@@ -545,11 +579,97 @@ async function saveQuestionPatch(questionId, article) {
   }
 }
 
-function syncQuestionTypeFields() {
-  const type = els.questionTypeInput.value;
-  const choiceFields = document.querySelectorAll('.choice-field');
-  const booleanFields = document.querySelectorAll('.boolean-field');
-  const shortFields = document.querySelectorAll('.short-field');
+function openQuestionEditor(questionId) {
+  const question = state.questions.find((item) => item.id === questionId);
+  if (!question) {
+    setFormMessage('找不到需要编辑的题目', true);
+    return;
+  }
+
+  state.editingQuestionId = questionId;
+  const form = els.questionEditForm;
+  setFormControl(form, 'id', question.id);
+  setFormControl(form, 'order', question.order ?? '');
+  setFormControl(form, 'categoryId', question.categoryId);
+  setFormControl(form, 'type', question.type);
+  setFormControl(form, 'difficulty', question.difficulty);
+  setFormControl(form, 'status', question.status);
+  setFormControl(form, 'reviewStatus', question.reviewStatus || 'needs_review');
+  setFormControl(form, 'verifiedAt', question.verifiedAt || '');
+  setFormControl(form, 'title', question.title || '');
+  setFormControl(form, 'optionsText', formatOptions(question.options));
+  setFormControl(form, 'correctOptionIds', (question.correctOptionIds || []).join(','));
+  setFormControl(form, 'answerBoolean', String(question.answerBoolean ?? true));
+  setFormControl(form, 'referenceAnswer', question.referenceAnswer || '');
+  setFormControl(form, 'scoringPointsText', (question.scoringPoints || []).join('\n'));
+  setFormControl(form, 'explanation', question.explanation || '');
+  setFormControl(form, 'knowledgePointsText', (question.knowledgePoints || []).join(', '));
+  setFormControl(form, 'sourceRefsText', formatSourceRefs(question.sourceRefs));
+  setFormControl(form, 'reviewNote', question.reviewNote || '');
+  els.questionEditMessage.textContent = '';
+  syncQuestionTypeFields(form);
+  els.questionEditorDialog.showModal();
+  form.elements.namedItem('title').focus();
+}
+
+function setFormControl(form, name, value) {
+  const control = form.elements.namedItem(name);
+  if (control) {
+    control.value = value;
+  }
+}
+
+function formatOptions(options = []) {
+  return options.map((option) => `${String(option.id).toUpperCase()}. ${option.text}`).join('\n');
+}
+
+function formatSourceRefs(sourceRefs = []) {
+  return sourceRefs
+    .map((source) => `${source.title} | ${source.url} | ${source.publisher || 'Huawei Developer'}`)
+    .join('\n');
+}
+
+function closeQuestionEditor() {
+  state.editingQuestionId = null;
+  els.questionEditMessage.textContent = '';
+  if (els.questionEditorDialog.open) {
+    els.questionEditorDialog.close();
+  }
+}
+
+async function submitQuestionEdit() {
+  const questionId = state.editingQuestionId;
+  if (!questionId) {
+    return;
+  }
+
+  els.questionEditSubmitButton.disabled = true;
+  els.questionEditMessage.textContent = '保存中...';
+  try {
+    const payload = parseQuestionForm(els.questionEditForm);
+    const result = await request(`/api/admin/questions/${encodeURIComponent(questionId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    });
+    const index = state.questions.findIndex((item) => item.id === questionId);
+    if (index >= 0) {
+      state.questions[index] = result.item;
+    }
+    closeQuestionEditor();
+    setFormMessage('题目详情已更新');
+    render();
+  } catch (error) {
+    els.questionEditMessage.textContent = error.message;
+  } finally {
+    els.questionEditSubmitButton.disabled = false;
+  }
+}
+
+function syncQuestionTypeFields(form = els.questionForm) {
+  const type = form.elements.namedItem('type').value;
+  const choiceFields = form.querySelectorAll('.choice-field');
+  const booleanFields = form.querySelectorAll('.boolean-field');
+  const shortFields = form.querySelectorAll('.short-field');
 
   choiceFields.forEach((item) => {
     item.hidden = type !== 'single' && type !== 'multiple';
@@ -575,8 +695,14 @@ function parseQuestionForm(form) {
     knowledgePoints: splitList(data.get('knowledgePointsText')),
     sourceRefs: parseSourceRefs(data.get('sourceRefsText')),
     verifiedAt: data.get('verifiedAt') || null,
-    reviewStatus: data.get('reviewStatus')
+    reviewStatus: data.get('reviewStatus'),
+    reviewNote: String(data.get('reviewNote') || '').trim()
   };
+
+  const order = String(data.get('order') ?? '').trim();
+  if (order) {
+    payload.order = Number(order);
+  }
 
   if (type === 'single' || type === 'multiple') {
     payload.options = parseOptions(data.get('optionsText'));
@@ -672,6 +798,11 @@ els.publishStatusFilter.addEventListener('change', (event) => {
   renderQuestions();
 });
 
+els.questionSearchInput.addEventListener('input', (event) => {
+  state.questionQuery = event.target.value.trim();
+  renderQuestions();
+});
+
 els.selectVisibleQuestions.addEventListener('change', (event) => {
   for (const question of visibleQuestions()) {
     if (event.target.checked) {
@@ -690,7 +821,8 @@ els.clearSelectionButton.addEventListener('click', () => {
   renderQuestions();
 });
 
-els.questionTypeInput.addEventListener('change', syncQuestionTypeFields);
+els.questionTypeInput.addEventListener('change', () => syncQuestionTypeFields());
+els.editQuestionTypeInput.addEventListener('change', () => syncQuestionTypeFields(els.questionEditForm));
 
 els.questionForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -719,6 +851,23 @@ els.questionForm.addEventListener('reset', () => {
     setFormMessage('');
     syncQuestionTypeFields();
   });
+});
+
+els.questionEditForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  await submitQuestionEdit();
+});
+
+els.questionEditCloseButton.addEventListener('click', closeQuestionEditor);
+els.questionEditCancelButton.addEventListener('click', closeQuestionEditor);
+els.questionEditorDialog.addEventListener('click', (event) => {
+  if (event.target === els.questionEditorDialog) {
+    closeQuestionEditor();
+  }
+});
+els.questionEditorDialog.addEventListener('close', () => {
+  state.editingQuestionId = null;
+  els.questionEditMessage.textContent = '';
 });
 
 for (const button of els.adminTabs) {

@@ -51,6 +51,7 @@ SQLite 当前使用以下业务表：
   ],
   "verifiedAt": "2026-07-02",
   "reviewStatus": "verified",
+  "reviewNote": "已完成官方文档复核",
   "status": "published",
   "createdAt": "2026-07-02T00:00:00.000Z",
   "updatedAt": "2026-07-02T00:00:00.000Z"
@@ -66,9 +67,10 @@ SQLite 当前使用以下业务表：
 
 入库约束：
 
-- 保存到运行题库前必须有官方 `sourceRefs`。
-- 保存到运行题库前 `reviewStatus` 必须是 `verified`。
-- 保存到运行题库前必须填写 `verifiedAt`。
+- 草稿和下架题可以使用 `needs_review` 或 `rejected`，并通过仅后台可见的 `reviewNote` 记录核验过程。
+- 保存到公开运行题库前必须有官方 `sourceRefs`。
+- 保存到公开运行题库前 `reviewStatus` 必须是 `verified`。
+- 保存到公开运行题库前必须填写 `verifiedAt`。
 - 后端只允许 `developer.huawei.com`、`docs.openharmony.cn`、`gitee.com/openharmony/docs` 作为官方来源域名。
 
 ## UserState

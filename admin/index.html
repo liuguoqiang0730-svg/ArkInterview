@@ -157,6 +157,11 @@
             <textarea name="sourceRefsText" rows="3" placeholder="每行一个来源：标题 | https://developer.huawei.com/..."></textarea>
           </label>
 
+          <label class="full-row">
+            审核备注
+            <textarea name="reviewNote" rows="2" maxlength="2000" placeholder="记录待核验点、复核结论或修改原因，仅后台可见"></textarea>
+          </label>
+
           <label>
             核验日期
             <input name="verifiedAt" type="date">
@@ -184,6 +189,13 @@
               <span id="visibleQuestionCount" class="visible-count">0 条</span>
             </div>
             <div class="filter-controls">
+              <input
+                id="questionSearchInput"
+                type="search"
+                maxlength="120"
+                placeholder="搜索 ID、题干、答案、解析或知识点"
+                aria-label="全文搜索题目"
+              >
               <select id="typeFilter" aria-label="题型筛选">
                 <option value="">全部题型</option>
                 <option value="single">单选题</option>
@@ -295,6 +307,118 @@
         </section>
       </div>
     </main>
+
+    <dialog id="questionEditorDialog" class="question-editor-dialog">
+      <form id="questionEditForm" class="question-form question-edit-form">
+        <div class="dialog-heading full-row">
+          <div>
+            <p class="eyebrow">Question Detail</p>
+            <h2>编辑题目</h2>
+          </div>
+          <button id="questionEditCloseButton" class="icon-button" type="button" title="关闭" aria-label="关闭">×</button>
+        </div>
+
+        <label>
+          题目 ID
+          <input name="id" readonly>
+        </label>
+        <label>
+          排序
+          <input name="order" type="number" min="0" step="1">
+        </label>
+        <label>
+          分类
+          <select name="categoryId" required></select>
+        </label>
+        <label>
+          题型
+          <select id="editQuestionTypeInput" name="type" required>
+            <option value="single">单选题</option>
+            <option value="multiple">多选题</option>
+            <option value="boolean">判断题</option>
+            <option value="short">简答题</option>
+          </select>
+        </label>
+        <label>
+          难度
+          <select name="difficulty">
+            <option value="easy">简单</option>
+            <option value="medium">中等</option>
+            <option value="hard">困难</option>
+          </select>
+        </label>
+        <label>
+          状态
+          <select name="status">
+            <option value="draft">草稿</option>
+            <option value="published">发布</option>
+            <option value="offline">下架</option>
+          </select>
+        </label>
+        <label>
+          审核状态
+          <select name="reviewStatus">
+            <option value="needs_review">待核验</option>
+            <option value="verified">已核验</option>
+            <option value="rejected">已驳回</option>
+          </select>
+        </label>
+        <label>
+          核验日期
+          <input name="verifiedAt" type="date">
+        </label>
+
+        <label class="full-row">
+          题干
+          <textarea name="title" rows="2" required></textarea>
+        </label>
+        <label class="choice-field full-row">
+          选项
+          <textarea name="optionsText" rows="5"></textarea>
+        </label>
+        <label class="choice-field">
+          正确选项
+          <input name="correctOptionIds">
+        </label>
+        <label class="boolean-field">
+          判断答案
+          <select name="answerBoolean">
+            <option value="true">正确</option>
+            <option value="false">错误</option>
+          </select>
+        </label>
+        <label class="short-field full-row">
+          参考答案
+          <textarea name="referenceAnswer" rows="4"></textarea>
+        </label>
+        <label class="short-field full-row">
+          评分点
+          <textarea name="scoringPointsText" rows="4"></textarea>
+        </label>
+        <label class="full-row">
+          解析
+          <textarea name="explanation" rows="4"></textarea>
+        </label>
+        <label class="full-row">
+          知识点
+          <input name="knowledgePointsText">
+        </label>
+        <label class="full-row">
+          官方来源
+          <textarea name="sourceRefsText" rows="4"></textarea>
+        </label>
+        <label class="full-row">
+          审核备注
+          <textarea name="reviewNote" rows="3" maxlength="2000" placeholder="记录待核验点、复核结论或修改原因，仅后台可见"></textarea>
+        </label>
+
+        <p id="questionEditMessage" class="auth-message full-row" role="alert"></p>
+        <div class="form-actions full-row">
+          <button id="questionEditCancelButton" class="secondary-button" type="button">取消</button>
+          <button id="questionEditSubmitButton" class="primary-button" type="submit">保存修改</button>
+        </div>
+      </form>
+    </dialog>
 
     <dialog id="moderationDialog" class="moderation-dialog">
       <form id="moderationForm" class="moderation-form">

@@ -202,6 +202,7 @@ function normalizeQuestionPayload(payload, existing = {}) {
     sourceRefs: normalizeSourceRefs(payload.sourceRefs ?? existing.sourceRefs ?? []),
     verifiedAt: payload.verifiedAt ?? existing.verifiedAt ?? null,
     reviewStatus: payload.reviewStatus ?? existing.reviewStatus ?? 'needs_review',
+    reviewNote: String(payload.reviewNote ?? existing.reviewNote ?? '').trim(),
     status: payload.status ?? existing.status ?? 'draft',
     order: orderValue === undefined ? undefined : Number(orderValue),
     createdAt: existing.createdAt || now,
@@ -272,6 +273,9 @@ function validateQuestion(question, db, { allowExistingId = false } = {}) {
   if (!reviewStatuses.has(question.reviewStatus)) {
     throw httpError(400, '审核状态必须是 needs_review、verified 或 rejected');
   }
+  if (question.reviewNote.length > 2000) {
+    throw httpError(400, '审核备注不能超过 2000 个字符');
+  }
   if (question.order !== undefined && (!Number.isInteger(question.order) || question.order < 0)) {
     throw httpError(400, '题目顺序必须是非负整数');
   }
@@ -305,14 +309,14 @@ function validateQuestion(question, db, { allowExistingId = false } = {}) {
 }
 
 function validateOfficialSources(question) {
-  if (question.reviewStatus !== 'verified') {
-    throw httpError(400, '题目入库前必须先标记为已核验');
+  if (question.status === 'published' && question.reviewStatus !== 'verified') {
+    throw httpError(400, '题目发布前必须先标记为已核验');
   }
-  if (!question.verifiedAt) {
-    throw httpError(400, '题目入库前必须填写核验日期');
+  if (question.reviewStatus === 'verified' && !question.verifiedAt) {
+    throw httpError(400, '已核验题目必须填写核验日期');
   }
-  if (question.sourceRefs.length === 0) {
-    throw httpError(400, '题目入库前必须填写至少一个官方文档来源');
+  if (question.reviewStatus === 'verified' && question.sourceRefs.length === 0) {
+    throw httpError(400, '已核验题目必须填写至少一个官方文档来源');
   }
 
   const invalid = question.sourceRefs.find((source) => !isOfficialSourceUrl(source.url));

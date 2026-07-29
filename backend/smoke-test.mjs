@@ -188,6 +188,19 @@ async function runChecks() {
   const orderedQuestion = adminQuestions.items.find((item) => item.id === 'q-smoke-single');
   assert(orderedQuestion.order === 9001, 'admin question create should preserve explicit order');
 
+  const editedQuestion = await patchJson('/api/admin/questions/q-smoke-single', {
+    title: '已核验单选测试题（已复核）',
+    explanation: '用于验证完整题目编辑和单选题答题流程。',
+    knowledgePoints: ['ArkTS', '后台编辑'],
+    reviewNote: '已对照官方文档完成二次复核'
+  });
+  assert(editedQuestion.item.title.includes('已复核'), 'admin question PATCH should update title');
+  assert(editedQuestion.item.knowledgePoints.includes('后台编辑'), 'admin question PATCH should update knowledge points');
+  assert(
+    editedQuestion.item.reviewNote === '已对照官方文档完成二次复核',
+    'admin question PATCH should persist review note'
+  );
+
   const missingBatchQuestion = await patchJson('/api/admin/questions/batch-status', {
     questionIds: ['q-smoke-single', 'q-smoke-missing'],
     status: 'offline'
@@ -231,6 +244,7 @@ async function runChecks() {
 
   const questionDetail = await getJson('/api/questions/q-smoke-single');
   assert(questionDetail.item.sourceRefs.length > 0, 'question detail should include official sources');
+  assert(questionDetail.item.reviewNote === undefined, 'public question detail should not expose review notes');
 
   const concurrentDeviceId = 'smoke-test-concurrent';
   await Promise.all(Array.from({ length: 12 }, () => postJson('/api/answers/submit', {
@@ -282,13 +296,14 @@ async function runChecks() {
   const interview = await getJson('/api/interviews/basic?count=4');
   assert(interview.total === 4, 'basic interview should return 4 questions');
 
-  const blockedDraft = await postJson('/api/admin/questions', {
+  const reviewDraft = await postJson('/api/admin/questions', {
     categoryId: 'arkts',
     type: 'single',
     difficulty: 'easy',
     status: 'draft',
     reviewStatus: 'needs_review',
-    title: '未核验题目不能直接发布',
+    reviewNote: '等待对照官方文档核验',
+    title: '未核验题目只能保存为草稿',
     options: [
       { id: 'a', text: '正确选项' },
       { id: 'b', text: '错误选项' }
@@ -296,8 +311,15 @@ async function runChecks() {
     correctOptionIds: ['a'],
     explanation: '这道题用于验证发布质量闸门。',
     knowledgePoints: ['内容审核']
+  });
+  assert(reviewDraft.item.status === 'draft', 'unverified question should be saved as draft');
+  assert(reviewDraft.item.reviewNote === '等待对照官方文档核验', 'review note should be persisted');
+
+  const blockedPublish = await patchJson('/api/admin/questions/batch-status', {
+    questionIds: [reviewDraft.item.id],
+    status: 'published'
   }, false);
-  assert(blockedDraft.status === 400, 'saving unverified question should be blocked');
+  assert(blockedPublish.status === 400, 'unverified draft should not be published');
 }
 
 async function createVerifiedSmokeQuestions() {
