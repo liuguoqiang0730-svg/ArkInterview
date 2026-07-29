@@ -1,11 +1,11 @@
 import { ApiClient, ApiRequestError, PracticeSessionOptions } from '../services/ApiClient';
 import {
   Category,
-  PageResult,
   PracticeMode,
-  PracticeRecordItem,
+  PracticeRecordPage,
   PracticeSession,
   Question,
+  QuestionType,
   SubmitAnswerRequest,
   SubmitAnswerResponse,
   UserStats
@@ -31,9 +31,11 @@ export class PracticeStore {
   async loadRecords(
     page: number = 1,
     pageSize: number = 20,
-    date: string = ''
-  ): Promise<PageResult<PracticeRecordItem>> {
-    return this.api.getPracticeRecords(page, pageSize, date);
+    date: string = '',
+    categoryId: string = '',
+    type?: QuestionType
+  ): Promise<PracticeRecordPage> {
+    return this.api.getPracticeRecords(page, pageSize, date, categoryId, type);
   }
 
   async startPractice(mode: PracticeMode, options?: PracticeSessionOptions): Promise<PracticeSession> {

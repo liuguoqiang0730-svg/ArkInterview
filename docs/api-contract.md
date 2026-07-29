@@ -235,8 +235,12 @@ Query 参数：
 - `page`：页码，默认 `1`。
 - `pageSize`：每页数量，默认 `20`，最大 `50`。
 - `date`：可选，北京时间自然日，格式必须为 `YYYY-MM-DD`。
+- `categoryId`：可选，只返回指定题库模块的作答记录；不存在的模块返回 `400`。
+- `type`：可选，支持 `single`、`multiple`、`boolean`、`short`。
 
-返回字段沿用通用分页结构：`items`、`page`、`pageSize`、`total`、`totalPages`，并附带当前 `date` 过滤值。每条记录包含题目 ID、题干、分类、题型、判定结果和提交时间。
+返回字段沿用通用分页结构：`items`、`page`、`pageSize`、`total`、`totalPages`，并回显当前 `date`、`categoryId` 和 `type` 过滤值。每条记录包含题目 ID、题干、分类、题型、判定结果和提交时间。
+
+响应额外包含基于 `categoryId`、`type` 过滤后的 `summary` 和 `dailyStats`。`summary` 返回作答数、判分数、正确数和正确率；`dailyStats` 结构与统计接口一致，不受单日 `date` 下钻影响，用于在查看某天明细时继续展示当前模块、题型的完整趋势。
 
 ### GET /api/users/me/wrongs
 

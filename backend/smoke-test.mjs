@@ -300,6 +300,27 @@ async function runChecks() {
     `/api/users/me/records?date=${practiceStats.dailyStats[0].date}&pageSize=50`
   );
   assert(dateRecordPage.total === 2, 'record pagination should filter by Shanghai date');
+  const filteredRecordPage = await getJson(
+    '/api/users/me/records?categoryId=arkts&type=single&pageSize=50'
+  );
+  assert(filteredRecordPage.total === 2, 'record pagination should filter by category and type');
+  assert(filteredRecordPage.categoryId === 'arkts', 'record pagination should echo the category filter');
+  assert(filteredRecordPage.type === 'single', 'record pagination should echo the question type filter');
+  assert(filteredRecordPage.summary.attempts === 2, 'filtered record summary should count matching attempts');
+  assert(filteredRecordPage.summary.gradedAttempts === 2, 'filtered record summary should count graded attempts');
+  assert(filteredRecordPage.summary.correct === 1, 'filtered record summary should count correct attempts');
+  assert(filteredRecordPage.summary.accuracy === 0.5, 'filtered record summary should calculate accuracy');
+  assert(filteredRecordPage.dailyStats.length === 1, 'filtered records should include matching daily stats');
+  const emptyCategoryRecordPage = await getJson('/api/users/me/records?categoryId=network');
+  assert(emptyCategoryRecordPage.total === 0, 'record pagination should exclude other categories');
+  const invalidRecordCategory = await fetch(`${baseUrl}/api/users/me/records?categoryId=missing`, {
+    headers: { 'X-Device-Id': 'smoke-test' }
+  });
+  assert(invalidRecordCategory.status === 400, 'record pagination should reject unknown categories');
+  const invalidRecordType = await fetch(`${baseUrl}/api/users/me/records?type=code`, {
+    headers: { 'X-Device-Id': 'smoke-test' }
+  });
+  assert(invalidRecordType.status === 400, 'record pagination should reject unsupported question types');
   const emptyDateRecordPage = await getJson('/api/users/me/records?date=2000-01-01');
   assert(emptyDateRecordPage.total === 0, 'record pagination should return an empty date result');
   const invalidRecordDate = await fetch(`${baseUrl}/api/users/me/records?date=2026-7-1`, {
@@ -322,6 +343,15 @@ async function runChecks() {
     questionId: 'q-smoke-multiple',
     selectedOptionIds: ['c']
   });
+  const multipleRecordPage = await getJson(
+    '/api/users/me/records?categoryId=network&type=multiple&pageSize=50'
+  );
+  assert(multipleRecordPage.total === 1, 'combined record filters should include the matching answer');
+  assert(multipleRecordPage.items[0].questionId === 'q-smoke-multiple', 'combined filters should return the match');
+  const mismatchedRecordPage = await getJson(
+    '/api/users/me/records?categoryId=arkts&type=multiple&pageSize=50'
+  );
+  assert(mismatchedRecordPage.total === 0, 'combined record filters should exclude partial matches');
   await postJson('/api/users/me/favorites', { questionId: 'q-smoke-multiple' });
 
   const wrongsBeforeBatch = await getJson('/api/users/me/wrongs');

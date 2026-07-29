@@ -550,15 +550,64 @@ function practiceRecordsFor(db, user, searchParams) {
   const page = boundedInteger(searchParams.get('page'), 1, 1, Number.MAX_SAFE_INTEGER);
   const pageSize = boundedInteger(searchParams.get('pageSize'), 20, 1, 50);
   const date = searchParams.get('date') || '';
+  const categoryId = searchParams.get('categoryId') || '';
+  const type = searchParams.get('type') || '';
   if (date && !isValidDateKey(date)) {
     throw httpError(400, 'date 必须使用 YYYY-MM-DD 格式');
   }
-  const answers = user.answers
+  if (categoryId && !db.categories.some((category) => category.id === categoryId)) {
+    throw httpError(400, 'categoryId 不存在');
+  }
+  if (type && !new Set(['single', 'multiple', 'boolean', 'short']).has(type)) {
+    throw httpError(400, 'type 不支持');
+  }
+
+  const scopedAnswers = user.answers.filter((answer) => {
+    return (!categoryId || answer.categoryId === categoryId) && (!type || answer.type === type);
+  });
+  const gradedAnswers = scopedAnswers.filter((answer) => answer.isCorrect !== null);
+  const correctAnswers = gradedAnswers.filter((answer) => answer.isCorrect).length;
+  const dailyMap = new Map();
+  for (const answer of scopedAnswers) {
+    const dateKey = shanghaiDateKey(answer.submittedAt);
+    if (!dailyMap.has(dateKey)) {
+      dailyMap.set(dateKey, {
+        date: dateKey,
+        attempts: 0,
+        gradedAttempts: 0,
+        correct: 0
+      });
+    }
+    const daily = dailyMap.get(dateKey);
+    daily.attempts += 1;
+    if (answer.isCorrect !== null) {
+      daily.gradedAttempts += 1;
+      if (answer.isCorrect) {
+        daily.correct += 1;
+      }
+    }
+  }
+
+  const answers = scopedAnswers
     .filter((answer) => !date || shanghaiDateKey(answer.submittedAt) === date)
     .sort((left, right) => right.submittedAt.localeCompare(left.submittedAt));
   return {
     ...paginate(practiceRecordItems(db, answers), page, pageSize),
-    date: date || null
+    date: date || null,
+    categoryId: categoryId || null,
+    type: type || null,
+    summary: {
+      attempts: scopedAnswers.length,
+      gradedAttempts: gradedAnswers.length,
+      correct: correctAnswers,
+      accuracy: gradedAnswers.length === 0 ? 0 : Number((correctAnswers / gradedAnswers.length).toFixed(4))
+    },
+    dailyStats: Array.from(dailyMap.values())
+      .sort((left, right) => left.date.localeCompare(right.date))
+      .map((item) => ({
+        ...item,
+        accuracy: item.gradedAttempts === 0 ? 0 : Number((item.correct / item.gradedAttempts).toFixed(4))
+      }))
   };
 }
 

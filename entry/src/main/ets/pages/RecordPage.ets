@@ -41,11 +41,15 @@ struct RecordPage {
   @State private isTablet: boolean = false;
   @State private selectedRange: string = '7d';
   @State private selectedDate: string = '';
+  @State private selectedCategoryIndex: number = 0;
+  @State private selectedTypeIndex: number = 0;
   @State private records: PracticeRecordItem[] = [];
+  @State private recordDailyStats: DailyPracticeStats[] = [];
   @State private recordPage: number = 1;
   @State private recordTotal: number = 0;
   @State private recordsLoading: boolean = false;
   @State private historyApiAvailable: boolean = true;
+  @State private historyFilterApiAvailable: boolean = true;
   private observedStatsVersion: number = 0;
   private pendingRecordsReload: boolean = false;
 
@@ -68,6 +72,7 @@ struct RecordPage {
       this.stats = await store.loadStats();
       this.observedStatsVersion = PracticeEvents.currentStatsVersion();
       this.historyApiAvailable = true;
+      this.historyFilterApiAvailable = true;
       this.applyFallbackRecords();
       await this.loadRecords(true);
     } catch (error) {
@@ -90,13 +95,22 @@ struct RecordPage {
       return;
     }
     const targetPage = reset ? 1 : this.recordPage + 1;
+    const categoryId = this.selectedRecordCategoryId();
+    const type = this.selectedRecordType();
     this.recordsLoading = true;
     if (reset) {
       this.records = [];
       this.recordTotal = 0;
     }
     try {
-      const result = await store.loadRecords(targetPage, 20, this.selectedDate);
+      const result = await store.loadRecords(targetPage, 20, this.selectedDate, categoryId, type);
+      if ((categoryId.length > 0 && result.categoryId !== categoryId) ||
+        (type !== undefined && result.type !== type)) {
+        this.historyFilterApiAvailable = false;
+        this.applyFallbackRecords();
+        return;
+      }
+      this.historyFilterApiAvailable = true;
       if (reset) {
         this.records = result.items;
       } else {
@@ -107,6 +121,7 @@ struct RecordPage {
       }
       this.recordPage = result.page;
       this.recordTotal = result.total;
+      this.recordDailyStats = result.dailyStats ?? this.defaultDailyStats();
     } catch (error) {
       if (error instanceof ApiRequestError && error.statusCode === 404) {
         this.historyApiAvailable = false;
@@ -623,6 +638,8 @@ struct RecordPage {
       .width('100%')
       .margin({ bottom: 10 })
 
+      this.RecordFilters()
+
       if (this.recordsLoading && this.records.length === 0) {
         Row() {
           LoadingProgress()
@@ -668,6 +685,73 @@ struct RecordPage {
       }
     }
     .width('100%')
+  }
+
+  @Builder
+  RecordFilters() {
+    Row() {
+      Column() {
+        Text('模块')
+          .fontSize(10)
+          .fontColor(COLOR_MUTED)
+          .width('100%')
+          .margin({ bottom: 5 })
+        Select(this.recordCategoryOptions())
+          .selected(this.selectedCategoryIndex)
+          .value(this.selectedRecordCategoryName())
+          .width('100%')
+          .height(38)
+          .font({ size: 12 })
+          .fontColor(COLOR_TEXT)
+          .selectedOptionBgColor(COLOR_SOFT_GREEN)
+          .optionBgColor(COLOR_SURFACE)
+          .optionFontColor(COLOR_TEXT)
+          .backgroundColor('#f8fafb')
+          .border({ width: 1, color: COLOR_LINE })
+          .borderRadius(8)
+          .onSelect((index: number) => this.selectRecordCategory(index))
+      }
+      .layoutWeight(1)
+
+      Column() {
+        Text('题型')
+          .fontSize(10)
+          .fontColor(COLOR_MUTED)
+          .width('100%')
+          .margin({ bottom: 5 })
+        Select(this.recordTypeOptions())
+          .selected(this.selectedTypeIndex)
+          .value(this.selectedRecordTypeName())
+          .width('100%')
+          .height(38)
+          .font({ size: 12 })
+          .fontColor(COLOR_TEXT)
+          .selectedOptionBgColor(COLOR_SOFT_BLUE)
+          .optionBgColor(COLOR_SURFACE)
+          .optionFontColor(COLOR_TEXT)
+          .backgroundColor('#f8fafb')
+          .border({ width: 1, color: COLOR_LINE })
+          .borderRadius(8)
+          .onSelect((index: number) => this.selectRecordType(index))
+      }
+      .layoutWeight(1)
+      .margin({ left: 8 })
+
+      if (this.hasRecordFilters()) {
+        Button('重置')
+          .width(54)
+          .height(38)
+          .fontSize(11)
+          .fontColor(COLOR_BLUE)
+          .backgroundColor(COLOR_SOFT_BLUE)
+          .borderRadius(8)
+          .margin({ left: 8, top: 15 })
+          .onClick(() => this.resetRecordFilters())
+      }
+    }
+    .width('100%')
+    .alignItems(VerticalAlign.Bottom)
+    .margin({ bottom: 12 })
   }
 
   @Builder
@@ -921,23 +1005,40 @@ struct RecordPage {
   }
 
   applyFallbackRecords(): void {
+    const scoped = new Array<PracticeRecordItem>();
     const fallback = new Array<PracticeRecordItem>();
     (this.stats?.recentRecords ?? []).forEach((item: PracticeRecordItem) => {
-      if (this.selectedDate.length === 0 || this.recordDate(item.submittedAt) === this.selectedDate) {
+      if (this.recordMatchesFilters(item)) {
+        scoped.push(item);
+      }
+      if (this.recordMatchesFilters(item) &&
+        (this.selectedDate.length === 0 || this.recordDate(item.submittedAt) === this.selectedDate)) {
         fallback.push(item);
       }
     });
+    this.recordDailyStats = this.hasRecordFilters() ? this.buildDailyStats(scoped) : this.defaultDailyStats();
     this.records = fallback;
     this.recordPage = 1;
     this.recordTotal = fallback.length;
   }
 
   dailyStatsSource(): DailyPracticeStats[] {
+    if (this.hasRecordFilters()) {
+      return this.recordDailyStats;
+    }
+    return this.defaultDailyStats();
+  }
+
+  defaultDailyStats(): DailyPracticeStats[] {
     if (this.stats?.dailyStats !== undefined) {
       return this.stats.dailyStats;
     }
+    return this.buildDailyStats(this.stats?.recentRecords ?? []);
+  }
+
+  buildDailyStats(records: PracticeRecordItem[]): DailyPracticeStats[] {
     const result = new Array<DailyPracticeStats>();
-    (this.stats?.recentRecords ?? []).forEach((record: PracticeRecordItem) => {
+    records.forEach((record: PracticeRecordItem) => {
       const date = this.recordDate(record.submittedAt);
       let daily = result.find((item: DailyPracticeStats) => item.date === date);
       if (daily === undefined) {
@@ -1003,13 +1104,14 @@ struct RecordPage {
   }
 
   rangeSummary(): string {
+    let range = '近 7 天活跃日表现';
     if (this.selectedRange === '30d') {
-      return '近 30 天活跃日表现';
+      range = '近 30 天活跃日表现';
+    } else if (this.selectedRange === 'all') {
+      range = '累计活跃日表现';
     }
-    if (this.selectedRange === 'all') {
-      return '累计活跃日表现';
-    }
-    return '近 7 天活跃日表现';
+    const filter = this.recordFilterSummary();
+    return filter.length > 0 ? `${range} · ${filter}` : range;
   }
 
   changeRange(value: string): void {
@@ -1031,7 +1133,9 @@ struct RecordPage {
   }
 
   hasMoreRecords(): boolean {
-    return this.historyApiAvailable && this.records.length < this.recordTotal;
+    return this.historyApiAvailable &&
+      (!this.hasRecordFilters() || this.historyFilterApiAvailable) &&
+      this.records.length < this.recordTotal;
   }
 
   recordsPanelTitle(): string {
@@ -1042,20 +1146,135 @@ struct RecordPage {
   }
 
   recordsPanelSubtitle(): string {
+    const filter = this.recordFilterSummary();
+    if (this.hasRecordFilters() && !this.historyFilterApiAvailable) {
+      return `服务器待升级，暂按最近 12 次记录筛选${filter.length > 0 ? ` · ${filter}` : ''}`;
+    }
     if (this.selectedDate.length > 0) {
-      return '按北京时间筛选当天提交';
+      return `按北京时间筛选当天提交${filter.length > 0 ? ` · ${filter}` : ''}`;
     }
     if (!this.historyApiAvailable) {
-      return '最近 12 次提交记录';
+      return `最近 12 次提交记录${filter.length > 0 ? ` · ${filter}` : ''}`;
     }
-    return '按提交时间从新到旧排列';
+    return `按提交时间从新到旧排列${filter.length > 0 ? ` · ${filter}` : ''}`;
   }
 
   emptyRecordsLabel(): string {
-    if (this.selectedDate.length > 0) {
-      return '这一天没有作答记录。';
+    if (this.selectedDate.length > 0 || this.hasRecordFilters()) {
+      return '当前筛选条件下没有作答记录。';
     }
     return '完成作答后，提交记录会显示在这里。';
+  }
+
+  recordCategoryOptions(): SelectOption[] {
+    const options: SelectOption[] = [{ value: '全部模块' }];
+    (this.stats?.categories ?? []).forEach((category: CategoryStats) => {
+      options.push({ value: category.name });
+    });
+    return options;
+  }
+
+  recordTypeOptions(): SelectOption[] {
+    return [
+      { value: '全部题型' },
+      { value: '单选题' },
+      { value: '多选题' },
+      { value: '判断题' },
+      { value: '简答题' }
+    ];
+  }
+
+  selectedRecordCategoryId(): string {
+    const categories = this.stats?.categories ?? [];
+    if (this.selectedCategoryIndex <= 0 || this.selectedCategoryIndex > categories.length) {
+      return '';
+    }
+    return categories[this.selectedCategoryIndex - 1].categoryId;
+  }
+
+  selectedRecordCategoryName(): string {
+    const categories = this.stats?.categories ?? [];
+    if (this.selectedCategoryIndex <= 0 || this.selectedCategoryIndex > categories.length) {
+      return '全部模块';
+    }
+    return categories[this.selectedCategoryIndex - 1].name;
+  }
+
+  selectedRecordType(): QuestionType | undefined {
+    if (this.selectedTypeIndex === 1) {
+      return 'single';
+    }
+    if (this.selectedTypeIndex === 2) {
+      return 'multiple';
+    }
+    if (this.selectedTypeIndex === 3) {
+      return 'boolean';
+    }
+    if (this.selectedTypeIndex === 4) {
+      return 'short';
+    }
+    return undefined;
+  }
+
+  selectedRecordTypeName(): string {
+    if (this.selectedTypeIndex === 1) {
+      return '单选题';
+    }
+    if (this.selectedTypeIndex === 2) {
+      return '多选题';
+    }
+    if (this.selectedTypeIndex === 3) {
+      return '判断题';
+    }
+    if (this.selectedTypeIndex === 4) {
+      return '简答题';
+    }
+    return '全部题型';
+  }
+
+  selectRecordCategory(index: number): void {
+    const categories = this.stats?.categories ?? [];
+    if (index < 0 || index > categories.length || index === this.selectedCategoryIndex) {
+      return;
+    }
+    this.selectedCategoryIndex = index;
+    this.loadRecords(true);
+  }
+
+  selectRecordType(index: number): void {
+    if (index < 0 || index > 4 || index === this.selectedTypeIndex) {
+      return;
+    }
+    this.selectedTypeIndex = index;
+    this.loadRecords(true);
+  }
+
+  resetRecordFilters(): void {
+    this.selectedCategoryIndex = 0;
+    this.selectedTypeIndex = 0;
+    this.loadRecords(true);
+  }
+
+  hasRecordFilters(): boolean {
+    return this.selectedCategoryIndex > 0 || this.selectedTypeIndex > 0;
+  }
+
+  recordFilterSummary(): string {
+    const labels = new Array<string>();
+    if (this.selectedCategoryIndex > 0) {
+      labels.push(this.selectedRecordCategoryName());
+    }
+    if (this.selectedTypeIndex > 0) {
+      labels.push(this.selectedRecordTypeName());
+    }
+    return labels.join(' · ');
+  }
+
+  recordMatchesFilters(item: PracticeRecordItem): boolean {
+    const categoryId = this.selectedRecordCategoryId();
+    const type = this.selectedRecordType();
+    return (categoryId.length === 0 || item.categoryId === categoryId) &&
+      (type === undefined || item.questionType === type);
   }
 
   rangeStartDate(days: number): string {

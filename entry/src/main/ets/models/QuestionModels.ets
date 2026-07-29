@@ -123,6 +123,21 @@ export interface DailyPracticeStats {
   accuracy: number;
 }
 
+export interface PracticeRecordSummary {
+  attempts: number;
+  gradedAttempts: number;
+  correct: number;
+  accuracy: number;
+}
+
+export interface PracticeRecordPage extends PageResult<PracticeRecordItem> {
+  date?: string | null;
+  categoryId?: string | null;
+  type?: QuestionType | null;
+  summary?: PracticeRecordSummary;
+  dailyStats?: DailyPracticeStats[];
+}
+
 export interface UserStats {
   totalAnswers: number;
   answeredQuestionCount: number;
