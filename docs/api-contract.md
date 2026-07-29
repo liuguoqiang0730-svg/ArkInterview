@@ -226,6 +226,18 @@ GET /api/practice/session?mode=favorites&count=20
 - `correct`：当天正确次数。
 - `accuracy`：`correct / gradedAttempts`；当天只有简答题时为 `0`。
 
+### GET /api/users/me/records
+
+分页返回当前匿名设备或登录账号的完整作答历史，按提交时间倒序排列。
+
+Query 参数：
+
+- `page`：页码，默认 `1`。
+- `pageSize`：每页数量，默认 `20`，最大 `50`。
+- `date`：可选，北京时间自然日，格式必须为 `YYYY-MM-DD`。
+
+返回字段沿用通用分页结构：`items`、`page`、`pageSize`、`total`、`totalPages`，并附带当前 `date` 过滤值。每条记录包含题目 ID、题干、分类、题型、判定结果和提交时间。
+
 ### GET /api/users/me/wrongs
 
 返回错题列表。

@@ -1,7 +1,9 @@
 import { ApiClient, PracticeSessionOptions } from '../services/ApiClient';
 import {
   Category,
+  PageResult,
   PracticeMode,
+  PracticeRecordItem,
   PracticeSession,
   Question,
   SubmitAnswerRequest,
@@ -24,6 +26,14 @@ export class PracticeStore {
 
   async loadStats(): Promise<UserStats> {
     return this.api.getStats();
+  }
+
+  async loadRecords(
+    page: number = 1,
+    pageSize: number = 20,
+    date: string = ''
+  ): Promise<PageResult<PracticeRecordItem>> {
+    return this.api.getPracticeRecords(page, pageSize, date);
   }
 
   async startPractice(mode: PracticeMode, options?: PracticeSessionOptions): Promise<PracticeSession> {

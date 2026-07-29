@@ -17,6 +17,7 @@ import {
   ListResult,
   PageResult,
   PracticeMode,
+  PracticeRecordItem,
   PracticeSession,
   Question,
   QuestionType,
@@ -154,6 +155,18 @@ export class ApiClient {
 
   async getStats(): Promise<UserStats> {
     return this.request<UserStats>('/users/me/stats');
+  }
+
+  async getPracticeRecords(
+    page: number = 1,
+    pageSize: number = 20,
+    date: string = ''
+  ): Promise<PageResult<PracticeRecordItem>> {
+    const pairs: string[] = [];
+    this.appendQueryParam(pairs, 'page', String(page));
+    this.appendQueryParam(pairs, 'pageSize', String(pageSize));
+    this.appendQueryParam(pairs, 'date', date);
+    return this.request<PageResult<PracticeRecordItem>>(`/users/me/records${this.queryString(pairs)}`);
   }
 
   async getWrongs(): Promise<Question[]> {

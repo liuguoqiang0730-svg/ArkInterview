@@ -441,14 +441,30 @@ function answerFeedback(question, isCorrect) {
   };
 }
 
+function practiceRecordItems(db, answers) {
+  const questionMap = new Map(db.questions.map((question) => [question.id, question]));
+  const categoryNameMap = new Map(db.categories.map((category) => [category.id, category.name]));
+  return answers.map((answer) => {
+    const question = questionMap.get(answer.questionId);
+    return {
+      id: answer.id,
+      questionId: answer.questionId,
+      categoryId: answer.categoryId,
+      categoryName: categoryNameMap.get(answer.categoryId) || '未分类',
+      questionTitle: question?.title || '题目已下架',
+      questionType: answer.type,
+      isCorrect: answer.isCorrect,
+      submittedAt: answer.submittedAt
+    };
+  });
+}
+
 function statsFor(db, user) {
   const totalAnswers = user.answers.length;
   const gradedAnswers = user.answers.filter((answer) => answer.isCorrect !== null);
   const correctAnswers = gradedAnswers.filter((answer) => answer.isCorrect).length;
   const answeredQuestionCount = new Set(user.answers.map((answer) => answer.questionId)).size;
   const masteredWrongCount = Object.values(user.wrongs).filter((wrong) => wrong.mastered).length;
-  const questionMap = new Map(db.questions.map((question) => [question.id, question]));
-  const categoryNameMap = new Map(db.categories.map((category) => [category.id, category.name]));
   const dailyMap = new Map();
   const categoryMap = new Map(db.categories.map((category) => [category.id, {
     categoryId: category.id,
@@ -491,19 +507,7 @@ function statsFor(db, user) {
     }
   }
 
-  const recentRecords = user.answers.slice(-12).reverse().map((answer) => {
-    const question = questionMap.get(answer.questionId);
-    return {
-      id: answer.id,
-      questionId: answer.questionId,
-      categoryId: answer.categoryId,
-      categoryName: categoryNameMap.get(answer.categoryId) || '未分类',
-      questionTitle: question?.title || '题目已下架',
-      questionType: answer.type,
-      isCorrect: answer.isCorrect,
-      submittedAt: answer.submittedAt
-    };
-  });
+  const recentRecords = practiceRecordItems(db, user.answers.slice(-12).reverse());
 
   return {
     totalAnswers,
@@ -540,6 +544,38 @@ function statsFor(db, user) {
       };
     })
   };
+}
+
+function practiceRecordsFor(db, user, searchParams) {
+  const page = boundedInteger(searchParams.get('page'), 1, 1, Number.MAX_SAFE_INTEGER);
+  const pageSize = boundedInteger(searchParams.get('pageSize'), 20, 1, 50);
+  const date = searchParams.get('date') || '';
+  if (date && !isValidDateKey(date)) {
+    throw httpError(400, 'date 必须使用 YYYY-MM-DD 格式');
+  }
+  const answers = user.answers
+    .filter((answer) => !date || shanghaiDateKey(answer.submittedAt) === date)
+    .sort((left, right) => right.submittedAt.localeCompare(left.submittedAt));
+  return {
+    ...paginate(practiceRecordItems(db, answers), page, pageSize),
+    date: date || null
+  };
+}
+
+function boundedInteger(value, fallback, min, max) {
+  const parsed = Number(value || fallback);
+  if (!Number.isInteger(parsed)) {
+    return fallback;
+  }
+  return Math.min(max, Math.max(min, parsed));
+}
+
+function isValidDateKey(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+  const timestamp = Date.parse(`${value}T00:00:00.000Z`);
+  return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value;
 }
 
 function shanghaiDateKey(value) {
@@ -786,6 +822,11 @@ async function routeApi(
 
   if (method === 'GET' && pathname === '/api/users/me/stats') {
     sendJson(res, 200, statsFor(db, user));
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/users/me/records') {
+    sendJson(res, 200, practiceRecordsFor(db, user, searchParams));
     return;
   }
 

@@ -12,6 +12,7 @@ import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
 import { PracticeEvents } from '../utils/PracticeEvents';
 import { PracticeStore } from '../viewmodels/PracticeStore';
+import { ApiRequestError } from '../services/ApiClient';
 
 const store = new PracticeStore();
 const COLOR_BG: string = '#f3f5f8';
@@ -39,7 +40,14 @@ struct RecordPage {
   @State private loadError: string = '';
   @State private isTablet: boolean = false;
   @State private selectedRange: string = '7d';
+  @State private selectedDate: string = '';
+  @State private records: PracticeRecordItem[] = [];
+  @State private recordPage: number = 1;
+  @State private recordTotal: number = 0;
+  @State private recordsLoading: boolean = false;
+  @State private historyApiAvailable: boolean = true;
   private observedStatsVersion: number = 0;
+  private pendingRecordsReload: boolean = false;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -59,11 +67,60 @@ struct RecordPage {
     try {
       this.stats = await store.loadStats();
       this.observedStatsVersion = PracticeEvents.currentStatsVersion();
+      this.historyApiAvailable = true;
+      this.applyFallbackRecords();
+      await this.loadRecords(true);
     } catch (error) {
       this.loadError = String(error);
       AppToast.show(this.getUIContext(), '练习记录加载失败');
     } finally {
       this.loading = false;
+    }
+  }
+
+  async loadRecords(reset: boolean): Promise<void> {
+    if (this.recordsLoading) {
+      if (reset) {
+        this.pendingRecordsReload = true;
+      }
+      return;
+    }
+    if (!this.historyApiAvailable) {
+      this.applyFallbackRecords();
+      return;
+    }
+    const targetPage = reset ? 1 : this.recordPage + 1;
+    this.recordsLoading = true;
+    if (reset) {
+      this.records = [];
+      this.recordTotal = 0;
+    }
+    try {
+      const result = await store.loadRecords(targetPage, 20, this.selectedDate);
+      if (reset) {
+        this.records = result.items;
+      } else {
+        const merged = new Array<PracticeRecordItem>();
+        this.records.forEach((item: PracticeRecordItem) => merged.push(item));
+        result.items.forEach((item: PracticeRecordItem) => merged.push(item));
+        this.records = merged;
+      }
+      this.recordPage = result.page;
+      this.recordTotal = result.total;
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.statusCode === 404) {
+        this.historyApiAvailable = false;
+        this.applyFallbackRecords();
+      } else {
+        this.applyFallbackRecords();
+        AppToast.show(this.getUIContext(), '历史记录加载失败');
+      }
+    } finally {
+      this.recordsLoading = false;
+      if (this.pendingRecordsReload) {
+        this.pendingRecordsReload = false;
+        this.loadRecords(true);
+      }
     }
   }
 
@@ -405,7 +462,7 @@ struct RecordPage {
         offsetY: 2
       })
       .onClick(() => {
-        this.selectedRange = value;
+        this.changeRange(value);
       })
   }
 
@@ -446,6 +503,10 @@ struct RecordPage {
     .layoutWeight(1)
     .height('100%')
     .justifyContent(FlexAlign.End)
+    .backgroundColor(this.selectedDate === item.date ? COLOR_SOFT_BLUE : '#00000000')
+    .borderRadius(6)
+    .opacity(this.selectedDate.length === 0 || this.selectedDate === item.date ? 1 : 0.58)
+    .onClick(() => this.selectDate(item.date))
   }
 
   @Builder
@@ -532,26 +593,54 @@ struct RecordPage {
     Column() {
       Row() {
         Column() {
-          Text('最近作答')
+          Text(this.recordsPanelTitle())
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
             .fontColor(COLOR_NAVY)
-          Text('保留最近 12 次提交记录')
+          Text(this.recordsPanelSubtitle())
             .fontSize(11)
             .fontColor(COLOR_MUTED)
             .margin({ top: 3 })
         }
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Start)
-        Text(`${this.stats?.recentRecords?.length ?? 0} 条`)
+
+        if (this.selectedDate.length > 0) {
+          Button('清除日期')
+            .height(28)
+            .fontSize(11)
+            .fontColor(COLOR_BLUE)
+            .backgroundColor(COLOR_SOFT_BLUE)
+            .borderRadius(7)
+            .margin({ right: 8 })
+            .onClick(() => this.clearDateFilter())
+        }
+
+        Text(`${this.records.length}/${this.recordTotal}`)
           .fontSize(12)
           .fontColor(COLOR_MUTED)
       }
       .width('100%')
       .margin({ bottom: 10 })
 
-      if ((this.stats?.recentRecords?.length ?? 0) === 0) {
-        Text('完成答题后，最近提交记录会显示在这里。')
+      if (this.recordsLoading && this.records.length === 0) {
+        Row() {
+          LoadingProgress()
+            .width(22)
+            .height(22)
+          Text('正在加载历史记录')
+            .fontSize(13)
+            .fontColor(COLOR_MUTED)
+            .margin({ left: 9 })
+        }
+        .width('100%')
+        .height(72)
+        .justifyContent(FlexAlign.Center)
+        .backgroundColor(COLOR_SURFACE)
+        .borderRadius(8)
+        .border({ width: 1, color: COLOR_LINE })
+      } else if (this.records.length === 0) {
+        Text(this.emptyRecordsLabel())
           .width('100%')
           .fontSize(13)
           .fontColor(COLOR_MUTED)
@@ -560,9 +649,22 @@ struct RecordPage {
           .borderRadius(8)
           .border({ width: 1, color: COLOR_LINE })
       } else {
-        ForEach(this.stats?.recentRecords ?? [], (item: PracticeRecordItem) => {
+        ForEach(this.records, (item: PracticeRecordItem) => {
           this.RecentRecordItem(item)
         }, (item: PracticeRecordItem) => item.id)
+
+        if (this.hasMoreRecords()) {
+          Button(this.recordsLoading ? '加载中' : '加载更多')
+            .width('100%')
+            .height(40)
+            .fontSize(13)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_BLUE)
+            .backgroundColor(COLOR_SOFT_BLUE)
+            .borderRadius(8)
+            .enabled(!this.recordsLoading)
+            .onClick(() => this.loadRecords(false))
+        }
       }
     }
     .width('100%')
@@ -818,6 +920,18 @@ struct RecordPage {
     return result;
   }
 
+  applyFallbackRecords(): void {
+    const fallback = new Array<PracticeRecordItem>();
+    (this.stats?.recentRecords ?? []).forEach((item: PracticeRecordItem) => {
+      if (this.selectedDate.length === 0 || this.recordDate(item.submittedAt) === this.selectedDate) {
+        fallback.push(item);
+      }
+    });
+    this.records = fallback;
+    this.recordPage = 1;
+    this.recordTotal = fallback.length;
+  }
+
   dailyStatsSource(): DailyPracticeStats[] {
     if (this.stats?.dailyStats !== undefined) {
       return this.stats.dailyStats;
@@ -896,6 +1010,52 @@ struct RecordPage {
       return '累计活跃日表现';
     }
     return '近 7 天活跃日表现';
+  }
+
+  changeRange(value: string): void {
+    this.selectedRange = value;
+    if (this.selectedDate.length > 0) {
+      this.selectedDate = '';
+      this.loadRecords(true);
+    }
+  }
+
+  selectDate(date: string): void {
+    this.selectedDate = this.selectedDate === date ? '' : date;
+    this.loadRecords(true);
+  }
+
+  clearDateFilter(): void {
+    this.selectedDate = '';
+    this.loadRecords(true);
+  }
+
+  hasMoreRecords(): boolean {
+    return this.historyApiAvailable && this.records.length < this.recordTotal;
+  }
+
+  recordsPanelTitle(): string {
+    if (this.selectedDate.length > 0) {
+      return `${this.shortDate(this.selectedDate)} 作答明细`;
+    }
+    return '历史作答';
+  }
+
+  recordsPanelSubtitle(): string {
+    if (this.selectedDate.length > 0) {
+      return '按北京时间筛选当天提交';
+    }
+    if (!this.historyApiAvailable) {
+      return '最近 12 次提交记录';
+    }
+    return '按提交时间从新到旧排列';
+  }
+
+  emptyRecordsLabel(): string {
+    if (this.selectedDate.length > 0) {
+      return '这一天没有作答记录。';
+    }
+    return '完成作答后，提交记录会显示在这里。';
   }
 
   rangeStartDate(days: number): string {

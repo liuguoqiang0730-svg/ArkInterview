@@ -290,6 +290,26 @@ async function runChecks() {
   assert(practiceStats.dailyStats[0].gradedAttempts === 2, 'daily stats should count graded attempts');
   assert(practiceStats.dailyStats[0].correct === 1, 'daily stats should count correct answers');
   assert(practiceStats.dailyStats[0].accuracy === 0.5, 'daily stats should calculate graded accuracy');
+  const firstRecordPage = await getJson('/api/users/me/records?page=1&pageSize=1');
+  assert(firstRecordPage.total === 2, 'record pagination should include total answer count');
+  assert(firstRecordPage.items.length === 1, 'record pagination should honor page size');
+  assert(firstRecordPage.items[0].isCorrect === false, 'record pagination should order newest first');
+  const secondRecordPage = await getJson('/api/users/me/records?page=2&pageSize=1');
+  assert(secondRecordPage.items[0].isCorrect === true, 'record pagination should return the next page');
+  const dateRecordPage = await getJson(
+    `/api/users/me/records?date=${practiceStats.dailyStats[0].date}&pageSize=50`
+  );
+  assert(dateRecordPage.total === 2, 'record pagination should filter by Shanghai date');
+  const emptyDateRecordPage = await getJson('/api/users/me/records?date=2000-01-01');
+  assert(emptyDateRecordPage.total === 0, 'record pagination should return an empty date result');
+  const invalidRecordDate = await fetch(`${baseUrl}/api/users/me/records?date=2026-7-1`, {
+    headers: { 'X-Device-Id': 'smoke-test' }
+  });
+  assert(invalidRecordDate.status === 400, 'record pagination should reject invalid dates');
+  const impossibleRecordDate = await fetch(`${baseUrl}/api/users/me/records?date=2026-02-30`, {
+    headers: { 'X-Device-Id': 'smoke-test' }
+  });
+  assert(impossibleRecordDate.status === 400, 'record pagination should reject impossible calendar dates');
   const wrongPractice = await getJson('/api/practice/session?mode=wrongs&count=5');
   assert(wrongPractice.total === 1, 'wrong practice should include wrong question');
 
@@ -302,6 +322,8 @@ async function runChecks() {
   assert(isolatedStats.totalAnswers === 0, 'a second anonymous device should have isolated answer stats');
   assert(isolatedStats.recentRecords.length === 0, 'a second anonymous device should have no recent records');
   assert(isolatedStats.dailyStats.length === 0, 'a second anonymous device should have no daily stats');
+  const isolatedRecords = await getJson('/api/users/me/records', 'smoke-test-secondary');
+  assert(isolatedRecords.total === 0, 'a second anonymous device should have no paged records');
   const isolatedWrongs = await getJson('/api/users/me/wrongs', 'smoke-test-secondary');
   assert(isolatedWrongs.items.length === 0, 'a second anonymous device should not inherit wrong questions');
   const isolatedFavorites = await getJson('/api/users/me/favorites', 'smoke-test-secondary');
