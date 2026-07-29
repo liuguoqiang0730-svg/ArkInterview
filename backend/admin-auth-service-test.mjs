@@ -27,6 +27,9 @@ try {
     store: opened.store,
     legacyToken,
     sessionTtlSeconds: 3600,
+    loginWindowSeconds: 300,
+    loginLockSeconds: 60,
+    maximumLoginFailures: 3,
     now: () => clock
   });
 
@@ -48,7 +51,8 @@ try {
     authorization: `Bearer ${legacyToken}`,
     username: 'owner',
     password: 'Owner-password-2026',
-    displayName: '平台主管理员'
+    displayName: '平台主管理员',
+    ipAddress: '10.0.0.1'
   });
   assert(bootstrapped.accessToken.startsWith('ark_admin_'));
   assert.equal(bootstrapped.admin.role, 'super_admin');
@@ -84,10 +88,47 @@ try {
   assert.equal(moderator.permissions.includes('leaderboard:moderate'), true);
   assert.equal(editor.permissions.includes('questions:write'), true);
 
+  clock = new Date('2026-07-29T08:05:00.000Z');
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    assert.throws(
+      () => service.login({
+        username: 'editor.01',
+        password: 'Wrong-password-2026',
+        ipAddress: '10.0.0.2'
+      }),
+      (error) => error instanceof AdminAuthError && error.status === 401
+    );
+  }
+  assert.throws(
+    () => service.login({
+      username: 'editor.01',
+      password: 'Wrong-password-2026',
+      ipAddress: '10.0.0.2'
+    }),
+    (error) => error instanceof AdminAuthError && error.status === 429 && error.retryAfter === 60
+  );
+  assert.throws(
+    () => service.login({
+      username: 'editor.01',
+      password: 'Editor-password-2026',
+      ipAddress: '10.0.0.2'
+    }),
+    (error) => error instanceof AdminAuthError && error.status === 429,
+    'a correct password must not bypass an active source lock'
+  );
+  clock = new Date('2026-07-29T08:06:01.000Z');
+  const editorLogin = service.login({
+    username: 'editor.01',
+    password: 'Editor-password-2026',
+    ipAddress: '10.0.0.2'
+  });
+  assert.equal(editorLogin.admin.role, 'content_editor');
+
   clock = new Date('2026-07-29T08:10:00.000Z');
   const moderatorLogin = service.login({
     username: 'MODERATOR.01',
-    password: 'Moderator-password-2026'
+    password: 'Moderator-password-2026',
+    ipAddress: '10.0.0.3'
   });
   const moderatorPrincipal = service.resolvePrincipal(`Bearer ${moderatorLogin.accessToken}`);
   service.requirePermission(moderatorPrincipal, 'leaderboard:moderate');
@@ -128,6 +169,42 @@ try {
     (error) => error instanceof AdminAuthError && error.status === 409,
     'the current and last active super administrator must remain enabled'
   );
+
+  const sessions = service.listSessions({}, ownerPrincipal.session.id);
+  assert(sessions.some((session) => session.current), 'session lists should identify the current session');
+  const editorSession = sessions.find((session) => session.id === editorLogin.sessionId);
+  assert.equal(editorSession.ipAddress, '10.0.0.2');
+  service.revokeSession(editorSession.id, ownerPrincipal);
+  assert.throws(
+    () => service.resolvePrincipal(`Bearer ${editorLogin.accessToken}`),
+    (error) => error instanceof AdminAuthError && error.status === 401
+  );
+  assert.throws(
+    () => service.revokeSession(ownerPrincipal.session.id, ownerPrincipal),
+    (error) => error instanceof AdminAuthError && error.status === 409,
+    'session management must not revoke the current session'
+  );
+
+  const secondEditorLogin = service.login({
+    username: 'editor.01',
+    password: 'Editor-password-2026',
+    ipAddress: '10.0.0.4'
+  });
+  const bulkRevocation = service.revokeUserSessions(editor.id, ownerPrincipal);
+  assert.equal(bulkRevocation.revokedCount, 1);
+  assert.throws(
+    () => service.resolvePrincipal(`Bearer ${secondEditorLogin.accessToken}`),
+    (error) => error instanceof AdminAuthError && error.status === 401
+  );
+
+  const lockedEvents = service.listAuditEvents({
+    action: 'auth.login_locked',
+    from: '2026-07-29',
+    to: '2026-07-29'
+  });
+  assert.equal(lockedEvents.items.length, 1);
+  assert.equal(lockedEvents.items[0].ipAddress, '10.0.0.2');
+  assert(lockedEvents.pagination.totalItems >= 1);
 
   service.logout(service.resolvePrincipal(`Bearer ${changedLogin.accessToken}`));
   assert.throws(

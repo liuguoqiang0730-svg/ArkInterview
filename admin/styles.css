@@ -819,6 +819,15 @@ button:disabled {
   overflow: hidden;
 }
 
+#operatorManagementView {
+  display: grid;
+  gap: 18px;
+}
+
+#operatorManagementView[hidden] {
+  display: none;
+}
+
 .operator-form {
   display: grid;
   grid-template-columns: repeat(4, minmax(140px, 1fr)) auto;
@@ -878,8 +887,118 @@ button:disabled {
   font-size: 11px;
 }
 
+.operator-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.security-panel {
+  overflow: hidden;
+}
+
+.security-heading {
+  gap: 16px;
+}
+
+.security-filters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.security-filters input[type="search"] {
+  width: min(240px, 28vw);
+}
+
+.security-message {
+  min-height: 20px;
+  margin: 0;
+  padding: 0 16px;
+  color: var(--brand-strong);
+  font-size: 12px;
+}
+
+.security-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.security-table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+}
+
+.security-table th,
+.security-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.security-table th {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.security-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.security-table td strong,
+.security-table td code,
+.security-table td span {
+  display: block;
+}
+
+.security-table td code {
+  max-width: 210px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-active {
+  color: #127a4a;
+  background: #e8f7ef;
+}
+
+.session-expired,
+.session-revoked {
+  color: var(--muted);
+  background: var(--surface-strong);
+}
+
+.current-session {
+  margin-top: 4px;
+  color: var(--brand-strong);
+  font-size: 11px;
+}
+
+.audit-action {
+  color: var(--brand-strong);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.audit-events-table td:nth-child(1),
+.audit-events-table td:nth-child(6) {
+  white-space: nowrap;
+}
+
 .sr-only {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 1px;
   height: 1px;
   padding: 0;
@@ -887,6 +1006,17 @@ button:disabled {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+@media (max-width: 1100px) {
+  .operator-form,
+  .operator-item {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .operator-identity {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 800px) {
@@ -934,13 +1064,14 @@ button:disabled {
     flex-direction: column;
   }
 
-  .operator-form,
-  .operator-item {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .security-heading {
+    align-items: stretch;
+    flex-direction: column;
   }
 
-  .operator-identity {
-    grid-column: 1 / -1;
+  .security-filters {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 
@@ -1045,6 +1176,24 @@ button:disabled {
   .operator-identity,
   .operator-form .auth-message {
     grid-column: auto;
+  }
+
+  .operator-actions,
+  .operator-actions button,
+  .security-filters,
+  .security-filters input,
+  .security-filters select,
+  .security-filters button {
+    width: 100%;
+  }
+
+  .operator-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .security-filters .audit-date-field {
+    width: calc(50% - 4px);
   }
 
   .question-controls select,

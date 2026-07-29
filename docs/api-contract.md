@@ -316,6 +316,8 @@ Authorization: Bearer <ark_admin_access_token>
 
 使用管理员用户名和密码登录，返回 `ark_admin_` 开头的短期访问令牌及管理员角色、权限。密码使用服务端加盐 `scrypt` 哈希保存，数据库不保存明文。
 
+同一“用户名 + 来源 IP”默认在 15 分钟内连续失败 5 次后锁定 15 分钟。锁定期间返回 `429`，并通过 `Retry-After` 响应头给出建议等待秒数。可通过 `ADMIN_LOGIN_WINDOW_SECONDS`、`ADMIN_LOGIN_MAX_FAILURES` 和 `ADMIN_LOGIN_LOCK_SECONDS` 调整；服务位于可信反向代理后时设置 `TRUST_PROXY=1`，否则只使用 TCP 连接来源地址。
+
 ### GET /api/admin/auth/me
 
 返回当前管理员身份、角色和权限。
@@ -335,6 +337,30 @@ Authorization: Bearer <ark_admin_access_token>
 ### PATCH /api/admin/operators/{id}
 
 仅超级管理员可用。支持修改显示名称、角色、状态和密码。角色、密码或停用状态发生变化时撤销该账号的现有会话；系统禁止停用当前账号，并且必须至少保留一个启用的超级管理员。
+
+### GET /api/admin/sessions
+
+仅超级管理员可用。返回最近 500 条管理员会话，不包含令牌摘要；支持 `adminId` 和 `status=all|active|expired|revoked` 筛选。每条记录包含账号、来源 IP、创建/到期/撤销时间、当前状态及是否为当前会话。
+
+### DELETE /api/admin/sessions/{id}
+
+仅超级管理员可用。立即撤销指定有效会话；不能通过该接口撤销当前会话。
+
+### DELETE /api/admin/operators/{id}/sessions
+
+仅超级管理员可用。立即撤销指定管理员的全部有效会话；不能对当前登录账号执行。
+
+### GET /api/admin/audit/events
+
+仅超级管理员可用。分页读取后台统一操作审计，支持：
+
+- `action`：按动作精确筛选。
+- `actorId`：按管理员 ID 精确筛选。
+- `q`：按操作人、目标 ID 或摘要模糊搜索，最长 100 个字符。
+- `from`、`to`：按北京时间日期筛选，格式为 `YYYY-MM-DD`。
+- `page`、`pageSize`：默认 `1` 和 `20`，每页最多 `100`。
+
+审计覆盖后台初始化、登录成功/失败/锁定、退出、管理员增改、会话下线、分类和题目写操作、排行榜封禁/解封。响应记录操作者身份快照、动作、目标、摘要、受控详情、来源 IP 和服务端时间，不返回密码、访问令牌或令牌摘要。
 
 ### GET /api/admin/leaderboard/users
 

@@ -22,6 +22,7 @@ const adminDir = path.join(rootDir, 'admin');
 const port = Number(process.env.PORT || 8787);
 const host = process.env.HOST || '0.0.0.0';
 const adminToken = String(process.env.ADMIN_TOKEN || '').trim();
+const trustProxy = process.env.TRUST_PROXY === '1';
 const minimumAdminTokenLength = 32;
 
 async function readJson(file) {
@@ -60,6 +61,18 @@ async function createSeedDb() {
 
 function getDeviceId(req) {
   return req.headers['x-device-id'] || 'demo-device';
+}
+
+function getClientIp(req) {
+  if (trustProxy) {
+    const forwarded = req.headers['x-forwarded-for'];
+    const value = Array.isArray(forwarded) ? forwarded[0] : forwarded;
+    const firstAddress = String(value || '').split(',')[0].trim();
+    if (firstAddress) {
+      return firstAddress.slice(0, 64);
+    }
+  }
+  return String(req.socket.remoteAddress || 'unknown').slice(0, 64);
 }
 
 function assertValidServerConfig() {
@@ -1004,7 +1017,8 @@ async function routeAdmin(
       authorization: req.headers.authorization,
       username: payload.username,
       password: payload.password,
-      displayName: payload.displayName
+      displayName: payload.displayName,
+      ipAddress: getClientIp(req)
     });
     sendJson(res, 201, result, { 'Cache-Control': 'no-store' });
     return;
@@ -1014,7 +1028,8 @@ async function routeAdmin(
     const payload = await parseBody(req);
     const result = adminAuthService.login({
       username: payload.username,
-      password: payload.password
+      password: payload.password,
+      ipAddress: getClientIp(req)
     });
     sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
     return;
@@ -1028,7 +1043,7 @@ async function routeAdmin(
   }
 
   if (method === 'POST' && pathname === '/api/admin/auth/logout') {
-    adminAuthService.logout(principal);
+    adminAuthService.logout(principal, getClientIp(req));
     sendJson(res, 200, { success: true }, { 'Cache-Control': 'no-store' });
     return;
   }
@@ -1043,7 +1058,75 @@ async function routeAdmin(
     adminAuthService.requirePermission(principal, 'admin:manage');
     const payload = await parseBody(req);
     const item = adminAuthService.createUser(payload);
+    adminAuthService.recordAudit(principal, {
+      action: 'admin.create',
+      targetType: 'admin_account',
+      targetId: item.id,
+      summary: `创建管理员 ${item.displayName}`,
+      details: { username: item.username, role: item.role }
+    }, getClientIp(req));
     sendJson(res, 201, { item }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/admin/sessions') {
+    adminAuthService.requirePermission(principal, 'admin:manage');
+    const items = adminAuthService.listSessions({
+      adminId: searchParams.get('adminId') || '',
+      status: searchParams.get('status') || 'all'
+    }, principal.session?.id || '');
+    sendJson(res, 200, { items }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  const adminSessionMatch = pathname.match(/^\/api\/admin\/sessions\/([^/]+)$/);
+  if (method === 'DELETE' && adminSessionMatch) {
+    adminAuthService.requirePermission(principal, 'admin:manage');
+    const session = adminAuthService.revokeSession(
+      decodeURIComponent(adminSessionMatch[1]),
+      principal
+    );
+    adminAuthService.recordAudit(principal, {
+      action: 'session.revoke',
+      targetType: 'admin_session',
+      targetId: session.id,
+      summary: `强制下线 ${session.displayName} 的管理会话`,
+      details: { adminUserId: session.adminUserId }
+    }, getClientIp(req));
+    sendJson(res, 200, { success: true }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/admin/audit/events') {
+    adminAuthService.requirePermission(principal, 'admin:manage');
+    const result = adminAuthService.listAuditEvents({
+      action: searchParams.get('action') || '',
+      actorId: searchParams.get('actorId') || '',
+      query: searchParams.get('q') || '',
+      from: searchParams.get('from') || '',
+      to: searchParams.get('to') || '',
+      page: searchParams.get('page') || 1,
+      pageSize: searchParams.get('pageSize') || 20
+    });
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  const adminUserSessionsMatch = pathname.match(/^\/api\/admin\/operators\/([^/]+)\/sessions$/);
+  if (method === 'DELETE' && adminUserSessionsMatch) {
+    adminAuthService.requirePermission(principal, 'admin:manage');
+    const result = adminAuthService.revokeUserSessions(
+      decodeURIComponent(adminUserSessionsMatch[1]),
+      principal
+    );
+    adminAuthService.recordAudit(principal, {
+      action: 'session.revoke_all',
+      targetType: 'admin_account',
+      targetId: result.user.id,
+      summary: `强制下线 ${result.user.displayName} 的全部管理会话`,
+      details: { revokedCount: result.revokedCount }
+    }, getClientIp(req));
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
     return;
   }
 
@@ -1056,6 +1139,17 @@ async function routeAdmin(
       payload,
       principal.admin.id
     );
+    adminAuthService.recordAudit(principal, {
+      action: 'admin.update',
+      targetType: 'admin_account',
+      targetId: item.id,
+      summary: `更新管理员 ${item.displayName}`,
+      details: {
+        role: item.role,
+        status: item.status,
+        passwordReset: Boolean(payload.password)
+      }
+    }, getClientIp(req));
     sendJson(res, 200, { item }, { 'Cache-Control': 'no-store' });
     return;
   }
@@ -1087,6 +1181,13 @@ async function routeAdmin(
       note: payload.note,
       operator: principal.admin.displayName
     });
+    adminAuthService.recordAudit(principal, {
+      action: item.status === 'suspended' ? 'leaderboard.suspend' : 'leaderboard.restore',
+      targetType: 'user_account',
+      targetId: item.userId,
+      summary: `${item.status === 'suspended' ? '封禁' : '解封'}排行榜账号`,
+      details: { reason: payload.reason, hasNote: Boolean(payload.note) }
+    }, getClientIp(req));
     sendJson(res, 200, { item }, { 'Cache-Control': 'no-store' });
     return;
   }
@@ -1107,6 +1208,12 @@ async function routeAdmin(
     }
     db.categories.push(item);
     store.saveCategory(item, touchMetadata(db));
+    adminAuthService.recordAudit(principal, {
+      action: 'category.create',
+      targetType: 'category',
+      targetId: item.id,
+      summary: `创建分类 ${item.name}`
+    }, getClientIp(req));
     sendJson(res, 201, { item });
     return;
   }
@@ -1124,6 +1231,12 @@ async function routeAdmin(
     validateCategory(updated);
     Object.assign(category, updated, { id: category.id });
     store.saveCategory(category, touchMetadata(db));
+    adminAuthService.recordAudit(principal, {
+      action: 'category.update',
+      targetType: 'category',
+      targetId: category.id,
+      summary: `更新分类 ${category.name}`
+    }, getClientIp(req));
     sendJson(res, 200, { item: category });
     return;
   }
@@ -1141,6 +1254,13 @@ async function routeAdmin(
     validateQuestion(item, db);
     db.questions.push(item);
     store.saveQuestion(item, touchMetadata(db));
+    adminAuthService.recordAudit(principal, {
+      action: 'question.create',
+      targetType: 'question',
+      targetId: item.id,
+      summary: `创建题目 ${item.id}`,
+      details: { categoryId: item.categoryId, status: item.status }
+    }, getClientIp(req));
     sendJson(res, 201, { item });
     return;
   }
@@ -1172,6 +1292,13 @@ async function routeAdmin(
       Object.assign(questions[index], updates[index], { id: questions[index].id });
     }
     store.saveQuestions(questions, touchMetadata(db));
+    adminAuthService.recordAudit(principal, {
+      action: 'question.batch_status',
+      targetType: 'question_batch',
+      targetId: questionIds.join(','),
+      summary: `批量${status === 'published' ? '发布' : '下架'} ${questionIds.length} 道题`,
+      details: { questionIds, status }
+    }, getClientIp(req));
     sendJson(res, 200, { items: questions });
     return;
   }
@@ -1189,6 +1316,13 @@ async function routeAdmin(
     validateQuestion(updated, db, { allowExistingId: true });
     Object.assign(question, updated, { id: question.id });
     store.saveQuestion(question, touchMetadata(db));
+    adminAuthService.recordAudit(principal, {
+      action: 'question.update',
+      targetType: 'question',
+      targetId: question.id,
+      summary: `更新题目 ${question.id}`,
+      details: { categoryId: question.categoryId, status: question.status }
+    }, getClientIp(req));
     sendJson(res, 200, { item: question });
     return;
   }
@@ -1249,7 +1383,10 @@ async function main() {
   const adminAuthService = new AdminAuthService({
     store,
     legacyToken: adminToken,
-    sessionTtlSeconds: process.env.ADMIN_SESSION_TTL_SECONDS
+    sessionTtlSeconds: process.env.ADMIN_SESSION_TTL_SECONDS,
+    loginWindowSeconds: process.env.ADMIN_LOGIN_WINDOW_SECONDS,
+    loginLockSeconds: process.env.ADMIN_LOGIN_LOCK_SECONDS,
+    maximumLoginFailures: process.env.ADMIN_LOGIN_MAX_FAILURES
   });
   const leaderboardService = new LeaderboardService({
     store,
@@ -1301,6 +1438,9 @@ async function main() {
           ? 'ArkInterview Admin'
           : 'ArkInterview';
         res.setHeader('WWW-Authenticate', `Bearer realm="${realm}"`);
+      }
+      if (status === 429 && error.retryAfter) {
+        res.setHeader('Retry-After', String(error.retryAfter));
       }
       sendJson(res, status, {
         error: error.message || 'Internal Server Error'

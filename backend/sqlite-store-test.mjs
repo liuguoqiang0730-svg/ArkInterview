@@ -99,8 +99,8 @@ try {
   assert.equal(reopened.store.integrityCheck(), 'ok', 'reopened SQLite database should pass integrity check');
   assert.equal(
     reopened.store.database.pragma('user_version', { simple: true }),
-    6,
-    'opening a schema v1 database should migrate it to schema v6'
+    7,
+    'opening a schema v1 database should migrate it to schema v7'
   );
   const authSessionColumns = reopened.store.database
     .pragma('table_info(auth_sessions)')
@@ -138,6 +138,14 @@ try {
     "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN ('admin_users', 'admin_sessions')"
   ).all();
   assert.equal(adminTables.length, 2, 'schema v6 should add administrator accounts and sessions');
+  const adminSessionColumns = reopened.store.database
+    .pragma('table_info(admin_sessions)')
+    .map((column) => column.name);
+  assert(adminSessionColumns.includes('ip_address'), 'schema v7 should record administrator session IPs');
+  const adminSecurityTables = reopened.store.database.prepare(
+    "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN ('admin_login_limits', 'admin_audit_events')"
+  ).all();
+  assert.equal(adminSecurityTables.length, 2, 'schema v7 should add login limits and administrator audit events');
   assert.equal(await readFile(legacyDbFile, 'utf8'), legacyText, 'migration must not modify legacy JSON');
   assert.equal(existsSync(dbFile), true, 'migration should create the SQLite database file');
 

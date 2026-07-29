@@ -4,7 +4,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-const schemaVersion = 6;
+const schemaVersion = 7;
 
 export function resolveDatabasePaths(defaultStorageDir) {
   const configuredDbFile = process.env.DB_FILE
@@ -249,6 +249,7 @@ export class SqliteStore {
           id TEXT PRIMARY KEY,
           admin_user_id TEXT NOT NULL,
           token_hash TEXT NOT NULL UNIQUE,
+          ip_address TEXT NOT NULL DEFAULT '',
           expires_at TEXT NOT NULL,
           revoked_at TEXT,
           created_at TEXT NOT NULL,
@@ -258,6 +259,41 @@ export class SqliteStore {
 
         CREATE INDEX IF NOT EXISTS idx_admin_sessions_user
           ON admin_sessions(admin_user_id, revoked_at, expires_at);
+
+        CREATE TABLE IF NOT EXISTS admin_login_limits (
+          login_key TEXT PRIMARY KEY,
+          username TEXT NOT NULL,
+          ip_address TEXT NOT NULL,
+          failed_count INTEGER NOT NULL,
+          window_started_at TEXT NOT NULL,
+          locked_until TEXT,
+          updated_at TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_admin_login_limits_updated
+          ON admin_login_limits(updated_at);
+
+        CREATE TABLE IF NOT EXISTS admin_audit_events (
+          id TEXT PRIMARY KEY,
+          actor_admin_id TEXT,
+          actor_username TEXT NOT NULL,
+          actor_display_name TEXT NOT NULL,
+          actor_role TEXT NOT NULL,
+          action TEXT NOT NULL,
+          target_type TEXT NOT NULL,
+          target_id TEXT NOT NULL,
+          summary TEXT NOT NULL,
+          details_json TEXT NOT NULL DEFAULT '{}',
+          ip_address TEXT NOT NULL DEFAULT '',
+          created_at TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_admin_audit_events_created
+          ON admin_audit_events(created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_admin_audit_events_actor
+          ON admin_audit_events(actor_admin_id, created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_admin_audit_events_action
+          ON admin_audit_events(action, created_at DESC);
       `);
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
@@ -346,6 +382,7 @@ export class SqliteStore {
           id TEXT PRIMARY KEY,
           admin_user_id TEXT NOT NULL,
           token_hash TEXT NOT NULL UNIQUE,
+          ip_address TEXT NOT NULL DEFAULT '',
           expires_at TEXT NOT NULL,
           revoked_at TEXT,
           created_at TEXT NOT NULL,
@@ -355,6 +392,53 @@ export class SqliteStore {
 
         CREATE INDEX IF NOT EXISTS idx_admin_sessions_user
           ON admin_sessions(admin_user_id, revoked_at, expires_at);
+      `);
+      this.database.pragma('user_version = 6');
+    }
+    if (currentVersion >= 1 && currentVersion <= 6) {
+      const adminSessionColumns = this.database
+        .pragma('table_info(admin_sessions)')
+        .map((column) => column.name);
+      if (!adminSessionColumns.includes('ip_address')) {
+        this.database.exec(
+          "ALTER TABLE admin_sessions ADD COLUMN ip_address TEXT NOT NULL DEFAULT ''"
+        );
+      }
+      this.database.exec(`
+        CREATE TABLE IF NOT EXISTS admin_login_limits (
+          login_key TEXT PRIMARY KEY,
+          username TEXT NOT NULL,
+          ip_address TEXT NOT NULL,
+          failed_count INTEGER NOT NULL,
+          window_started_at TEXT NOT NULL,
+          locked_until TEXT,
+          updated_at TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_admin_login_limits_updated
+          ON admin_login_limits(updated_at);
+
+        CREATE TABLE IF NOT EXISTS admin_audit_events (
+          id TEXT PRIMARY KEY,
+          actor_admin_id TEXT,
+          actor_username TEXT NOT NULL,
+          actor_display_name TEXT NOT NULL,
+          actor_role TEXT NOT NULL,
+          action TEXT NOT NULL,
+          target_type TEXT NOT NULL,
+          target_id TEXT NOT NULL,
+          summary TEXT NOT NULL,
+          details_json TEXT NOT NULL DEFAULT '{}',
+          ip_address TEXT NOT NULL DEFAULT '',
+          created_at TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_admin_audit_events_created
+          ON admin_audit_events(created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_admin_audit_events_actor
+          ON admin_audit_events(actor_admin_id, created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_admin_audit_events_action
+          ON admin_audit_events(action, created_at DESC);
       `);
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
@@ -827,12 +911,13 @@ export class SqliteStore {
       ).run(user.lastLoginAt, user.updatedAt, user.id);
       this.database.prepare(
         `INSERT INTO admin_sessions (
-           id, admin_user_id, token_hash, expires_at, revoked_at, created_at, updated_at
-         ) VALUES (?, ?, ?, ?, NULL, ?, ?)`
+           id, admin_user_id, token_hash, ip_address, expires_at, revoked_at, created_at, updated_at
+         ) VALUES (?, ?, ?, ?, ?, NULL, ?, ?)`
       ).run(
         session.id,
         user.id,
         session.tokenHash,
+        session.ipAddress,
         session.expiresAt,
         session.createdAt,
         session.updatedAt
@@ -845,11 +930,16 @@ export class SqliteStore {
     const row = this.database.prepare(
       `SELECT session.id AS session_id,
               session.admin_user_id,
+              session.ip_address,
               session.expires_at,
+              session.created_at,
               admin.username,
               admin.display_name,
               admin.role,
-              admin.status
+              admin.status,
+              admin.last_login_at,
+              admin.created_at AS admin_created_at,
+              admin.updated_at AS admin_updated_at
        FROM admin_sessions session
        JOIN admin_users admin ON admin.id = session.admin_user_id
        WHERE session.token_hash = ?
@@ -864,6 +954,8 @@ export class SqliteStore {
       session: {
         id: row.session_id,
         adminUserId: row.admin_user_id,
+        ipAddress: row.ip_address,
+        createdAt: row.created_at,
         expiresAt: row.expires_at
       },
       user: {
@@ -871,17 +963,191 @@ export class SqliteStore {
         username: row.username,
         displayName: row.display_name,
         role: row.role,
-        status: row.status
+        status: row.status,
+        lastLoginAt: row.last_login_at,
+        createdAt: row.admin_created_at,
+        updatedAt: row.admin_updated_at
       }
     };
   }
 
   revokeAdminSession(sessionId, revokedAt) {
-    this.database.prepare(
+    return this.database.prepare(
       `UPDATE admin_sessions
        SET revoked_at = ?, updated_at = ?
        WHERE id = ? AND revoked_at IS NULL`
     ).run(revokedAt, revokedAt, sessionId);
+  }
+
+  listAdminSessions({ adminId = '' } = {}) {
+    const where = adminId ? 'WHERE session.admin_user_id = ?' : '';
+    const params = adminId ? [adminId] : [];
+    return this.database.prepare(
+      `SELECT session.id,
+              session.admin_user_id,
+              session.ip_address,
+              session.expires_at,
+              session.revoked_at,
+              session.created_at,
+              session.updated_at,
+              admin.username,
+              admin.display_name,
+              admin.role
+       FROM admin_sessions session
+       JOIN admin_users admin ON admin.id = session.admin_user_id
+       ${where}
+       ORDER BY session.created_at DESC
+       LIMIT 500`
+    ).all(...params).map(mapAdminSession);
+  }
+
+  findAdminSessionById(sessionId) {
+    const row = this.database.prepare(
+      `SELECT session.id,
+              session.admin_user_id,
+              session.ip_address,
+              session.expires_at,
+              session.revoked_at,
+              session.created_at,
+              session.updated_at,
+              admin.username,
+              admin.display_name,
+              admin.role
+       FROM admin_sessions session
+       JOIN admin_users admin ON admin.id = session.admin_user_id
+       WHERE session.id = ?`
+    ).get(sessionId);
+    return row ? mapAdminSession(row) : undefined;
+  }
+
+  revokeAdminSessionsForUser(adminUserId, revokedAt) {
+    return this.database.prepare(
+      `UPDATE admin_sessions
+       SET revoked_at = ?, updated_at = ?
+       WHERE admin_user_id = ?
+         AND revoked_at IS NULL
+         AND expires_at > ?`
+    ).run(revokedAt, revokedAt, adminUserId, revokedAt);
+  }
+
+  getAdminLoginLimit(loginKey) {
+    const row = this.database.prepare(
+      `SELECT login_key, username, ip_address, failed_count,
+              window_started_at, locked_until, updated_at
+       FROM admin_login_limits
+       WHERE login_key = ?`
+    ).get(loginKey);
+    return row ? mapAdminLoginLimit(row) : undefined;
+  }
+
+  saveAdminLoginLimit(limit) {
+    this.database.prepare(
+      `INSERT INTO admin_login_limits (
+         login_key, username, ip_address, failed_count,
+         window_started_at, locked_until, updated_at
+       ) VALUES (?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(login_key) DO UPDATE SET
+         username = excluded.username,
+         ip_address = excluded.ip_address,
+         failed_count = excluded.failed_count,
+         window_started_at = excluded.window_started_at,
+         locked_until = excluded.locked_until,
+         updated_at = excluded.updated_at`
+    ).run(
+      limit.loginKey,
+      limit.username,
+      limit.ipAddress,
+      limit.failedCount,
+      limit.windowStartedAt,
+      limit.lockedUntil || null,
+      limit.updatedAt
+    );
+  }
+
+  clearAdminLoginLimit(loginKey) {
+    this.database.prepare(
+      'DELETE FROM admin_login_limits WHERE login_key = ?'
+    ).run(loginKey);
+  }
+
+  pruneAdminLoginLimits(before) {
+    this.database.prepare(
+      'DELETE FROM admin_login_limits WHERE updated_at < ?'
+    ).run(before);
+  }
+
+  createAdminAuditEvent(event) {
+    this.database.prepare(
+      `INSERT INTO admin_audit_events (
+         id, actor_admin_id, actor_username, actor_display_name, actor_role,
+         action, target_type, target_id, summary, details_json, ip_address, created_at
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      event.id,
+      event.actorAdminId || null,
+      event.actorUsername,
+      event.actorDisplayName,
+      event.actorRole,
+      event.action,
+      event.targetType,
+      event.targetId,
+      event.summary,
+      JSON.stringify(event.details || {}),
+      event.ipAddress,
+      event.createdAt
+    );
+  }
+
+  listAdminAuditEvents({
+    action = '',
+    actorId = '',
+    query = '',
+    from = '',
+    to = '',
+    offset = 0,
+    limit = 20
+  } = {}) {
+    const clauses = [];
+    const params = [];
+    if (action) {
+      clauses.push('action = ?');
+      params.push(action);
+    }
+    if (actorId) {
+      clauses.push('actor_admin_id = ?');
+      params.push(actorId);
+    }
+    if (query) {
+      clauses.push(`(
+        LOWER(actor_username) LIKE ? OR
+        LOWER(actor_display_name) LIKE ? OR
+        LOWER(target_id) LIKE ? OR
+        LOWER(summary) LIKE ?
+      )`);
+      const pattern = `%${query.toLowerCase()}%`;
+      params.push(pattern, pattern, pattern, pattern);
+    }
+    if (from) {
+      clauses.push('created_at >= ?');
+      params.push(from);
+    }
+    if (to) {
+      clauses.push('created_at <= ?');
+      params.push(to);
+    }
+    const where = clauses.length > 0 ? `WHERE ${clauses.join(' AND ')}` : '';
+    const total = Number(this.database.prepare(
+      `SELECT COUNT(*) AS count FROM admin_audit_events ${where}`
+    ).get(...params).count);
+    const items = this.database.prepare(
+      `SELECT id, actor_admin_id, actor_username, actor_display_name, actor_role,
+              action, target_type, target_id, summary, details_json, ip_address, created_at
+       FROM admin_audit_events
+       ${where}
+       ORDER BY created_at DESC, id DESC
+       LIMIT ? OFFSET ?`
+    ).all(...params, limit, offset).map(mapAdminAuditEvent);
+    return { total, items };
   }
 
   recordAnswer(user, answer, wrong, metadata) {
@@ -1355,4 +1621,48 @@ function mapAdminUser(row, { includePassword = false } = {}) {
     user.passwordHash = row.password_hash;
   }
   return user;
+}
+
+function mapAdminSession(row) {
+  return {
+    id: row.id,
+    adminUserId: row.admin_user_id,
+    username: row.username,
+    displayName: row.display_name,
+    role: row.role,
+    ipAddress: row.ip_address,
+    expiresAt: row.expires_at,
+    revokedAt: row.revoked_at || null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+}
+
+function mapAdminLoginLimit(row) {
+  return {
+    loginKey: row.login_key,
+    username: row.username,
+    ipAddress: row.ip_address,
+    failedCount: row.failed_count,
+    windowStartedAt: row.window_started_at,
+    lockedUntil: row.locked_until || null,
+    updatedAt: row.updated_at
+  };
+}
+
+function mapAdminAuditEvent(row) {
+  return {
+    id: row.id,
+    actorAdminId: row.actor_admin_id || null,
+    actorUsername: row.actor_username,
+    actorDisplayName: row.actor_display_name,
+    actorRole: row.actor_role,
+    action: row.action,
+    targetType: row.target_type,
+    targetId: row.target_id,
+    summary: row.summary,
+    details: JSON.parse(row.details_json || '{}'),
+    ipAddress: row.ip_address,
+    createdAt: row.created_at
+  };
 }

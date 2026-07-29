@@ -11,6 +11,24 @@ const state = {
   batchPending: false,
   activeView: 'questions',
   adminUsers: [],
+  adminSessions: [],
+  sessionStatus: 'all',
+  adminAuditQuery: '',
+  adminAuditAction: '',
+  adminAuditFrom: '',
+  adminAuditTo: '',
+  adminAuditPage: 1,
+  adminAudit: {
+    items: [],
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      totalItems: 0,
+      totalPages: 1,
+      hasPrevious: false,
+      hasNext: false
+    }
+  },
   auditRisk: 'all',
   auditStatus: 'all',
   auditQuery: '',
@@ -115,6 +133,23 @@ const els = {
   operatorCreateForm: document.querySelector('#operatorCreateForm'),
   operatorMessage: document.querySelector('#operatorMessage'),
   operatorList: document.querySelector('#operatorList'),
+  sessionStatusFilter: document.querySelector('#sessionStatusFilter'),
+  sessionCount: document.querySelector('#sessionCount'),
+  sessionMessage: document.querySelector('#sessionMessage'),
+  sessionTableBody: document.querySelector('#sessionTableBody'),
+  sessionEmpty: document.querySelector('#sessionEmpty'),
+  adminAuditFilterForm: document.querySelector('#adminAuditFilterForm'),
+  adminAuditQueryInput: document.querySelector('#adminAuditQueryInput'),
+  adminAuditActionFilter: document.querySelector('#adminAuditActionFilter'),
+  adminAuditFromFilter: document.querySelector('#adminAuditFromFilter'),
+  adminAuditToFilter: document.querySelector('#adminAuditToFilter'),
+  adminAuditMessage: document.querySelector('#adminAuditMessage'),
+  adminAuditTableBody: document.querySelector('#adminAuditTableBody'),
+  adminAuditEmpty: document.querySelector('#adminAuditEmpty'),
+  adminAuditPageSummary: document.querySelector('#adminAuditPageSummary'),
+  adminAuditPreviousPage: document.querySelector('#adminAuditPreviousPage'),
+  adminAuditPageNumber: document.querySelector('#adminAuditPageNumber'),
+  adminAuditNextPage: document.querySelector('#adminAuditNextPage'),
   moderationDialog: document.querySelector('#moderationDialog'),
   moderationForm: document.querySelector('#moderationForm'),
   moderationTitle: document.querySelector('#moderationTitle'),
@@ -190,6 +225,8 @@ function lockAdmin(message = '') {
   state.categories = [];
   state.questions = [];
   state.adminUsers = [];
+  state.adminSessions = [];
+  state.adminAudit.items = [];
   state.editingQuestionId = null;
   state.audit.items = [];
   state.moderationTarget = null;
@@ -228,16 +265,20 @@ async function loadData() {
   const canReadQuestions = hasPermission('questions:read');
   const canReadAudit = hasPermission('leaderboard:read');
   const canManageAdmins = hasPermission('admin:manage');
-  const [categories, questions, audit, admins] = await Promise.all([
+  const [categories, questions, audit, admins, sessions, adminAudit] = await Promise.all([
     canReadQuestions ? request('/api/admin/categories') : Promise.resolve({ items: [] }),
     canReadQuestions ? request('/api/admin/questions') : Promise.resolve({ items: [] }),
     canReadAudit ? request(auditRequestPath()) : Promise.resolve(null),
-    canManageAdmins ? request('/api/admin/operators') : Promise.resolve({ items: [] })
+    canManageAdmins ? request('/api/admin/operators') : Promise.resolve({ items: [] }),
+    canManageAdmins ? request(`/api/admin/sessions?status=${encodeURIComponent(state.sessionStatus)}`) : Promise.resolve({ items: [] }),
+    canManageAdmins ? request(adminAuditRequestPath()) : Promise.resolve(null)
   ]);
   state.categories = categories.items;
   state.questions = questions.items;
   state.audit = audit || state.audit;
   state.adminUsers = admins.items;
+  state.adminSessions = sessions.items;
+  state.adminAudit = adminAudit || state.adminAudit;
   state.selectedQuestionIds = new Set(
     [...state.selectedQuestionIds].filter((id) => state.questions.some((question) => question.id === id))
   );
@@ -257,6 +298,7 @@ function render() {
   }
   if (hasPermission('admin:manage')) {
     renderAdminUsers();
+    renderAdminSecurity();
   }
   setActiveView(state.activeView);
   if (hasPermission('questions:read')) {
@@ -359,6 +401,24 @@ function renderAdminUsers() {
   els.operatorList.replaceChildren(...state.adminUsers.map(adminUserItem));
 }
 
+function renderAdminSecurity() {
+  els.sessionCount.textContent = `${state.adminSessions.length} 个`;
+  els.sessionEmpty.hidden = state.adminSessions.length > 0;
+  els.sessionTableBody.replaceChildren(...state.adminSessions.map(adminSessionRow));
+
+  const { items, pagination } = state.adminAudit;
+  els.adminAuditEmpty.hidden = items.length > 0;
+  els.adminAuditTableBody.replaceChildren(...items.map(adminAuditRow));
+  const first = pagination.totalItems === 0 ? 0 : (pagination.page - 1) * pagination.pageSize + 1;
+  const last = pagination.totalItems === 0 ? 0 : first + items.length - 1;
+  els.adminAuditPageSummary.textContent = pagination.totalItems === 0
+    ? '0 条'
+    : `${first}-${last} / ${pagination.totalItems} 条`;
+  els.adminAuditPageNumber.textContent = `${pagination.page} / ${pagination.totalPages}`;
+  els.adminAuditPreviousPage.disabled = !pagination.hasPrevious;
+  els.adminAuditNextPage.disabled = !pagination.hasNext;
+}
+
 function adminUserItem(item) {
   const article = document.createElement('article');
   article.className = 'operator-item';
@@ -389,9 +449,18 @@ function adminUserItem(item) {
       重置密码
       <input name="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" placeholder="留空则不修改">
     </label>
-    <button class="secondary-button" type="button">保存</button>
+    <div class="operator-actions">
+      <button class="secondary-button" type="button" data-action="save">保存</button>
+      <button
+        class="danger-outline-button"
+        type="button"
+        data-action="revoke-all"
+        ${item.id === state.adminProfile.id ? 'disabled title="不能下线当前账号"' : ''}
+      >全部下线</button>
+    </div>
   `;
-  article.querySelector('button').addEventListener('click', () => saveAdminUser(item.id, article));
+  article.querySelector('[data-action="save"]').addEventListener('click', () => saveAdminUser(item.id, article));
+  article.querySelector('[data-action="revoke-all"]').addEventListener('click', () => revokeAllAdminSessions(item));
   return article;
 }
 
@@ -406,7 +475,7 @@ function adminRoleOptions(selectedRole) {
 }
 
 async function saveAdminUser(userId, article) {
-  const button = article.querySelector('button');
+  const button = article.querySelector('[data-action="save"]');
   const editingCurrentAdmin = userId === state.adminProfile.id;
   const previousRole = state.adminProfile.role;
   const payload = {
@@ -440,6 +509,136 @@ async function saveAdminUser(userId, article) {
     els.operatorMessage.textContent = error.message;
   } finally {
     button.disabled = false;
+  }
+}
+
+function adminSessionRow(session) {
+  const row = document.createElement('tr');
+  const statusLabels = {
+    active: '有效',
+    expired: '已过期',
+    revoked: '已撤销'
+  };
+  row.innerHTML = `
+    <td>
+      <strong>${escapeHtml(session.displayName)}</strong>
+      <code>${escapeHtml(session.username)}</code>
+    </td>
+    <td><code>${escapeHtml(session.ipAddress)}</code></td>
+    <td>${escapeHtml(formatDate(session.createdAt))}</td>
+    <td>${escapeHtml(formatDate(session.expiresAt))}</td>
+    <td>
+      <span class="badge session-${escapeHtml(session.status)}">${statusLabels[session.status] || session.status}</span>
+      ${session.current ? '<span class="current-session">当前会话</span>' : ''}
+    </td>
+    <td>
+      ${session.status === 'active' && !session.current
+        ? '<button class="danger-outline-button" type="button" data-action="revoke">下线</button>'
+        : ''}
+    </td>
+  `;
+  row.querySelector('[data-action="revoke"]')?.addEventListener('click', () => revokeAdminSession(session));
+  return row;
+}
+
+function adminAuditRow(event) {
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${escapeHtml(formatDate(event.createdAt))}</td>
+    <td>
+      <strong>${escapeHtml(event.actorDisplayName)}</strong>
+      <code>${escapeHtml(event.actorUsername)}</code>
+    </td>
+    <td><span class="audit-action">${escapeHtml(adminAuditActionLabel(event.action))}</span></td>
+    <td>
+      <span>${escapeHtml(event.targetType)}</span>
+      <code title="${escapeHtml(event.targetId)}">${escapeHtml(event.targetId)}</code>
+    </td>
+    <td>${escapeHtml(event.summary)}</td>
+    <td><code>${escapeHtml(event.ipAddress)}</code></td>
+  `;
+  return row;
+}
+
+function adminAuditActionLabel(action) {
+  return {
+    'auth.bootstrap': '初始化后台',
+    'auth.login_succeeded': '登录成功',
+    'auth.login_failed': '登录失败',
+    'auth.login_locked': '登录锁定',
+    'auth.logout': '退出登录',
+    'admin.create': '创建管理员',
+    'admin.update': '更新管理员',
+    'session.revoke': '会话下线',
+    'session.revoke_all': '账号全部下线',
+    'question.create': '创建题目',
+    'question.update': '更新题目',
+    'question.batch_status': '批量题目状态',
+    'category.create': '创建分类',
+    'category.update': '更新分类',
+    'leaderboard.suspend': '封禁排行榜账号',
+    'leaderboard.restore': '解封排行榜账号'
+  }[action] || action;
+}
+
+function adminAuditRequestPath() {
+  const params = new URLSearchParams({
+    page: String(state.adminAuditPage),
+    pageSize: '20'
+  });
+  if (state.adminAuditQuery) {
+    params.set('q', state.adminAuditQuery);
+  }
+  if (state.adminAuditAction) {
+    params.set('action', state.adminAuditAction);
+  }
+  if (state.adminAuditFrom) {
+    params.set('from', state.adminAuditFrom);
+  }
+  if (state.adminAuditTo) {
+    params.set('to', state.adminAuditTo);
+  }
+  return `/api/admin/audit/events?${params.toString()}`;
+}
+
+async function loadAdminSecurity() {
+  try {
+    const [sessions, audit] = await Promise.all([
+      request(`/api/admin/sessions?status=${encodeURIComponent(state.sessionStatus)}`),
+      request(adminAuditRequestPath())
+    ]);
+    state.adminSessions = sessions.items;
+    state.adminAudit = audit;
+    state.adminAuditPage = audit.pagination.page;
+    els.sessionMessage.textContent = '';
+    els.adminAuditMessage.textContent = '';
+    renderAdminSecurity();
+  } catch (error) {
+    els.adminAuditMessage.textContent = error.message;
+  }
+}
+
+async function revokeAdminSession(session) {
+  els.sessionMessage.textContent = '正在强制下线会话...';
+  try {
+    await request(`/api/admin/sessions/${encodeURIComponent(session.id)}`, { method: 'DELETE' });
+    await loadAdminSecurity();
+    els.sessionMessage.textContent = `${session.displayName} 的会话已下线`;
+  } catch (error) {
+    els.sessionMessage.textContent = error.message;
+  }
+}
+
+async function revokeAllAdminSessions(admin) {
+  els.sessionMessage.textContent = `正在下线 ${admin.displayName} 的全部会话...`;
+  try {
+    const result = await request(`/api/admin/operators/${encodeURIComponent(admin.id)}/sessions`, {
+      method: 'DELETE'
+    });
+    await loadAdminSecurity();
+    els.sessionMessage.textContent = `已下线 ${result.revokedCount} 个会话`;
+  } catch (error) {
+    els.sessionMessage.textContent = error.message;
   }
 }
 
@@ -1157,6 +1356,37 @@ els.auditNextPage.addEventListener('click', async () => {
   }
   state.auditPage += 1;
   await loadAuditData().catch(() => {});
+});
+
+els.sessionStatusFilter.addEventListener('change', async (event) => {
+  state.sessionStatus = event.target.value;
+  await loadAdminSecurity();
+});
+
+els.adminAuditFilterForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  state.adminAuditQuery = els.adminAuditQueryInput.value.trim();
+  state.adminAuditAction = els.adminAuditActionFilter.value;
+  state.adminAuditFrom = els.adminAuditFromFilter.value;
+  state.adminAuditTo = els.adminAuditToFilter.value;
+  state.adminAuditPage = 1;
+  await loadAdminSecurity();
+});
+
+els.adminAuditPreviousPage.addEventListener('click', async () => {
+  if (state.adminAuditPage <= 1) {
+    return;
+  }
+  state.adminAuditPage -= 1;
+  await loadAdminSecurity();
+});
+
+els.adminAuditNextPage.addEventListener('click', async () => {
+  if (!state.adminAudit.pagination?.hasNext) {
+    return;
+  }
+  state.adminAuditPage += 1;
+  await loadAdminSecurity();
 });
 
 els.moderationForm.addEventListener('submit', async (event) => {

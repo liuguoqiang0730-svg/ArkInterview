@@ -7,6 +7,10 @@ import {
 } from 'node:crypto';
 
 const defaultSessionTtlSeconds = 8 * 60 * 60;
+const defaultLoginWindowSeconds = 15 * 60;
+const defaultLoginLockSeconds = 15 * 60;
+const defaultMaximumLoginFailures = 5;
+const maximumAuditPageSize = 100;
 const usernamePattern = /^[A-Za-z0-9._-]{3,32}$/;
 const validRoles = new Set(['super_admin', 'content_editor', 'moderator']);
 const validStatuses = new Set(['active', 'disabled']);
@@ -27,11 +31,32 @@ export class AdminAuthService {
     store,
     legacyToken = '',
     sessionTtlSeconds = defaultSessionTtlSeconds,
+    loginWindowSeconds = defaultLoginWindowSeconds,
+    loginLockSeconds = defaultLoginLockSeconds,
+    maximumLoginFailures = defaultMaximumLoginFailures,
     now = () => new Date()
   }) {
     this.store = store;
     this.legacyToken = String(legacyToken || '').trim();
     this.sessionTtlSeconds = normalizeTtl(sessionTtlSeconds);
+    this.loginWindowSeconds = normalizePositiveInteger(
+      loginWindowSeconds,
+      defaultLoginWindowSeconds,
+      60,
+      24 * 60 * 60
+    );
+    this.loginLockSeconds = normalizePositiveInteger(
+      loginLockSeconds,
+      defaultLoginLockSeconds,
+      60,
+      24 * 60 * 60
+    );
+    this.maximumLoginFailures = normalizePositiveInteger(
+      maximumLoginFailures,
+      defaultMaximumLoginFailures,
+      3,
+      20
+    );
     this.now = now;
   }
 
@@ -42,7 +67,7 @@ export class AdminAuthService {
     };
   }
 
-  bootstrap({ authorization, username, password, displayName }) {
+  bootstrap({ authorization, username, password, displayName, ipAddress = '' }) {
     if (!this.legacyToken) {
       throw new AdminAuthError(503, '首次初始化需要先配置 ADMIN_TOKEN');
     }
@@ -59,11 +84,32 @@ export class AdminAuthService {
       displayName,
       role: 'super_admin'
     });
-    return this.issueLogin(user);
+    const result = this.issueLogin(user, ipAddress);
+    this.recordAudit(null, {
+      actorAdmin: user,
+      action: 'auth.bootstrap',
+      targetType: 'admin_account',
+      targetId: user.id,
+      summary: `初始化超级管理员 ${user.displayName}`
+    }, ipAddress);
+    return result;
   }
 
-  login({ username, password }) {
+  login({ username, password, ipAddress = '' }) {
     const normalizedUsername = normalizeUsername(username);
+    const normalizedIp = normalizeIpAddress(ipAddress);
+    const loginKey = hashToken(`${normalizedUsername}\n${normalizedIp}`);
+    const timestamp = this.nowIso();
+    const timestampMs = Date.parse(timestamp);
+    const retentionSeconds = Math.max(this.loginWindowSeconds, this.loginLockSeconds) * 2;
+    this.store.pruneAdminLoginLimits(
+      new Date(timestampMs - retentionSeconds * 1000).toISOString()
+    );
+    const limit = this.store.getAdminLoginLimit(loginKey);
+    if (limit?.lockedUntil && Date.parse(limit.lockedUntil) > timestampMs) {
+      throw rateLimitError(limit.lockedUntil, timestampMs);
+    }
+
     const user = this.store.findAdminUserByUsername(normalizedUsername);
     const passwordValue = String(password || '');
     if (
@@ -71,9 +117,51 @@ export class AdminAuthService {
       user.status !== 'active' ||
       !verifyPassword(passwordValue, user.passwordSalt, user.passwordHash)
     ) {
+      const withinWindow = limit &&
+        timestampMs - Date.parse(limit.windowStartedAt) < this.loginWindowSeconds * 1000;
+      const failedCount = withinWindow ? limit.failedCount + 1 : 1;
+      const lockedUntil = failedCount >= this.maximumLoginFailures
+        ? new Date(timestampMs + this.loginLockSeconds * 1000).toISOString()
+        : null;
+      this.store.saveAdminLoginLimit({
+        loginKey,
+        username: normalizedUsername,
+        ipAddress: normalizedIp,
+        failedCount,
+        windowStartedAt: withinWindow ? limit.windowStartedAt : timestamp,
+        lockedUntil,
+        updatedAt: timestamp
+      });
+      this.recordAudit(null, {
+        actorAdmin: user || {
+          id: null,
+          username: normalizedUsername,
+          displayName: normalizedUsername,
+          role: 'unknown'
+        },
+        action: lockedUntil ? 'auth.login_locked' : 'auth.login_failed',
+        targetType: 'admin_account',
+        targetId: user?.id || normalizedUsername,
+        summary: lockedUntil
+          ? `管理员登录失败次数过多，账号来源已临时锁定`
+          : `管理员登录失败（${failedCount}/${this.maximumLoginFailures}）`,
+        details: { failedCount }
+      }, normalizedIp);
+      if (lockedUntil) {
+        throw rateLimitError(lockedUntil, timestampMs);
+      }
       throw new AdminAuthError(401, '管理员账号或密码错误');
     }
-    return this.issueLogin(user);
+    this.store.clearAdminLoginLimit(loginKey);
+    const result = this.issueLogin(user, normalizedIp);
+    this.recordAudit(null, {
+      actorAdmin: user,
+      action: 'auth.login_succeeded',
+      targetType: 'admin_session',
+      targetId: result.sessionId,
+      summary: `${user.displayName} 登录管理后台`
+    }, normalizedIp);
+    return result;
   }
 
   resolvePrincipal(authorization) {
@@ -111,11 +199,17 @@ export class AdminAuthService {
     };
   }
 
-  logout(principal) {
+  logout(principal, ipAddress = '') {
     if (!principal.session) {
       throw new AdminAuthError(400, '部署服务令牌不能通过会话接口退出');
     }
     this.store.revokeAdminSession(principal.session.id, this.nowIso());
+    this.recordAudit(principal, {
+      action: 'auth.logout',
+      targetType: 'admin_session',
+      targetId: principal.session.id,
+      summary: `${principal.admin.displayName} 退出管理后台`
+    }, ipAddress);
   }
 
   listUsers() {
@@ -197,7 +291,132 @@ export class AdminAuthService {
     }
   }
 
-  issueLogin(user) {
+  listSessions({ adminId = '', status = 'all' } = {}, currentSessionId = '') {
+    const normalizedStatus = String(status || 'all').trim();
+    if (!['all', 'active', 'expired', 'revoked'].includes(normalizedStatus)) {
+      throw new AdminAuthError(400, '会话状态筛选无效');
+    }
+    const timestampMs = Date.parse(this.nowIso());
+    return this.store.listAdminSessions({
+      adminId: String(adminId || '').trim()
+    }).map((session) => publicAdminSession(session, timestampMs, currentSessionId))
+      .filter((session) => normalizedStatus === 'all' || session.status === normalizedStatus);
+  }
+
+  revokeSession(sessionIdInput, principal) {
+    const sessionId = String(sessionIdInput || '').trim();
+    const session = this.store.findAdminSessionById(sessionId);
+    if (!session) {
+      throw new AdminAuthError(404, '管理员会话不存在');
+    }
+    if (session.id === principal.session?.id) {
+      throw new AdminAuthError(409, '不能在会话管理中强制下线当前会话，请使用退出登录');
+    }
+    if (session.revokedAt || Date.parse(session.expiresAt) <= Date.parse(this.nowIso())) {
+      throw new AdminAuthError(409, '管理员会话已经失效');
+    }
+    this.store.revokeAdminSession(session.id, this.nowIso());
+    return session;
+  }
+
+  revokeUserSessions(adminUserIdInput, principal) {
+    const adminUserId = String(adminUserIdInput || '').trim();
+    const user = this.store.findAdminUserById(adminUserId);
+    if (!user) {
+      throw new AdminAuthError(404, '管理员账号不存在');
+    }
+    if (adminUserId === principal.admin.id) {
+      throw new AdminAuthError(409, '不能强制下线当前登录账号');
+    }
+    const result = this.store.revokeAdminSessionsForUser(adminUserId, this.nowIso());
+    return { user: publicAdmin(user), revokedCount: result.changes };
+  }
+
+  listAuditEvents({
+    action = '',
+    actorId = '',
+    query = '',
+    from = '',
+    to = '',
+    page = 1,
+    pageSize = 20
+  } = {}) {
+    const normalizedAction = String(action || '').trim();
+    const normalizedActorId = String(actorId || '').trim();
+    const normalizedQuery = String(query || '').trim();
+    if (normalizedAction.length > 64 || normalizedActorId.length > 80) {
+      throw new AdminAuthError(400, '审计筛选参数过长');
+    }
+    if (normalizedQuery.length > 100) {
+      throw new AdminAuthError(400, '审计搜索内容不能超过 100 个字符');
+    }
+    const normalizedPage = normalizePositiveInteger(page, 1, 1, Number.MAX_SAFE_INTEGER);
+    const normalizedPageSize = normalizePositiveInteger(pageSize, 20, 1, maximumAuditPageSize);
+    const fromDate = normalizeAuditDate(from, false);
+    const toDate = normalizeAuditDate(to, true);
+    if (fromDate && toDate && Date.parse(fromDate) > Date.parse(toDate)) {
+      throw new AdminAuthError(400, '审计开始日期不能晚于结束日期');
+    }
+    const offset = (normalizedPage - 1) * normalizedPageSize;
+    const result = this.store.listAdminAuditEvents({
+      action: normalizedAction,
+      actorId: normalizedActorId,
+      query: normalizedQuery,
+      from: fromDate,
+      to: toDate,
+      offset,
+      limit: normalizedPageSize
+    });
+    const totalPages = Math.max(1, Math.ceil(result.total / normalizedPageSize));
+    const effectivePage = Math.min(normalizedPage, totalPages);
+    if (effectivePage !== normalizedPage) {
+      return this.listAuditEvents({
+        action,
+        actorId,
+        query,
+        from,
+        to,
+        page: effectivePage,
+        pageSize: normalizedPageSize
+      });
+    }
+    return {
+      items: result.items,
+      pagination: {
+        page: effectivePage,
+        pageSize: normalizedPageSize,
+        totalItems: result.total,
+        totalPages,
+        hasPrevious: effectivePage > 1,
+        hasNext: effectivePage < totalPages
+      }
+    };
+  }
+
+  recordAudit(principal, event, ipAddress = '') {
+    const actor = event.actorAdmin || principal?.admin || {
+      id: null,
+      username: 'system',
+      displayName: '系统',
+      role: 'system'
+    };
+    this.store.createAdminAuditEvent({
+      id: `admin-audit-${randomUUID()}`,
+      actorAdminId: actor.id || null,
+      actorUsername: String(actor.username || 'unknown').slice(0, 64),
+      actorDisplayName: String(actor.displayName || actor.username || '未知操作人').slice(0, 64),
+      actorRole: String(actor.role || 'unknown').slice(0, 32),
+      action: String(event.action || 'unknown').slice(0, 64),
+      targetType: String(event.targetType || 'unknown').slice(0, 64),
+      targetId: String(event.targetId || '').slice(0, 160),
+      summary: String(event.summary || '').slice(0, 300),
+      details: event.details || {},
+      ipAddress: normalizeIpAddress(ipAddress),
+      createdAt: this.nowIso()
+    });
+  }
+
+  issueLogin(user, ipAddress = '') {
     const timestamp = this.nowIso();
     const token = `ark_admin_${randomBytes(36).toString('base64url')}`;
     const expiresAt = new Date(
@@ -205,17 +424,20 @@ export class AdminAuthService {
     ).toISOString();
     user.lastLoginAt = timestamp;
     user.updatedAt = timestamp;
-    this.store.createAdminSession(user, {
+    const session = {
       id: `admin-session-${randomUUID()}`,
       tokenHash: hashToken(token),
+      ipAddress: normalizeIpAddress(ipAddress),
       expiresAt,
       createdAt: timestamp,
       updatedAt: timestamp
-    });
+    };
+    this.store.createAdminSession(user, session);
     return {
       tokenType: 'Bearer',
       accessToken: token,
       expiresIn: this.sessionTtlSeconds,
+      sessionId: session.id,
       admin: publicAdmin(user)
     };
   }
@@ -335,4 +557,63 @@ function normalizeTtl(value) {
     return defaultSessionTtlSeconds;
   }
   return Math.min(7 * 24 * 60 * 60, Math.max(5 * 60, Math.floor(parsed)));
+}
+
+function normalizePositiveInteger(value, fallback, minimum, maximum) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed)) {
+    return fallback;
+  }
+  return Math.min(maximum, Math.max(minimum, parsed));
+}
+
+function normalizeIpAddress(value) {
+  return String(value || 'unknown').trim().slice(0, 64) || 'unknown';
+}
+
+function rateLimitError(lockedUntil, nowMs) {
+  const error = new AdminAuthError(429, '登录失败次数过多，请稍后再试');
+  error.retryAfter = Math.max(1, Math.ceil((Date.parse(lockedUntil) - nowMs) / 1000));
+  return error;
+}
+
+function publicAdminSession(session, nowMs, currentSessionId) {
+  const status = session.revokedAt
+    ? 'revoked'
+    : Date.parse(session.expiresAt) <= nowMs
+      ? 'expired'
+      : 'active';
+  return {
+    id: session.id,
+    adminUserId: session.adminUserId,
+    username: session.username,
+    displayName: session.displayName,
+    role: session.role,
+    ipAddress: session.ipAddress || 'unknown',
+    status,
+    current: session.id === currentSessionId,
+    expiresAt: session.expiresAt,
+    revokedAt: session.revokedAt,
+    createdAt: session.createdAt
+  };
+}
+
+function normalizeAuditDate(value, endOfDay) {
+  const normalized = String(value || '').trim();
+  if (!normalized) {
+    return '';
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+    throw new AdminAuthError(400, '审计日期必须使用 YYYY-MM-DD 格式');
+  }
+  const [year, month, day] = normalized.split('-').map(Number);
+  const calendarDate = new Date(Date.UTC(year, month - 1, day));
+  if (
+    calendarDate.getUTCFullYear() !== year ||
+    calendarDate.getUTCMonth() !== month - 1 ||
+    calendarDate.getUTCDate() !== day
+  ) {
+    throw new AdminAuthError(400, '审计日期无效');
+  }
+  return `${normalized}${endOfDay ? 'T23:59:59.999+08:00' : 'T00:00:00.000+08:00'}`;
 }

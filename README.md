@@ -31,7 +31,9 @@ npm run dev
 - API: `http://127.0.0.1:8787/api`
 - 管理后台: `http://127.0.0.1:8787/admin/`
 
-进入管理后台时输入当前 shell 中的 `ADMIN_TOKEN`。令牌只保存在当前浏览器标签页的 `sessionStorage`，关闭标签页后需要重新输入。服务端要求令牌至少 32 个字符；未配置时公开刷题 API 仍可用，但所有 `/api/admin/*` 管理接口会关闭。
+首次进入管理后台时，展开“首次初始化管理员”，使用当前 shell 中的 `ADMIN_TOKEN` 创建超级管理员；之后使用管理员用户名和密码登录。短期会话令牌只保存在当前浏览器标签页的 `sessionStorage`。`ADMIN_TOKEN` 至少 32 个字符，仅用于首次初始化、部署和题库发布；未配置且数据库中尚无管理员时，公开刷题 API 仍可用，但无法初始化管理后台。
+
+管理员登录默认在同一用户名和来源 IP 连续失败 5 次后锁定 15 分钟，会话默认有效 8 小时。可通过 `ADMIN_LOGIN_MAX_FAILURES`、`ADMIN_LOGIN_WINDOW_SECONDS`、`ADMIN_LOGIN_LOCK_SECONDS` 和 `ADMIN_SESSION_TTL_SECONDS` 调整。反向代理已正确覆盖来源地址时设置 `TRUST_PROXY=1`；不要在服务直接暴露公网时信任客户端传入的转发头。
 
 服务首次启动会从 `data/seed/` 生成 SQLite 运行库 `backend/storage/arkinterview.sqlite`。该文件是本地运行状态，不纳入版本控制。若检测到旧版 `backend/storage/db.json`，服务会自动导入分类、题目、匿名用户、收藏、错题和答题记录，且不会修改或删除旧 JSON。
 
@@ -83,7 +85,7 @@ export ADMIN_TOKEN="$(openssl rand -hex 32)"
 bash scripts/deploy-production.sh
 ```
 
-脚本会拒绝脏 Git 工作区，使用锁文件安装生产依赖，在线备份 SQLite，运行 `npm test`，通过 PM2 重载服务，并验证公开 API、登录能力状态、未授权 `401` 和授权 `200`。首次迁移时如果 SQLite 尚不存在，脚本会先备份旧版 `db.json`。脚本不会自动执行 `git pull` 或覆盖题库。若服务端使用自定义目录、端口或数据库路径，可通过 `APP_DIR`、`API_URL`、`PORT`、`DB_FILE` 和 `LEGACY_DB_FILE` 环境变量覆盖。
+脚本会拒绝脏 Git 工作区，使用锁文件安装生产依赖，在线备份 SQLite，运行 `npm test`，通过 PM2 重载服务，并验证公开 API、登录能力状态、未授权 `401` 和授权 `200`。首次迁移时如果 SQLite 尚不存在，脚本会先备份旧版 `db.json`。脚本不会自动执行 `git pull` 或覆盖题库。若服务端使用自定义目录、端口、数据库路径或反向代理策略，可通过 `APP_DIR`、`API_URL`、`PORT`、`DB_FILE`、`LEGACY_DB_FILE` 和 `TRUST_PROXY` 环境变量覆盖。
 
 部署成功后应妥善保存令牌并立即配置 HTTPS。需要回滚代码时，先切回上一条已验证提交并重新执行部署脚本；若确实需要恢复数据，再停止服务后使用脚本输出的 `.deploy-backups/*.sqlite` 或首次迁移产生的旧 JSON 备份。
 

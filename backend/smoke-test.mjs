@@ -155,6 +155,22 @@ async function runChecks() {
     role: 'moderator'
   });
   assert(moderator.item.role === 'moderator', 'super administrators should create scoped accounts');
+  let rateLimitedLogin;
+  for (let attempt = 1; attempt <= 5; attempt += 1) {
+    rateLimitedLogin = await fetch(`${baseUrl}/api/admin/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'rate-limit-user',
+        password: 'Wrong-password-2026'
+      })
+    });
+    assert(
+      rateLimitedLogin.status === (attempt === 5 ? 429 : 401),
+      'administrator login failures should activate the configured source lock'
+    );
+  }
+  assert(Number(rateLimitedLogin.headers.get('retry-after')) > 0, 'rate limits should expose Retry-After');
   const moderatorLogin = await postJson('/api/admin/auth/login', {
     username: 'smoke-moderator',
     password: 'Smoke-moderator-password-2026'
@@ -170,6 +186,32 @@ async function runChecks() {
   });
   assert(allowedAudit.status === 200, 'moderators should read leaderboard audit data');
   adminAccessToken = ownerAccessToken;
+  const adminSessions = await getJson('/api/admin/sessions?status=active');
+  const moderatorSession = adminSessions.items.find((item) => item.id === moderatorLogin.sessionId);
+  assert(moderatorSession, 'super administrators should see active administrator sessions');
+  const revokedModerator = await fetch(
+    `${baseUrl}/api/admin/sessions/${encodeURIComponent(moderatorSession.id)}`,
+    {
+      method: 'DELETE',
+      headers: requestHeaders('/api/admin/sessions')
+    }
+  );
+  assert(revokedModerator.status === 200, 'super administrators should force another session offline');
+  adminAccessToken = moderatorLogin.accessToken;
+  const revokedModeratorProfile = await fetch(`${baseUrl}/api/admin/auth/me`, {
+    headers: requestHeaders('/api/admin/auth/me')
+  });
+  assert(revokedModeratorProfile.status === 401, 'a forced-off session should stop working immediately');
+  adminAccessToken = ownerAccessToken;
+  const adminAuditEvents = await getJson('/api/admin/audit/events?pageSize=50');
+  assert(
+    adminAuditEvents.items.some((item) => item.action === 'auth.login_locked'),
+    'administrator source locks should be auditable'
+  );
+  assert(
+    adminAuditEvents.items.some((item) => item.action === 'session.revoke'),
+    'forced administrator logout should be auditable'
+  );
 
   const preflightResponse = await fetch(`${baseUrl}/api/admin/questions`, {
     method: 'OPTIONS',

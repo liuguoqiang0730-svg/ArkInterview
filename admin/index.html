@@ -399,6 +399,106 @@
           </form>
           <div id="operatorList" class="operator-list"></div>
         </section>
+
+        <section class="panel security-panel">
+          <div class="panel-heading security-heading">
+            <div>
+              <p class="eyebrow">Active Sessions</p>
+              <h2>管理员会话</h2>
+            </div>
+            <div class="security-filters">
+              <select id="sessionStatusFilter" aria-label="会话状态筛选">
+                <option value="all">全部会话</option>
+                <option value="active">有效会话</option>
+                <option value="expired">已过期</option>
+                <option value="revoked">已撤销</option>
+              </select>
+              <span id="sessionCount" class="visible-count">0 个</span>
+            </div>
+          </div>
+          <p id="sessionMessage" class="security-message" role="status"></p>
+          <div class="security-table-wrap">
+            <table class="security-table">
+              <thead>
+                <tr>
+                  <th scope="col">管理员</th>
+                  <th scope="col">来源</th>
+                  <th scope="col">登录时间</th>
+                  <th scope="col">到期时间</th>
+                  <th scope="col">状态</th>
+                  <th scope="col"><span class="sr-only">操作</span></th>
+                </tr>
+              </thead>
+              <tbody id="sessionTableBody"></tbody>
+            </table>
+            <p id="sessionEmpty" class="empty" hidden>当前筛选条件下没有会话。</p>
+          </div>
+        </section>
+
+        <section class="panel security-panel">
+          <div class="panel-heading security-heading">
+            <div>
+              <p class="eyebrow">Administrator Audit</p>
+              <h2>后台操作审计</h2>
+            </div>
+            <form id="adminAuditFilterForm" class="security-filters">
+              <input id="adminAuditQueryInput" type="search" maxlength="100" placeholder="操作人、目标或摘要">
+              <select id="adminAuditActionFilter" aria-label="审计动作筛选">
+                <option value="">全部动作</option>
+                <option value="auth.bootstrap">初始化后台</option>
+                <option value="auth.login_succeeded">登录成功</option>
+                <option value="auth.login_failed">登录失败</option>
+                <option value="auth.login_locked">登录锁定</option>
+                <option value="auth.logout">退出登录</option>
+                <option value="admin.create">创建管理员</option>
+                <option value="admin.update">更新管理员</option>
+                <option value="session.revoke">会话下线</option>
+                <option value="session.revoke_all">账号全部下线</option>
+                <option value="question.create">创建题目</option>
+                <option value="question.update">更新题目</option>
+                <option value="question.batch_status">批量题目状态</option>
+                <option value="category.create">创建分类</option>
+                <option value="category.update">更新分类</option>
+                <option value="leaderboard.suspend">封禁排行榜账号</option>
+                <option value="leaderboard.restore">解封排行榜账号</option>
+              </select>
+              <label class="audit-date-field">
+                从
+                <input id="adminAuditFromFilter" type="date">
+              </label>
+              <label class="audit-date-field">
+                至
+                <input id="adminAuditToFilter" type="date">
+              </label>
+              <button class="secondary-button" type="submit">查询</button>
+            </form>
+          </div>
+          <p id="adminAuditMessage" class="security-message" role="status"></p>
+          <div class="security-table-wrap">
+            <table class="security-table audit-events-table">
+              <thead>
+                <tr>
+                  <th scope="col">时间</th>
+                  <th scope="col">操作人</th>
+                  <th scope="col">动作</th>
+                  <th scope="col">目标</th>
+                  <th scope="col">摘要</th>
+                  <th scope="col">来源</th>
+                </tr>
+              </thead>
+              <tbody id="adminAuditTableBody"></tbody>
+            </table>
+            <p id="adminAuditEmpty" class="empty" hidden>当前筛选条件下没有审计记录。</p>
+          </div>
+          <div class="audit-pagination">
+            <span id="adminAuditPageSummary">0 条</span>
+            <div class="audit-page-actions">
+              <button id="adminAuditPreviousPage" class="icon-button" type="button" title="上一页" aria-label="上一页">←</button>
+              <span id="adminAuditPageNumber">1 / 1</span>
+              <button id="adminAuditNextPage" class="icon-button" type="button" title="下一页" aria-label="下一页">→</button>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
 
