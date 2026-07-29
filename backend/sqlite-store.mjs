@@ -4,7 +4,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-const schemaVersion = 3;
+const schemaVersion = 4;
 
 export function resolveDatabasePaths(defaultStorageDir) {
   const configuredDbFile = process.env.DB_FILE
@@ -217,6 +217,18 @@ export class SqliteStore {
           ON answer_attempts(user_id, submitted_at, sequence_id);
         CREATE INDEX IF NOT EXISTS idx_answer_attempts_leaderboard
           ON answer_attempts(question_id, is_correct, submitted_at);
+
+        CREATE TABLE IF NOT EXISTS user_moderation_events (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          action TEXT NOT NULL,
+          reason TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_user_moderation_events_user
+          ON user_moderation_events(user_id, created_at DESC);
       `);
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
@@ -250,6 +262,22 @@ export class SqliteStore {
          WHERE leaderboard_opt_in = 1
            AND leaderboard_opted_in_at IS NULL`
       ).run(new Date().toISOString());
+      this.database.pragma('user_version = 3');
+    }
+    if (currentVersion >= 1 && currentVersion <= 3) {
+      this.database.exec(`
+        CREATE TABLE IF NOT EXISTS user_moderation_events (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          action TEXT NOT NULL,
+          reason TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_user_moderation_events_user
+          ON user_moderation_events(user_id, created_at DESC);
+      `);
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
     this.assertSupportedSchema();
@@ -392,6 +420,7 @@ export class SqliteStore {
     const normalized = normalizeSnapshot(snapshot);
     const replace = this.database.transaction(() => {
       this.database.exec(`
+        DELETE FROM user_moderation_events;
         DELETE FROM auth_sessions;
         DELETE FROM user_identities;
         DELETE FROM favorites;
@@ -472,7 +501,7 @@ export class SqliteStore {
     save();
   }
 
-  listLeaderboardRows({ categoryId = '', periodStart = null } = {}) {
+  listLeaderboardRows({ categoryId = '', periodStart = null, includeInactive = false } = {}) {
     const categoryClause = categoryId ? 'AND q.category_id = ?' : '';
     const periodClause = periodStart ? 'WHERE first_correct_at >= ?' : '';
     const parameters = [];
@@ -513,9 +542,8 @@ export class SqliteStore {
               scores.last_scored_at
        FROM scores
        INNER JOIN users u ON u.id = scores.user_id
-       WHERE u.leaderboard_opt_in = 1
-         AND u.leaderboard_opted_in_at IS NOT NULL
-         AND u.status = 'active'
+       WHERE u.leaderboard_opted_in_at IS NOT NULL
+         ${includeInactive ? '' : "AND u.leaderboard_opt_in = 1 AND u.status = 'active'"}
          AND EXISTS (
            SELECT 1
            FROM user_identities identity
@@ -530,6 +558,88 @@ export class SqliteStore {
       score: row.score,
       lastScoredAt: row.last_scored_at
     }));
+  }
+
+  listLeaderboardAuditUsers() {
+    return this.database.prepare(
+      `SELECT u.id AS user_id,
+              u.display_name,
+              u.status,
+              u.leaderboard_opt_in,
+              u.leaderboard_opted_in_at,
+              u.created_at,
+              u.updated_at,
+              GROUP_CONCAT(DISTINCT identity.provider) AS providers
+       FROM users u
+       INNER JOIN user_identities identity ON identity.user_id = u.id
+       GROUP BY u.id
+       ORDER BY u.created_at, u.id`
+    ).all().map((row) => ({
+      userId: row.user_id,
+      displayName: row.display_name || '',
+      status: row.status,
+      leaderboardOptIn: Boolean(row.leaderboard_opt_in),
+      leaderboardOptedInAt: row.leaderboard_opted_in_at || null,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      providers: String(row.providers || '').split(',').filter(Boolean)
+    }));
+  }
+
+  listLeaderboardAuditAttempts() {
+    return this.database.prepare(
+      `SELECT aa.user_id,
+              aa.question_id,
+              aa.is_correct,
+              aa.leaderboard_eligible,
+              aa.submitted_at
+       FROM answer_attempts aa
+       WHERE EXISTS (
+         SELECT 1
+         FROM user_identities identity
+         WHERE identity.user_id = aa.user_id
+       )
+       ORDER BY aa.user_id, aa.submitted_at, aa.sequence_id`
+    ).all().map((row) => ({
+      userId: row.user_id,
+      questionId: row.question_id,
+      isCorrect: row.is_correct === null ? null : Boolean(row.is_correct),
+      leaderboardEligible: Boolean(row.leaderboard_eligible),
+      submittedAt: row.submitted_at
+    }));
+  }
+
+  listUserModerationEvents() {
+    return this.database.prepare(
+      `SELECT id, user_id, action, reason, created_at
+       FROM user_moderation_events
+       ORDER BY created_at DESC, id DESC`
+    ).all().map((row) => ({
+      id: row.id,
+      userId: row.user_id,
+      action: row.action,
+      reason: row.reason,
+      createdAt: row.created_at
+    }));
+  }
+
+  moderateUser(user, event, metadata) {
+    const moderate = this.database.transaction(() => {
+      this.saveMetadataRecord(metadata);
+      this.saveUserRecord(user);
+      this.database.prepare(
+        `INSERT INTO user_moderation_events (id, user_id, action, reason, created_at)
+         VALUES (?, ?, ?, ?, ?)`
+      ).run(event.id, user.id, event.action, event.reason, event.createdAt);
+      if (event.action === 'suspend') {
+        this.database.prepare(
+          `UPDATE auth_sessions
+           SET revoked_at = ?, updated_at = ?
+           WHERE user_id = ? AND revoked_at IS NULL`
+        ).run(event.createdAt, event.createdAt, user.id);
+      }
+    });
+    moderate();
   }
 
   recordAnswer(user, answer, wrong, metadata) {

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { AuthService } from './auth-service.mjs';
 import { HuaweiAccountClient } from './huawei-account-client.mjs';
+import { LeaderboardAdminService } from './leaderboard-admin-service.mjs';
 import { LeaderboardService } from './leaderboard-service.mjs';
 import { openSqliteStore, resolveDatabasePaths } from './sqlite-store.mjs';
 
@@ -557,7 +558,16 @@ async function sendStatic(req, res, pathname) {
   }
 }
 
-async function routeApi(req, res, db, url, store, authService, leaderboardService) {
+async function routeApi(
+  req,
+  res,
+  db,
+  url,
+  store,
+  authService,
+  leaderboardService,
+  leaderboardAdminService
+) {
   const { pathname, searchParams } = url;
   const method = req.method || 'GET';
   const deviceId = getDeviceId(req);
@@ -568,7 +578,7 @@ async function routeApi(req, res, db, url, store, authService, leaderboardServic
   }
 
   if (pathname.startsWith('/api/admin/')) {
-    await routeAdmin(req, res, db, url, store);
+    await routeAdmin(req, res, db, url, store, leaderboardAdminService);
     return;
   }
 
@@ -781,10 +791,32 @@ async function routeApi(req, res, db, url, store, authService, leaderboardServic
   notFound(res);
 }
 
-async function routeAdmin(req, res, db, url, store) {
-  const { pathname } = url;
+async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
+  const { pathname, searchParams } = url;
   const method = req.method || 'GET';
   authorizeAdmin(req);
+
+  if (method === 'GET' && pathname === '/api/admin/leaderboard/users') {
+    const result = leaderboardAdminService.listUsers({
+      risk: searchParams.get('risk') || 'all',
+      status: searchParams.get('status') || 'all',
+      query: searchParams.get('q') || ''
+    });
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  const leaderboardUserMatch = pathname.match(/^\/api\/admin\/leaderboard\/users\/([^/]+)\/status$/);
+  if (method === 'PATCH' && leaderboardUserMatch) {
+    const payload = await parseBody(req);
+    const item = leaderboardAdminService.updateUserStatus({
+      userId: decodeURIComponent(leaderboardUserMatch[1]),
+      status: payload.status,
+      reason: payload.reason
+    });
+    sendJson(res, 200, { item }, { 'Cache-Control': 'no-store' });
+    return;
+  }
 
   if (method === 'GET' && pathname === '/api/admin/categories') {
     sendJson(res, 200, { items: db.categories.sort((a, b) => a.order - b.order) });
@@ -938,6 +970,10 @@ async function main() {
     store,
     db
   });
+  const leaderboardAdminService = new LeaderboardAdminService({
+    store,
+    db
+  });
 
   if (process.argv.includes('--seed-only')) {
     store.replaceAll(await createSeedDb());
@@ -954,7 +990,16 @@ async function main() {
         return;
       }
       if (url.pathname.startsWith('/api/')) {
-        await routeApi(req, res, db, url, store, authService, leaderboardService);
+        await routeApi(
+          req,
+          res,
+          db,
+          url,
+          store,
+          authService,
+          leaderboardService,
+          leaderboardAdminService
+        );
         return;
       }
       if (url.pathname === '/') {

@@ -255,6 +255,33 @@ Authorization: Bearer <ADMIN_TOKEN>
 - `ADMIN_TOKEN` 至少 32 个字符，不能写入仓库或前端源码。
 - 公网调用必须使用 HTTPS。
 
+### GET /api/admin/leaderboard/users
+
+读取已绑定外部身份的排行榜账号审计列表。支持查询参数：
+
+- `risk`：`all`、`flagged`、`normal`、`review` 或 `high`。
+- `status`：`all`、`active` 或 `suspended`。
+- `q`：按展示名、内部用户 ID 或身份提供方搜索，最长 100 个字符。
+
+响应包含账号总数、参与数、待复核数、封禁数，以及每个账号的历史积分、有效提交数、正确率、60 秒/5 分钟峰值、风险原因和最近一次管理员操作。异常检测只提供复核信号，不会自动封禁。
+
+### PATCH /api/admin/leaderboard/users/{userId}/status
+
+封禁或解封已绑定账号。请求体：
+
+```json
+{
+  "status": "suspended",
+  "reason": "一分钟内连续提交次数异常，人工复核后暂停排行榜资格"
+}
+```
+
+- `status` 仅允许 `active` 或 `suspended`。
+- `reason` 必须包含 4 至 300 个字符。
+- 封禁会立即从公开排行榜移除账号、吊销全部有效 ArkInterview 登录会话，并阻止该华为身份重新登录。
+- 解封后旧会话不会恢复，用户需要重新登录。
+- 每次状态变化都会写入独立审计记录；重复设置相同状态返回 `409`。
+
 ### GET /api/admin/categories
 
 管理端分类列表。

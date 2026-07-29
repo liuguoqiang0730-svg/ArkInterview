@@ -7,12 +7,30 @@ const state = {
   activePublishStatus: '',
   selectedQuestionIds: new Set(),
   batchPending: false,
+  activeView: 'questions',
+  auditRisk: 'all',
+  auditStatus: 'all',
+  auditQuery: '',
+  audit: {
+    summary: {
+      totalAccounts: 0,
+      optedInAccounts: 0,
+      flaggedAccounts: 0,
+      suspendedAccounts: 0,
+      filteredAccounts: 0
+    },
+    items: []
+  },
+  moderationTarget: null,
   adminToken: sessionStorage.getItem('arkinterview.adminToken') || ''
 };
 
 const els = {
   authView: document.querySelector('#authView'),
   adminView: document.querySelector('#adminView'),
+  questionManagementView: document.querySelector('#questionManagementView'),
+  leaderboardAuditView: document.querySelector('#leaderboardAuditView'),
+  adminTabs: [...document.querySelectorAll('.admin-tab')],
   authForm: document.querySelector('#authForm'),
   adminTokenInput: document.querySelector('#adminTokenInput'),
   authMessage: document.querySelector('#authMessage'),
@@ -37,7 +55,27 @@ const els = {
   questionForm: document.querySelector('#questionForm'),
   categoryInput: document.querySelector('#categoryInput'),
   questionTypeInput: document.querySelector('#questionTypeInput'),
-  formMessage: document.querySelector('#formMessage')
+  formMessage: document.querySelector('#formMessage'),
+  auditAccountCount: document.querySelector('#auditAccountCount'),
+  auditOptInCount: document.querySelector('#auditOptInCount'),
+  auditFlaggedCount: document.querySelector('#auditFlaggedCount'),
+  auditSuspendedCount: document.querySelector('#auditSuspendedCount'),
+  auditVisibleCount: document.querySelector('#auditVisibleCount'),
+  auditFilterForm: document.querySelector('#auditFilterForm'),
+  auditSearchInput: document.querySelector('#auditSearchInput'),
+  auditRiskFilter: document.querySelector('#auditRiskFilter'),
+  auditStatusFilter: document.querySelector('#auditStatusFilter'),
+  auditMessage: document.querySelector('#auditMessage'),
+  auditTableBody: document.querySelector('#auditTableBody'),
+  auditEmpty: document.querySelector('#auditEmpty'),
+  moderationDialog: document.querySelector('#moderationDialog'),
+  moderationForm: document.querySelector('#moderationForm'),
+  moderationTitle: document.querySelector('#moderationTitle'),
+  moderationDescription: document.querySelector('#moderationDescription'),
+  moderationReasonInput: document.querySelector('#moderationReasonInput'),
+  moderationMessage: document.querySelector('#moderationMessage'),
+  moderationCancelButton: document.querySelector('#moderationCancelButton'),
+  moderationSubmitButton: document.querySelector('#moderationSubmitButton')
 };
 
 const typeLabels = {
@@ -98,6 +136,8 @@ function lockAdmin(message = '') {
   state.adminToken = '';
   state.categories = [];
   state.questions = [];
+  state.audit.items = [];
+  state.moderationTarget = null;
   state.selectedQuestionIds.clear();
   sessionStorage.removeItem('arkinterview.adminToken');
   els.authView.hidden = false;
@@ -105,6 +145,9 @@ function lockAdmin(message = '') {
   els.refreshButton.hidden = true;
   els.logoutButton.hidden = true;
   els.authMessage.textContent = message;
+  if (els.moderationDialog.open) {
+    els.moderationDialog.close();
+  }
   els.adminTokenInput.focus();
 }
 
@@ -116,12 +159,14 @@ async function unlockAdmin(token) {
 }
 
 async function loadData() {
-  const [categories, questions] = await Promise.all([
+  const [categories, questions, audit] = await Promise.all([
     request('/api/admin/categories'),
-    request('/api/admin/questions')
+    request('/api/admin/questions'),
+    request(auditRequestPath())
   ]);
   state.categories = categories.items;
   state.questions = questions.items;
+  state.audit = audit;
   state.selectedQuestionIds = new Set(
     [...state.selectedQuestionIds].filter((id) => state.questions.some((question) => question.id === id))
   );
@@ -133,7 +178,20 @@ function render() {
   renderCategoryInput();
   renderCategories();
   renderQuestions();
+  renderAudit();
+  setActiveView(state.activeView);
   syncQuestionTypeFields();
+}
+
+function setActiveView(view) {
+  state.activeView = view === 'leaderboard' ? 'leaderboard' : 'questions';
+  els.questionManagementView.hidden = state.activeView !== 'questions';
+  els.leaderboardAuditView.hidden = state.activeView !== 'leaderboard';
+  for (const button of els.adminTabs) {
+    const active = button.dataset.view === state.activeView;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-current', active ? 'page' : 'false');
+  }
 }
 
 function renderStats() {
@@ -143,6 +201,163 @@ function renderStats() {
   els.questionCount.textContent = String(state.questions.length);
   els.publishedCount.textContent = String(published);
   els.draftCount.textContent = String(draft);
+}
+
+function renderAudit() {
+  const { summary, items } = state.audit;
+  els.auditAccountCount.textContent = String(summary.totalAccounts);
+  els.auditOptInCount.textContent = String(summary.optedInAccounts);
+  els.auditFlaggedCount.textContent = String(summary.flaggedAccounts);
+  els.auditSuspendedCount.textContent = String(summary.suspendedAccounts);
+  els.auditVisibleCount.textContent = `${summary.filteredAccounts} 人`;
+  els.auditEmpty.hidden = items.length > 0;
+  els.auditTableBody.replaceChildren(...items.map(auditRow));
+}
+
+function auditRow(item) {
+  const row = document.createElement('tr');
+  const riskLabels = {
+    normal: '正常',
+    review: '需复核',
+    high: '高风险'
+  };
+  const statusLabel = item.status === 'suspended' ? '已封禁' : '正常';
+  const riskReason = item.riskReasons.length > 0
+    ? item.riskReasons.join('；')
+    : '未发现异常频率';
+  const latestAction = item.lastModeration
+    ? `${item.lastModeration.action === 'suspend' ? '封禁' : '解封'}：${item.lastModeration.reason}`
+    : '';
+  row.innerHTML = `
+    <td>
+      <strong class="account-name">${escapeHtml(item.displayName || '未设置昵称')}</strong>
+      <code class="account-id">${escapeHtml(item.userId)}</code>
+      <span class="account-provider">${escapeHtml(item.providers.join(' / ') || '账号')}</span>
+    </td>
+    <td>
+      <div class="status-stack">
+        <span class="badge account-${escapeHtml(item.status)}">${statusLabel}</span>
+        <span class="badge risk-${escapeHtml(item.riskLevel)}" title="${escapeHtml(riskReason)}">${riskLabels[item.riskLevel] || item.riskLevel}</span>
+      </div>
+      ${latestAction ? `<span class="audit-secondary" title="${escapeHtml(latestAction)}">${escapeHtml(latestAction)}</span>` : ''}
+    </td>
+    <td><strong class="numeric-value">${item.score}</strong></td>
+    <td>
+      <strong class="numeric-value">${item.eligibleAttempts}</strong>
+      <span class="audit-secondary">${item.eligibleCorrectRate}% 正确</span>
+    </td>
+    <td>
+      <strong class="numeric-value">${item.maxAttemptsInMinute}/分钟</strong>
+      <span class="audit-secondary">${item.maxAttemptsInFiveMinutes}/5 分钟</span>
+    </td>
+    <td>
+      <span class="date-value">${formatDate(item.lastAnsweredAt)}</span>
+      <span class="audit-secondary">${item.status === 'suspended' ? '封禁期间不公开' : item.leaderboardOptIn ? '当前参与排行' : '当前未参与'}</span>
+    </td>
+    <td class="audit-action-cell">
+      <button
+        class="${item.status === 'suspended' ? 'small-button' : 'danger-outline-button'}"
+        type="button"
+        data-action="moderate"
+      >${item.status === 'suspended' ? '解封' : '封禁'}</button>
+    </td>
+  `;
+  row.querySelector('[data-action="moderate"]').addEventListener('click', () => {
+    openModerationDialog(item);
+  });
+  return row;
+}
+
+function auditRequestPath() {
+  const params = new URLSearchParams({
+    risk: state.auditRisk,
+    status: state.auditStatus
+  });
+  if (state.auditQuery) {
+    params.set('q', state.auditQuery);
+  }
+  return `/api/admin/leaderboard/users?${params.toString()}`;
+}
+
+async function loadAuditData() {
+  setAuditMessage('正在刷新审计数据...');
+  try {
+    state.audit = await request(auditRequestPath());
+    renderAudit();
+    setAuditMessage('');
+  } catch (error) {
+    setAuditMessage(error.message, true);
+    throw error;
+  }
+}
+
+function openModerationDialog(item) {
+  const nextStatus = item.status === 'suspended' ? 'active' : 'suspended';
+  state.moderationTarget = {
+    userId: item.userId,
+    displayName: item.displayName || item.userId,
+    status: nextStatus
+  };
+  const suspending = nextStatus === 'suspended';
+  els.moderationTitle.textContent = suspending ? '封禁账号' : '解除封禁';
+  els.moderationDescription.textContent = suspending
+    ? `封禁 ${state.moderationTarget.displayName} 后，其登录会话会立即失效并退出排行榜。`
+    : `解除 ${state.moderationTarget.displayName} 的封禁。用户需要重新登录，历史审计记录不会删除。`;
+  els.moderationSubmitButton.textContent = suspending ? '确认封禁' : '确认解封';
+  els.moderationSubmitButton.className = suspending ? 'danger-button' : 'primary-button';
+  els.moderationReasonInput.value = '';
+  els.moderationMessage.textContent = '';
+  els.moderationDialog.showModal();
+  els.moderationReasonInput.focus();
+}
+
+async function submitModeration() {
+  const target = state.moderationTarget;
+  if (!target) {
+    return;
+  }
+  const reason = els.moderationReasonInput.value.trim();
+  els.moderationSubmitButton.disabled = true;
+  els.moderationMessage.textContent = '处理中...';
+  try {
+    await request(`/api/admin/leaderboard/users/${encodeURIComponent(target.userId)}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        status: target.status,
+        reason
+      })
+    });
+    els.moderationDialog.close();
+    state.moderationTarget = null;
+    await loadAuditData();
+    setAuditMessage(target.status === 'suspended' ? '账号已封禁' : '账号已解除封禁');
+  } catch (error) {
+    els.moderationMessage.textContent = error.message;
+  } finally {
+    els.moderationSubmitButton.disabled = false;
+  }
+}
+
+function setAuditMessage(message, isError = false) {
+  els.auditMessage.textContent = message;
+  els.auditMessage.classList.toggle('error', isError);
+}
+
+function formatDate(value) {
+  if (!value) {
+    return '暂无记录';
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '时间无效';
+  }
+  return new Intl.DateTimeFormat('zh-CN', {
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).format(date);
 }
 
 function renderCategoryInput() {
@@ -504,6 +719,45 @@ els.questionForm.addEventListener('reset', () => {
     setFormMessage('');
     syncQuestionTypeFields();
   });
+});
+
+for (const button of els.adminTabs) {
+  button.addEventListener('click', () => {
+    setActiveView(button.dataset.view);
+  });
+}
+
+els.auditFilterForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  state.auditQuery = els.auditSearchInput.value.trim();
+  await loadAuditData().catch(() => {});
+});
+
+els.auditRiskFilter.addEventListener('change', async (event) => {
+  state.auditRisk = event.target.value;
+  await loadAuditData().catch(() => {});
+});
+
+els.auditStatusFilter.addEventListener('change', async (event) => {
+  state.auditStatus = event.target.value;
+  await loadAuditData().catch(() => {});
+});
+
+els.moderationForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  await submitModeration();
+});
+
+els.moderationCancelButton.addEventListener('click', () => {
+  state.moderationTarget = null;
+  els.moderationDialog.close();
+});
+
+els.moderationDialog.addEventListener('click', (event) => {
+  if (event.target === els.moderationDialog) {
+    state.moderationTarget = null;
+    els.moderationDialog.close();
+  }
 });
 
 els.authForm.addEventListener('submit', async (event) => {

@@ -10,10 +10,10 @@
     <header class="topbar">
       <div>
         <p class="eyebrow">ArkInterview Admin</p>
-        <h1>题库管理</h1>
+        <h1>运营后台</h1>
       </div>
       <div class="topbar-actions">
-        <button id="refreshButton" class="icon-button" title="刷新题库" aria-label="刷新题库" hidden>↻</button>
+        <button id="refreshButton" class="icon-button" title="刷新数据" aria-label="刷新数据" hidden>↻</button>
         <button id="logoutButton" class="secondary-button" type="button" hidden>退出</button>
       </div>
     </header>
@@ -40,7 +40,13 @@
     </main>
 
     <main id="adminView" class="layout" hidden>
-      <section class="panel stats-panel" aria-label="概览">
+      <nav class="admin-tabs" aria-label="后台功能">
+        <button class="admin-tab active" type="button" data-view="questions">题库管理</button>
+        <button class="admin-tab" type="button" data-view="leaderboard">排行榜审计</button>
+      </nav>
+
+      <div id="questionManagementView" class="management-view">
+      <section class="panel stats-panel" aria-label="题库概览">
         <div>
           <span class="metric-label">分类</span>
           <strong id="categoryCount">0</strong>
@@ -214,7 +220,107 @@
           <div id="questionList" class="question-list"></div>
         </section>
       </section>
+      </div>
+
+      <div id="leaderboardAuditView" class="management-view" hidden>
+        <section class="panel stats-panel audit-stats" aria-label="排行榜审计概览">
+          <div>
+            <span class="metric-label">账号用户</span>
+            <strong id="auditAccountCount">0</strong>
+          </div>
+          <div>
+            <span class="metric-label">已授权参与</span>
+            <strong id="auditOptInCount">0</strong>
+          </div>
+          <div>
+            <span class="metric-label">待复核</span>
+            <strong id="auditFlaggedCount">0</strong>
+          </div>
+          <div>
+            <span class="metric-label">已封禁</span>
+            <strong id="auditSuspendedCount">0</strong>
+          </div>
+        </section>
+
+        <section class="panel audit-panel">
+          <div class="panel-heading audit-heading">
+            <div class="heading-title">
+              <h2>参与用户审计</h2>
+              <span id="auditVisibleCount" class="visible-count">0 人</span>
+            </div>
+            <form id="auditFilterForm" class="audit-filters">
+              <input
+                id="auditSearchInput"
+                type="search"
+                maxlength="100"
+                placeholder="搜索昵称或用户 ID"
+                aria-label="搜索排行榜用户"
+              >
+              <select id="auditRiskFilter" aria-label="风险等级筛选">
+                <option value="all">全部风险</option>
+                <option value="flagged">只看待复核</option>
+                <option value="high">高风险</option>
+                <option value="review">需复核</option>
+                <option value="normal">正常</option>
+              </select>
+              <select id="auditStatusFilter" aria-label="账号状态筛选">
+                <option value="all">全部状态</option>
+                <option value="active">正常账号</option>
+                <option value="suspended">已封禁</option>
+              </select>
+              <button class="secondary-button" type="submit">查询</button>
+            </form>
+          </div>
+          <div class="audit-note">
+            <span>系统仅标记异常提交频率，不会自动封禁。</span>
+            <span id="auditMessage" class="form-message" role="status"></span>
+          </div>
+          <div class="audit-table-wrap">
+            <table class="audit-table">
+              <thead>
+                <tr>
+                  <th scope="col">账号</th>
+                  <th scope="col">状态 / 风险</th>
+                  <th scope="col">积分</th>
+                  <th scope="col">有效提交</th>
+                  <th scope="col">峰值频率</th>
+                  <th scope="col">最近作答</th>
+                  <th scope="col"><span class="sr-only">操作</span></th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody"></tbody>
+            </table>
+            <p id="auditEmpty" class="empty" hidden>当前筛选条件下没有账号。</p>
+          </div>
+        </section>
+      </div>
     </main>
+
+    <dialog id="moderationDialog" class="moderation-dialog">
+      <form id="moderationForm" class="moderation-form">
+        <div>
+          <p class="eyebrow">Account Moderation</p>
+          <h2 id="moderationTitle">账号处理</h2>
+          <p id="moderationDescription" class="dialog-description"></p>
+        </div>
+        <label for="moderationReasonInput">
+          操作原因
+          <textarea
+            id="moderationReasonInput"
+            minlength="4"
+            maxlength="300"
+            rows="4"
+            required
+            placeholder="填写复核依据，操作记录会永久保留"
+          ></textarea>
+        </label>
+        <p id="moderationMessage" class="auth-message" role="alert"></p>
+        <div class="form-actions">
+          <button id="moderationCancelButton" class="secondary-button" type="button">取消</button>
+          <button id="moderationSubmitButton" class="danger-button" type="submit">确认封禁</button>
+        </div>
+      </form>
+    </dialog>
 
     <script src="/admin/app.js" type="module"></script>
   </body>

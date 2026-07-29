@@ -101,6 +101,9 @@ export class AuthService {
     if (existingIdentity && !existingUser) {
       throw new AuthError(409, '华为账号关联的用户记录不存在');
     }
+    if (existingUser && existingUser.status !== 'active') {
+      throw new AuthError(403, '该账号已停用，请联系管理员');
+    }
 
     const user = existingUser || sourceUser;
     const mergedUserId = existingUser && existingUser.id !== sourceUser.id

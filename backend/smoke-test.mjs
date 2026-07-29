@@ -149,6 +149,20 @@ async function runChecks() {
     'admin API preflight should allow the Authorization header'
   );
 
+  const leaderboardAudit = await getJson('/api/admin/leaderboard/users');
+  assert(leaderboardAudit.summary.totalAccounts === 0, 'anonymous users should not enter account audit');
+  assert(Array.isArray(leaderboardAudit.items), 'leaderboard audit should return an item list');
+  const invalidAuditFilter = await fetch(
+    `${baseUrl}/api/admin/leaderboard/users?risk=unknown`,
+    { headers: requestHeaders('/api/admin/leaderboard/users') }
+  );
+  assert(invalidAuditFilter.status === 400, 'leaderboard audit should reject invalid risk filters');
+  const missingAuditUser = await patchJson('/api/admin/leaderboard/users/missing-user/status', {
+    status: 'suspended',
+    reason: '烟雾测试验证不存在账号'
+  }, false);
+  assert(missingAuditUser.status === 404, 'leaderboard moderation should reject missing accounts');
+
   const categories = await getJson('/api/categories');
   assert(categories.items.length === 16, 'categories count should be 16');
 
