@@ -1,6 +1,7 @@
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
 import { Question } from '../models/QuestionModels';
+import { ApiRequestError } from '../services/ApiClient';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { PracticeStore } from '../viewmodels/PracticeStore';
@@ -993,6 +994,9 @@ struct ReviewListPage {
     for (const id of this.selectedQuestionIds) {
       ids.push(id);
     }
+    if (!await this.confirmBatchAction(ids.length)) {
+      return;
+    }
     this.bulkBusy = true;
     try {
       if (this.mode === 'favorites') {
@@ -1006,10 +1010,56 @@ struct ReviewListPage {
       }
       this.selectedQuestionIds = [];
     } catch (error) {
-      AppToast.show(this.getUIContext(), `批量操作失败：${String(error)}`);
+      if (this.isReviewStateConflict(error)) {
+        AppToast.show(this.getUIContext(), '题目状态已变化，列表已自动刷新');
+        await this.loadQuestions();
+      } else {
+        AppToast.show(this.getUIContext(), `批量操作失败：${this.readableError(error)}`);
+      }
     } finally {
       this.bulkBusy = false;
     }
+  }
+
+  async confirmBatchAction(count: number): Promise<boolean> {
+    try {
+      const result = await this.getUIContext().getPromptAction().showDialog({
+        title: this.batchActionText(),
+        message: this.batchConfirmMessage(count),
+        buttons: [
+          { text: this.batchConfirmButtonText(), color: this.batchActionColor() },
+          { text: '取消', color: COLOR_MUTED }
+        ],
+        alignment: DialogAlignment.Center
+      });
+      return result.index === 0;
+    } catch (error) {
+      AppToast.show(this.getUIContext(), `确认窗口打开失败：${this.readableError(error)}`);
+      return false;
+    }
+  }
+
+  batchConfirmMessage(count: number): string {
+    if (this.mode === 'favorites') {
+      return `确定取消选中的 ${count} 道收藏吗？操作完成后，这些题目会从收藏列表移除。`;
+    }
+    return `确定将选中的 ${count} 道错题标记为已掌握吗？标记后，它们不会再进入未掌握错题训练。`;
+  }
+
+  batchConfirmButtonText(): string {
+    return this.mode === 'favorites' ? '取消收藏' : '标记掌握';
+  }
+
+  isReviewStateConflict(error: Object): boolean {
+    return error instanceof ApiRequestError &&
+      (error.statusCode === 404 || error.statusCode === 409);
+  }
+
+  readableError(error: Object): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return String(error);
   }
 
   openReviewAt(index: number): void {
@@ -1040,7 +1090,12 @@ struct ReviewListPage {
       this.setQuestionSelected(questionId, false);
       AppToast.show(this.getUIContext(), '已取消收藏');
     } catch (error) {
-      AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
+      if (this.isReviewStateConflict(error)) {
+        AppToast.show(this.getUIContext(), '收藏状态已变化，列表已自动刷新');
+        await this.loadQuestions();
+      } else {
+        AppToast.show(this.getUIContext(), `操作失败：${this.readableError(error)}`);
+      }
     } finally {
       this.busyQuestionId = '';
     }
@@ -1057,7 +1112,12 @@ struct ReviewListPage {
       this.setQuestionSelected(questionId, false);
       AppToast.show(this.getUIContext(), '已标记掌握');
     } catch (error) {
-      AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
+      if (this.isReviewStateConflict(error)) {
+        AppToast.show(this.getUIContext(), '错题状态已变化，列表已自动刷新');
+        await this.loadQuestions();
+      } else {
+        AppToast.show(this.getUIContext(), `操作失败：${this.readableError(error)}`);
+      }
     } finally {
       this.busyQuestionId = '';
     }
