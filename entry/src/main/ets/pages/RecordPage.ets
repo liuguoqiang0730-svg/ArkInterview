@@ -344,7 +344,7 @@ struct RecordPage {
             .fontSize(12)
             .fontColor('#d8efe8')
             .margin({ top: 4 })
-          Text(this.practiceStreakLabel())
+          Text(this.practiceTodayLabel())
             .fontSize(11)
             .fontColor('#8ed8c5')
             .margin({ top: 3 })
@@ -362,18 +362,82 @@ struct RecordPage {
       .width('100%')
       .margin({ top: 14 })
 
+      this.StreakMilestonePanel()
+
+      this.FocusCategoryPanel()
+    }
+    .width('100%')
+    .padding(18)
+    .backgroundColor(COLOR_NAVY)
+    .borderRadius(8)
+    .shadow({ radius: 18, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
+  }
+
+  @Builder
+  StreakMilestonePanel() {
+    Column() {
+      Row() {
+        Text(this.practiceStreakLabel())
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#ffffff')
+          .layoutWeight(1)
+
+        Text(`${this.currentPracticeStreak()}/${this.nextStreakMilestone()} 天`)
+          .fontSize(11)
+          .fontColor('#8ed8c5')
+      }
+      .width('100%')
+
+      Stack({ alignContent: Alignment.Start }) {
+        Row()
+          .width('100%')
+          .height(6)
+          .backgroundColor('#ffffff24')
+          .borderRadius(3)
+        Row()
+          .width(this.streakProgressWidth())
+          .height(6)
+          .backgroundColor('#58c4a7')
+          .borderRadius(3)
+      }
+      .width('100%')
+      .height(6)
+      .margin({ top: 8 })
+
+      Text(this.streakMilestoneDetail())
+        .fontSize(11)
+        .fontColor('#b9d7cf')
+        .width('100%')
+        .margin({ top: 7 })
+    }
+    .width('100%')
+    .padding({ top: 12 })
+    .margin({ top: 12 })
+    .border({ width: { top: 1 }, color: '#ffffff24' })
+  }
+
+  @Builder
+  FocusCategoryPanel() {
+    Column() {
       Row() {
         Column() {
           Text(this.focusCategoryTitle())
-            .fontSize(11)
+            .fontSize(12)
             .fontWeight(FontWeight.Bold)
             .fontColor('#d8efe8')
           Text(this.focusCategoryDetail())
             .fontSize(12)
             .fontColor('#ffffff')
-            .maxLines(2)
+            .maxLines(3)
             .lineHeight(18)
-            .margin({ top: 3 })
+            .margin({ top: 4 })
+          if (this.focusCategory() !== undefined) {
+            Text(this.focusCategoryEvidence())
+              .fontSize(10)
+              .fontColor('#8ed8c5')
+              .margin({ top: 5 })
+          }
         }
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Start)
@@ -387,16 +451,12 @@ struct RecordPage {
         }
       }
       .width('100%')
-      .padding({ top: 12 })
-      .margin({ top: 12 })
-      .border({ width: { top: 1 }, color: '#ffffff24' })
-      .onClick(() => this.openFocusCategory())
     }
     .width('100%')
-    .padding(18)
-    .backgroundColor(COLOR_NAVY)
-    .borderRadius(8)
-    .shadow({ radius: 18, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
+    .padding({ top: 12 })
+    .margin({ top: 12 })
+    .border({ width: { top: 1 }, color: '#ffffff24' })
+    .onClick(() => this.openFocusCategory())
   }
 
   @Builder
@@ -1008,6 +1068,40 @@ struct RecordPage {
     return streak > 0 ? `连续 ${streak} 天` : '今天开始练习';
   }
 
+  practiceTodayLabel(): string {
+    return this.hasPracticeOnDate(this.defaultDailyStats(), this.shanghaiToday()) ? '今日已记录' : '今日待练习';
+  }
+
+  nextStreakMilestone(): number {
+    const streak = this.currentPracticeStreak();
+    const milestones: number[] = [3, 7, 14, 30, 60, 100, 180, 365];
+    for (let index = 0; index < milestones.length; index += 1) {
+      if (streak < milestones[index]) {
+        return milestones[index];
+      }
+    }
+    return Math.ceil((streak + 1) / 100) * 100;
+  }
+
+  streakProgressWidth(): string {
+    const target = this.nextStreakMilestone();
+    const progress = target === 0 ? 0 : Math.min(100, Math.round(this.currentPracticeStreak() / target * 100));
+    return `${progress}%`;
+  }
+
+  streakMilestoneDetail(): string {
+    const streak = this.currentPracticeStreak();
+    const target = this.nextStreakMilestone();
+    if (streak === 0) {
+      return '今天完成一次练习，开启 3 天连续里程碑。';
+    }
+    const remaining = target - streak;
+    if (!this.hasPracticeOnDate(this.defaultDailyStats(), this.shanghaiToday())) {
+      return `今天完成一次即可延续，距离 ${target} 天还差 ${remaining} 天。`;
+    }
+    return `今日连续记录已完成，距离 ${target} 天还差 ${remaining} 天。`;
+  }
+
   currentPracticeStreak(): number {
     const source = this.defaultDailyStats();
     if (source.length === 0) {
@@ -1071,7 +1165,7 @@ struct RecordPage {
     if (category === undefined) {
       return '重点模块建议';
     }
-    return category.accuracy < 0.8 ? '薄弱模块' : '建议拓展';
+    return category.accuracy < 0.8 ? `薄弱模块 · ${category.name}` : `建议拓展 · ${category.name}`;
   }
 
   focusCategoryDetail(): string {
@@ -1080,9 +1174,17 @@ struct RecordPage {
       return '每个模块完成至少 3 次客观题判分后，这里会给出复习建议。';
     }
     if (category.accuracy < 0.8) {
-      return `${category.name} · 正确率 ${FormatUtils.percent(category.accuracy)}，建议优先巩固`;
+      return '在达到样本门槛的模块中正确率最低，建议先复习高频失分知识点。';
     }
-    return `${category.name} · 正确率稳定，可继续提高题目覆盖率`;
+    return '当前正确率已达到稳定线，可继续扩大题目覆盖并保持正确率。';
+  }
+
+  focusCategoryEvidence(): string {
+    const category = this.focusCategory();
+    if (category === undefined) {
+      return '';
+    }
+    return `判分 ${this.categoryGradedAttempts(category)} 次 · 正确率 ${FormatUtils.percent(category.accuracy)} · 完成度 ${FormatUtils.percent(category.completionRate)}`;
   }
 
   reviewHint(): string {
