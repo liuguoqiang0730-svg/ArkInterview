@@ -890,5 +890,400 @@
       "子组件用 @Event 输出变更意图",
       "说明 @Param @Once 只适用于初始化一次的本地编辑场景"
     ]
+  },
+  {
+    "id": "component-communication-023",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "@Consumer 未找到匹配的 @Provider 时，会怎样初始化？",
+    "explanation": "@Consumer 必须本地初始化；找不到匹配 Provider 时使用本地默认值。",
+    "knowledgePoints": [
+      "@Consumer",
+      "默认值"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "直接导致应用进程退出"
+      },
+      {
+        "id": "b",
+        "text": "使用自身必须声明的本地默认值"
+      },
+      {
+        "id": "c",
+        "text": "自动创建全局 AppStorage"
+      },
+      {
+        "id": "d",
+        "text": "读取最近的 @State"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "component-communication-024",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "@Provider 与 @Consumer 进行匹配时，唯一使用的键是什么？",
+    "explanation": "V2 中 aliasName 是唯一匹配键，未显式提供时默认使用属性名。",
+    "knowledgePoints": [
+      "aliasName",
+      "@Provider"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "组件文件路径"
+      },
+      {
+        "id": "b",
+        "text": "aliasName，缺省时使用属性名"
+      },
+      {
+        "id": "c",
+        "text": "组件实例序号"
+      },
+      {
+        "id": "d",
+        "text": "变量运行时地址"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "component-communication-025",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "组件树中存在多个同名 @Provider 时，@Consumer 默认绑定哪一个？",
+    "explanation": "@Provider 默认允许重名，Consumer 沿父链向上查找最近匹配项。",
+    "knowledgePoints": [
+      "最近祖先",
+      "Provider重载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "应用入口处最远的 Provider"
+      },
+      {
+        "id": "b",
+        "text": "向上查找到的最近 Provider"
+      },
+      {
+        "id": "c",
+        "text": "随机一个 Provider"
+      },
+      {
+        "id": "d",
+        "text": "最后编译的 Provider"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "component-communication-026",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望跨层级传递一个行为回调，状态管理 V2 的哪种方案受官方能力支持？",
+    "explanation": "@Provider/@Consumer 支持函数类型，可用于跨层级行为抽象，但应控制耦合范围。",
+    "knowledgePoints": [
+      "函数通信",
+      "@Provider"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "用 @Provider/@Consumer 装饰箭头函数"
+      },
+      {
+        "id": "b",
+        "text": "把函数序列化到 Preferences"
+      },
+      {
+        "id": "c",
+        "text": "把函数放进路由 URL"
+      },
+      {
+        "id": "d",
+        "text": "在 build 中创建全局变量"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "component-communication-027",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 @Provider 和 @Consumer 的初始化规则，哪些正确？",
+    "explanation": "两者均要求本地初始化且禁止外部传入，但可以作为子组件 @Param 的数据源。",
+    "knowledgePoints": [
+      "初始化规则",
+      "@Param"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "都必须本地初始化"
+      },
+      {
+        "id": "b",
+        "text": "都不允许由外部构造参数初始化"
+      },
+      {
+        "id": "c",
+        "text": "可以用于初始化子组件的 @Param"
+      },
+      {
+        "id": "d",
+        "text": "@Consumer 可以省略默认值并依赖运行时查找"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "component-communication-028",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "跨层级共享复杂 User 对象并希望属性修改刷新 UI，哪些做法正确？",
+    "explanation": "Provider/Consumer 对复杂对象内部属性的深度变化需要配合 V2 可观察能力。",
+    "knowledgePoints": [
+      "复杂对象",
+      "@Trace",
+      "makeObserved"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "让 User 使用 @ObservedV2"
+      },
+      {
+        "id": "b",
+        "text": "对需观察属性使用 @Trace"
+      },
+      {
+        "id": "c",
+        "text": "或使用 makeObserved 将普通对象变为可观察对象"
+      },
+      {
+        "id": "d",
+        "text": "只给普通对象外层加 Consumer 就保证任意深层变化都刷新"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "component-communication-029",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "@Provider/@Consumer 相比 V1 @Provide/@Consume，有哪些 V2 特征？",
+    "explanation": "V2 支持函数且只在 ComponentV2 中使用，Provider 默认可以重名并按最近祖先匹配。",
+    "knowledgePoints": [
+      "V1/V2",
+      "组件通信"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "只能用于 @ComponentV2"
+      },
+      {
+        "id": "b",
+        "text": "支持函数类型"
+      },
+      {
+        "id": "c",
+        "text": "alias 是唯一匹配键"
+      },
+      {
+        "id": "d",
+        "text": "Provider 禁止重名"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "component-communication-030",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "@Provider 和 @Consumer 可以直接装饰普通 class 的字段，以替代 @Trace。",
+    "explanation": "它们是 ComponentV2 自定义组件的属性装饰器，不能装饰普通 class 字段。",
+    "knowledgePoints": [
+      "使用限制",
+      "@ComponentV2"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "component-communication-031",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "跨层级双向同步会增加组件层级耦合，因此简单父子关系仍应优先使用明确的输入输出契约。",
+    "explanation": "官方提醒 Provider/Consumer 强依赖组件树，应减少无边界使用。",
+    "knowledgePoints": [
+      "组件解耦",
+      "通信选型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "component-communication-032",
+    "categoryId": "component-communication",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "多层表单需要共享主题和校验动作，但字段值仍由各业务组件维护，应怎样设计通信？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "区分跨层状态与普通父子输入输出",
+      "说明函数通信能力",
+      "说明复杂对象观察",
+      "强调作用域和解耦"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "referenceAnswer": "稳定的跨层主题可由祖先 @Provider 提供、后代 @Consumer 获取；跨层校验动作可使用受控的函数 Provider/Consumer。普通父子字段值继续用 @Param 输入、@Event 输出，复杂共享对象配合 @ObservedV2/@Trace。应限定 alias 和作用域，避免把所有状态都塞入跨层双向通道。",
+    "scoringPoints": [
+      "区分跨层状态与普通父子输入输出",
+      "说明函数通信能力",
+      "说明复杂对象观察",
+      "强调作用域和解耦"
+    ]
   }
 ]

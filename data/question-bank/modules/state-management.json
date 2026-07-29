@@ -908,5 +908,399 @@
       "说明复杂对象用 @ObservedV2 与 @Trace 精准观测",
       "区分进程共享状态和跨重启持久化状态"
     ]
+  },
+  {
+    "id": "state-management-023",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "状态管理 V1 中，页面级 UI 状态容器是哪一个？",
+    "explanation": "LocalStorage 面向页面级 UI 状态；AppStorage 面向应用进程内全局 UI 状态。",
+    "knowledgePoints": [
+      "LocalStorage",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "LocalStorage"
+      },
+      {
+        "id": "b",
+        "text": "AppStorage"
+      },
+      {
+        "id": "c",
+        "text": "PersistentStorage"
+      },
+      {
+        "id": "d",
+        "text": "relationalStore"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-024",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "状态管理 V1 中，需要把少量 AppStorage 属性持久化到磁盘时应使用什么？",
+    "explanation": "PersistentStorage 用于持久化选定的 AppStorage 属性，不应把所有运行时对象都持久化。",
+    "knowledgePoints": [
+      "PersistentStorage",
+      "AppStorage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "PersistentStorage"
+      },
+      {
+        "id": "b",
+        "text": "LocalStorage"
+      },
+      {
+        "id": "c",
+        "text": "@Watch"
+      },
+      {
+        "id": "d",
+        "text": "@Builder"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-025",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望判断一个对象能否被状态管理 V2 观察，应使用哪个辅助接口？",
+    "explanation": "canBeObserved 用于判断对象是否可以被观察。",
+    "knowledgePoints": [
+      "canBeObserved",
+      "V2辅助接口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "canBeObserved"
+      },
+      {
+        "id": "b",
+        "text": "getTarget"
+      },
+      {
+        "id": "c",
+        "text": "flushUpdates"
+      },
+      {
+        "id": "d",
+        "text": "clearMonitor"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-026",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要获取状态管理代理背后的原始对象，应使用哪个辅助接口？",
+    "explanation": "getTarget 返回状态管理框架代理前的原始对象。",
+    "knowledgePoints": [
+      "getTarget",
+      "代理对象"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "makeObserved"
+      },
+      {
+        "id": "b",
+        "text": "getTarget"
+      },
+      {
+        "id": "c",
+        "text": "addMonitor"
+      },
+      {
+        "id": "d",
+        "text": "applySync"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "state-management-027",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 makeObserved 的理解，哪些正确？",
+    "explanation": "makeObserved 解决普通对象接入 V2 观察体系的问题，与持久化无关。",
+    "knowledgePoints": [
+      "makeObserved",
+      "可观察对象"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "可把非观察对象转换为可观察对象"
+      },
+      {
+        "id": "b",
+        "text": "适合无法直接添加装饰器的数据对象"
+      },
+      {
+        "id": "c",
+        "text": "返回的观察对象变化可参与 UI 更新"
+      },
+      {
+        "id": "d",
+        "text": "等同于把对象序列化到磁盘"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-028",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "为页面筛选条件、应用主题和用户长期偏好选择作用域时，哪些对应合理？",
+    "explanation": "状态应按组件、页面、应用和跨重启范围划分，运行时资源对象不适合直接持久化。",
+    "knowledgePoints": [
+      "状态作用域",
+      "持久化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "页面筛选条件使用 LocalStorage 或组件本地状态"
+      },
+      {
+        "id": "b",
+        "text": "应用进程共享主题使用 AppStorage"
+      },
+      {
+        "id": "c",
+        "text": "需跨重启恢复的少量 UI 偏好使用持久化状态能力"
+      },
+      {
+        "id": "d",
+        "text": "把网络连接对象直接放入 PersistentStorage"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-029",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "状态管理 V2 强调哪些能力？",
+    "explanation": "V2 将观察能力增强到数据本身，并支持深度观察与属性级更新。",
+    "knowledgePoints": [
+      "状态管理V2",
+      "精准更新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "对象深度观察"
+      },
+      {
+        "id": "b",
+        "text": "属性级精准更新"
+      },
+      {
+        "id": "c",
+        "text": "明确的组件输入和输出"
+      },
+      {
+        "id": "d",
+        "text": "所有变量变化都强制整页重绘"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-030",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "AppStorage 是应用运行期的全局 UI 状态容器，但不能据此假定进程退出后数据仍然存在。",
+    "explanation": "跨重启恢复需要额外的 PersistentStorage 或 PersistenceV2 等持久化能力。",
+    "knowledgePoints": [
+      "AppStorage",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": true
+  },
+  {
+    "id": "state-management-031",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "@Computed 表示派生计算属性，业务代码应把它当作独立可写数据源随意赋值。",
+    "explanation": "计算属性应由依赖状态推导，不能再作为独立可写源制造双向状态。",
+    "knowledgePoints": [
+      "@Computed",
+      "派生状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": false
+  },
+  {
+    "id": "state-management-032",
+    "categoryId": "state-management",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "商品列表页包含临时筛选、全局主题、登录会话和上次排序偏好，如何划分状态？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "区分页面、应用和持久化作用域",
+      "说明敏感会话不属于普通 UI 状态",
+      "说明复杂对象观察",
+      "避免重复状态源"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "referenceAnswer": "临时筛选属于页面或组件作用域，使用 LocalStorage 或本地状态；主题可放应用级 AppStorage/AppStorageV2；上次排序属于少量跨重启 UI 偏好，使用对应持久化状态能力；登录会话包含敏感凭据，应交给安全存储和业务会话层，不应仅依赖 UI 状态容器。复杂对象采用 V2 可观察模型并限制追踪属性。",
+    "scoringPoints": [
+      "区分页面、应用和持久化作用域",
+      "说明敏感会话不属于普通 UI 状态",
+      "说明复杂对象观察",
+      "避免重复状态源"
+    ]
   }
 ]

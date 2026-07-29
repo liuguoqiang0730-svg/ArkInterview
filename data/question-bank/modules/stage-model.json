@@ -913,5 +913,399 @@
       "把可并发的非 UI 任务放到 taskPool，并延后非首屏任务",
       "说明循环依赖、失败降级和耗时观测"
     ]
+  },
+  {
+    "id": "stage-model-023",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "普通应用需要实现桌面卡片能力时，应选择哪类 Stage 模型组件？",
+    "explanation": "ExtensionAbility 面向特定系统场景，桌面卡片应使用 FormExtensionAbility，而不是自定义通用服务。",
+    "knowledgePoints": [
+      "ExtensionAbility",
+      "FormExtensionAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "自定义一个通用后台 Service"
+      },
+      {
+        "id": "b",
+        "text": "FormExtensionAbility 的派生实现"
+      },
+      {
+        "id": "c",
+        "text": "额外创建一个 UIAbility 窗口"
+      },
+      {
+        "id": "d",
+        "text": "在页面组件中常驻定时器"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "stage-model-024",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Stage 模型中，ExtensionAbility 派生类实例的生命周期主要由谁管理？",
+    "explanation": "ExtensionAbility 服务于卡片、输入法等特定场景，其实例由系统按场景触发并管理生命周期。",
+    "knowledgePoints": [
+      "ExtensionAbility",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "应用页面自行创建并长期持有"
+      },
+      {
+        "id": "b",
+        "text": "系统根据对应场景触发和管理"
+      },
+      {
+        "id": "c",
+        "text": "任意 HAR 模块自动创建"
+      },
+      {
+        "id": "d",
+        "text": "用户在任务中心手动管理"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "stage-model-025",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "每个 UIAbility 实例与窗口舞台的关系，哪项描述正确？",
+    "explanation": "每个 UIAbility 实例都会绑定一个 WindowStage，WindowStage 包含主窗口并为 ArkUI 提供绘制区域。",
+    "knowledgePoints": [
+      "UIAbility",
+      "WindowStage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "一个 UIAbility 实例绑定一个 WindowStage 实例"
+      },
+      {
+        "id": "b",
+        "text": "所有 UIAbility 永远共享同一个 WindowStage"
+      },
+      {
+        "id": "c",
+        "text": "WindowStage 只属于 AbilityStage"
+      },
+      {
+        "id": "d",
+        "text": "无界面 UIAbility 才有 WindowStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "stage-model-026",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Stage 模型将应用组件管理与窗口管理解耦，主要有利于什么？",
+    "explanation": "组件与窗口解耦便于系统适配不同设备形态，无屏设备可裁剪窗口，同时复用组件生命周期。",
+    "knowledgePoints": [
+      "多设备",
+      "窗口管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "让所有设备强制显示相同窗口"
+      },
+      {
+        "id": "b",
+        "text": "适配多设备并允许无屏设备裁剪窗口能力"
+      },
+      {
+        "id": "c",
+        "text": "绕过后台进程治理"
+      },
+      {
+        "id": "d",
+        "text": "让 ExtensionAbility 直接绘制页面"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "stage-model-027",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Stage 模型后台与扩展能力的约束，哪些说法正确？",
+    "explanation": "Stage 模型强调系统管控和场景化扩展能力，不能依赖任意常驻后台进程。",
+    "knowledgePoints": [
+      "后台治理",
+      "ExtensionAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "后台进程受到系统有序治理"
+      },
+      {
+        "id": "b",
+        "text": "普通应用不能任意开发自定义常驻服务"
+      },
+      {
+        "id": "c",
+        "text": "应按业务场景选择系统提供的 ExtensionAbility 派生类"
+      },
+      {
+        "id": "d",
+        "text": "只要创建多个 UIAbility 就能永久驻留后台"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-028",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Context 在 Stage 模型中的设计，哪些说法正确？",
+    "explanation": "Context 能力与所属组件相关，虽然共享基类，但不能假定所有派生 Context 能力一致。",
+    "knowledgePoints": [
+      "Context",
+      "组件能力"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "不同应用组件有各自派生 Context"
+      },
+      {
+        "id": "b",
+        "text": "各类 Context 继承基础 Context"
+      },
+      {
+        "id": "c",
+        "text": "组件 Context 可提供与所属组件对应的能力"
+      },
+      {
+        "id": "d",
+        "text": "所有 Context 的能力完全相同，可无条件强制转换"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-029",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 AbilityStage 创建时机和作用域，哪些说法正确？",
+    "explanation": "AbilityStage 是 HAP 级运行时入口，不是页面级对象。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "HAP"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "Entry 或 Feature 类型 HAP 运行时对应 AbilityStage"
+      },
+      {
+        "id": "b",
+        "text": "HAP 代码首次加载进进程时先创建 AbilityStage"
+      },
+      {
+        "id": "c",
+        "text": "该 HAP 内的 UIAbility 实例与其 AbilityStage 关联"
+      },
+      {
+        "id": "d",
+        "text": "每次页面重绘都会新建 AbilityStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-030",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "UIAbility 的创建、前后台生命周期可以完全替代 WindowStage 的获焦、失焦和可交互状态事件。",
+    "explanation": "UIAbility 与显示状态职责不同，获焦、失焦、可交互等状态应通过 WindowStage 事件感知。",
+    "knowledgePoints": [
+      "UIAbility",
+      "WindowStage事件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "stage-model-031",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Stage 模型允许多个应用组件共享 ArkTS 引擎实例，从而便于共享对象并降低复杂应用的内存开销。",
+    "explanation": "共享 ArkTS 引擎是 Stage 模型面向复杂应用设计的重要特征。",
+    "knowledgePoints": [
+      "ArkTS引擎",
+      "内存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "stage-model-032",
+    "categoryId": "stage-model",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "企业协作应用同时包含主界面、桌面卡片和输入法扩展，如何按 Stage 模型划分组件？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "正确区分 UIAbility 与 ExtensionAbility",
+      "为卡片和输入法选择对应派生类",
+      "说明组件职责和 Context 边界",
+      "说明窗口逻辑只属于界面组件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "referenceAnswer": "主交互界面使用 UIAbility；桌面卡片使用 FormExtensionAbility；输入法场景使用 InputMethodExtensionAbility。各组件只承担对应场景职责，通过合适的 Context 获取能力，不把特定系统扩展伪装成常驻通用服务；窗口相关初始化放在 UIAbility 的 WindowStage 阶段。",
+    "scoringPoints": [
+      "正确区分 UIAbility 与 ExtensionAbility",
+      "为卡片和输入法选择对应派生类",
+      "说明组件职责和 Context 边界",
+      "说明窗口逻辑只属于界面组件"
+    ]
   }
 ]

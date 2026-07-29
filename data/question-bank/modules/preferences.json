@@ -845,5 +845,399 @@
       "说明缓存或监听的生命周期",
       "指出大量数据、关系查询、事务和多进程场景不适合"
     ]
+  },
+  {
+    "id": "preferences-022",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Preferences 的 key 最大长度是多少？",
+    "explanation": "官方常量 MAX_KEY_LENGTH 为 1024 字节。",
+    "knowledgePoints": [
+      "MAX_KEY_LENGTH",
+      "容量边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "255 字节"
+      },
+      {
+        "id": "b",
+        "text": "1024 字节"
+      },
+      {
+        "id": "c",
+        "text": "16 MB"
+      },
+      {
+        "id": "d",
+        "text": "没有限制"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "preferences-023",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Preferences 单个 value 的最大长度是多少？",
+    "explanation": "MAX_VALUE_LENGTH 为 16 MB，但接近上限的数据通常仍应评估更合适的存储方案。",
+    "knowledgePoints": [
+      "MAX_VALUE_LENGTH",
+      "容量边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "1024 字节"
+      },
+      {
+        "id": "b",
+        "text": "1 MB"
+      },
+      {
+        "id": "c",
+        "text": "16 MB"
+      },
+      {
+        "id": "d",
+        "text": "无限制"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-024",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "只想监听指定 key 集合的精确变化，应使用哪种事件？",
+    "explanation": "dataChange 从 API 12 支持按 key 集合精确返回变化后的键值。",
+    "knowledgePoints": [
+      "dataChange",
+      "精确订阅"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "on('dataChange', keys, callback)"
+      },
+      {
+        "id": "b",
+        "text": "on('change') 且无法过滤"
+      },
+      {
+        "id": "c",
+        "text": "on('headersReceive')"
+      },
+      {
+        "id": "d",
+        "text": "on('windowStageEvent')"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "preferences-025",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "调用 deletePreferences 后，对旧 Preferences 实例应怎样处理？",
+    "explanation": "删除会移除缓存实例和持久化文件，继续使用旧实例可能导致一致性问题。",
+    "knowledgePoints": [
+      "deletePreferences",
+      "缓存实例"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "继续长期读写以复用缓存"
+      },
+      {
+        "id": "b",
+        "text": "停止使用并清空引用，重新获取实例"
+      },
+      {
+        "id": "c",
+        "text": "只调用 getAll 即可恢复"
+      },
+      {
+        "id": "d",
+        "text": "把实例跨进程传递"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "preferences-026",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 on('change') 监听，哪些说法正确？",
+    "explanation": "change 监听与持久化刷新关联，订阅生命周期也需要管理。",
+    "knowledgePoints": [
+      "change监听",
+      "flush"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "值变化并执行 flush 后触发"
+      },
+      {
+        "id": "b",
+        "text": "回调参数包含发生变化的 key"
+      },
+      {
+        "id": "c",
+        "text": "不再需要时应使用 off 取消"
+      },
+      {
+        "id": "d",
+        "text": "只调用 put 且不 flush 一定立即触发 XML 模式回调"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-027",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Preferences 支持哪些 ValueType？",
+    "explanation": "Preferences 支持有限的可持久化值类型，不支持函数或运行时组件实例。",
+    "knowledgePoints": [
+      "ValueType",
+      "数据类型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "number、string、boolean"
+      },
+      {
+        "id": "b",
+        "text": "对应简单类型数组"
+      },
+      {
+        "id": "c",
+        "text": "Uint8Array"
+      },
+      {
+        "id": "d",
+        "text": "任意函数和 UI 组件实例"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-028",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于删除或移除 Preferences 缓存，哪些说法正确？",
+    "explanation": "缓存和文件删除会改变实例与订阅生命周期，必须重新获取并注册。",
+    "knowledgePoints": [
+      "缓存管理",
+      "订阅生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "相关数据变更订阅会被主动取消"
+      },
+      {
+        "id": "b",
+        "text": "重新获取实例后需要重新订阅"
+      },
+      {
+        "id": "c",
+        "text": "不应与其他 Preferences 操作并发调用 deletePreferences"
+      },
+      {
+        "id": "d",
+        "text": "旧实例可保证继续写入新文件且完全一致"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-029",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Preferences 名称必须非空、长度不超过 255 字节，并且不能包含斜杠。",
+    "explanation": "名称用于持久化文件标识，接口对长度和字符有明确约束。",
+    "knowledgePoints": [
+      "Preferences名称",
+      "参数约束"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "preferences-030",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Preferences 天然保证同一文件的多进程并发安全，因此适合多个进程无锁高频写入。",
+    "explanation": "官方明确提示多进程并发可能造成文件损坏和数据丢失。",
+    "knowledgePoints": [
+      "多进程",
+      "并发安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "preferences-031",
+    "categoryId": "preferences",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "设置页需要监听主题和字体大小变化，并支持恢复默认值，应如何使用 Preferences？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明精确或普通订阅",
+      "说明写入与 flush",
+      "说明 remove/clear",
+      "说明 off 和实例删除后的重建"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "获取固定名称的 Preferences 实例；用 dataChange 精确订阅主题和字体 key，或用 change 接收变化 key；修改后按存储模式正确 flush。恢复默认值可 remove 指定 key 或 clear 后 flush。页面退出时 off；若删除 Preferences 文件或移除缓存，应丢弃旧实例，重新获取后重新订阅。",
+    "scoringPoints": [
+      "说明精确或普通订阅",
+      "说明写入与 flush",
+      "说明 remove/clear",
+      "说明 off 和实例删除后的重建"
+    ]
   }
 ]

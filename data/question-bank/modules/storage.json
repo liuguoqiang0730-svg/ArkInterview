@@ -825,5 +825,399 @@
       "说明事务、版本迁移和备份恢复",
       "提到敏感数据加密和密钥安全"
     ]
+  },
+  {
+    "id": "storage-022",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "较大的文件读写操作为什么优先使用异步接口？",
+    "explanation": "官方建议耗时 read/write 使用异步接口，完成后仍需正确关闭资源。",
+    "knowledgePoints": [
+      "异步文件IO",
+      "主线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "避免长时间阻塞导致应用无响应或崩溃"
+      },
+      {
+        "id": "b",
+        "text": "异步接口会自动加密所有文件"
+      },
+      {
+        "id": "c",
+        "text": "同步接口不能访问沙箱"
+      },
+      {
+        "id": "d",
+        "text": "异步接口无需关闭文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-023",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "检查应用沙箱内文件是否存在，应使用基础文件接口中的哪类能力？",
+    "explanation": "fileIo.access 用于检查路径是否存在。",
+    "knowledgePoints": [
+      "fileIo.access",
+      "文件检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "access/accessSync"
+      },
+      {
+        "id": "b",
+        "text": "flushUpdates"
+      },
+      {
+        "id": "c",
+        "text": "pushDestination"
+      },
+      {
+        "id": "d",
+        "text": "checkAccessToken"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-024",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要获取文件大小、修改时间等详细属性，应使用哪个接口？",
+    "explanation": "stat 返回文件详细属性，可用于空间治理和缓存清理策略。",
+    "knowledgePoints": [
+      "fileIo.stat",
+      "文件属性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "stat/statSync"
+      },
+      {
+        "id": "b",
+        "text": "rename"
+      },
+      {
+        "id": "c",
+        "text": "unlink"
+      },
+      {
+        "id": "d",
+        "text": "mkdir"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-025",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "流式读取大文件时，哪项资源管理最关键？",
+    "explanation": "文件流必须及时关闭，异步流操作还要避免不受控的同步异步混用。",
+    "knowledgePoints": [
+      "Stream.close",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 finally 或结束路径及时关闭输入输出流"
+      },
+      {
+        "id": "b",
+        "text": "反复创建流且不关闭"
+      },
+      {
+        "id": "c",
+        "text": "同步与异步方法任意交叉并发"
+      },
+      {
+        "id": "d",
+        "text": "把完整文件长期保存在 UI 状态中"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-026",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "使用 fileIo 复制大文件时，哪些做法可靠？",
+    "explanation": "分段复制必须维护偏移和实际读取长度，否则容易重复或写入无效字节。",
+    "knowledgePoints": [
+      "分段读写",
+      "offset"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用固定大小缓冲区分段读写"
+      },
+      {
+        "id": "b",
+        "text": "依据实际 readLen 写入有效字节"
+      },
+      {
+        "id": "c",
+        "text": "循环直到 readLen 为 0"
+      },
+      {
+        "id": "d",
+        "text": "忽略偏移量并重复写入整个缓冲区"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "storage-027",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "基础文件访问提供哪些常见能力？",
+    "explanation": "fileIo 面向文件和目录操作，关系查询应使用数据库能力。",
+    "knowledgePoints": [
+      "fileIo",
+      "文件管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "创建目录与列出文件"
+      },
+      {
+        "id": "b",
+        "text": "打开、读取、写入和关闭"
+      },
+      {
+        "id": "c",
+        "text": "复制、移动、重命名与删除"
+      },
+      {
+        "id": "d",
+        "text": "直接执行任意 SQL 联表查询"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "storage-028",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于文件流并发和异步规范，哪些说法正确？",
+    "explanation": "共享流位置和生命周期需要串行治理，不能无锁并发访问。",
+    "knowledgePoints": [
+      "文件流",
+      "并发"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "流接口不支持并发读写"
+      },
+      {
+        "id": "b",
+        "text": "异步调用应按顺序等待完成"
+      },
+      {
+        "id": "c",
+        "text": "应避免同步和异步接口无序混用"
+      },
+      {
+        "id": "d",
+        "text": "同一流可由多个任务无锁同时修改位置"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "storage-029",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "文件偏移指针可能停留在上次读写结束位置，重复访问时应明确管理 offset。",
+    "explanation": "忽略当前偏移会导致读取缺失、重复或覆盖位置错误。",
+    "knowledgePoints": [
+      "offset",
+      "文件指针"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "storage-030",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "只要文件位于应用沙箱，就可以永远不处理 close，因为系统会立即回收所有描述符。",
+    "explanation": "文件和流都应显式关闭，避免描述符泄漏和数据未完整刷新。",
+    "knowledgePoints": [
+      "close",
+      "文件描述符"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "storage-031",
+    "categoryId": "storage",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "离线地图包下载后需要校验、替换和清理旧版本，应如何设计文件流程？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明临时文件和原子替换思路",
+      "说明异步分段读写与资源关闭",
+      "说明完整性校验",
+      "说明空间治理与异常清理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "下载到临时文件，使用异步分段写入并显示进度；结束后关闭流，通过大小或 SHA-256 校验完整性；校验成功再以移动或重命名方式替换正式文件，失败则删除临时文件。用 stat 和目录遍历维护版本、大小和最后修改时间，按空间策略清理旧包；所有异常路径都关闭文件和流。",
+    "scoringPoints": [
+      "说明临时文件和原子替换思路",
+      "说明异步分段读写与资源关闭",
+      "说明完整性校验",
+      "说明空间治理与异常清理"
+    ]
   }
 ]

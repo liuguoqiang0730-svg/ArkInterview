@@ -841,5 +841,399 @@
       "合理区分 push、replace 和 pop",
       "说明跨模块路由表或路由拦截设计"
     ]
+  },
+  {
+    "id": "routing-022",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要跳转并在失败时获得明确错误码，优先使用哪类 NavPathStack 接口？",
+    "explanation": "pushDestination 系列返回 Promise，可处理路由表缺失等跳转错误。",
+    "knowledgePoints": [
+      "pushDestination",
+      "错误处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "pushDestination 或 pushDestinationByName"
+      },
+      {
+        "id": "b",
+        "text": "只调用 getAllPathName"
+      },
+      {
+        "id": "c",
+        "text": "只调用 removeByName"
+      },
+      {
+        "id": "d",
+        "text": "直接修改路由数组私有字段"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-023",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "NavDestination 子页想获取当前 Navigation 的 NavPathStack，推荐在哪个回调中读取 context.pathStack？",
+    "explanation": "NavDestination.onReady 提供 NavDestinationContext，可从中获取当前 pathStack 和参数。",
+    "knowledgePoints": [
+      "NavDestination",
+      "onReady"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "onReady"
+      },
+      {
+        "id": "b",
+        "text": "onClick"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "d",
+        "text": "onAreaChange"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-024",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "登录成功后不希望返回登录页，应该使用哪类栈操作替换栈顶页面？",
+    "explanation": "replace 系列用目标页替换当前栈顶，适合登录等不可回退流程。",
+    "knowledgePoints": [
+      "replacePath",
+      "路由栈"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "replacePath 或 replaceDestination"
+      },
+      {
+        "id": "b",
+        "text": "getParamByName"
+      },
+      {
+        "id": "c",
+        "text": "moveIndexToTop"
+      },
+      {
+        "id": "d",
+        "text": "setInterception"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-025",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望返回指定名称的上一层页面，应优先使用哪个方法？",
+    "explanation": "popToName 会回退到指定名称的页面并移除其上方页面。",
+    "knowledgePoints": [
+      "popToName",
+      "页面返回"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "popToName"
+      },
+      {
+        "id": "b",
+        "text": "pushPath"
+      },
+      {
+        "id": "c",
+        "text": "removeByIndexes"
+      },
+      {
+        "id": "d",
+        "text": "getPathStack"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-026",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "NavPathStack 提供哪些路由栈能力？",
+    "explanation": "NavPathStack 管理 NavDestination 路由栈，不能直接操作 NavBar 页面。",
+    "knowledgePoints": [
+      "NavPathStack",
+      "栈操作"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "页面压栈与返回"
+      },
+      {
+        "id": "b",
+        "text": "页面替换和删除"
+      },
+      {
+        "id": "c",
+        "text": "参数查询与跳转拦截"
+      },
+      {
+        "id": "d",
+        "text": "直接操作 NavBar 内部组件树"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-027",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于系统路由表配置，哪些正确？",
+    "explanation": "系统路由表建立名称到构建函数的映射，可实现跨模块解耦跳转。",
+    "knowledgePoints": [
+      "系统路由表",
+      "跨模块"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 router_map.json 中注册名称、源文件和构建函数"
+      },
+      {
+        "id": "b",
+        "text": "在 module.json5 中配置 routerMap 资源"
+      },
+      {
+        "id": "c",
+        "text": "未注册的页面名称会导致跳转失败"
+      },
+      {
+        "id": "d",
+        "text": "每次跳转都必须直接 import 页面文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-028",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Navigation 单实例跳转的理解，哪些正确？",
+    "explanation": "两种单实例模式都复用已存在目标，但对其上方页面处理不同。",
+    "knowledgePoints": [
+      "LaunchMode",
+      "onNewParam"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "MOVE_TO_TOP_SINGLETON 将已存在目标移动到栈顶"
+      },
+      {
+        "id": "b",
+        "text": "POP_TO_SINGLETON 移除目标上方页面"
+      },
+      {
+        "id": "c",
+        "text": "已有页面以单实例方式到栈顶时可触发 onNewParam"
+      },
+      {
+        "id": "d",
+        "text": "单实例模式始终创建新的重复页面"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-029",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "应用在后台调用 NavPathStack 栈操作后，界面会在应用再次回到前台时刷新。",
+    "explanation": "官方文档明确说明后台栈操作会在回前台时触发刷新。",
+    "knowledgePoints": [
+      "后台路由",
+      "刷新时机"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "routing-030",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "为了管理路由栈，官方建议主要依赖页面生命周期监听手工维护一份重复数组。",
+    "explanation": "应使用 NavPathStack.getPathStack 等能力查询真实路由栈，避免重复状态源。",
+    "knowledgePoints": [
+      "路由栈查询",
+      "状态一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "routing-031",
+    "categoryId": "routing",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "电商流程包含商品页、确认页、支付页和结果页，如何设计返回、替换和失败处理？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明一一对应的 NavPathStack",
+      "区分 push、popToName 和 replace",
+      "说明结果回传",
+      "说明跨模块注册与失败处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "使用一个与 Navigation 一一对应的 NavPathStack。普通详情用 pushDestination 并捕获失败；确认页可用 onPop 或 onResult 接收返回结果；支付成功后 replace 到结果页，避免回到支付页；返回指定节点用 popToName。跨模块页面注册到路由表，参数使用明确的数据契约，并记录失败码而不是静默无响应。",
+    "scoringPoints": [
+      "说明一一对应的 NavPathStack",
+      "区分 push、popToName 和 replace",
+      "说明结果回传",
+      "说明跨模块注册与失败处理"
+    ]
   }
 ]

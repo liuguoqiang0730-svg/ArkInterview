@@ -849,5 +849,400 @@
       "只对合适的幂等请求做有限退避重试",
       "说明断网缓存、网络恢复刷新和安全日志"
     ]
+  },
+  {
+    "id": "network-022",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "下载大文件并需要持续获取接收进度时，更适合使用哪个 HttpRequest 能力？",
+    "explanation": "大文件和进度场景适合流式传输，避免一次性把完整响应加载进内存。",
+    "knowledgePoints": [
+      "requestInstream",
+      "下载进度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "requestInstream 并监听 dataReceiveProgress"
+      },
+      {
+        "id": "b",
+        "text": "只使用普通 request 并一次性加载全部内容"
+      },
+      {
+        "id": "c",
+        "text": "NetConnection.unregister"
+      },
+      {
+        "id": "d",
+        "text": "Preferences.flush"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-023",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "每个 HttpRequest 对象的复用规则是什么？",
+    "explanation": "官方示例明确每个 HttpRequest 对应一个 HTTP 请求任务，请求结束后主动 destroy。",
+    "knowledgePoints": [
+      "HttpRequest",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "一个对象对应一个请求任务，不应复用"
+      },
+      {
+        "id": "b",
+        "text": "全应用只能创建一个对象"
+      },
+      {
+        "id": "c",
+        "text": "对象销毁后仍可继续发请求"
+      },
+      {
+        "id": "d",
+        "text": "多个并发请求必须共享同一对象"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-024",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "HttpRequestOptions 中 usingCache 的默认行为是什么？",
+    "explanation": "usingCache 默认 true，缓存跟随当前进程生效。",
+    "knowledgePoints": [
+      "usingCache",
+      "HTTP缓存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "默认为 true，优先读取进程内有效缓存"
+      },
+      {
+        "id": "b",
+        "text": "默认为 false 且禁止配置"
+      },
+      {
+        "id": "c",
+        "text": "只缓存 POST 请求"
+      },
+      {
+        "id": "d",
+        "text": "缓存跨卸载永久有效"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-025",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "上传 multipart/form-data 文件时，主要通过哪个配置提供表单字段和文件路径？",
+    "explanation": "multiFormDataList 支持文本或 filePath 等多部分表单数据。",
+    "knowledgePoints": [
+      "multipart",
+      "文件上传"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "multiFormDataList"
+      },
+      {
+        "id": "b",
+        "text": "readTimeout"
+      },
+      {
+        "id": "c",
+        "text": "dnsServers"
+      },
+      {
+        "id": "d",
+        "text": "expectDataType"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-026",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "完整的 HTTP 流式请求可以监听哪些事件？",
+    "explanation": "流式接口分别提供数据块、结束、收发进度事件。",
+    "knowledgePoints": [
+      "流式传输",
+      "进度监听"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "dataReceive 获取数据块"
+      },
+      {
+        "id": "b",
+        "text": "dataEnd 感知接收结束"
+      },
+      {
+        "id": "c",
+        "text": "dataReceiveProgress 获取下载进度"
+      },
+      {
+        "id": "d",
+        "text": "dataSendProgress 获取上传进度"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "network-027",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 HttpRequestOptions 超时，哪些说法正确？",
+    "explanation": "超时参数需要结合异常分类处理，不能替代错误处理。",
+    "knowledgePoints": [
+      "connectTimeout",
+      "readTimeout"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "connectTimeout 控制连接建立超时"
+      },
+      {
+        "id": "b",
+        "text": "readTimeout 覆盖从请求开始到结束的总时间"
+      },
+      {
+        "id": "c",
+        "text": "单位为毫秒"
+      },
+      {
+        "id": "d",
+        "text": "设置超时后可以忽略异常处理"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "network-028",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "提升 HTTPS 安全性时，哪些能力可按场景配置？",
+    "explanation": "Network Kit 支持 CA、客户端证书和证书锁定；跳过校验会破坏服务器身份验证。",
+    "knowledgePoints": [
+      "HTTPS",
+      "证书校验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "指定 CA 证书路径"
+      },
+      {
+        "id": "b",
+        "text": "配置客户端证书"
+      },
+      {
+        "id": "c",
+        "text": "配置证书锁定 PIN"
+      },
+      {
+        "id": "d",
+        "text": "生产环境无条件跳过 SSL 校验"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "network-029",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "普通 HttpRequest.request 更适合较小收发数据；大文件及进度场景应考虑流式传输。",
+    "explanation": "接口选择应根据数据规模和是否需要进度事件决定。",
+    "knowledgePoints": [
+      "HTTP请求",
+      "流式传输"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "network-030",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "HttpRequest 使用完毕后只要 Promise 已完成，就无需取消事件订阅或调用 destroy。",
+    "explanation": "不再监听时应 off，任务结束应 destroy，避免资源和回调泄漏。",
+    "knowledgePoints": [
+      "destroy",
+      "off"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "network-031",
+    "categoryId": "network",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "设计一个支持头像上传和离线缓存的网络层，需要包含哪些关键点？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "区分普通与流式请求",
+      "说明超时、证书和错误分类",
+      "说明缓存策略",
+      "说明资源释放和敏感信息保护"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "小型 JSON 请求使用 request，大文件上传使用 multipart 或流式能力并展示发送进度；为每个任务创建独立 HttpRequest，配置连接与读取超时、HTTPS 校验和响应类型；区分网络、HTTP 与业务错误。GET 缓存应定义有效期和刷新策略；结束时取消监听并 destroy。敏感令牌只放请求头且日志脱敏。",
+    "scoringPoints": [
+      "区分普通与流式请求",
+      "说明超时、证书和错误分类",
+      "说明缓存策略",
+      "说明资源释放和敏感信息保护"
+    ]
   }
 ]

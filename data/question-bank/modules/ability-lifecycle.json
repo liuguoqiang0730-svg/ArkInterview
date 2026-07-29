@@ -829,5 +829,399 @@
       "区分一次性初始化、窗口加载和前台恢复职责",
       "给出避免重复初始化的数据刷新策略"
     ]
+  },
+  {
+    "id": "ability-lifecycle-022",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "通过 startAbilityByCall 将 UIAbility 启动到后台时，冷启动回调顺序是哪一项？",
+    "explanation": "后台冷启动会执行 onCreate、onBackground，不创建 WindowStage；后续拉到前台才创建窗口舞台。",
+    "knowledgePoints": [
+      "startAbilityByCall",
+      "后台启动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "onCreate → onWindowStageCreate → onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onCreate → onBackground，且不执行 onWindowStageCreate"
+      },
+      {
+        "id": "c",
+        "text": "onNewWant → onForeground"
+      },
+      {
+        "id": "d",
+        "text": "onForeground → onCreate"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-023",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个后台启动且尚未创建窗口的 UIAbility 被拉到前台时，主要顺序是什么？",
+    "explanation": "官方生命周期说明中，后台实例拉到前台会先接收新 Want，再创建 WindowStage，最后进入前台。",
+    "knowledgePoints": [
+      "onNewWant",
+      "onWindowStageCreate"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "onNewWant → onWindowStageCreate → onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onCreate → onDestroy"
+      },
+      {
+        "id": "c",
+        "text": "onBackground → onWindowStageDestroy"
+      },
+      {
+        "id": "d",
+        "text": "onForeground → onNewWant"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-024",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "UIAbility 的 UI 完全不可见后，系统主要触发哪个回调？",
+    "explanation": "onBackground 在 UI 完全不可见后触发，适合释放不可见时不需要的资源。",
+    "knowledgePoints": [
+      "onBackground",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onBackground"
+      },
+      {
+        "id": "c",
+        "text": "onWindowStageCreate"
+      },
+      {
+        "id": "d",
+        "text": "onNewWant"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-025",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望集中监听进程内多个 UIAbility 的生命周期变化，应使用哪类能力？",
+    "explanation": "ApplicationContext 提供 UIAbility 生命周期变化监听，适合应用级观测。",
+    "knowledgePoints": [
+      "ApplicationContext",
+      "生命周期监听"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "ApplicationContext 的 Ability 生命周期监听"
+      },
+      {
+        "id": "b",
+        "text": "每个页面的 build 方法轮询"
+      },
+      {
+        "id": "c",
+        "text": "Preferences 变化监听"
+      },
+      {
+        "id": "d",
+        "text": "HttpRequest 响应头监听"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-026",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 UIAbility 生命周期回调的线程与任务安排，哪些做法正确？",
+    "explanation": "生命周期回调运行在主线程，阻塞会影响启动和切换性能，尤其不能把耗时保存塞进 onBackground。",
+    "knowledgePoints": [
+      "主线程",
+      "性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "生命周期回调运行在应用主线程"
+      },
+      {
+        "id": "b",
+        "text": "回调中只执行必要的轻量操作"
+      },
+      {
+        "id": "c",
+        "text": "耗时工作应异步处理或交给子线程"
+      },
+      {
+        "id": "d",
+        "text": "onBackground 适合执行长时间数据库事务"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-027",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "在 onWindowStageCreate 中通常可以执行哪些工作？",
+    "explanation": "WindowStage 创建完成后可加载 UI、注册窗口事件并保存引用。",
+    "knowledgePoints": [
+      "onWindowStageCreate",
+      "loadContent"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "调用 loadContent 设置首个页面"
+      },
+      {
+        "id": "b",
+        "text": "订阅 WindowStage 事件"
+      },
+      {
+        "id": "c",
+        "text": "保存 WindowStage 引用供后续释放"
+      },
+      {
+        "id": "d",
+        "text": "假定窗口已经销毁并访问空对象"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-028",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "WindowStage 事件可以反映哪些显示相关状态？",
+    "explanation": "WindowStageEventType 描述窗口显示、焦点和可交互状态，不负责业务数据库状态。",
+    "knowledgePoints": [
+      "WindowStageEventType",
+      "窗口状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "获焦与失焦"
+      },
+      {
+        "id": "b",
+        "text": "前台与后台显示"
+      },
+      {
+        "id": "c",
+        "text": "前台可交互与不可交互"
+      },
+      {
+        "id": "d",
+        "text": "数据库事务提交状态"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-029",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "onWindowStageDestroy 执行时 WindowStage 已经销毁，因此不应再依赖该对象释放窗口事件。",
+    "explanation": "需要访问 WindowStage 注销事件时应在 onWindowStageWillDestroy 中完成；onWindowStageDestroy 适合释放其他 UI 资源。",
+    "knowledgePoints": [
+      "onWindowStageWillDestroy",
+      "onWindowStageDestroy"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "ability-lifecycle-030",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "onForeground 在 UIAbility 的 UI 可见之前触发，可用于重新申请在后台阶段释放的前台资源。",
+    "explanation": "onForeground 是恢复定位、动画等前台资源的合适边界。",
+    "knowledgePoints": [
+      "onForeground",
+      "资源恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": true
+  },
+  {
+    "id": "ability-lifecycle-031",
+    "categoryId": "ability-lifecycle",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "音视频应用从冷启动、进入后台、再次前台到退出，应如何安排播放器和窗口资源？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明冷启动与窗口阶段",
+      "说明前后台资源治理",
+      "区分 WillDestroy、WindowStageDestroy 与 onDestroy",
+      "说明 onNewWant 的刷新职责"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "onCreate 只做一次性轻量初始化；onWindowStageCreate 加载页面并注册窗口事件；onForeground 恢复前台播放策略或必要资源；onBackground 停止仅前台需要的任务但不执行耗时事务；onWindowStageWillDestroy 注销窗口事件；onDestroy 释放 UIAbility 级播放器、连接等最终资源。已有实例收到新参数时在 onNewWant 更新数据。",
+    "scoringPoints": [
+      "说明冷启动与窗口阶段",
+      "说明前后台资源治理",
+      "区分 WillDestroy、WindowStageDestroy 与 onDestroy",
+      "说明 onNewWant 的刷新职责"
+    ]
   }
 ]

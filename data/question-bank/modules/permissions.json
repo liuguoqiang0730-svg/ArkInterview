@@ -868,5 +868,400 @@
       "权限失效后立即停止能力并更新界面",
       "提供拒绝后的降级和设置引导"
     ]
+  },
+  {
+    "id": "permissions-022",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "检查应用当前是否持有某项权限，AtManager 应调用哪个接口？",
+    "explanation": "checkAccessToken 根据 accessTokenId 和权限名返回 GRANTED 或 DENIED。",
+    "knowledgePoints": [
+      "checkAccessToken",
+      "GrantStatus"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "checkAccessToken"
+      },
+      {
+        "id": "b",
+        "text": "flush"
+      },
+      {
+        "id": "c",
+        "text": "pushPath"
+      },
+      {
+        "id": "d",
+        "text": "createHttp"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-023",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "用户已拒绝且系统不再重复弹出动态授权框时，应用应怎样处理？",
+    "explanation": "系统不鼓励频繁弹窗；拒绝后应尊重决定并提供设置页引导或降级能力。",
+    "knowledgePoints": [
+      "拒绝策略",
+      "requestPermissionOnSetting"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "持续循环调用动态申请接口"
+      },
+      {
+        "id": "b",
+        "text": "解释用途并引导系统设置或使用 requestPermissionOnSetting"
+      },
+      {
+        "id": "c",
+        "text": "绕过权限直接调用敏感接口"
+      },
+      {
+        "id": "d",
+        "text": "把授权状态改写成本地 true"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "permissions-024",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在 onWindowStageCreate 中申请权限时，需要满足什么时机要求？",
+    "explanation": "内容加载完成前直接申请可能失败，需等待 UI 加载完成。",
+    "knowledgePoints": [
+      "onWindowStageCreate",
+      "授权时机"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "先等待 loadContent/setUIContent 完成或在其回调中申请"
+      },
+      {
+        "id": "b",
+        "text": "必须在加载 UI 之前同步申请"
+      },
+      {
+        "id": "c",
+        "text": "只能在 onDestroy 申请"
+      },
+      {
+        "id": "d",
+        "text": "无需 UIContext 即可任意申请"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-025",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "动态授权结果中，业务是否继续访问敏感能力主要依据什么？",
+    "explanation": "应用必须逐项检查 authResults，只有已授权权限才能继续对应操作。",
+    "knowledgePoints": [
+      "PermissionRequestResult",
+      "authResults"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "PermissionRequestResult.authResults"
+      },
+      {
+        "id": "b",
+        "text": "设备型号"
+      },
+      {
+        "id": "c",
+        "text": "上次安装时间"
+      },
+      {
+        "id": "d",
+        "text": "页面颜色模式"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-026",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "user_grant 权限的可靠流程包括哪些步骤？",
+    "explanation": "权限链路应遵循用户可知可控，并完整处理声明、检查、申请和拒绝。",
+    "knowledgePoints": [
+      "user_grant",
+      "授权流程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 module.json5 声明权限"
+      },
+      {
+        "id": "b",
+        "text": "在用户触发相关功能时精准申请"
+      },
+      {
+        "id": "c",
+        "text": "检查当前状态和本次授权结果"
+      },
+      {
+        "id": "d",
+        "text": "拒绝后提供说明、降级或设置引导"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "permissions-027",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "为什么不能持久化“曾经授权”并永久信任？",
+    "explanation": "权限状态由系统控制，业务缓存不能替代实时检查。",
+    "knowledgePoints": [
+      "权限撤销",
+      "临时授权"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "用户可在系统设置撤销"
+      },
+      {
+        "id": "b",
+        "text": "临时授权可能在特定条件后失效"
+      },
+      {
+        "id": "c",
+        "text": "每次访问前都应重新检查"
+      },
+      {
+        "id": "d",
+        "text": "本地布尔值能阻止系统回收权限"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "permissions-028",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "申请多个相关权限时，哪些处理正确？",
+    "explanation": "多权限结果必须逐项处理，并允许业务按实际授权范围降级。",
+    "knowledgePoints": [
+      "多权限",
+      "降级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "权限列表与 authResults 按索引对应处理"
+      },
+      {
+        "id": "b",
+        "text": "只要其中一个成功就默认全部成功"
+      },
+      {
+        "id": "c",
+        "text": "按能力提供部分授权后的降级路径"
+      },
+      {
+        "id": "d",
+        "text": "调用敏感接口前再次确认所需权限"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "permissions-029",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "系统权限弹窗应由用户主动操作触发，并且不能被应用自定义控件遮挡。",
+    "explanation": "授权必须具有明确上下文，系统弹窗信息也必须完整可见。",
+    "knowledgePoints": [
+      "用户可知可控",
+      "系统弹窗"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "permissions-030",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "只要权限写入 module.json5，应用就已经获得所有 user_grant 权限，无需运行时申请。",
+    "explanation": "配置声明只是前置条件，user_grant 还需要运行时由用户授权。",
+    "knowledgePoints": [
+      "权限声明",
+      "动态授权"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "permissions-031",
+    "categoryId": "permissions",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "地图功能需要精确定位和模糊定位，如何设计授权与降级流程？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明声明、检查和动态申请",
+      "逐项处理授权结果",
+      "说明模糊定位降级",
+      "说明拒绝引导和再次检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "先在配置中声明相关权限；用户进入定位功能时查询当前状态，按官方权限依赖关系申请所需列表；逐项解析 authResults。仅有模糊定位时提供低精度能力，全部拒绝时解释影响并允许继续使用不依赖定位的功能；需要再次授权时引导系统设置。每次调用定位前重新检查，不能永久信任本地缓存。",
+    "scoringPoints": [
+      "说明声明、检查和动态申请",
+      "逐项处理授权结果",
+      "说明模糊定位降级",
+      "说明拒绝引导和再次检查"
+    ]
   }
 ]

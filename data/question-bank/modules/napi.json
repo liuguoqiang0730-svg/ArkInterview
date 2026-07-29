@@ -971,5 +971,400 @@
       "complete 中 resolve 或 reject 并释放所有资源",
       "覆盖排队失败、取消、状态码和线程安全回调"
     ]
+  },
+  {
+    "id": "napi-025",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "napi_create_async_work 的 execute 回调运行在哪里？",
+    "explanation": "execute_cb 在独立工作线程运行，不能用原 ArkTS env 创建 napi_value。",
+    "knowledgePoints": [
+      "execute_cb",
+      "工作线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "env 所属 ArkTS 线程"
+      },
+      {
+        "id": "b",
+        "text": "uv 线程池中的工作线程"
+      },
+      {
+        "id": "c",
+        "text": "GPU 渲染线程"
+      },
+      {
+        "id": "d",
+        "text": "固定的系统 UI 线程"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "napi-026",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "异步任务把结果转换为 napi_value 并回传 ArkTS，应在哪个回调完成？",
+    "explanation": "complete_cb 回到原 ArkTS 线程，可使用 env 创建值、调用回调或完成 Promise。",
+    "knowledgePoints": [
+      "complete_cb",
+      "ArkTS线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "execute_cb"
+      },
+      {
+        "id": "b",
+        "text": "complete_cb"
+      },
+      {
+        "id": "c",
+        "text": "模块注册函数"
+      },
+      {
+        "id": "d",
+        "text": "CMake 配置阶段"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "napi-027",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "创建 napi_async_work 后，使用哪个接口把任务加入执行队列？",
+    "explanation": "create 只创建工作项，queue 才将其提交执行。",
+    "knowledgePoints": [
+      "napi_queue_async_work",
+      "异步任务"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_queue_async_work"
+      },
+      {
+        "id": "b",
+        "text": "napi_delete_async_work"
+      },
+      {
+        "id": "c",
+        "text": "napi_get_cb_info"
+      },
+      {
+        "id": "d",
+        "text": "napi_define_properties"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "napi-028",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "napi_async_work 完成后应如何释放？",
+    "explanation": "异步工作项建议单次使用，重复释放会产生未定义行为。",
+    "knowledgePoints": [
+      "napi_delete_async_work",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 complete 回调执行时或之后调用 napi_delete_async_work，且只释放一次"
+      },
+      {
+        "id": "b",
+        "text": "在 execute 开始前重复 delete"
+      },
+      {
+        "id": "c",
+        "text": "永远不释放"
+      },
+      {
+        "id": "d",
+        "text": "由 ArkTS GC 自动删除 C++ 工作项"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "napi-029",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Promise 风格 NAPI 异步接口通常包含哪些步骤？",
+    "explanation": "Promise 只是结果通道，线程切换和 C++ 资源仍需完整管理。",
+    "knowledgePoints": [
+      "napi_create_promise",
+      "deferred"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_create_promise 获取 deferred 和 promise"
+      },
+      {
+        "id": "b",
+        "text": "创建并排队 async work"
+      },
+      {
+        "id": "c",
+        "text": "complete 中 resolve 或 reject deferred"
+      },
+      {
+        "id": "d",
+        "text": "完成后删除 async work 和自定义上下文"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "napi-030",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "callback 风格 NAPI 异步接口需要哪些生命周期处理？",
+    "explanation": "ArkTS 函数只能在合适线程调用，引用必须在任务完成后释放。",
+    "knowledgePoints": [
+      "napi_ref",
+      "napi_call_function"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "把回调保存为 napi_ref 防止被回收"
+      },
+      {
+        "id": "b",
+        "text": "complete 中取回回调并 napi_call_function"
+      },
+      {
+        "id": "c",
+        "text": "完成后删除 napi_ref"
+      },
+      {
+        "id": "d",
+        "text": "在 execute 工作线程直接调用 ArkTS 函数"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "napi-031",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于多个 napi_async_work 的执行顺序，哪些说法正确？",
+    "explanation": "uv 工作线程并发执行，不同工作项不能依赖提交顺序。",
+    "knowledgePoints": [
+      "异步顺序",
+      "并发"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "options": [
+      {
+        "id": "a",
+        "text": "只保证每个任务的 complete 在自身 execute 之后"
+      },
+      {
+        "id": "b",
+        "text": "不同任务的 execute 顺序没有保证"
+      },
+      {
+        "id": "c",
+        "text": "有严格顺序需求应设计额外保序机制"
+      },
+      {
+        "id": "d",
+        "text": "提交顺序天然等于完成顺序"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "napi-032",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "execute_cb 可以使用传入 env 创建 napi_value，因为它与原 ArkTS 线程使用同一执行上下文。",
+    "explanation": "execute_cb 在工作线程，不能用原线程 env 构造 napi_value。",
+    "knowledgePoints": [
+      "线程安全",
+      "napi_env"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "answerBoolean": false
+  },
+  {
+    "id": "napi-033",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "napi_cancel_async_work 返回 napi_ok 仍不代表底层任务一定已取消，complete 回调还应检查 status。",
+    "explanation": "取消请求和实际取消结果需要通过 complete 的状态继续判断。",
+    "knowledgePoints": [
+      "napi_cancel_async_work",
+      "status"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "answerBoolean": true
+  },
+  {
+    "id": "napi-034",
+    "categoryId": "napi",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "把 C++ 图片分析算法封装为可取消的 Promise 接口，应如何管理线程、错误和资源？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明 Promise 和 async work 创建",
+      "说明 execute 线程限制",
+      "说明 complete 的结果与取消处理",
+      "说明所有路径资源释放且只释放一次"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "referenceAnswer": "ArkTS 入口解析参数并创建 Promise/deferred 与任务上下文；create/queue async work。execute 只做纯 C++ 计算和取消检查，不创建 napi_value；complete 根据 status 和业务结果 resolve/reject，映射清晰错误。无论成功、失败或取消，都释放 native 缓冲区并且只调用一次 napi_delete_async_work；若持有 ArkTS 对象引用也要删除。",
+    "scoringPoints": [
+      "说明 Promise 和 async work 创建",
+      "说明 execute 线程限制",
+      "说明 complete 的结果与取消处理",
+      "说明所有路径资源释放且只释放一次"
+    ]
   }
 ]

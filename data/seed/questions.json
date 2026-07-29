@@ -4632,6 +4632,400 @@
     ]
   },
   {
+    "id": "stage-model-023",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "普通应用需要实现桌面卡片能力时，应选择哪类 Stage 模型组件？",
+    "explanation": "ExtensionAbility 面向特定系统场景，桌面卡片应使用 FormExtensionAbility，而不是自定义通用服务。",
+    "knowledgePoints": [
+      "ExtensionAbility",
+      "FormExtensionAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "自定义一个通用后台 Service"
+      },
+      {
+        "id": "b",
+        "text": "FormExtensionAbility 的派生实现"
+      },
+      {
+        "id": "c",
+        "text": "额外创建一个 UIAbility 窗口"
+      },
+      {
+        "id": "d",
+        "text": "在页面组件中常驻定时器"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "stage-model-024",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Stage 模型中，ExtensionAbility 派生类实例的生命周期主要由谁管理？",
+    "explanation": "ExtensionAbility 服务于卡片、输入法等特定场景，其实例由系统按场景触发并管理生命周期。",
+    "knowledgePoints": [
+      "ExtensionAbility",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "应用页面自行创建并长期持有"
+      },
+      {
+        "id": "b",
+        "text": "系统根据对应场景触发和管理"
+      },
+      {
+        "id": "c",
+        "text": "任意 HAR 模块自动创建"
+      },
+      {
+        "id": "d",
+        "text": "用户在任务中心手动管理"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "stage-model-025",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "每个 UIAbility 实例与窗口舞台的关系，哪项描述正确？",
+    "explanation": "每个 UIAbility 实例都会绑定一个 WindowStage，WindowStage 包含主窗口并为 ArkUI 提供绘制区域。",
+    "knowledgePoints": [
+      "UIAbility",
+      "WindowStage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "一个 UIAbility 实例绑定一个 WindowStage 实例"
+      },
+      {
+        "id": "b",
+        "text": "所有 UIAbility 永远共享同一个 WindowStage"
+      },
+      {
+        "id": "c",
+        "text": "WindowStage 只属于 AbilityStage"
+      },
+      {
+        "id": "d",
+        "text": "无界面 UIAbility 才有 WindowStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "stage-model-026",
+    "categoryId": "stage-model",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Stage 模型将应用组件管理与窗口管理解耦，主要有利于什么？",
+    "explanation": "组件与窗口解耦便于系统适配不同设备形态，无屏设备可裁剪窗口，同时复用组件生命周期。",
+    "knowledgePoints": [
+      "多设备",
+      "窗口管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "让所有设备强制显示相同窗口"
+      },
+      {
+        "id": "b",
+        "text": "适配多设备并允许无屏设备裁剪窗口能力"
+      },
+      {
+        "id": "c",
+        "text": "绕过后台进程治理"
+      },
+      {
+        "id": "d",
+        "text": "让 ExtensionAbility 直接绘制页面"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "stage-model-027",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Stage 模型后台与扩展能力的约束，哪些说法正确？",
+    "explanation": "Stage 模型强调系统管控和场景化扩展能力，不能依赖任意常驻后台进程。",
+    "knowledgePoints": [
+      "后台治理",
+      "ExtensionAbility"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "后台进程受到系统有序治理"
+      },
+      {
+        "id": "b",
+        "text": "普通应用不能任意开发自定义常驻服务"
+      },
+      {
+        "id": "c",
+        "text": "应按业务场景选择系统提供的 ExtensionAbility 派生类"
+      },
+      {
+        "id": "d",
+        "text": "只要创建多个 UIAbility 就能永久驻留后台"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-028",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 Context 在 Stage 模型中的设计，哪些说法正确？",
+    "explanation": "Context 能力与所属组件相关，虽然共享基类，但不能假定所有派生 Context 能力一致。",
+    "knowledgePoints": [
+      "Context",
+      "组件能力"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "不同应用组件有各自派生 Context"
+      },
+      {
+        "id": "b",
+        "text": "各类 Context 继承基础 Context"
+      },
+      {
+        "id": "c",
+        "text": "组件 Context 可提供与所属组件对应的能力"
+      },
+      {
+        "id": "d",
+        "text": "所有 Context 的能力完全相同，可无条件强制转换"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-029",
+    "categoryId": "stage-model",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 AbilityStage 创建时机和作用域，哪些说法正确？",
+    "explanation": "AbilityStage 是 HAP 级运行时入口，不是页面级对象。",
+    "knowledgePoints": [
+      "AbilityStage",
+      "HAP"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "Entry 或 Feature 类型 HAP 运行时对应 AbilityStage"
+      },
+      {
+        "id": "b",
+        "text": "HAP 代码首次加载进进程时先创建 AbilityStage"
+      },
+      {
+        "id": "c",
+        "text": "该 HAP 内的 UIAbility 实例与其 AbilityStage 关联"
+      },
+      {
+        "id": "d",
+        "text": "每次页面重绘都会新建 AbilityStage"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "stage-model-030",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "UIAbility 的创建、前后台生命周期可以完全替代 WindowStage 的获焦、失焦和可交互状态事件。",
+    "explanation": "UIAbility 与显示状态职责不同，获焦、失焦、可交互等状态应通过 WindowStage 事件感知。",
+    "knowledgePoints": [
+      "UIAbility",
+      "WindowStage事件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "stage-model-031",
+    "categoryId": "stage-model",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Stage 模型允许多个应用组件共享 ArkTS 引擎实例，从而便于共享对象并降低复杂应用的内存开销。",
+    "explanation": "共享 ArkTS 引擎是 Stage 模型面向复杂应用设计的重要特征。",
+    "knowledgePoints": [
+      "ArkTS引擎",
+      "内存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "stage-model-032",
+    "categoryId": "stage-model",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "企业协作应用同时包含主界面、桌面卡片和输入法扩展，如何按 Stage 模型划分组件？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "正确区分 UIAbility 与 ExtensionAbility",
+      "为卡片和输入法选择对应派生类",
+      "说明组件职责和 Context 边界",
+      "说明窗口逻辑只属于界面组件"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型开发概述",
+        "url": "https://developer.huawei.com/consumer/cn/arkui/arkui-stage/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "referenceAnswer": "主交互界面使用 UIAbility；桌面卡片使用 FormExtensionAbility；输入法场景使用 InputMethodExtensionAbility。各组件只承担对应场景职责，通过合适的 Context 获取能力，不把特定系统扩展伪装成常驻通用服务；窗口相关初始化放在 UIAbility 的 WindowStage 阶段。",
+    "scoringPoints": [
+      "正确区分 UIAbility 与 ExtensionAbility",
+      "为卡片和输入法选择对应派生类",
+      "说明组件职责和 Context 边界",
+      "说明窗口逻辑只属于界面组件"
+    ]
+  },
+  {
     "id": "ability-lifecycle-001",
     "categoryId": "ability-lifecycle",
     "type": "single",
@@ -5460,6 +5854,400 @@
       "说明已有实例通过 onNewWant 接收新请求",
       "区分一次性初始化、窗口加载和前台恢复职责",
       "给出避免重复初始化的数据刷新策略"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-022",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "通过 startAbilityByCall 将 UIAbility 启动到后台时，冷启动回调顺序是哪一项？",
+    "explanation": "后台冷启动会执行 onCreate、onBackground，不创建 WindowStage；后续拉到前台才创建窗口舞台。",
+    "knowledgePoints": [
+      "startAbilityByCall",
+      "后台启动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "onCreate → onWindowStageCreate → onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onCreate → onBackground，且不执行 onWindowStageCreate"
+      },
+      {
+        "id": "c",
+        "text": "onNewWant → onForeground"
+      },
+      {
+        "id": "d",
+        "text": "onForeground → onCreate"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-023",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个后台启动且尚未创建窗口的 UIAbility 被拉到前台时，主要顺序是什么？",
+    "explanation": "官方生命周期说明中，后台实例拉到前台会先接收新 Want，再创建 WindowStage，最后进入前台。",
+    "knowledgePoints": [
+      "onNewWant",
+      "onWindowStageCreate"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "onNewWant → onWindowStageCreate → onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onCreate → onDestroy"
+      },
+      {
+        "id": "c",
+        "text": "onBackground → onWindowStageDestroy"
+      },
+      {
+        "id": "d",
+        "text": "onForeground → onNewWant"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-024",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "UIAbility 的 UI 完全不可见后，系统主要触发哪个回调？",
+    "explanation": "onBackground 在 UI 完全不可见后触发，适合释放不可见时不需要的资源。",
+    "knowledgePoints": [
+      "onBackground",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "onForeground"
+      },
+      {
+        "id": "b",
+        "text": "onBackground"
+      },
+      {
+        "id": "c",
+        "text": "onWindowStageCreate"
+      },
+      {
+        "id": "d",
+        "text": "onNewWant"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-025",
+    "categoryId": "ability-lifecycle",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望集中监听进程内多个 UIAbility 的生命周期变化，应使用哪类能力？",
+    "explanation": "ApplicationContext 提供 UIAbility 生命周期变化监听，适合应用级观测。",
+    "knowledgePoints": [
+      "ApplicationContext",
+      "生命周期监听"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "ApplicationContext 的 Ability 生命周期监听"
+      },
+      {
+        "id": "b",
+        "text": "每个页面的 build 方法轮询"
+      },
+      {
+        "id": "c",
+        "text": "Preferences 变化监听"
+      },
+      {
+        "id": "d",
+        "text": "HttpRequest 响应头监听"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-026",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 UIAbility 生命周期回调的线程与任务安排，哪些做法正确？",
+    "explanation": "生命周期回调运行在主线程，阻塞会影响启动和切换性能，尤其不能把耗时保存塞进 onBackground。",
+    "knowledgePoints": [
+      "主线程",
+      "性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "生命周期回调运行在应用主线程"
+      },
+      {
+        "id": "b",
+        "text": "回调中只执行必要的轻量操作"
+      },
+      {
+        "id": "c",
+        "text": "耗时工作应异步处理或交给子线程"
+      },
+      {
+        "id": "d",
+        "text": "onBackground 适合执行长时间数据库事务"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-027",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "在 onWindowStageCreate 中通常可以执行哪些工作？",
+    "explanation": "WindowStage 创建完成后可加载 UI、注册窗口事件并保存引用。",
+    "knowledgePoints": [
+      "onWindowStageCreate",
+      "loadContent"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "调用 loadContent 设置首个页面"
+      },
+      {
+        "id": "b",
+        "text": "订阅 WindowStage 事件"
+      },
+      {
+        "id": "c",
+        "text": "保存 WindowStage 引用供后续释放"
+      },
+      {
+        "id": "d",
+        "text": "假定窗口已经销毁并访问空对象"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-028",
+    "categoryId": "ability-lifecycle",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "WindowStage 事件可以反映哪些显示相关状态？",
+    "explanation": "WindowStageEventType 描述窗口显示、焦点和可交互状态，不负责业务数据库状态。",
+    "knowledgePoints": [
+      "WindowStageEventType",
+      "窗口状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "获焦与失焦"
+      },
+      {
+        "id": "b",
+        "text": "前台与后台显示"
+      },
+      {
+        "id": "c",
+        "text": "前台可交互与不可交互"
+      },
+      {
+        "id": "d",
+        "text": "数据库事务提交状态"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "ability-lifecycle-029",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "onWindowStageDestroy 执行时 WindowStage 已经销毁，因此不应再依赖该对象释放窗口事件。",
+    "explanation": "需要访问 WindowStage 注销事件时应在 onWindowStageWillDestroy 中完成；onWindowStageDestroy 适合释放其他 UI 资源。",
+    "knowledgePoints": [
+      "onWindowStageWillDestroy",
+      "onWindowStageDestroy"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "ability-lifecycle-030",
+    "categoryId": "ability-lifecycle",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "onForeground 在 UIAbility 的 UI 可见之前触发，可用于重新申请在后台阶段释放的前台资源。",
+    "explanation": "onForeground 是恢复定位、动画等前台资源的合适边界。",
+    "knowledgePoints": [
+      "onForeground",
+      "资源恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": true
+  },
+  {
+    "id": "ability-lifecycle-031",
+    "categoryId": "ability-lifecycle",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "音视频应用从冷启动、进入后台、再次前台到退出，应如何安排播放器和窗口资源？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明冷启动与窗口阶段",
+      "说明前后台资源治理",
+      "区分 WillDestroy、WindowStageDestroy 与 onDestroy",
+      "说明 onNewWant 的刷新职责"
+    ],
+    "sourceRefs": [
+      {
+        "title": "UIAbility组件生命周期",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-lifecycle.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "onCreate 只做一次性轻量初始化；onWindowStageCreate 加载页面并注册窗口事件；onForeground 恢复前台播放策略或必要资源；onBackground 停止仅前台需要的任务但不执行耗时事务；onWindowStageWillDestroy 注销窗口事件；onDestroy 释放 UIAbility 级播放器、连接等最终资源。已有实例收到新参数时在 onNewWant 更新数据。",
+    "scoringPoints": [
+      "说明冷启动与窗口阶段",
+      "说明前后台资源治理",
+      "区分 WillDestroy、WindowStageDestroy 与 onDestroy",
+      "说明 onNewWant 的刷新职责"
     ]
   },
   {
@@ -6352,6 +7140,401 @@
       "子组件用 @Param 定义输入",
       "子组件用 @Event 输出变更意图",
       "说明 @Param @Once 只适用于初始化一次的本地编辑场景"
+    ]
+  },
+  {
+    "id": "component-communication-023",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "@Consumer 未找到匹配的 @Provider 时，会怎样初始化？",
+    "explanation": "@Consumer 必须本地初始化；找不到匹配 Provider 时使用本地默认值。",
+    "knowledgePoints": [
+      "@Consumer",
+      "默认值"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "直接导致应用进程退出"
+      },
+      {
+        "id": "b",
+        "text": "使用自身必须声明的本地默认值"
+      },
+      {
+        "id": "c",
+        "text": "自动创建全局 AppStorage"
+      },
+      {
+        "id": "d",
+        "text": "读取最近的 @State"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "component-communication-024",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "@Provider 与 @Consumer 进行匹配时，唯一使用的键是什么？",
+    "explanation": "V2 中 aliasName 是唯一匹配键，未显式提供时默认使用属性名。",
+    "knowledgePoints": [
+      "aliasName",
+      "@Provider"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "组件文件路径"
+      },
+      {
+        "id": "b",
+        "text": "aliasName，缺省时使用属性名"
+      },
+      {
+        "id": "c",
+        "text": "组件实例序号"
+      },
+      {
+        "id": "d",
+        "text": "变量运行时地址"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "component-communication-025",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "组件树中存在多个同名 @Provider 时，@Consumer 默认绑定哪一个？",
+    "explanation": "@Provider 默认允许重名，Consumer 沿父链向上查找最近匹配项。",
+    "knowledgePoints": [
+      "最近祖先",
+      "Provider重载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "应用入口处最远的 Provider"
+      },
+      {
+        "id": "b",
+        "text": "向上查找到的最近 Provider"
+      },
+      {
+        "id": "c",
+        "text": "随机一个 Provider"
+      },
+      {
+        "id": "d",
+        "text": "最后编译的 Provider"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "component-communication-026",
+    "categoryId": "component-communication",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望跨层级传递一个行为回调，状态管理 V2 的哪种方案受官方能力支持？",
+    "explanation": "@Provider/@Consumer 支持函数类型，可用于跨层级行为抽象，但应控制耦合范围。",
+    "knowledgePoints": [
+      "函数通信",
+      "@Provider"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "用 @Provider/@Consumer 装饰箭头函数"
+      },
+      {
+        "id": "b",
+        "text": "把函数序列化到 Preferences"
+      },
+      {
+        "id": "c",
+        "text": "把函数放进路由 URL"
+      },
+      {
+        "id": "d",
+        "text": "在 build 中创建全局变量"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "component-communication-027",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 @Provider 和 @Consumer 的初始化规则，哪些正确？",
+    "explanation": "两者均要求本地初始化且禁止外部传入，但可以作为子组件 @Param 的数据源。",
+    "knowledgePoints": [
+      "初始化规则",
+      "@Param"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "都必须本地初始化"
+      },
+      {
+        "id": "b",
+        "text": "都不允许由外部构造参数初始化"
+      },
+      {
+        "id": "c",
+        "text": "可以用于初始化子组件的 @Param"
+      },
+      {
+        "id": "d",
+        "text": "@Consumer 可以省略默认值并依赖运行时查找"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "component-communication-028",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "跨层级共享复杂 User 对象并希望属性修改刷新 UI，哪些做法正确？",
+    "explanation": "Provider/Consumer 对复杂对象内部属性的深度变化需要配合 V2 可观察能力。",
+    "knowledgePoints": [
+      "复杂对象",
+      "@Trace",
+      "makeObserved"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "让 User 使用 @ObservedV2"
+      },
+      {
+        "id": "b",
+        "text": "对需观察属性使用 @Trace"
+      },
+      {
+        "id": "c",
+        "text": "或使用 makeObserved 将普通对象变为可观察对象"
+      },
+      {
+        "id": "d",
+        "text": "只给普通对象外层加 Consumer 就保证任意深层变化都刷新"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "component-communication-029",
+    "categoryId": "component-communication",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "@Provider/@Consumer 相比 V1 @Provide/@Consume，有哪些 V2 特征？",
+    "explanation": "V2 支持函数且只在 ComponentV2 中使用，Provider 默认可以重名并按最近祖先匹配。",
+    "knowledgePoints": [
+      "V1/V2",
+      "组件通信"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "只能用于 @ComponentV2"
+      },
+      {
+        "id": "b",
+        "text": "支持函数类型"
+      },
+      {
+        "id": "c",
+        "text": "alias 是唯一匹配键"
+      },
+      {
+        "id": "d",
+        "text": "Provider 禁止重名"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "component-communication-030",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "@Provider 和 @Consumer 可以直接装饰普通 class 的字段，以替代 @Trace。",
+    "explanation": "它们是 ComponentV2 自定义组件的属性装饰器，不能装饰普通 class 字段。",
+    "knowledgePoints": [
+      "使用限制",
+      "@ComponentV2"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "component-communication-031",
+    "categoryId": "component-communication",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "跨层级双向同步会增加组件层级耦合，因此简单父子关系仍应优先使用明确的输入输出契约。",
+    "explanation": "官方提醒 Provider/Consumer 强依赖组件树，应减少无边界使用。",
+    "knowledgePoints": [
+      "组件解耦",
+      "通信选型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "component-communication-032",
+    "categoryId": "component-communication",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "多层表单需要共享主题和校验动作，但字段值仍由各业务组件维护，应怎样设计通信？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "区分跨层状态与普通父子输入输出",
+      "说明函数通信能力",
+      "说明复杂对象观察",
+      "强调作用域和解耦"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@Provider和@Consumer：跨组件层级双向同步",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-provider-and-consumer.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "referenceAnswer": "稳定的跨层主题可由祖先 @Provider 提供、后代 @Consumer 获取；跨层校验动作可使用受控的函数 Provider/Consumer。普通父子字段值继续用 @Param 输入、@Event 输出，复杂共享对象配合 @ObservedV2/@Trace。应限定 alias 和作用域，避免把所有状态都塞入跨层双向通道。",
+    "scoringPoints": [
+      "区分跨层状态与普通父子输入输出",
+      "说明函数通信能力",
+      "说明复杂对象观察",
+      "强调作用域和解耦"
     ]
   },
   {
@@ -7265,6 +8448,400 @@
     ]
   },
   {
+    "id": "state-management-023",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "状态管理 V1 中，页面级 UI 状态容器是哪一个？",
+    "explanation": "LocalStorage 面向页面级 UI 状态；AppStorage 面向应用进程内全局 UI 状态。",
+    "knowledgePoints": [
+      "LocalStorage",
+      "状态作用域"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "LocalStorage"
+      },
+      {
+        "id": "b",
+        "text": "AppStorage"
+      },
+      {
+        "id": "c",
+        "text": "PersistentStorage"
+      },
+      {
+        "id": "d",
+        "text": "relationalStore"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-024",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "状态管理 V1 中，需要把少量 AppStorage 属性持久化到磁盘时应使用什么？",
+    "explanation": "PersistentStorage 用于持久化选定的 AppStorage 属性，不应把所有运行时对象都持久化。",
+    "knowledgePoints": [
+      "PersistentStorage",
+      "AppStorage"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "PersistentStorage"
+      },
+      {
+        "id": "b",
+        "text": "LocalStorage"
+      },
+      {
+        "id": "c",
+        "text": "@Watch"
+      },
+      {
+        "id": "d",
+        "text": "@Builder"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-025",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望判断一个对象能否被状态管理 V2 观察，应使用哪个辅助接口？",
+    "explanation": "canBeObserved 用于判断对象是否可以被观察。",
+    "knowledgePoints": [
+      "canBeObserved",
+      "V2辅助接口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "canBeObserved"
+      },
+      {
+        "id": "b",
+        "text": "getTarget"
+      },
+      {
+        "id": "c",
+        "text": "flushUpdates"
+      },
+      {
+        "id": "d",
+        "text": "clearMonitor"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "state-management-026",
+    "categoryId": "state-management",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要获取状态管理代理背后的原始对象，应使用哪个辅助接口？",
+    "explanation": "getTarget 返回状态管理框架代理前的原始对象。",
+    "knowledgePoints": [
+      "getTarget",
+      "代理对象"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "makeObserved"
+      },
+      {
+        "id": "b",
+        "text": "getTarget"
+      },
+      {
+        "id": "c",
+        "text": "addMonitor"
+      },
+      {
+        "id": "d",
+        "text": "applySync"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "state-management-027",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 makeObserved 的理解，哪些正确？",
+    "explanation": "makeObserved 解决普通对象接入 V2 观察体系的问题，与持久化无关。",
+    "knowledgePoints": [
+      "makeObserved",
+      "可观察对象"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "可把非观察对象转换为可观察对象"
+      },
+      {
+        "id": "b",
+        "text": "适合无法直接添加装饰器的数据对象"
+      },
+      {
+        "id": "c",
+        "text": "返回的观察对象变化可参与 UI 更新"
+      },
+      {
+        "id": "d",
+        "text": "等同于把对象序列化到磁盘"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-028",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "为页面筛选条件、应用主题和用户长期偏好选择作用域时，哪些对应合理？",
+    "explanation": "状态应按组件、页面、应用和跨重启范围划分，运行时资源对象不适合直接持久化。",
+    "knowledgePoints": [
+      "状态作用域",
+      "持久化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "页面筛选条件使用 LocalStorage 或组件本地状态"
+      },
+      {
+        "id": "b",
+        "text": "应用进程共享主题使用 AppStorage"
+      },
+      {
+        "id": "c",
+        "text": "需跨重启恢复的少量 UI 偏好使用持久化状态能力"
+      },
+      {
+        "id": "d",
+        "text": "把网络连接对象直接放入 PersistentStorage"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-029",
+    "categoryId": "state-management",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "状态管理 V2 强调哪些能力？",
+    "explanation": "V2 将观察能力增强到数据本身，并支持深度观察与属性级更新。",
+    "knowledgePoints": [
+      "状态管理V2",
+      "精准更新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "对象深度观察"
+      },
+      {
+        "id": "b",
+        "text": "属性级精准更新"
+      },
+      {
+        "id": "c",
+        "text": "明确的组件输入和输出"
+      },
+      {
+        "id": "d",
+        "text": "所有变量变化都强制整页重绘"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "state-management-030",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "AppStorage 是应用运行期的全局 UI 状态容器，但不能据此假定进程退出后数据仍然存在。",
+    "explanation": "跨重启恢复需要额外的 PersistentStorage 或 PersistenceV2 等持久化能力。",
+    "knowledgePoints": [
+      "AppStorage",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": true
+  },
+  {
+    "id": "state-management-031",
+    "categoryId": "state-management",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "@Computed 表示派生计算属性，业务代码应把它当作独立可写数据源随意赋值。",
+    "explanation": "计算属性应由依赖状态推导，不能再作为独立可写源制造双向状态。",
+    "knowledgePoints": [
+      "@Computed",
+      "派生状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": false
+  },
+  {
+    "id": "state-management-032",
+    "categoryId": "state-management",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "商品列表页包含临时筛选、全局主题、登录会话和上次排序偏好，如何划分状态？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "区分页面、应用和持久化作用域",
+      "说明敏感会话不属于普通 UI 状态",
+      "说明复杂对象观察",
+      "避免重复状态源"
+    ],
+    "sourceRefs": [
+      {
+        "title": "状态管理概述",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/arkts-state-management-overview-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "referenceAnswer": "临时筛选属于页面或组件作用域，使用 LocalStorage 或本地状态；主题可放应用级 AppStorage/AppStorageV2；上次排序属于少量跨重启 UI 偏好，使用对应持久化状态能力；登录会话包含敏感凭据，应交给安全存储和业务会话层，不应仅依赖 UI 状态容器。复杂对象采用 V2 可观察模型并限制追踪属性。",
+    "scoringPoints": [
+      "区分页面、应用和持久化作用域",
+      "说明敏感会话不属于普通 UI 状态",
+      "说明复杂对象观察",
+      "避免重复状态源"
+    ]
+  },
+  {
     "id": "routing-001",
     "categoryId": "routing",
     "type": "single",
@@ -8105,6 +9682,400 @@
       "参数只传稳定标识而非大型业务对象",
       "合理区分 push、replace 和 pop",
       "说明跨模块路由表或路由拦截设计"
+    ]
+  },
+  {
+    "id": "routing-022",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要跳转并在失败时获得明确错误码，优先使用哪类 NavPathStack 接口？",
+    "explanation": "pushDestination 系列返回 Promise，可处理路由表缺失等跳转错误。",
+    "knowledgePoints": [
+      "pushDestination",
+      "错误处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "pushDestination 或 pushDestinationByName"
+      },
+      {
+        "id": "b",
+        "text": "只调用 getAllPathName"
+      },
+      {
+        "id": "c",
+        "text": "只调用 removeByName"
+      },
+      {
+        "id": "d",
+        "text": "直接修改路由数组私有字段"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-023",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "NavDestination 子页想获取当前 Navigation 的 NavPathStack，推荐在哪个回调中读取 context.pathStack？",
+    "explanation": "NavDestination.onReady 提供 NavDestinationContext，可从中获取当前 pathStack 和参数。",
+    "knowledgePoints": [
+      "NavDestination",
+      "onReady"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "onReady"
+      },
+      {
+        "id": "b",
+        "text": "onClick"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "d",
+        "text": "onAreaChange"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-024",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "登录成功后不希望返回登录页，应该使用哪类栈操作替换栈顶页面？",
+    "explanation": "replace 系列用目标页替换当前栈顶，适合登录等不可回退流程。",
+    "knowledgePoints": [
+      "replacePath",
+      "路由栈"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "replacePath 或 replaceDestination"
+      },
+      {
+        "id": "b",
+        "text": "getParamByName"
+      },
+      {
+        "id": "c",
+        "text": "moveIndexToTop"
+      },
+      {
+        "id": "d",
+        "text": "setInterception"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-025",
+    "categoryId": "routing",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "希望返回指定名称的上一层页面，应优先使用哪个方法？",
+    "explanation": "popToName 会回退到指定名称的页面并移除其上方页面。",
+    "knowledgePoints": [
+      "popToName",
+      "页面返回"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "popToName"
+      },
+      {
+        "id": "b",
+        "text": "pushPath"
+      },
+      {
+        "id": "c",
+        "text": "removeByIndexes"
+      },
+      {
+        "id": "d",
+        "text": "getPathStack"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "routing-026",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "NavPathStack 提供哪些路由栈能力？",
+    "explanation": "NavPathStack 管理 NavDestination 路由栈，不能直接操作 NavBar 页面。",
+    "knowledgePoints": [
+      "NavPathStack",
+      "栈操作"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "页面压栈与返回"
+      },
+      {
+        "id": "b",
+        "text": "页面替换和删除"
+      },
+      {
+        "id": "c",
+        "text": "参数查询与跳转拦截"
+      },
+      {
+        "id": "d",
+        "text": "直接操作 NavBar 内部组件树"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-027",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于系统路由表配置，哪些正确？",
+    "explanation": "系统路由表建立名称到构建函数的映射，可实现跨模块解耦跳转。",
+    "knowledgePoints": [
+      "系统路由表",
+      "跨模块"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 router_map.json 中注册名称、源文件和构建函数"
+      },
+      {
+        "id": "b",
+        "text": "在 module.json5 中配置 routerMap 资源"
+      },
+      {
+        "id": "c",
+        "text": "未注册的页面名称会导致跳转失败"
+      },
+      {
+        "id": "d",
+        "text": "每次跳转都必须直接 import 页面文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-028",
+    "categoryId": "routing",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Navigation 单实例跳转的理解，哪些正确？",
+    "explanation": "两种单实例模式都复用已存在目标，但对其上方页面处理不同。",
+    "knowledgePoints": [
+      "LaunchMode",
+      "onNewParam"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "MOVE_TO_TOP_SINGLETON 将已存在目标移动到栈顶"
+      },
+      {
+        "id": "b",
+        "text": "POP_TO_SINGLETON 移除目标上方页面"
+      },
+      {
+        "id": "c",
+        "text": "已有页面以单实例方式到栈顶时可触发 onNewParam"
+      },
+      {
+        "id": "d",
+        "text": "单实例模式始终创建新的重复页面"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "routing-029",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "应用在后台调用 NavPathStack 栈操作后，界面会在应用再次回到前台时刷新。",
+    "explanation": "官方文档明确说明后台栈操作会在回前台时触发刷新。",
+    "knowledgePoints": [
+      "后台路由",
+      "刷新时机"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "routing-030",
+    "categoryId": "routing",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "为了管理路由栈，官方建议主要依赖页面生命周期监听手工维护一份重复数组。",
+    "explanation": "应使用 NavPathStack.getPathStack 等能力查询真实路由栈，避免重复状态源。",
+    "knowledgePoints": [
+      "路由栈查询",
+      "状态一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "routing-031",
+    "categoryId": "routing",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "电商流程包含商品页、确认页、支付页和结果页，如何设计返回、替换和失败处理？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明一一对应的 NavPathStack",
+      "区分 push、popToName 和 replace",
+      "说明结果回传",
+      "说明跨模块注册与失败处理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation页面路由",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-jump.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "使用一个与 Navigation 一一对应的 NavPathStack。普通详情用 pushDestination 并捕获失败；确认页可用 onPop 或 onResult 接收返回结果；支付成功后 replace 到结果页，避免回到支付页；返回指定节点用 popToName。跨模块页面注册到路由表，参数使用明确的数据契约，并记录失败码而不是静默无响应。",
+    "scoringPoints": [
+      "说明一一对应的 NavPathStack",
+      "区分 push、popToName 和 replace",
+      "说明结果回传",
+      "说明跨模块注册与失败处理"
     ]
   },
   {
@@ -8956,6 +10927,401 @@
       "说明请求资源释放与事件取消",
       "只对合适的幂等请求做有限退避重试",
       "说明断网缓存、网络恢复刷新和安全日志"
+    ]
+  },
+  {
+    "id": "network-022",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "下载大文件并需要持续获取接收进度时，更适合使用哪个 HttpRequest 能力？",
+    "explanation": "大文件和进度场景适合流式传输，避免一次性把完整响应加载进内存。",
+    "knowledgePoints": [
+      "requestInstream",
+      "下载进度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "requestInstream 并监听 dataReceiveProgress"
+      },
+      {
+        "id": "b",
+        "text": "只使用普通 request 并一次性加载全部内容"
+      },
+      {
+        "id": "c",
+        "text": "NetConnection.unregister"
+      },
+      {
+        "id": "d",
+        "text": "Preferences.flush"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-023",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "每个 HttpRequest 对象的复用规则是什么？",
+    "explanation": "官方示例明确每个 HttpRequest 对应一个 HTTP 请求任务，请求结束后主动 destroy。",
+    "knowledgePoints": [
+      "HttpRequest",
+      "生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "一个对象对应一个请求任务，不应复用"
+      },
+      {
+        "id": "b",
+        "text": "全应用只能创建一个对象"
+      },
+      {
+        "id": "c",
+        "text": "对象销毁后仍可继续发请求"
+      },
+      {
+        "id": "d",
+        "text": "多个并发请求必须共享同一对象"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-024",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "HttpRequestOptions 中 usingCache 的默认行为是什么？",
+    "explanation": "usingCache 默认 true，缓存跟随当前进程生效。",
+    "knowledgePoints": [
+      "usingCache",
+      "HTTP缓存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "默认为 true，优先读取进程内有效缓存"
+      },
+      {
+        "id": "b",
+        "text": "默认为 false 且禁止配置"
+      },
+      {
+        "id": "c",
+        "text": "只缓存 POST 请求"
+      },
+      {
+        "id": "d",
+        "text": "缓存跨卸载永久有效"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-025",
+    "categoryId": "network",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "上传 multipart/form-data 文件时，主要通过哪个配置提供表单字段和文件路径？",
+    "explanation": "multiFormDataList 支持文本或 filePath 等多部分表单数据。",
+    "knowledgePoints": [
+      "multipart",
+      "文件上传"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "multiFormDataList"
+      },
+      {
+        "id": "b",
+        "text": "readTimeout"
+      },
+      {
+        "id": "c",
+        "text": "dnsServers"
+      },
+      {
+        "id": "d",
+        "text": "expectDataType"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "network-026",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "完整的 HTTP 流式请求可以监听哪些事件？",
+    "explanation": "流式接口分别提供数据块、结束、收发进度事件。",
+    "knowledgePoints": [
+      "流式传输",
+      "进度监听"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "dataReceive 获取数据块"
+      },
+      {
+        "id": "b",
+        "text": "dataEnd 感知接收结束"
+      },
+      {
+        "id": "c",
+        "text": "dataReceiveProgress 获取下载进度"
+      },
+      {
+        "id": "d",
+        "text": "dataSendProgress 获取上传进度"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "network-027",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 HttpRequestOptions 超时，哪些说法正确？",
+    "explanation": "超时参数需要结合异常分类处理，不能替代错误处理。",
+    "knowledgePoints": [
+      "connectTimeout",
+      "readTimeout"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "connectTimeout 控制连接建立超时"
+      },
+      {
+        "id": "b",
+        "text": "readTimeout 覆盖从请求开始到结束的总时间"
+      },
+      {
+        "id": "c",
+        "text": "单位为毫秒"
+      },
+      {
+        "id": "d",
+        "text": "设置超时后可以忽略异常处理"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "network-028",
+    "categoryId": "network",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "提升 HTTPS 安全性时，哪些能力可按场景配置？",
+    "explanation": "Network Kit 支持 CA、客户端证书和证书锁定；跳过校验会破坏服务器身份验证。",
+    "knowledgePoints": [
+      "HTTPS",
+      "证书校验"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "指定 CA 证书路径"
+      },
+      {
+        "id": "b",
+        "text": "配置客户端证书"
+      },
+      {
+        "id": "c",
+        "text": "配置证书锁定 PIN"
+      },
+      {
+        "id": "d",
+        "text": "生产环境无条件跳过 SSL 校验"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "network-029",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "普通 HttpRequest.request 更适合较小收发数据；大文件及进度场景应考虑流式传输。",
+    "explanation": "接口选择应根据数据规模和是否需要进度事件决定。",
+    "knowledgePoints": [
+      "HTTP请求",
+      "流式传输"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "network-030",
+    "categoryId": "network",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "HttpRequest 使用完毕后只要 Promise 已完成，就无需取消事件订阅或调用 destroy。",
+    "explanation": "不再监听时应 off，任务结束应 destroy，避免资源和回调泄漏。",
+    "knowledgePoints": [
+      "destroy",
+      "off"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "network-031",
+    "categoryId": "network",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "设计一个支持头像上传和离线缓存的网络层，需要包含哪些关键点？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "区分普通与流式请求",
+      "说明超时、证书和错误分类",
+      "说明缓存策略",
+      "说明资源释放和敏感信息保护"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用HTTP访问网络",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/network/http-request.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "小型 JSON 请求使用 request，大文件上传使用 multipart 或流式能力并展示发送进度；为每个任务创建独立 HttpRequest，配置连接与读取超时、HTTPS 校验和响应类型；区分网络、HTTP 与业务错误。GET 缓存应定义有效期和刷新策略；结束时取消监听并 destroy。敏感令牌只放请求头且日志脱敏。",
+    "scoringPoints": [
+      "区分普通与流式请求",
+      "说明超时、证书和错误分类",
+      "说明缓存策略",
+      "说明资源释放和敏感信息保护"
     ]
   },
   {
@@ -9829,6 +12195,401 @@
     ]
   },
   {
+    "id": "permissions-022",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "检查应用当前是否持有某项权限，AtManager 应调用哪个接口？",
+    "explanation": "checkAccessToken 根据 accessTokenId 和权限名返回 GRANTED 或 DENIED。",
+    "knowledgePoints": [
+      "checkAccessToken",
+      "GrantStatus"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "checkAccessToken"
+      },
+      {
+        "id": "b",
+        "text": "flush"
+      },
+      {
+        "id": "c",
+        "text": "pushPath"
+      },
+      {
+        "id": "d",
+        "text": "createHttp"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-023",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "用户已拒绝且系统不再重复弹出动态授权框时，应用应怎样处理？",
+    "explanation": "系统不鼓励频繁弹窗；拒绝后应尊重决定并提供设置页引导或降级能力。",
+    "knowledgePoints": [
+      "拒绝策略",
+      "requestPermissionOnSetting"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "持续循环调用动态申请接口"
+      },
+      {
+        "id": "b",
+        "text": "解释用途并引导系统设置或使用 requestPermissionOnSetting"
+      },
+      {
+        "id": "c",
+        "text": "绕过权限直接调用敏感接口"
+      },
+      {
+        "id": "d",
+        "text": "把授权状态改写成本地 true"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "permissions-024",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在 onWindowStageCreate 中申请权限时，需要满足什么时机要求？",
+    "explanation": "内容加载完成前直接申请可能失败，需等待 UI 加载完成。",
+    "knowledgePoints": [
+      "onWindowStageCreate",
+      "授权时机"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "先等待 loadContent/setUIContent 完成或在其回调中申请"
+      },
+      {
+        "id": "b",
+        "text": "必须在加载 UI 之前同步申请"
+      },
+      {
+        "id": "c",
+        "text": "只能在 onDestroy 申请"
+      },
+      {
+        "id": "d",
+        "text": "无需 UIContext 即可任意申请"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-025",
+    "categoryId": "permissions",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "动态授权结果中，业务是否继续访问敏感能力主要依据什么？",
+    "explanation": "应用必须逐项检查 authResults，只有已授权权限才能继续对应操作。",
+    "knowledgePoints": [
+      "PermissionRequestResult",
+      "authResults"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "PermissionRequestResult.authResults"
+      },
+      {
+        "id": "b",
+        "text": "设备型号"
+      },
+      {
+        "id": "c",
+        "text": "上次安装时间"
+      },
+      {
+        "id": "d",
+        "text": "页面颜色模式"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "permissions-026",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "user_grant 权限的可靠流程包括哪些步骤？",
+    "explanation": "权限链路应遵循用户可知可控，并完整处理声明、检查、申请和拒绝。",
+    "knowledgePoints": [
+      "user_grant",
+      "授权流程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 module.json5 声明权限"
+      },
+      {
+        "id": "b",
+        "text": "在用户触发相关功能时精准申请"
+      },
+      {
+        "id": "c",
+        "text": "检查当前状态和本次授权结果"
+      },
+      {
+        "id": "d",
+        "text": "拒绝后提供说明、降级或设置引导"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "permissions-027",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "为什么不能持久化“曾经授权”并永久信任？",
+    "explanation": "权限状态由系统控制，业务缓存不能替代实时检查。",
+    "knowledgePoints": [
+      "权限撤销",
+      "临时授权"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "用户可在系统设置撤销"
+      },
+      {
+        "id": "b",
+        "text": "临时授权可能在特定条件后失效"
+      },
+      {
+        "id": "c",
+        "text": "每次访问前都应重新检查"
+      },
+      {
+        "id": "d",
+        "text": "本地布尔值能阻止系统回收权限"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "permissions-028",
+    "categoryId": "permissions",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "申请多个相关权限时，哪些处理正确？",
+    "explanation": "多权限结果必须逐项处理，并允许业务按实际授权范围降级。",
+    "knowledgePoints": [
+      "多权限",
+      "降级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "权限列表与 authResults 按索引对应处理"
+      },
+      {
+        "id": "b",
+        "text": "只要其中一个成功就默认全部成功"
+      },
+      {
+        "id": "c",
+        "text": "按能力提供部分授权后的降级路径"
+      },
+      {
+        "id": "d",
+        "text": "调用敏感接口前再次确认所需权限"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "permissions-029",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "系统权限弹窗应由用户主动操作触发，并且不能被应用自定义控件遮挡。",
+    "explanation": "授权必须具有明确上下文，系统弹窗信息也必须完整可见。",
+    "knowledgePoints": [
+      "用户可知可控",
+      "系统弹窗"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "permissions-030",
+    "categoryId": "permissions",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "只要权限写入 module.json5，应用就已经获得所有 user_grant 权限，无需运行时申请。",
+    "explanation": "配置声明只是前置条件，user_grant 还需要运行时由用户授权。",
+    "knowledgePoints": [
+      "权限声明",
+      "动态授权"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "permissions-031",
+    "categoryId": "permissions",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "地图功能需要精确定位和模糊定位，如何设计授权与降级流程？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明声明、检查和动态申请",
+      "逐项处理授权结果",
+      "说明模糊定位降级",
+      "说明拒绝引导和再次检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "向用户申请授权",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/AccessToken/request-user-authorization.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "先在配置中声明相关权限；用户进入定位功能时查询当前状态，按官方权限依赖关系申请所需列表；逐项解析 authResults。仅有模糊定位时提供低精度能力，全部拒绝时解释影响并允许继续使用不依赖定位的功能；需要再次授权时引导系统设置。每次调用定位前重新检查，不能永久信任本地缓存。",
+    "scoringPoints": [
+      "说明声明、检查和动态申请",
+      "逐项处理授权结果",
+      "说明模糊定位降级",
+      "说明拒绝引导和再次检查"
+    ]
+  },
+  {
     "id": "storage-001",
     "categoryId": "storage",
     "type": "single",
@@ -10653,6 +13414,400 @@
       "说明服务端内容与本地缓存的真源边界",
       "说明事务、版本迁移和备份恢复",
       "提到敏感数据加密和密钥安全"
+    ]
+  },
+  {
+    "id": "storage-022",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "较大的文件读写操作为什么优先使用异步接口？",
+    "explanation": "官方建议耗时 read/write 使用异步接口，完成后仍需正确关闭资源。",
+    "knowledgePoints": [
+      "异步文件IO",
+      "主线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "避免长时间阻塞导致应用无响应或崩溃"
+      },
+      {
+        "id": "b",
+        "text": "异步接口会自动加密所有文件"
+      },
+      {
+        "id": "c",
+        "text": "同步接口不能访问沙箱"
+      },
+      {
+        "id": "d",
+        "text": "异步接口无需关闭文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-023",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "检查应用沙箱内文件是否存在，应使用基础文件接口中的哪类能力？",
+    "explanation": "fileIo.access 用于检查路径是否存在。",
+    "knowledgePoints": [
+      "fileIo.access",
+      "文件检查"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "access/accessSync"
+      },
+      {
+        "id": "b",
+        "text": "flushUpdates"
+      },
+      {
+        "id": "c",
+        "text": "pushDestination"
+      },
+      {
+        "id": "d",
+        "text": "checkAccessToken"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-024",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要获取文件大小、修改时间等详细属性，应使用哪个接口？",
+    "explanation": "stat 返回文件详细属性，可用于空间治理和缓存清理策略。",
+    "knowledgePoints": [
+      "fileIo.stat",
+      "文件属性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "stat/statSync"
+      },
+      {
+        "id": "b",
+        "text": "rename"
+      },
+      {
+        "id": "c",
+        "text": "unlink"
+      },
+      {
+        "id": "d",
+        "text": "mkdir"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-025",
+    "categoryId": "storage",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "流式读取大文件时，哪项资源管理最关键？",
+    "explanation": "文件流必须及时关闭，异步流操作还要避免不受控的同步异步混用。",
+    "knowledgePoints": [
+      "Stream.close",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 finally 或结束路径及时关闭输入输出流"
+      },
+      {
+        "id": "b",
+        "text": "反复创建流且不关闭"
+      },
+      {
+        "id": "c",
+        "text": "同步与异步方法任意交叉并发"
+      },
+      {
+        "id": "d",
+        "text": "把完整文件长期保存在 UI 状态中"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "storage-026",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "使用 fileIo 复制大文件时，哪些做法可靠？",
+    "explanation": "分段复制必须维护偏移和实际读取长度，否则容易重复或写入无效字节。",
+    "knowledgePoints": [
+      "分段读写",
+      "offset"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用固定大小缓冲区分段读写"
+      },
+      {
+        "id": "b",
+        "text": "依据实际 readLen 写入有效字节"
+      },
+      {
+        "id": "c",
+        "text": "循环直到 readLen 为 0"
+      },
+      {
+        "id": "d",
+        "text": "忽略偏移量并重复写入整个缓冲区"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "storage-027",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "基础文件访问提供哪些常见能力？",
+    "explanation": "fileIo 面向文件和目录操作，关系查询应使用数据库能力。",
+    "knowledgePoints": [
+      "fileIo",
+      "文件管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "创建目录与列出文件"
+      },
+      {
+        "id": "b",
+        "text": "打开、读取、写入和关闭"
+      },
+      {
+        "id": "c",
+        "text": "复制、移动、重命名与删除"
+      },
+      {
+        "id": "d",
+        "text": "直接执行任意 SQL 联表查询"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "storage-028",
+    "categoryId": "storage",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于文件流并发和异步规范，哪些说法正确？",
+    "explanation": "共享流位置和生命周期需要串行治理，不能无锁并发访问。",
+    "knowledgePoints": [
+      "文件流",
+      "并发"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "流接口不支持并发读写"
+      },
+      {
+        "id": "b",
+        "text": "异步调用应按顺序等待完成"
+      },
+      {
+        "id": "c",
+        "text": "应避免同步和异步接口无序混用"
+      },
+      {
+        "id": "d",
+        "text": "同一流可由多个任务无锁同时修改位置"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "storage-029",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "文件偏移指针可能停留在上次读写结束位置，重复访问时应明确管理 offset。",
+    "explanation": "忽略当前偏移会导致读取缺失、重复或覆盖位置错误。",
+    "knowledgePoints": [
+      "offset",
+      "文件指针"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "storage-030",
+    "categoryId": "storage",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "只要文件位于应用沙箱，就可以永远不处理 close，因为系统会立即回收所有描述符。",
+    "explanation": "文件和流都应显式关闭，避免描述符泄漏和数据未完整刷新。",
+    "knowledgePoints": [
+      "close",
+      "文件描述符"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "storage-031",
+    "categoryId": "storage",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "离线地图包下载后需要校验、替换和清理旧版本，应如何设计文件流程？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明临时文件和原子替换思路",
+      "说明异步分段读写与资源关闭",
+      "说明完整性校验",
+      "说明空间治理与异常清理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用文件访问",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/file-management/app-file-access.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "下载到临时文件，使用异步分段写入并显示进度；结束后关闭流，通过大小或 SHA-256 校验完整性；校验成功再以移动或重命名方式替换正式文件，失败则删除临时文件。用 stat 和目录遍历维护版本、大小和最后修改时间，按空间策略清理旧包；所有异常路径都关闭文件和流。",
+    "scoringPoints": [
+      "说明临时文件和原子替换思路",
+      "说明异步分段读写与资源关闭",
+      "说明完整性校验",
+      "说明空间治理与异常清理"
     ]
   },
   {
@@ -11500,6 +14655,400 @@
       "说明 XML 模式需要 flush 并处理错误",
       "说明缓存或监听的生命周期",
       "指出大量数据、关系查询、事务和多进程场景不适合"
+    ]
+  },
+  {
+    "id": "preferences-022",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Preferences 的 key 最大长度是多少？",
+    "explanation": "官方常量 MAX_KEY_LENGTH 为 1024 字节。",
+    "knowledgePoints": [
+      "MAX_KEY_LENGTH",
+      "容量边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 22,
+    "options": [
+      {
+        "id": "a",
+        "text": "255 字节"
+      },
+      {
+        "id": "b",
+        "text": "1024 字节"
+      },
+      {
+        "id": "c",
+        "text": "16 MB"
+      },
+      {
+        "id": "d",
+        "text": "没有限制"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "preferences-023",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Preferences 单个 value 的最大长度是多少？",
+    "explanation": "MAX_VALUE_LENGTH 为 16 MB，但接近上限的数据通常仍应评估更合适的存储方案。",
+    "knowledgePoints": [
+      "MAX_VALUE_LENGTH",
+      "容量边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "1024 字节"
+      },
+      {
+        "id": "b",
+        "text": "1 MB"
+      },
+      {
+        "id": "c",
+        "text": "16 MB"
+      },
+      {
+        "id": "d",
+        "text": "无限制"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-024",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "只想监听指定 key 集合的精确变化，应使用哪种事件？",
+    "explanation": "dataChange 从 API 12 支持按 key 集合精确返回变化后的键值。",
+    "knowledgePoints": [
+      "dataChange",
+      "精确订阅"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "on('dataChange', keys, callback)"
+      },
+      {
+        "id": "b",
+        "text": "on('change') 且无法过滤"
+      },
+      {
+        "id": "c",
+        "text": "on('headersReceive')"
+      },
+      {
+        "id": "d",
+        "text": "on('windowStageEvent')"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "preferences-025",
+    "categoryId": "preferences",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "调用 deletePreferences 后，对旧 Preferences 实例应怎样处理？",
+    "explanation": "删除会移除缓存实例和持久化文件，继续使用旧实例可能导致一致性问题。",
+    "knowledgePoints": [
+      "deletePreferences",
+      "缓存实例"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "继续长期读写以复用缓存"
+      },
+      {
+        "id": "b",
+        "text": "停止使用并清空引用，重新获取实例"
+      },
+      {
+        "id": "c",
+        "text": "只调用 getAll 即可恢复"
+      },
+      {
+        "id": "d",
+        "text": "把实例跨进程传递"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "preferences-026",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 on('change') 监听，哪些说法正确？",
+    "explanation": "change 监听与持久化刷新关联，订阅生命周期也需要管理。",
+    "knowledgePoints": [
+      "change监听",
+      "flush"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "值变化并执行 flush 后触发"
+      },
+      {
+        "id": "b",
+        "text": "回调参数包含发生变化的 key"
+      },
+      {
+        "id": "c",
+        "text": "不再需要时应使用 off 取消"
+      },
+      {
+        "id": "d",
+        "text": "只调用 put 且不 flush 一定立即触发 XML 模式回调"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-027",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Preferences 支持哪些 ValueType？",
+    "explanation": "Preferences 支持有限的可持久化值类型，不支持函数或运行时组件实例。",
+    "knowledgePoints": [
+      "ValueType",
+      "数据类型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "number、string、boolean"
+      },
+      {
+        "id": "b",
+        "text": "对应简单类型数组"
+      },
+      {
+        "id": "c",
+        "text": "Uint8Array"
+      },
+      {
+        "id": "d",
+        "text": "任意函数和 UI 组件实例"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-028",
+    "categoryId": "preferences",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于删除或移除 Preferences 缓存，哪些说法正确？",
+    "explanation": "缓存和文件删除会改变实例与订阅生命周期，必须重新获取并注册。",
+    "knowledgePoints": [
+      "缓存管理",
+      "订阅生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "相关数据变更订阅会被主动取消"
+      },
+      {
+        "id": "b",
+        "text": "重新获取实例后需要重新订阅"
+      },
+      {
+        "id": "c",
+        "text": "不应与其他 Preferences 操作并发调用 deletePreferences"
+      },
+      {
+        "id": "d",
+        "text": "旧实例可保证继续写入新文件且完全一致"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "preferences-029",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Preferences 名称必须非空、长度不超过 255 字节，并且不能包含斜杠。",
+    "explanation": "名称用于持久化文件标识，接口对长度和字符有明确约束。",
+    "knowledgePoints": [
+      "Preferences名称",
+      "参数约束"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "preferences-030",
+    "categoryId": "preferences",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "Preferences 天然保证同一文件的多进程并发安全，因此适合多个进程无锁高频写入。",
+    "explanation": "官方明确提示多进程并发可能造成文件损坏和数据丢失。",
+    "knowledgePoints": [
+      "多进程",
+      "并发安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "answerBoolean": false
+  },
+  {
+    "id": "preferences-031",
+    "categoryId": "preferences",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "设置页需要监听主题和字体大小变化，并支持恢复默认值，应如何使用 Preferences？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明精确或普通订阅",
+      "说明写入与 flush",
+      "说明 remove/clear",
+      "说明 off 和实例删除后的重建"
+    ],
+    "sourceRefs": [
+      {
+        "title": "用户首选项API",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "referenceAnswer": "获取固定名称的 Preferences 实例；用 dataChange 精确订阅主题和字体 key，或用 change 接收变化 key；修改后按存储模式正确 flush。恢复默认值可 remove 指定 key 或 clear 后 flush。页面退出时 off；若删除 Preferences 文件或移除缓存，应丢弃旧实例，重新获取后重新订阅。",
+    "scoringPoints": [
+      "说明精确或普通订阅",
+      "说明写入与 flush",
+      "说明 remove/clear",
+      "说明 off 和实例删除后的重建"
     ]
   },
   {
@@ -14238,6 +17787,401 @@
       "execute 只做 Native 工作，不跨线程使用 env 构造 ArkTS 值",
       "complete 中 resolve 或 reject 并释放所有资源",
       "覆盖排队失败、取消、状态码和线程安全回调"
+    ]
+  },
+  {
+    "id": "napi-025",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "napi_create_async_work 的 execute 回调运行在哪里？",
+    "explanation": "execute_cb 在独立工作线程运行，不能用原 ArkTS env 创建 napi_value。",
+    "knowledgePoints": [
+      "execute_cb",
+      "工作线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "env 所属 ArkTS 线程"
+      },
+      {
+        "id": "b",
+        "text": "uv 线程池中的工作线程"
+      },
+      {
+        "id": "c",
+        "text": "GPU 渲染线程"
+      },
+      {
+        "id": "d",
+        "text": "固定的系统 UI 线程"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "napi-026",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "异步任务把结果转换为 napi_value 并回传 ArkTS，应在哪个回调完成？",
+    "explanation": "complete_cb 回到原 ArkTS 线程，可使用 env 创建值、调用回调或完成 Promise。",
+    "knowledgePoints": [
+      "complete_cb",
+      "ArkTS线程"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "execute_cb"
+      },
+      {
+        "id": "b",
+        "text": "complete_cb"
+      },
+      {
+        "id": "c",
+        "text": "模块注册函数"
+      },
+      {
+        "id": "d",
+        "text": "CMake 配置阶段"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "napi-027",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "创建 napi_async_work 后，使用哪个接口把任务加入执行队列？",
+    "explanation": "create 只创建工作项，queue 才将其提交执行。",
+    "knowledgePoints": [
+      "napi_queue_async_work",
+      "异步任务"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_queue_async_work"
+      },
+      {
+        "id": "b",
+        "text": "napi_delete_async_work"
+      },
+      {
+        "id": "c",
+        "text": "napi_get_cb_info"
+      },
+      {
+        "id": "d",
+        "text": "napi_define_properties"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "napi-028",
+    "categoryId": "napi",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "napi_async_work 完成后应如何释放？",
+    "explanation": "异步工作项建议单次使用，重复释放会产生未定义行为。",
+    "knowledgePoints": [
+      "napi_delete_async_work",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 complete 回调执行时或之后调用 napi_delete_async_work，且只释放一次"
+      },
+      {
+        "id": "b",
+        "text": "在 execute 开始前重复 delete"
+      },
+      {
+        "id": "c",
+        "text": "永远不释放"
+      },
+      {
+        "id": "d",
+        "text": "由 ArkTS GC 自动删除 C++ 工作项"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "napi-029",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "Promise 风格 NAPI 异步接口通常包含哪些步骤？",
+    "explanation": "Promise 只是结果通道，线程切换和 C++ 资源仍需完整管理。",
+    "knowledgePoints": [
+      "napi_create_promise",
+      "deferred"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "napi_create_promise 获取 deferred 和 promise"
+      },
+      {
+        "id": "b",
+        "text": "创建并排队 async work"
+      },
+      {
+        "id": "c",
+        "text": "complete 中 resolve 或 reject deferred"
+      },
+      {
+        "id": "d",
+        "text": "完成后删除 async work 和自定义上下文"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "napi-030",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "callback 风格 NAPI 异步接口需要哪些生命周期处理？",
+    "explanation": "ArkTS 函数只能在合适线程调用，引用必须在任务完成后释放。",
+    "knowledgePoints": [
+      "napi_ref",
+      "napi_call_function"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "把回调保存为 napi_ref 防止被回收"
+      },
+      {
+        "id": "b",
+        "text": "complete 中取回回调并 napi_call_function"
+      },
+      {
+        "id": "c",
+        "text": "完成后删除 napi_ref"
+      },
+      {
+        "id": "d",
+        "text": "在 execute 工作线程直接调用 ArkTS 函数"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "napi-031",
+    "categoryId": "napi",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于多个 napi_async_work 的执行顺序，哪些说法正确？",
+    "explanation": "uv 工作线程并发执行，不同工作项不能依赖提交顺序。",
+    "knowledgePoints": [
+      "异步顺序",
+      "并发"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "options": [
+      {
+        "id": "a",
+        "text": "只保证每个任务的 complete 在自身 execute 之后"
+      },
+      {
+        "id": "b",
+        "text": "不同任务的 execute 顺序没有保证"
+      },
+      {
+        "id": "c",
+        "text": "有严格顺序需求应设计额外保序机制"
+      },
+      {
+        "id": "d",
+        "text": "提交顺序天然等于完成顺序"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "napi-032",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "execute_cb 可以使用传入 env 创建 napi_value，因为它与原 ArkTS 线程使用同一执行上下文。",
+    "explanation": "execute_cb 在工作线程，不能用原线程 env 构造 napi_value。",
+    "knowledgePoints": [
+      "线程安全",
+      "napi_env"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "answerBoolean": false
+  },
+  {
+    "id": "napi-033",
+    "categoryId": "napi",
+    "type": "boolean",
+    "difficulty": "easy",
+    "title": "napi_cancel_async_work 返回 napi_ok 仍不代表底层任务一定已取消，complete 回调还应检查 status。",
+    "explanation": "取消请求和实际取消结果需要通过 complete 的状态继续判断。",
+    "knowledgePoints": [
+      "napi_cancel_async_work",
+      "status"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "answerBoolean": true
+  },
+  {
+    "id": "napi-034",
+    "categoryId": "napi",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "把 C++ 图片分析算法封装为可取消的 Promise 接口，应如何管理线程、错误和资源？",
+    "explanation": "该题重点考察能力选型、生命周期边界、异常路径和资源治理是否完整，而不是只罗列 API 名称。",
+    "knowledgePoints": [
+      "说明 Promise 和 async work 创建",
+      "说明 execute 线程限制",
+      "说明 complete 的结果与取消处理",
+      "说明所有路径资源释放且只释放一次"
+    ],
+    "sourceRefs": [
+      {
+        "title": "使用Node-API接口进行异步任务开发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/napi/use-napi-asynchronous-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "referenceAnswer": "ArkTS 入口解析参数并创建 Promise/deferred 与任务上下文；create/queue async work。execute 只做纯 C++ 计算和取消检查，不创建 napi_value；complete 根据 status 和业务结果 resolve/reject，映射清晰错误。无论成功、失败或取消，都释放 native 缓冲区并且只调用一次 napi_delete_async_work；若持有 ArkTS 对象引用也要删除。",
+    "scoringPoints": [
+      "说明 Promise 和 async work 创建",
+      "说明 execute 线程限制",
+      "说明 complete 的结果与取消处理",
+      "说明所有路径资源释放且只释放一次"
     ]
   },
   {

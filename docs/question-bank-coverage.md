@@ -7,7 +7,7 @@
 ## 当前总览
 
 - 分类模块：16
-- 已发布题目：460
+- 已发布题目：560
 - 所有模块均已有题目
 - 题库源目录：`data/question-bank/modules/*.json`
 - 聚合输出：`data/seed/questions.json`
@@ -26,22 +26,33 @@
 | --- | ---: | --- | --- | --- |
 | ArkTS | 45 | `arkts-001` - `arkts-045` | 静态类型、Promise/async/await、TaskPool 取消与异常、AsyncLock/ConditionVariable、共享容器、线性/非线性容器、懒加载/动态加载 | Worker 错误隔离、Sendable 深层约束、模块副作用、性能诊断 |
 | ArkUI | 45 | `arkui-001` - `arkui-045` | 组件生命周期、渲染控制、布局测量/放置、DynamicLayout、布局调试、手势优先/并行/互斥/判定、转场与共享元素 | 组件复用性能实测、复杂滚动嵌套、无障碍焦点、动效性能诊断 |
-| Stage 模型 | 22 | `stage-model-001` - `stage-model-022` | AbilityStage、UIAbility、WindowStage、AppStartup、Context、HAP/HAR/HSP、多模块启动依赖 | 进程模型、ExtensionAbility、跨进程场景、应用故障恢复 |
-| Ability 生命周期 | 21 | `ability-lifecycle-001` - `ability-lifecycle-021` | 冷启动、窗口阶段、前后台切换、启动模式、onNewWant、状态恢复、回调顺序 | Want 参数、多实例任务管理、异常退出恢复、资源释放边界 |
-| 组件通信 | 22 | `component-communication-001` - `component-communication-022` | V1/V2 父子通信、@Param/@Event/@Once、Provider/Consumer、状态上提 | 跨页面边界、复杂对象契约、V1/V2 混用、事件总线取舍 |
-| 状态管理 | 22 | `state-management-001` - `state-management-022` | @State、@Local、@ObservedV2/@Trace、@Monitor、AppStorage、PersistenceV2 | LocalStorage、PersistentStorage、makeObserved、V1/V2 状态迁移 |
-| 路由导航 | 21 | `routing-001` - `routing-021` | router、Navigation、NavPathStack、栈操作、系统路由表、NavDestination | 自定义转场、深链、跨模块注册、路由失败恢复 |
-| 网络请求 | 21 | `network-001` - `network-021` | HttpRequest 完整生命周期、监听释放、错误分层、NetConnection、网络权限 | 证书校验、请求取消、上传下载、缓存协商、重试退避 |
-| 权限申请 | 21 | `permissions-001` - `permissions-021` | 权限声明、AtManager、运行时授权、单次授权、设置页申请、状态监听 | 特殊权限、隐私弹窗、重复拒绝策略、权限组边界 |
-| 数据存储 | 21 | `storage-001` - `storage-021` | Preferences/KV/RDB 选型、应用沙箱文件、文件 I/O、备份恢复、缓存边界 | 数据加密、跨版本迁移、空间治理、文件并发访问 |
-| Preferences | 21 | `preferences-001` - `preferences-021` | get/put/flush、has/getAll、XML/GSKV、多进程限制、删除与缓存 | 观察器、加密数据、容量边界、异常恢复 |
+| Stage 模型 | 32 | `stage-model-001` - `stage-model-032` | AbilityStage、UIAbility、WindowStage、AppStartup、Context、HAP/HAR/HSP、ExtensionAbility、后台治理与多设备窗口解耦 | 进程间通信、应用故障恢复、扩展能力高级场景 |
+| Ability 生命周期 | 31 | `ability-lifecycle-001` - `ability-lifecycle-031` | 冷启动、后台启动、窗口阶段、前后台切换、启动模式、onNewWant、WindowStage 事件、应用级生命周期监听与资源边界 | Want 参数、多实例任务管理、异常退出恢复 |
+| 组件通信 | 32 | `component-communication-001` - `component-communication-032` | V1/V2 父子通信、@Param/@Event/@Once、Provider/Consumer、alias、最近祖先匹配、函数和复杂对象跨层通信 | 跨页面边界、V1/V2 混用、事件总线取舍 |
+| 状态管理 | 32 | `state-management-001` - `state-management-032` | @State、@Local、@ObservedV2/@Trace、@Monitor、AppStorage、PersistenceV2、LocalStorage、PersistentStorage、makeObserved 与辅助接口 | V1/V2 状态迁移、动态监听、复杂持久化边界 |
+| 路由导航 | 31 | `routing-001` - `routing-031` | router、Navigation、NavPathStack、压栈/回退/替换/删除、系统路由表、结果回传、单实例与错误处理 | 自定义转场、深链、路由恢复与拦截高级场景 |
+| 网络请求 | 31 | `network-001` - `network-031` | HttpRequest 生命周期、流式上传下载、进度、缓存、超时、证书、监听释放、错误分层、NetConnection | 请求取消、缓存协商、重试退避、HTTP 拦截器 |
+| 权限申请 | 31 | `permissions-001` - `permissions-031` | 权限声明、AtManager、实时检查、运行时授权、多权限结果、拒绝降级、设置页申请、UI 加载时机 | 特殊权限、隐私弹窗、权限组边界 |
+| 数据存储 | 31 | `storage-001` - `storage-031` | 存储选型、应用沙箱文件、异步/分段 I/O、偏移、文件流并发、哈希校验、备份恢复与空间治理 | 数据加密、跨版本迁移、文件锁与原子替换 |
+| Preferences | 31 | `preferences-001` - `preferences-031` | get/put/flush、容量和类型边界、change/dataChange 监听、删除与缓存、多进程限制 | 加密数据、异常恢复、GSKV 高级场景 |
 | relationalStore | 42 | `relational-store-001` - `relational-store-042` | CRUD、谓词分页/排序/索引提示、ResultSet/LiteResultSet、事务并发、加密与密钥轮换、备份恢复、内存/只读数据库 | 慢查询工具、FTS、分布式表、复杂迁移压测 |
-| NAPI | 24 | `napi-001` - `napi-024` | 模块注册、参数解析、异步任务、Promise、ArrayBuffer、线程安全函数、引用生命周期 | Native 异常映射、资源清理、并发取消、性能测量 |
+| NAPI | 34 | `napi-001` - `napi-034` | 模块注册、参数解析、异步任务、Promise/callback、execute/complete 线程边界、取消状态、ArrayBuffer、线程安全函数、引用与工作项生命周期 | Native 异常映射、并发取消深化、性能测量 |
 | 性能优化 | 24 | `performance-001` - `performance-024` | 长列表、稳定 key、缓存、冷启动阶段、Profiler Self Time、精准刷新范围 | 内存泄漏、图片资源、网络性能、布局与帧率分析 |
 | 调试与发布 | 44 | `debug-release-001` - `debug-release-044` | SDK/签名、HiLog、CppCrash/JsCrash/AppFreeze、errorManager、HiAppEvent、SourceMap、自动化测试、可复现排障 | 包体组成分析、性能测试、流水线制品追溯、灰度与回滚 |
 | HarmonyOS NEXT 适配 | 44 | `next-adaptation-001` - `next-adaptation-044` | 多窗口、媒体查询、GridRow、字体缩放、折叠状态、FolderStack 悬停、安全区、WindowLimits、键鼠与 PC 适配 | 多屏协同、自由窗口高级交互、无障碍大字体极限布局、设备能力降级 |
 
 ## 最近批次
+
+2026-07-29 新增 100 道（总数 460 -> 560）：
+
+- Stage 模型：`stage-model-023` - `stage-model-032`
+- Ability 生命周期：`ability-lifecycle-022` - `ability-lifecycle-031`
+- 组件通信：`component-communication-023` - `component-communication-032`
+- 状态管理：`state-management-023` - `state-management-032`
+- 路由、网络、权限、数据存储、Preferences：各 `022` - `031`
+- NAPI：`napi-025` - `napi-034`
+
+本批十个相对薄弱模块各补 10 道，统一题型分布为单选 4、多选 3、判断 2、简答 1，总计单选 40、多选 30、判断 20、简答 10。重点覆盖 ExtensionAbility 与后台治理、UIAbility 后台启动时序、Provider/Consumer 深层规则、状态作用域、Navigation 栈操作、HTTP 流式传输、权限拒绝降级、文件流治理、Preferences 精确监听和 NAPI 异步线程边界。
 
 2026-07-29 新增 100 道（总数 360 -> 460）：
 
