@@ -1851,5 +1851,787 @@
       "使用 responseRegion 或 HitTestMode 调整命中",
       "覆盖边缘和复杂输入场景验证"
     ]
+  },
+  {
+    "id": "arkui-046",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Repeat 未开启 virtualScroll 时，首次渲染长列表会怎样创建子组件？",
+    "explanation": "Repeat 关闭虚拟滚动时会创建全部子组件；大数据列表应评估 virtualScroll，避免首帧节点过多。",
+    "knowledgePoints": [
+      "Repeat",
+      "virtualScroll"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "始终只创建可视区一项"
+      },
+      {
+        "id": "b",
+        "text": "完全不创建组件"
+      },
+      {
+        "id": "c",
+        "text": "首次渲染时创建全部子组件"
+      },
+      {
+        "id": "d",
+        "text": "只创建第一个子组件"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-047",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Repeat 虚拟滚动的数据源只加载了当前页，但 totalCount 声明了服务端总量，items 应如何提供数据？",
+    "explanation": "虚拟滚动依赖稳定的总量、索引和数据供应关系，范围错乱会造成空白、复用错位或越界。",
+    "knowledgePoints": [
+      "Repeat数据源",
+      "虚拟滚动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "把 totalCount 固定为 1"
+      },
+      {
+        "id": "b",
+        "text": "根据框架请求的索引范围返回对应数据，并保证索引和总量一致"
+      },
+      {
+        "id": "c",
+        "text": "每次都返回同一个首项"
+      },
+      {
+        "id": "d",
+        "text": "忽略索引范围并随机返回"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkui-048",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "Repeat 虚拟滚动要获得稳定复用效果，哪些设计是重要的？",
+    "explanation": "稳定键和模板边界决定节点身份与复用范围，数据源索引必须与 totalCount 协同。",
+    "knowledgePoints": [
+      "Repeat复用",
+      "稳定key"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "options": [
+      {
+        "id": "a",
+        "text": "为业务项提供稳定且唯一的 key"
+      },
+      {
+        "id": "b",
+        "text": "让 templateId 与实际模板类型一致"
+      },
+      {
+        "id": "c",
+        "text": "更新后保持索引和数据源一致"
+      },
+      {
+        "id": "d",
+        "text": "每次刷新随机生成 key"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-049",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Repeat 中不同 template type 的节点会进入同一个复用池并互相复用。",
+    "explanation": "Repeat 以模板类型作为复用边界，只有相同 template type 的节点才会互相复用。",
+    "knowledgePoints": [
+      "Repeat模板",
+      "复用边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkui-050",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "@ReusableV2 组件从复用池再次绑定新数据时，最需要关注哪个回调阶段？",
+    "explanation": "复用组件不会按全新实例路径重建全部状态，开发者要在复用回调中同步新数据并清理旧项痕迹。",
+    "knowledgePoints": [
+      "@ReusableV2",
+      "复用状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ReusableV2装饰器：V2组件复用",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-reusableV2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "数据库升级回调"
+      },
+      {
+        "id": "b",
+        "text": "签名校验回调"
+      },
+      {
+        "id": "c",
+        "text": "组件复用回调阶段，在其中刷新与旧数据相关的临时状态"
+      },
+      {
+        "id": "d",
+        "text": "应用安装回调"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-051",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "可复用卡片包含异步图片、展开状态和临时动画时，哪些处理更合理？",
+    "explanation": "组件复用提升创建效率，但业务状态和异步回调必须按新旧数据身份显式治理。",
+    "knowledgePoints": [
+      "组件复用",
+      "异步状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ReusableV2装饰器：V2组件复用",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-reusableV2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "假设组件复用后所有成员都会自动恢复默认值"
+      },
+      {
+        "id": "b",
+        "text": "回收时停止或解绑与旧项相关的异步任务"
+      },
+      {
+        "id": "c",
+        "text": "复用时按新业务 ID 重置临时状态"
+      },
+      {
+        "id": "d",
+        "text": "避免把旧项缓存结果无条件写入新项"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-052",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ArkUI 页面布局层级过深并出现频繁测量开销时，优先优化方向是什么？",
+    "explanation": "冗余嵌套会增加节点创建和布局成本，相同方向或没有独立职责的容器应合并。",
+    "knowledgePoints": [
+      "布局性能",
+      "组件树扁平化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "options": [
+      {
+        "id": "a",
+        "text": "移除没有布局作用的冗余容器，尽量扁平化组件树"
+      },
+      {
+        "id": "b",
+        "text": "继续套更多同方向 Row 和 Column"
+      },
+      {
+        "id": "c",
+        "text": "把所有组件改成绝对定位"
+      },
+      {
+        "id": "d",
+        "text": "提高日志级别即可"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-053",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "两个相邻 Column 只用于相同方向排列且没有独立样式或约束时，保留双层嵌套通常比合并更高效。",
+    "explanation": "没有额外职责的同类嵌套会增加节点和布局层级，通常应合并以减少开销。",
+    "knowledgePoints": [
+      "冗余嵌套",
+      "布局优化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkui-054",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "子 List 与父 Scroll 需要滚动联动时，nestedScroll 可以分别为哪些方向配置策略？",
+    "explanation": "滚动组件可通过 scrollForward 和 scrollBackward 分别设置嵌套滚动模式，以处理两个边界方向。",
+    "knowledgePoints": [
+      "nestedScroll",
+      "滚动方向"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "只能按设备型号配置"
+      },
+      {
+        "id": "b",
+        "text": "只能在应用启动前配置一次"
+      },
+      {
+        "id": "c",
+        "text": "向末尾方向滚动"
+      },
+      {
+        "id": "d",
+        "text": "向起始方向滚动"
+      }
+    ],
+    "correctOptionIds": [
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-055",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "NestedScrollMode.SELF_FIRST 的核心行为是什么？",
+    "explanation": "SELF_FIRST 让当前滚动组件优先消费位移，到达边界后再把滚动交给父组件。",
+    "knowledgePoints": [
+      "SELF_FIRST",
+      "嵌套滚动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "options": [
+      {
+        "id": "a",
+        "text": "禁用所有边缘效果"
+      },
+      {
+        "id": "b",
+        "text": "子组件先滚动，到边界后再由父组件继续滚动"
+      },
+      {
+        "id": "c",
+        "text": "父子永远同时滚动"
+      },
+      {
+        "id": "d",
+        "text": "只允许父组件滚动"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkui-056",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "商品详情页外层可滚动、内部评价列表也可滚动，如何设计嵌套滚动并验证边界体验？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "嵌套滚动",
+      "边界验证"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "referenceAnswer": "先明确两个方向由谁优先消费，根据吸顶和列表边界选择 SELF_FIRST、PARENT_FIRST 或 PARALLEL，并分别配置 scrollForward 与 scrollBackward；避免父子同时出现冲突的边缘效果；覆盖短内容、长内容、快速甩动、到顶回拉、到底继续滑和程序化滚动，确认位移连续且不会锁死。",
+    "scoringPoints": [
+      "分别设计前后方向的滚动优先级",
+      "处理父子边界和边缘效果",
+      "覆盖短内容与快速甩动",
+      "验证程序化滚动和手势滚动一致"
+    ]
+  },
+  {
+    "id": "arkui-057",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "为复合工具栏补充无障碍体验时，哪些做法合理？",
+    "explanation": "无障碍名称、分组和默认焦点分别解决控件含义、节点粒度和初始导航问题。",
+    "knowledgePoints": [
+      "无障碍文本",
+      "无障碍焦点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "按语义决定是否将多个子节点合成无障碍组"
+      },
+      {
+        "id": "b",
+        "text": "为页面设置合理的屏幕朗读默认首焦点"
+      },
+      {
+        "id": "c",
+        "text": "把所有控件都设置成同一个朗读文本"
+      },
+      {
+        "id": "d",
+        "text": "为纯图标按钮提供可朗读名称"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-058",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "accessibilityGroup 设置为 true 后，屏幕朗读通常如何处理该组件及子组件？",
+    "explanation": "无障碍分组用于把相关内容合并成一个语义单元，应避免把仍需独立操作的按钮错误合并。",
+    "knowledgePoints": [
+      "accessibilityGroup",
+      "语义分组"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "options": [
+      {
+        "id": "a",
+        "text": "只改变视觉颜色"
+      },
+      {
+        "id": "b",
+        "text": "自动点击所有子组件"
+      },
+      {
+        "id": "c",
+        "text": "把它们作为一个整体可选节点，不再逐个关注内部子组件"
+      },
+      {
+        "id": "d",
+        "text": "强制隐藏整个组件"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-059",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "accessibilityDefaultFocus 主要设置屏幕朗读进入页面时的默认首焦点，并不等同于普通键盘焦点配置。",
+    "explanation": "该属性面向无障碍焦点。键盘焦点顺序和默认焦点还需使用对应焦点能力单独设计。",
+    "knowledgePoints": [
+      "无障碍首焦点",
+      "键盘焦点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-060",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "复杂页面打开后屏幕朗读总从无意义装饰元素开始，最直接的修正是什么？",
+    "explanation": "一个页面应只有清晰的首个无障碍落点，并保持后续语义顺序符合视觉和操作逻辑。",
+    "knowledgePoints": [
+      "accessibilityDefaultFocus",
+      "焦点顺序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "为页面核心语义节点配置合理的 accessibilityDefaultFocus，并减少装饰节点干扰"
+      },
+      {
+        "id": "b",
+        "text": "把所有文字字号设为 1vp"
+      },
+      {
+        "id": "c",
+        "text": "关闭系统无障碍服务"
+      },
+      {
+        "id": "d",
+        "text": "给每个节点都设置默认首焦点"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-061",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "滚动容器出现“子列表到边界后父页面不接手”的问题，应重点检查哪些配置？",
+    "explanation": "嵌套滚动是否交接由方向策略、父子可滚动状态和边界共同决定。",
+    "knowledgePoints": [
+      "滚动诊断",
+      "nestedScroll"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "options": [
+      {
+        "id": "a",
+        "text": "父子组件是否都可滚动"
+      },
+      {
+        "id": "b",
+        "text": "边缘效果和当前内容是否真的达到边界"
+      },
+      {
+        "id": "c",
+        "text": "签名证书的别名"
+      },
+      {
+        "id": "d",
+        "text": "子组件 nestedScroll 的方向配置"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-062",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "List 的 onReachEnd 只会由用户手指滑动触发，Scroller 发起的动画滚动绝不会触发。",
+    "explanation": "官方组件说明指出，Scroller 动画滚动到达对应位置时也可能触发相关滚动事件，业务加载逻辑要做好幂等。",
+    "knowledgePoints": [
+      "onReachEnd",
+      "程序化滚动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "List",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-list.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkui-063",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Swiper 开启 loop 后，为什么不能依赖其边界把滚动继续传给父容器？",
+    "explanation": "Swiper 的循环模式没有普通首尾边界，官方说明此时不触发父级嵌套滚动。",
+    "knowledgePoints": [
+      "Swiper",
+      "nestedScroll"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Swiper",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-swiper.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "因为父容器必须是 Grid"
+      },
+      {
+        "id": "b",
+        "text": "循环模式没有可到达的边界效果，不会触发父容器的嵌套滚动"
+      },
+      {
+        "id": "c",
+        "text": "因为 loop 会销毁父容器"
+      },
+      {
+        "id": "d",
+        "text": "因为 Swiper 不支持手势"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkui-064",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "优化频繁更新的复杂 ArkUI 页面时，哪些措施通常有效？",
+    "explanation": "性能优化应控制节点数量、布局层级、刷新范围和复用稳定性；把状态集中到根节点会扩大刷新范围。优化后仍应使用可复现数据复测布局与帧率。",
+    "knowledgePoints": [
+      "ArkUI性能",
+      "性能验证"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "options": [
+      {
+        "id": "a",
+        "text": "减少无意义组件嵌套"
+      },
+      {
+        "id": "b",
+        "text": "缩小状态变化触发的刷新范围"
+      },
+      {
+        "id": "c",
+        "text": "对长列表采用虚拟化与稳定 key"
+      },
+      {
+        "id": "d",
+        "text": "把所有状态集中到页面根节点并让每次变化刷新整页"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-065",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "为了减少节点数量，可以把所有业务区域合并到一个不可复用的超大自定义组件中。",
+    "explanation": "扁平化不等于取消合理组件边界。应移除冗余容器，同时保留清晰职责、精准刷新和可复用结构。",
+    "knowledgePoints": [
+      "组件边界",
+      "布局性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 65,
+    "answerBoolean": false
   }
 ]

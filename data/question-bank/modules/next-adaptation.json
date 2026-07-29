@@ -1821,5 +1821,818 @@
       "处理字体缩放、安全区和自由窗口边界",
       "覆盖多设备、多窗口和输入方式验证"
     ]
+  },
+  {
+    "id": "next-adaptation-045",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用希望字体跟随系统缩放，仅在组件中读取 Environment.fontScale 是否足够？",
+    "explanation": "Environment 可提供 fontScale，但是否跟随系统还受应用配置控制，开发与测试要同时检查。",
+    "knowledgePoints": [
+      "fontScale",
+      "应用配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "options": [
+      {
+        "id": "a",
+        "text": "足够，配置文件与字体无关"
+      },
+      {
+        "id": "b",
+        "text": "必须关闭系统无障碍"
+      },
+      {
+        "id": "c",
+        "text": "只修改 versionCode 即可"
+      },
+      {
+        "id": "d",
+        "text": "不够，还需要在应用配置中启用相应的字体缩放跟随策略"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-046",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Environment 中哪个字段用于反映系统是否启用无障碍能力？",
+    "explanation": "Environment 把设备环境属性提供给 ArkUI 状态系统，accessibilityEnabled 可用于适配相关体验。",
+    "knowledgePoints": [
+      "Environment",
+      "accessibilityEnabled"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "bundleName"
+      },
+      {
+        "id": "b",
+        "text": "apiReleaseType"
+      },
+      {
+        "id": "c",
+        "text": "accessibilityEnabled"
+      },
+      {
+        "id": "d",
+        "text": "versionCode"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-047",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "Environment 可提供哪些与“一多”界面适配相关的内置环境值？",
+    "explanation": "Environment 可提供颜色模式、字体缩放和布局方向等设备环境值；versionCode 属于应用版本配置，不是 Environment 的内置环境值。",
+    "knowledgePoints": [
+      "Environment",
+      "设备环境"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "versionCode"
+      },
+      {
+        "id": "b",
+        "text": "colorMode"
+      },
+      {
+        "id": "c",
+        "text": "fontScale 与 fontWeightScale"
+      },
+      {
+        "id": "d",
+        "text": "layoutDirection"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-048",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Environment 提供的环境属性都是可由业务任意修改的复杂对象。",
+    "explanation": "Environment 属性是简单类型且只读，用于描述设备环境；业务状态应放在自己的状态模型中。",
+    "knowledgePoints": [
+      "Environment约束",
+      "只读环境"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-049",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "大字体下一个包含标题、说明和两个按钮的操作区被错误合成一个无障碍节点，最可能应调整什么？",
+    "explanation": "无障碍分组会让服务不再逐个关注子节点，操作控件不应被错误合并成不可独立访问的整体。",
+    "knowledgePoints": [
+      "无障碍分组",
+      "操作粒度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "options": [
+      {
+        "id": "a",
+        "text": "签名证书"
+      },
+      {
+        "id": "b",
+        "text": "数据库版本"
+      },
+      {
+        "id": "c",
+        "text": "Worker数量"
+      },
+      {
+        "id": "d",
+        "text": "accessibilityGroup 的分组粒度，保留需要独立操作的按钮"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-050",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "大字体极限布局应重点验证哪些问题？",
+    "explanation": "大字体适配要检查文字裁切、换行后的布局和控件可操作性，并确认全部内容仍可到达；截图文件名与布局是否可用无关。",
+    "knowledgePoints": [
+      "大字体",
+      "布局验证"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "按钮和输入框是否仍可操作"
+      },
+      {
+        "id": "b",
+        "text": "页面截图文件名是否包含设备型号"
+      },
+      {
+        "id": "c",
+        "text": "文本换行后是否遮挡后续内容"
+      },
+      {
+        "id": "d",
+        "text": "固定高度容器是否裁切文字"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-051",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "TextInput 同时设置 minFontSize、maxFontSize 并启用自适应后，原 fontSize 配置会怎样？",
+    "explanation": "自适应字体由最小、最大字号和布局约束共同决定，不能再假设固定 fontSize 控制最终大小。",
+    "knowledgePoints": [
+      "TextInput",
+      "字体自适应"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TextInput",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-basic-components-textinput.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "只影响占位符颜色"
+      },
+      {
+        "id": "b",
+        "text": "自适应字体生效时 fontSize 不再生效"
+      },
+      {
+        "id": "c",
+        "text": "fontSize 始终最高优先级"
+      },
+      {
+        "id": "d",
+        "text": "输入框会被删除"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "next-adaptation-052",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "无障碍大字体适配的首选方案是把所有文本强制缩回很小字号，以保持原布局不变。",
+    "explanation": "应优先让容器增长、文本换行、结构重排和页面滚动，不能以牺牲可读性规避布局适配。",
+    "knowledgePoints": [
+      "大字体可读性",
+      "结构重排"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-053",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 GridRow 响应式断点，哪些说法正确？",
+    "explanation": "GridRow 断点按可用宽度生效，默认包含 xs、sm、md、lg；自定义断点数组需单调递增且最多支持六个，并非按设备型号硬编码。",
+    "knowledgePoints": [
+      "GridRow",
+      "响应式断点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式栅格布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-grid-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "options": [
+      {
+        "id": "a",
+        "text": "断点只能根据设备型号切换"
+      },
+      {
+        "id": "b",
+        "text": "自定义断点数组应单调递增"
+      },
+      {
+        "id": "c",
+        "text": "最多支持六个断点"
+      },
+      {
+        "id": "d",
+        "text": "默认包含 xs、sm、md、lg"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-054",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "GridRow 默认 md 断点对应的宽度范围是什么？",
+    "explanation": "默认 xs、sm、md、lg 分别覆盖最小、小、中和大宽度，md 为 520vp 到 840vp 之间。",
+    "knowledgePoints": [
+      "GridRow",
+      "md断点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式栅格布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-grid-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "[320, 520) vp"
+      },
+      {
+        "id": "b",
+        "text": "[840, +∞) vp"
+      },
+      {
+        "id": "c",
+        "text": "[520, 840) vp"
+      },
+      {
+        "id": "d",
+        "text": "[0, 320) vp"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-055",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "企业审批页面在系统字体 1x、1.75x、2x 和更高倍率下，应如何设计结构与验收？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "大字体极限布局",
+      "可访问性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "referenceAnswer": "启用字体跟随并读取 fontScale 作为辅助状态；标题、说明和错误信息允许换行，避免固定高度，操作按钮在空间不足时从横排改为纵排；列表、弹窗和双栏区域保证可滚动且焦点可达，纯图标补充语义。覆盖手机、平板分屏、自由窗口、软键盘、横竖屏和长文本，确认内容不裁切、不重叠、操作顺序和屏幕朗读顺序一致。",
+    "scoringPoints": [
+      "启用并验证字体跟随策略",
+      "避免固定高度并允许换行重排",
+      "保证滚动、焦点和语义可达",
+      "覆盖多窗口、键盘和长文本矩阵"
+    ]
+  },
+  {
+    "id": "next-adaptation-056",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "2in1 设备上的高频操作除触摸外，还应覆盖哪些输入体验？",
+    "explanation": "2in1 场景不能只验证触摸，鼠标反馈、键盘焦点和快捷键都影响桌面使用效率；还应单独覆盖触控板滚动，设备序列号输入不是通用交互适配项。",
+    "knowledgePoints": [
+      "2in1",
+      "多输入适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "键盘快捷键事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-events-keyboardshortcut.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "options": [
+      {
+        "id": "a",
+        "text": "鼠标悬停和点击"
+      },
+      {
+        "id": "b",
+        "text": "键盘焦点移动"
+      },
+      {
+        "id": "c",
+        "text": "常用快捷键"
+      },
+      {
+        "id": "d",
+        "text": "设备序列号输入"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-057",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "准备调用只在部分设备类型提供的系统能力时，最可靠的前置检查是什么？",
+    "explanation": "SystemCapability 描述能力支持范围，跨设备产品应在设计和测试阶段确认并准备降级。",
+    "knowledgePoints": [
+      "SystemCapability",
+      "能力降级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "只检查设备品牌字符串"
+      },
+      {
+        "id": "b",
+        "text": "假设编译通过就一定可用"
+      },
+      {
+        "id": "c",
+        "text": "捕获崩溃后重新启动"
+      },
+      {
+        "id": "d",
+        "text": "核对 API 的 SystemCapability 与目标设备能力，并提供不可用时的降级路径"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-058",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "同一 HarmonyOS API 在手机可用，就可以推断它在平板、2in1、车机和穿戴设备上全部可用。",
+    "explanation": "API 支持受 SystemCapability、设备类型和版本影响，必须按目标设备核验。",
+    "knowledgePoints": [
+      "设备能力",
+      "API兼容"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-059",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "设计跨设备能力降级时，哪些做法合理？",
+    "explanation": "能力降级要在构建前核对 SystemCapability，并测试能力存在和缺失两条路径；运行时失败要有替代流程。可选 API 应集中封装，不能散落在页面中。",
+    "knowledgePoints": [
+      "能力降级",
+      "兼容性测试"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "options": [
+      {
+        "id": "a",
+        "text": "测试能力存在和不存在两条路径"
+      },
+      {
+        "id": "b",
+        "text": "构建前核对目标设备的 SystemCapability"
+      },
+      {
+        "id": "c",
+        "text": "运行时对可选能力失败提供可理解的替代流程"
+      },
+      {
+        "id": "d",
+        "text": "把可选 API 调用直接散落在所有页面中"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-060",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用检测到 accessibilityEnabled 为 true 后，最合理的响应是什么？",
+    "explanation": "无障碍状态用于优化交互与验证，核心业务结果不应因该状态改变。",
+    "knowledgePoints": [
+      "accessibilityEnabled",
+      "无障碍适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "检查语义、焦点、朗读顺序和操作反馈是否完整，而不是改变业务数据"
+      },
+      {
+        "id": "b",
+        "text": "自动删除所有动画和图片"
+      },
+      {
+        "id": "c",
+        "text": "强制退出应用"
+      },
+      {
+        "id": "d",
+        "text": "清空用户设置"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-061",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "fontWeightScale 与 fontScale 表示完全相同的环境属性，可以只保留其中任意一个。",
+    "explanation": "fontScale 描述字号缩放，fontWeightScale 描述字重缩放，两者应分别理解和验证。",
+    "knowledgePoints": [
+      "fontWeightScale",
+      "fontScale"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-062",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "自由窗口从宽屏缩到窄屏时，哪些状态应该保持连续？",
+    "explanation": "响应式结构变化不应重置导航、表单、列表等业务上下文，布局和数据状态需要解耦；窗口变化不应无条件重建正在执行的任务。",
+    "knowledgePoints": [
+      "自由窗口",
+      "状态连续性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "options": [
+      {
+        "id": "a",
+        "text": "列表滚动与选中上下文"
+      },
+      {
+        "id": "b",
+        "text": "每次窗口变窄都重新创建正在执行的业务任务"
+      },
+      {
+        "id": "c",
+        "text": "当前页面和导航位置"
+      },
+      {
+        "id": "d",
+        "text": "已输入但未提交的表单内容"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-063",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "超宽窗口中正文被无限拉长导致阅读困难，最合理的布局策略是什么？",
+    "explanation": "宽屏适配不等于所有内容等比拉伸，应控制阅读宽度并按任务需要增加侧栏。",
+    "knowledgePoints": [
+      "超宽布局",
+      "阅读宽度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "强制切回手机宽度窗口"
+      },
+      {
+        "id": "b",
+        "text": "限制正文最大阅读宽度，把额外空间用于稳定留白或有价值的辅助栏"
+      },
+      {
+        "id": "c",
+        "text": "继续把每行文字拉到窗口全宽"
+      },
+      {
+        "id": "d",
+        "text": "把字体按窗口宽度无限放大"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "next-adaptation-064",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "设备专有能力不可用时，直接保留可点击入口并让调用失败，比提前禁用或提供替代流程更清晰。",
+    "explanation": "可选能力应在入口、说明和执行结果上提供一致降级，避免用户进入必然失败的流程。",
+    "knowledgePoints": [
+      "能力不可用",
+      "交互降级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "answerBoolean": false
   }
 ]

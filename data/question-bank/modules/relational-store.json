@@ -1763,5 +1763,808 @@
       "开启数据库加密并安全管理密钥",
       "关闭结果集并用真实数据验证性能和恢复"
     ]
+  },
+  {
+    "id": "relational-store-043",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要执行参数化 INSERT、UPDATE、PRAGMA 或 DDL，并获取对应返回值时，优先使用哪个新接口？",
+    "explanation": "execute 支持参数绑定，可执行增删改、PRAGMA 和表结构操作；查询结果集仍应使用 query 或 querySql。",
+    "knowledgePoints": [
+      "execute",
+      "参数绑定"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "RdbPredicates.limitAs"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore.execute"
+      },
+      {
+        "id": "c",
+        "text": "ResultSet.close"
+      },
+      {
+        "id": "d",
+        "text": "RdbStore.on"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "relational-store-044",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "execute 执行的 SQL 中，各类表达式和操作符之间的关系操作符数量上限是多少？",
+    "explanation": "当前官方接口文档明确限制关系操作符不超过 1000，超复杂语句应拆分或重构查询。",
+    "knowledgePoints": [
+      "execute限制",
+      "复杂SQL"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "options": [
+      {
+        "id": "a",
+        "text": "1000 个"
+      },
+      {
+        "id": "b",
+        "text": "10 个"
+      },
+      {
+        "id": "c",
+        "text": "10000 个"
+      },
+      {
+        "id": "d",
+        "text": "没有限制"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-045",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "数据库查询需要拼接用户输入时，哪些做法更安全且更容易复用执行计划？",
+    "explanation": "值参数应绑定，动态表名或排序字段应走受控白名单，不能依赖字符串清洗代替边界控制。",
+    "knowledgePoints": [
+      "参数绑定",
+      "SQL边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "options": [
+      {
+        "id": "a",
+        "text": "把表名等不可绑定标识符限制在可信白名单"
+      },
+      {
+        "id": "b",
+        "text": "避免直接把输入拼进 SQL 字符串"
+      },
+      {
+        "id": "c",
+        "text": "先拼接 SQL 再用正则删除引号即可"
+      },
+      {
+        "id": "d",
+        "text": "使用 ? 占位符和参数数组"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-046",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "频繁读取和设置 RdbStore.version 不会占用数据库连接，因此可在每次列表刷新时执行。",
+    "explanation": "官方文档说明 version 的读取和设置会占用连接，应使用临时变量完成迁移后一次性更新版本。",
+    "knowledgePoints": [
+      "数据库版本",
+      "连接占用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-047",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "RdbStore.rebuilt 属性主要用于判断什么？",
+    "explanation": "rebuilt 用于识别数据库损坏后的重建或修复状态，业务可据此补建表结构或恢复必要数据。",
+    "knowledgePoints": [
+      "rebuilt",
+      "损坏恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "当前事务是否只读"
+      },
+      {
+        "id": "b",
+        "text": "数据库是否发生过重建或修复"
+      },
+      {
+        "id": "c",
+        "text": "当前查询是否命中索引"
+      },
+      {
+        "id": "d",
+        "text": "是否开启深色模式"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "relational-store-048",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 relationalStore 单条数据和字符串字段大小，哪些结论符合当前接口文档？",
+    "explanation": "数据写入上限和结果集共享内存限制需要一起考虑，大文件通常不应直接作为超大行保存。",
+    "knowledgePoints": [
+      "数据大小限制",
+      "共享内存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "options": [
+      {
+        "id": "a",
+        "text": "受共享内存限制，单条数据必须严格小于 2MB"
+      },
+      {
+        "id": "b",
+        "text": "单个字符串字段最大支持写入 8MB"
+      },
+      {
+        "id": "c",
+        "text": "字符串超出 8MB 的部分会被截断"
+      },
+      {
+        "id": "d",
+        "text": "任意大对象都能通过 ResultSet 完整读取"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-049",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "写入压力持续增大并收到错误码 14800047，首先应关注什么？",
+    "explanation": "14800047 对应 WAL 文件超过默认限制，应排查长事务、写入节奏、连接和检查点相关问题。",
+    "knowledgePoints": [
+      "WAL",
+      "错误码14800047"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "options": [
+      {
+        "id": "a",
+        "text": "字体缩放比例"
+      },
+      {
+        "id": "b",
+        "text": "页面路由表"
+      },
+      {
+        "id": "c",
+        "text": "应用图标格式"
+      },
+      {
+        "id": "d",
+        "text": "WAL 文件大小超过默认限制以及长期事务或未及时检查点等原因"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-050",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用批量插入接口处理大量行时，哪些边界需要纳入设计？",
+    "explanation": "批量接口按参数量分批并采用明确的冲突策略；执行中途失败会立即返回错误，而不是静默继续并报告成功，调用方仍需评估业务一致性。",
+    "knowledgePoints": [
+      "批量插入",
+      "参数上限"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "任一批次失败后接口仍会静默继续并返回成功"
+      },
+      {
+        "id": "b",
+        "text": "批次采用 ON_CONFLICT_REPLACE 策略"
+      },
+      {
+        "id": "c",
+        "text": "参数总量按行数乘字段并集计算"
+      },
+      {
+        "id": "d",
+        "text": "接口会按每批 32766 个参数分批"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-051",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "关系型表要参与设备间分布式同步，首先需要调用哪类能力声明分布式表？",
+    "explanation": "setDistributedTables 用于把指定表配置为分布式表，并要求相应的分布式数据同步权限。",
+    "knowledgePoints": [
+      "分布式表",
+      "setDistributedTables"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "getColumnIndex"
+      },
+      {
+        "id": "b",
+        "text": "setDistributedTables"
+      },
+      {
+        "id": "c",
+        "text": "setLocale"
+      },
+      {
+        "id": "d",
+        "text": "queryLockedRow"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "relational-store-052",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "调用 setDistributedTables 不需要声明任何分布式数据同步权限。",
+    "explanation": "接口文档要求 ohos.permission.DISTRIBUTED_DATASYNC，权限和设备能力都应在接入前确认。",
+    "knowledgePoints": [
+      "分布式权限",
+      "DISTRIBUTED_DATASYNC"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-053",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "配置端云分布式表时，哪些说法正确？",
+    "explanation": "分布式表声明、自动同步配置和主动同步是不同层次，业务还要设计错误和冲突处理。",
+    "knowledgePoints": [
+      "端云同步",
+      "DistributedConfig"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "options": [
+      {
+        "id": "a",
+        "text": "未开启自动同步时可主动调用 cloudSync"
+      },
+      {
+        "id": "b",
+        "text": "cloudSync 需要实现对应云服务能力"
+      },
+      {
+        "id": "c",
+        "text": "设置分布式表后所有冲突都会自动按业务规则解决"
+      },
+      {
+        "id": "d",
+        "text": "DistributedConfig 未传时 autoSync 默认 false"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-054",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "cloudSync 的进度回调最适合用于什么？",
+    "explanation": "主动云同步是异步过程，进度信息用于展示、日志和失败定位，不应承担数据写入事务职责。",
+    "knowledgePoints": [
+      "cloudSync",
+      "同步进度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "替代数据库事务"
+      },
+      {
+        "id": "b",
+        "text": "修改应用签名"
+      },
+      {
+        "id": "c",
+        "text": "观察同步阶段和进度，驱动状态展示与错误诊断"
+      },
+      {
+        "id": "d",
+        "text": "执行页面布局测量"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-055",
+    "categoryId": "relational-store",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "设备管理应用需要让部分结构化数据跨设备同步，如何设计分布式表、权限和失败恢复？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "分布式表",
+      "同步恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "referenceAnswer": "只把确有跨设备价值的表设为分布式表，声明并运行时校验 DISTRIBUTED_DATASYNC；明确设备同步或端云同步类型及 autoSync 策略，手动同步时记录每个设备或阶段的结果；本地事务与远端最终状态分开处理，失败可重试但要幂等；订阅远端 dataChange 并在退出时 off，冲突字段保留更新时间或业务版本用于决策。",
+    "scoringPoints": [
+      "最小化分布式表范围",
+      "声明权限并选择同步类型",
+      "记录分设备结果并幂等重试",
+      "订阅变化并设计冲突版本"
+    ]
+  },
+  {
+    "id": "relational-store-056",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "订阅关系型数据库分布式数据变化时，哪些生命周期做法合理？",
+    "explanation": "监听器应成对注册和注销，避免重复回调和对象长期被引用。",
+    "knowledgePoints": [
+      "dataChange",
+      "监听生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 dataChange 监听远端变化"
+      },
+      {
+        "id": "b",
+        "text": "保留原 observer 引用以便 off"
+      },
+      {
+        "id": "c",
+        "text": "页面或服务退出时取消不再需要的监听"
+      },
+      {
+        "id": "d",
+        "text": "每次刷新都注册匿名监听且从不释放"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-057",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ResultSet 创建后默认游标位置通常在哪里？",
+    "explanation": "读取前通常先调用 goToFirstRow 或 goToNextRow；无论成功失败都要及时 close。",
+    "knowledgePoints": [
+      "ResultSet游标",
+      "结果集读取"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "最后一条记录之后"
+      },
+      {
+        "id": "b",
+        "text": "第一条记录索引 0 上"
+      },
+      {
+        "id": "c",
+        "text": "随机记录上"
+      },
+      {
+        "id": "d",
+        "text": "第一条记录之前，即索引 -1"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-058",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "只要 ResultSet 已遍历到最后一行，系统就会立即自动 close，因此无需 finally 释放。",
+    "explanation": "遍历结束不等于资源关闭，应在 finally 或等价清理路径显式 close。",
+    "knowledgePoints": [
+      "ResultSet关闭",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-059",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 setLocale 做本地化排序时，哪些步骤正确？",
+    "explanation": "setLocale 配置排序语言，不负责翻译；不支持的语言要有回退策略。",
+    "knowledgePoints": [
+      "setLocale",
+      "本地化排序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "options": [
+      {
+        "id": "a",
+        "text": "setLocale 会自动翻译字段内容"
+      },
+      {
+        "id": "b",
+        "text": "传入受支持的 ISO 639 语言标识"
+      },
+      {
+        "id": "c",
+        "text": "排序 SQL 使用 COLLATE LOCALES"
+      },
+      {
+        "id": "d",
+        "text": "捕获不支持语言可能返回的 14800001"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-060",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "queryLockedRow 的主要用途是什么？",
+    "explanation": "queryLockedRow 是数据库锁定数据查询能力，返回 ResultSet 后仍需按结果集规范读取和关闭。",
+    "knowledgePoints": [
+      "queryLockedRow",
+      "锁定数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "按条件查询数据库中被锁定的数据"
+      },
+      {
+        "id": "b",
+        "text": "获取屏幕锁定状态"
+      },
+      {
+        "id": "c",
+        "text": "锁定 ArkUI 组件"
+      },
+      {
+        "id": "d",
+        "text": "查询签名证书"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-061",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "rekeyEx 更新加密参数时，可以保留未关闭的 ResultSet 和活动 Transaction，接口会自动迁移它们。",
+    "explanation": "rekeyEx 需要独占数据库访问；未释放结果集、事务或其他进程打开数据库都可能导致失败。",
+    "knowledgePoints": [
+      "rekeyEx",
+      "独占访问"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-062",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "为什么 rekeyEx 过程中不建议同时启用 AllowedRebuild 作为开库兜底？",
+    "explanation": "加密参数切换要保留新旧参数冗余重试路径，不能让错误密钥直接触发空库重建。",
+    "knowledgePoints": [
+      "rekeyEx",
+      "AllowedRebuild"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "options": [
+      {
+        "id": "a",
+        "text": "会禁用所有查询索引"
+      },
+      {
+        "id": "b",
+        "text": "会改变 bundleName"
+      },
+      {
+        "id": "c",
+        "text": "错误的新加密参数可能被误判为数据库问题并触发重建，造成数据风险"
+      },
+      {
+        "id": "d",
+        "text": "会让字体变小"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
   }
 ]

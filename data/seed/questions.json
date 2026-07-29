@@ -1864,6 +1864,802 @@
     ]
   },
   {
+    "id": "arkts-046",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Worker 与宿主线程交换普通对象时，默认采用哪种数据处理方式？",
+    "explanation": "普通对象跨线程通常需要序列化和反序列化，数据越大通信成本越高；需要共享或转移时应选择文档支持的数据类型和机制。",
+    "knowledgePoints": [
+      "Worker",
+      "结构化克隆"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkTS线程间通信概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/interthread-communication-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "把对象永久移动到宿主线程"
+      },
+      {
+        "id": "b",
+        "text": "自动转换为数据库记录"
+      },
+      {
+        "id": "c",
+        "text": "结构化克隆，接收端得到内容相同的新对象"
+      },
+      {
+        "id": "d",
+        "text": "直接共享同一普通对象引用"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-047",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "手动创建 Worker 文件后，为确保它被构建进产物，最关键的工程要求是什么？",
+    "explanation": "Worker 文件必须处于规定源码层级；手动创建时还要同步配置构建信息，DevEco Studio 自动创建则会生成模板和配置。",
+    "knowledgePoints": [
+      "Worker文件",
+      "构建配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "把 Worker 文件改成 JSON 后缀"
+      },
+      {
+        "id": "b",
+        "text": "文件位于模块 src/main/ets 层级下，并按手动方式补充 build-profile.json5 的 workers 配置"
+      },
+      {
+        "id": "c",
+        "text": "只把文件放进 rawfile 目录"
+      },
+      {
+        "id": "d",
+        "text": "仅在 app.json5 增加页面路由"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-048",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 Worker 的脚本路径和跨包加载，哪些说法符合当前官方文档？",
+    "explanation": "Worker 路径由模块名和 ets 下相对位置构成；不同包形态及规范化 OHMUrl 配置会影响可用写法。",
+    "knowledgePoints": [
+      "Worker路径",
+      "跨包加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "options": [
+      {
+        "id": "a",
+        "text": "Stage 模型可使用 moduleName/ets/relativePath 形式"
+      },
+      {
+        "id": "b",
+        "text": "相对路径形式只支持包内加载"
+      },
+      {
+        "id": "c",
+        "text": "开启 useNormalizedOHMUrl 或三方 HAR 场景要关注相对路径约束"
+      },
+      {
+        "id": "d",
+        "text": "任意绝对磁盘路径都能在设备上加载"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-049",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Worker 子线程可以直接调用 ArkUI 非线程安全接口更新页面组件。",
+    "explanation": "不同线程拥有独立上下文，Worker 只能使用线程安全库，UI 更新应回到宿主线程处理。",
+    "knowledgePoints": [
+      "线程安全",
+      "ArkUI线程边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-050",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Worker 单次通过序列化机制传输数据时，当前官方文档给出的大小上限是多少？",
+    "explanation": "Worker 单次序列化传输限制为 16MB。大型数据应拆分、转移所有权或使用适合的共享机制，并评估通信成本。",
+    "knowledgePoints": [
+      "Worker通信",
+      "序列化上限"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "64MB"
+      },
+      {
+        "id": "b",
+        "text": "没有上限"
+      },
+      {
+        "id": "c",
+        "text": "16MB"
+      },
+      {
+        "id": "d",
+        "text": "2MB"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-051",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "宿主线程要观察 Worker 消息、全局异常和序列化失败，通常应注册哪些回调？",
+    "explanation": "onmessage 接收业务消息，onAllErrors 捕获全局异常，onmessageerror 处理不可序列化消息；Worker 没有通用的 onprogress 回调。若还要观察线程退出，可另外注册 onexit。",
+    "knowledgePoints": [
+      "Worker回调",
+      "错误隔离"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "onprogress"
+      },
+      {
+        "id": "b",
+        "text": "onmessage"
+      },
+      {
+        "id": "c",
+        "text": "onAllErrors"
+      },
+      {
+        "id": "d",
+        "text": "onmessageerror"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-052",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Worker 的 onexit 回调中，正常退出与异常退出的 code 通常分别是什么？",
+    "explanation": "官方示例说明 onexit 的 code 为 0 表示正常退出，为 1 表示异常退出，可用于区分资源回收路径。",
+    "knowledgePoints": [
+      "onexit",
+      "Worker生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "options": [
+      {
+        "id": "a",
+        "text": "正常为 0，异常为 1"
+      },
+      {
+        "id": "b",
+        "text": "正常为 1，异常为 0"
+      },
+      {
+        "id": "c",
+        "text": "两者始终为 -1"
+      },
+      {
+        "id": "d",
+        "text": "两者都没有 code"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-053",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "调用 terminate() 或 workerPort.close() 后，Worker 会在该调用返回前同步完成全部退出流程。",
+    "explanation": "Worker 退出是异步过程；若注册 onexit，线程真正退出还要等 onexit 回调完成。",
+    "knowledgePoints": [
+      "terminate",
+      "异步退出"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-054",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "管理长期使用的 Worker 时，哪些做法更合理？",
+    "explanation": "Worker 创建销毁成本较高，空闲时仍占资源，因此应控制数量、复用实例并在不需要时主动结束。",
+    "knowledgePoints": [
+      "Worker复用",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "避免在每个短任务前后频繁创建销毁"
+      },
+      {
+        "id": "b",
+        "text": "认为空闲 Worker 完全不占资源"
+      },
+      {
+        "id": "c",
+        "text": "复用已经创建的 Worker"
+      },
+      {
+        "id": "d",
+        "text": "空闲且不再需要时主动 terminate 或 close"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-055",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "父 Worker 创建了子 Worker，准备销毁整条线程链时应采用什么顺序？",
+    "explanation": "多级 Worker 由开发者管理生命周期。父线程先退出会让子线程消息失去接收方，可能产生不可预期结果。",
+    "knowledgePoints": [
+      "多级Worker",
+      "生命周期顺序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "options": [
+      {
+        "id": "a",
+        "text": "顺序无关，系统会同步回收所有消息"
+      },
+      {
+        "id": "b",
+        "text": "先终止子 Worker，再退出父 Worker"
+      },
+      {
+        "id": "c",
+        "text": "先退出父 Worker，子 Worker 永久保留"
+      },
+      {
+        "id": "d",
+        "text": "只销毁宿主页面即可"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-056",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "图像批处理服务使用长期 Worker 时，如何设计消息协议、故障隔离和资源回收？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "Worker架构",
+      "错误隔离",
+      "资源回收"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ArkTS线程间通信概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/interthread-communication-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "referenceAnswer": "为每条请求分配可关联的任务标识，只传可序列化、可转移或 Sendable 数据；宿主注册消息、全局错误、序列化错误和退出回调；Worker 内捕获业务异常并返回结构化错误；限制并复用线程，页面或服务结束时停止接收新任务，等待或取消在途任务后 terminate，并确保子 Worker 先退出。",
+    "scoringPoints": [
+      "定义请求标识和结构化结果协议",
+      "区分业务错误、序列化错误和线程全局异常",
+      "控制数据大小并选择克隆、转移或共享机制",
+      "复用线程并按子线程到父线程顺序回收"
+    ]
+  },
+  {
+    "id": "arkts-057",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "自定义 Sendable 类成员的声明需要满足哪些约束？",
+    "explanation": "Sendable 对象要求布局和类型静态稳定，成员必须使用受支持类型并有可确定的初值，也不能使用计算属性名；不能用确定赋值断言绕过初始化要求。",
+    "knowledgePoints": [
+      "Sendable成员",
+      "静态布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "成员必须有可确定的初值"
+      },
+      {
+        "id": "b",
+        "text": "不使用计算属性名"
+      },
+      {
+        "id": "c",
+        "text": "成员可以不初始化并使用 ! 确定赋值断言"
+      },
+      {
+        "id": "d",
+        "text": "成员类型属于 Sendable 支持的数据类型"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-058",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "为什么 Sendable 类成员不支持使用“!”确定赋值断言？",
+    "explanation": "Sendable 成员必须初始化，确定赋值断言会绕过初始化检查，因此不被支持。",
+    "knowledgePoints": [
+      "Sendable初始化",
+      "确定赋值断言"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "options": [
+      {
+        "id": "a",
+        "text": "因为 Sendable 不允许任何成员"
+      },
+      {
+        "id": "b",
+        "text": "因为“!”会自动删除属性"
+      },
+      {
+        "id": "c",
+        "text": "该写法允许成员不初始化，违背 Sendable 成员必须有初值的约束"
+      },
+      {
+        "id": "d",
+        "text": "因为“!”只用于网络请求"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-059",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "普通非 Sendable 类可以实现继承自 ISendable 的接口，从而自动获得跨线程共享能力。",
+    "explanation": "非 Sendable 类禁止实现 Sendable 接口，否则会造成类型被误认为可共享而产生错误使用。",
+    "knowledgePoints": [
+      "ISendable",
+      "接口实现约束"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-060",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "共享模块中的“use shared”指令应放在什么位置？",
+    "explanation": "共享模块指令与 use strict 类似，位置不正确就不能按共享模块规则工作。",
+    "knowledgePoints": [
+      "共享模块",
+      "use shared"
+    ],
+    "sourceRefs": [
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "ArkTS 文件顶层，位于 import 之后、其他语句之前"
+      },
+      {
+        "id": "b",
+        "text": "任意函数内部"
+      },
+      {
+        "id": "c",
+        "text": "文件最后一行"
+      },
+      {
+        "id": "d",
+        "text": "module.json5 的 abilities 数组中"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-061",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于共享模块的导出与加载，哪些结论正确？",
+    "explanation": "共享模块统一模块实例，但不取消 Sendable 和并发同步约束。",
+    "knowledgePoints": [
+      "共享模块",
+      "共享导出"
+    ],
+    "sourceRefs": [
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "options": [
+      {
+        "id": "a",
+        "text": "导出的对象必须可共享"
+      },
+      {
+        "id": "b",
+        "text": "跨并发实例写共享状态仍要处理竞争"
+      },
+      {
+        "id": "c",
+        "text": "可以导出任意普通对象并安全并发写入"
+      },
+      {
+        "id": "d",
+        "text": "同一进程内只加载一次"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-062",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "箭头函数可以直接用 @Sendable 装饰并作为 Sendable 函数共享。",
+    "explanation": "官方约束明确指出箭头函数不能标记为 Sendable；需要共享函数时应使用符合规则的 Sendable 函数声明。",
+    "knowledgePoints": [
+      "Sendable函数",
+      "箭头函数"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-063",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "为什么 collections.Array<Array<number>> 不能作为可共享容器类型？",
+    "explanation": "Sendable 泛型容器的模板类型也必须是 Sendable 类型，普通数组不满足这一深层约束。",
+    "knowledgePoints": [
+      "Sendable泛型",
+      "共享容器"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "泛型容器不能跨线程"
+      },
+      {
+        "id": "b",
+        "text": "内层普通 Array 不是 Sendable 类型，泛型模板类型不满足约束"
+      },
+      {
+        "id": "c",
+        "text": "number 不能用于任何容器"
+      },
+      {
+        "id": "d",
+        "text": "collections.Array 只能保存字符串"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-064",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 Sendable 类型转换和上下文访问，哪些说法正确？",
+    "explanation": "类型断言不会改变真实对象能力；跨实例上下文和对象布局都必须保持 Sendable 规则。",
+    "knowledgePoints": [
+      "Sendable转换",
+      "上下文隔离"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "options": [
+      {
+        "id": "a",
+        "text": "不能把普通非 Sendable 实例强转成 Sendable 后当作真实共享对象"
+      },
+      {
+        "id": "b",
+        "text": "Sendable 类内部不能随意读取当前并发实例的普通模块变量"
+      },
+      {
+        "id": "c",
+        "text": "Sendable 对象传给 TS/JS 后仍不能改变其布局"
+      },
+      {
+        "id": "d",
+        "text": "使用 as 后运行时对象会自动重建为 Sendable"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-065",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "多个 Worker 需要读取统一配置并更新少量共享计数时，如何组合共享模块、Sendable 和锁？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "共享模块",
+      "Sendable",
+      "并发同步"
+    ],
+    "sourceRefs": [
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 65,
+    "referenceAnswer": "把只加载一次的共享入口声明为 use shared，仅导出 Sendable 配置和服务对象；配置初始化后尽量保持只读，复杂成员也必须满足深层 Sendable 约束；计数更新集中到很小的临界区并使用 AsyncLock 等同步能力，避免在 Sendable 方法里依赖当前线程的普通模块变量；宿主统一管理 Worker 生命周期和异常回调。",
+    "scoringPoints": [
+      "共享模块只导出可共享对象",
+      "配置及嵌套成员满足 Sendable 约束",
+      "共享写入使用锁并缩小临界区",
+      "统一管理线程异常与回收"
+    ]
+  },
+  {
     "id": "arkui-001",
     "categoryId": "arkui",
     "type": "single",
@@ -3715,6 +4511,788 @@
       "使用 responseRegion 或 HitTestMode 调整命中",
       "覆盖边缘和复杂输入场景验证"
     ]
+  },
+  {
+    "id": "arkui-046",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Repeat 未开启 virtualScroll 时，首次渲染长列表会怎样创建子组件？",
+    "explanation": "Repeat 关闭虚拟滚动时会创建全部子组件；大数据列表应评估 virtualScroll，避免首帧节点过多。",
+    "knowledgePoints": [
+      "Repeat",
+      "virtualScroll"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "始终只创建可视区一项"
+      },
+      {
+        "id": "b",
+        "text": "完全不创建组件"
+      },
+      {
+        "id": "c",
+        "text": "首次渲染时创建全部子组件"
+      },
+      {
+        "id": "d",
+        "text": "只创建第一个子组件"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-047",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Repeat 虚拟滚动的数据源只加载了当前页，但 totalCount 声明了服务端总量，items 应如何提供数据？",
+    "explanation": "虚拟滚动依赖稳定的总量、索引和数据供应关系，范围错乱会造成空白、复用错位或越界。",
+    "knowledgePoints": [
+      "Repeat数据源",
+      "虚拟滚动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "把 totalCount 固定为 1"
+      },
+      {
+        "id": "b",
+        "text": "根据框架请求的索引范围返回对应数据，并保证索引和总量一致"
+      },
+      {
+        "id": "c",
+        "text": "每次都返回同一个首项"
+      },
+      {
+        "id": "d",
+        "text": "忽略索引范围并随机返回"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkui-048",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "Repeat 虚拟滚动要获得稳定复用效果，哪些设计是重要的？",
+    "explanation": "稳定键和模板边界决定节点身份与复用范围，数据源索引必须与 totalCount 协同。",
+    "knowledgePoints": [
+      "Repeat复用",
+      "稳定key"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "options": [
+      {
+        "id": "a",
+        "text": "为业务项提供稳定且唯一的 key"
+      },
+      {
+        "id": "b",
+        "text": "让 templateId 与实际模板类型一致"
+      },
+      {
+        "id": "c",
+        "text": "更新后保持索引和数据源一致"
+      },
+      {
+        "id": "d",
+        "text": "每次刷新随机生成 key"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-049",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Repeat 中不同 template type 的节点会进入同一个复用池并互相复用。",
+    "explanation": "Repeat 以模板类型作为复用边界，只有相同 template type 的节点才会互相复用。",
+    "knowledgePoints": [
+      "Repeat模板",
+      "复用边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkui-050",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "@ReusableV2 组件从复用池再次绑定新数据时，最需要关注哪个回调阶段？",
+    "explanation": "复用组件不会按全新实例路径重建全部状态，开发者要在复用回调中同步新数据并清理旧项痕迹。",
+    "knowledgePoints": [
+      "@ReusableV2",
+      "复用状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ReusableV2装饰器：V2组件复用",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-reusableV2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "数据库升级回调"
+      },
+      {
+        "id": "b",
+        "text": "签名校验回调"
+      },
+      {
+        "id": "c",
+        "text": "组件复用回调阶段，在其中刷新与旧数据相关的临时状态"
+      },
+      {
+        "id": "d",
+        "text": "应用安装回调"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-051",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "可复用卡片包含异步图片、展开状态和临时动画时，哪些处理更合理？",
+    "explanation": "组件复用提升创建效率，但业务状态和异步回调必须按新旧数据身份显式治理。",
+    "knowledgePoints": [
+      "组件复用",
+      "异步状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "@ReusableV2装饰器：V2组件复用",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-new-reusableV2.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "假设组件复用后所有成员都会自动恢复默认值"
+      },
+      {
+        "id": "b",
+        "text": "回收时停止或解绑与旧项相关的异步任务"
+      },
+      {
+        "id": "c",
+        "text": "复用时按新业务 ID 重置临时状态"
+      },
+      {
+        "id": "d",
+        "text": "避免把旧项缓存结果无条件写入新项"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-052",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ArkUI 页面布局层级过深并出现频繁测量开销时，优先优化方向是什么？",
+    "explanation": "冗余嵌套会增加节点创建和布局成本，相同方向或没有独立职责的容器应合并。",
+    "knowledgePoints": [
+      "布局性能",
+      "组件树扁平化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "options": [
+      {
+        "id": "a",
+        "text": "移除没有布局作用的冗余容器，尽量扁平化组件树"
+      },
+      {
+        "id": "b",
+        "text": "继续套更多同方向 Row 和 Column"
+      },
+      {
+        "id": "c",
+        "text": "把所有组件改成绝对定位"
+      },
+      {
+        "id": "d",
+        "text": "提高日志级别即可"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-053",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "两个相邻 Column 只用于相同方向排列且没有独立样式或约束时，保留双层嵌套通常比合并更高效。",
+    "explanation": "没有额外职责的同类嵌套会增加节点和布局层级，通常应合并以减少开销。",
+    "knowledgePoints": [
+      "冗余嵌套",
+      "布局优化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkui-054",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "子 List 与父 Scroll 需要滚动联动时，nestedScroll 可以分别为哪些方向配置策略？",
+    "explanation": "滚动组件可通过 scrollForward 和 scrollBackward 分别设置嵌套滚动模式，以处理两个边界方向。",
+    "knowledgePoints": [
+      "nestedScroll",
+      "滚动方向"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "只能按设备型号配置"
+      },
+      {
+        "id": "b",
+        "text": "只能在应用启动前配置一次"
+      },
+      {
+        "id": "c",
+        "text": "向末尾方向滚动"
+      },
+      {
+        "id": "d",
+        "text": "向起始方向滚动"
+      }
+    ],
+    "correctOptionIds": [
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-055",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "NestedScrollMode.SELF_FIRST 的核心行为是什么？",
+    "explanation": "SELF_FIRST 让当前滚动组件优先消费位移，到达边界后再把滚动交给父组件。",
+    "knowledgePoints": [
+      "SELF_FIRST",
+      "嵌套滚动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "options": [
+      {
+        "id": "a",
+        "text": "禁用所有边缘效果"
+      },
+      {
+        "id": "b",
+        "text": "子组件先滚动，到边界后再由父组件继续滚动"
+      },
+      {
+        "id": "c",
+        "text": "父子永远同时滚动"
+      },
+      {
+        "id": "d",
+        "text": "只允许父组件滚动"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkui-056",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "商品详情页外层可滚动、内部评价列表也可滚动，如何设计嵌套滚动并验证边界体验？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "嵌套滚动",
+      "边界验证"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "referenceAnswer": "先明确两个方向由谁优先消费，根据吸顶和列表边界选择 SELF_FIRST、PARENT_FIRST 或 PARALLEL，并分别配置 scrollForward 与 scrollBackward；避免父子同时出现冲突的边缘效果；覆盖短内容、长内容、快速甩动、到顶回拉、到底继续滑和程序化滚动，确认位移连续且不会锁死。",
+    "scoringPoints": [
+      "分别设计前后方向的滚动优先级",
+      "处理父子边界和边缘效果",
+      "覆盖短内容与快速甩动",
+      "验证程序化滚动和手势滚动一致"
+    ]
+  },
+  {
+    "id": "arkui-057",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "为复合工具栏补充无障碍体验时，哪些做法合理？",
+    "explanation": "无障碍名称、分组和默认焦点分别解决控件含义、节点粒度和初始导航问题。",
+    "knowledgePoints": [
+      "无障碍文本",
+      "无障碍焦点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "按语义决定是否将多个子节点合成无障碍组"
+      },
+      {
+        "id": "b",
+        "text": "为页面设置合理的屏幕朗读默认首焦点"
+      },
+      {
+        "id": "c",
+        "text": "把所有控件都设置成同一个朗读文本"
+      },
+      {
+        "id": "d",
+        "text": "为纯图标按钮提供可朗读名称"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-058",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "accessibilityGroup 设置为 true 后，屏幕朗读通常如何处理该组件及子组件？",
+    "explanation": "无障碍分组用于把相关内容合并成一个语义单元，应避免把仍需独立操作的按钮错误合并。",
+    "knowledgePoints": [
+      "accessibilityGroup",
+      "语义分组"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "options": [
+      {
+        "id": "a",
+        "text": "只改变视觉颜色"
+      },
+      {
+        "id": "b",
+        "text": "自动点击所有子组件"
+      },
+      {
+        "id": "c",
+        "text": "把它们作为一个整体可选节点，不再逐个关注内部子组件"
+      },
+      {
+        "id": "d",
+        "text": "强制隐藏整个组件"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-059",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "accessibilityDefaultFocus 主要设置屏幕朗读进入页面时的默认首焦点，并不等同于普通键盘焦点配置。",
+    "explanation": "该属性面向无障碍焦点。键盘焦点顺序和默认焦点还需使用对应焦点能力单独设计。",
+    "knowledgePoints": [
+      "无障碍首焦点",
+      "键盘焦点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-060",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "复杂页面打开后屏幕朗读总从无意义装饰元素开始，最直接的修正是什么？",
+    "explanation": "一个页面应只有清晰的首个无障碍落点，并保持后续语义顺序符合视觉和操作逻辑。",
+    "knowledgePoints": [
+      "accessibilityDefaultFocus",
+      "焦点顺序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "为页面核心语义节点配置合理的 accessibilityDefaultFocus，并减少装饰节点干扰"
+      },
+      {
+        "id": "b",
+        "text": "把所有文字字号设为 1vp"
+      },
+      {
+        "id": "c",
+        "text": "关闭系统无障碍服务"
+      },
+      {
+        "id": "d",
+        "text": "给每个节点都设置默认首焦点"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-061",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "滚动容器出现“子列表到边界后父页面不接手”的问题，应重点检查哪些配置？",
+    "explanation": "嵌套滚动是否交接由方向策略、父子可滚动状态和边界共同决定。",
+    "knowledgePoints": [
+      "滚动诊断",
+      "nestedScroll"
+    ],
+    "sourceRefs": [
+      {
+        "title": "滚动组件通用属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-scrollable-common.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "options": [
+      {
+        "id": "a",
+        "text": "父子组件是否都可滚动"
+      },
+      {
+        "id": "b",
+        "text": "边缘效果和当前内容是否真的达到边界"
+      },
+      {
+        "id": "c",
+        "text": "签名证书的别名"
+      },
+      {
+        "id": "d",
+        "text": "子组件 nestedScroll 的方向配置"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-062",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "List 的 onReachEnd 只会由用户手指滑动触发，Scroller 发起的动画滚动绝不会触发。",
+    "explanation": "官方组件说明指出，Scroller 动画滚动到达对应位置时也可能触发相关滚动事件，业务加载逻辑要做好幂等。",
+    "knowledgePoints": [
+      "onReachEnd",
+      "程序化滚动"
+    ],
+    "sourceRefs": [
+      {
+        "title": "List",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-list.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkui-063",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Swiper 开启 loop 后，为什么不能依赖其边界把滚动继续传给父容器？",
+    "explanation": "Swiper 的循环模式没有普通首尾边界，官方说明此时不触发父级嵌套滚动。",
+    "knowledgePoints": [
+      "Swiper",
+      "nestedScroll"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Swiper",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-swiper.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "因为父容器必须是 Grid"
+      },
+      {
+        "id": "b",
+        "text": "循环模式没有可到达的边界效果，不会触发父容器的嵌套滚动"
+      },
+      {
+        "id": "c",
+        "text": "因为 loop 会销毁父容器"
+      },
+      {
+        "id": "d",
+        "text": "因为 Swiper 不支持手势"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkui-064",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "优化频繁更新的复杂 ArkUI 页面时，哪些措施通常有效？",
+    "explanation": "性能优化应控制节点数量、布局层级、刷新范围和复用稳定性；把状态集中到根节点会扩大刷新范围。优化后仍应使用可复现数据复测布局与帧率。",
+    "knowledgePoints": [
+      "ArkUI性能",
+      "性能验证"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Repeat：可复用的循环渲染",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/rendering-control/arkts-new-rendering-control-repeat.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "options": [
+      {
+        "id": "a",
+        "text": "减少无意义组件嵌套"
+      },
+      {
+        "id": "b",
+        "text": "缩小状态变化触发的刷新范围"
+      },
+      {
+        "id": "c",
+        "text": "对长列表采用虚拟化与稳定 key"
+      },
+      {
+        "id": "d",
+        "text": "把所有状态集中到页面根节点并让每次变化刷新整页"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-065",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "为了减少节点数量，可以把所有业务区域合并到一个不可复用的超大自定义组件中。",
+    "explanation": "扁平化不等于取消合理组件边界。应移除冗余容器，同时保留清晰职责、精准刷新和可复用结构。",
+    "knowledgePoints": [
+      "组件边界",
+      "布局性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "减少视图嵌套层级",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/performance/reduce-view-nesting-levels.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 65,
+    "answerBoolean": false
   },
   {
     "id": "stage-model-001",
@@ -16817,6 +18395,809 @@
     ]
   },
   {
+    "id": "relational-store-043",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要执行参数化 INSERT、UPDATE、PRAGMA 或 DDL，并获取对应返回值时，优先使用哪个新接口？",
+    "explanation": "execute 支持参数绑定，可执行增删改、PRAGMA 和表结构操作；查询结果集仍应使用 query 或 querySql。",
+    "knowledgePoints": [
+      "execute",
+      "参数绑定"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "RdbPredicates.limitAs"
+      },
+      {
+        "id": "b",
+        "text": "RdbStore.execute"
+      },
+      {
+        "id": "c",
+        "text": "ResultSet.close"
+      },
+      {
+        "id": "d",
+        "text": "RdbStore.on"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "relational-store-044",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "execute 执行的 SQL 中，各类表达式和操作符之间的关系操作符数量上限是多少？",
+    "explanation": "当前官方接口文档明确限制关系操作符不超过 1000，超复杂语句应拆分或重构查询。",
+    "knowledgePoints": [
+      "execute限制",
+      "复杂SQL"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "options": [
+      {
+        "id": "a",
+        "text": "1000 个"
+      },
+      {
+        "id": "b",
+        "text": "10 个"
+      },
+      {
+        "id": "c",
+        "text": "10000 个"
+      },
+      {
+        "id": "d",
+        "text": "没有限制"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-045",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "数据库查询需要拼接用户输入时，哪些做法更安全且更容易复用执行计划？",
+    "explanation": "值参数应绑定，动态表名或排序字段应走受控白名单，不能依赖字符串清洗代替边界控制。",
+    "knowledgePoints": [
+      "参数绑定",
+      "SQL边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "options": [
+      {
+        "id": "a",
+        "text": "把表名等不可绑定标识符限制在可信白名单"
+      },
+      {
+        "id": "b",
+        "text": "避免直接把输入拼进 SQL 字符串"
+      },
+      {
+        "id": "c",
+        "text": "先拼接 SQL 再用正则删除引号即可"
+      },
+      {
+        "id": "d",
+        "text": "使用 ? 占位符和参数数组"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-046",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "频繁读取和设置 RdbStore.version 不会占用数据库连接，因此可在每次列表刷新时执行。",
+    "explanation": "官方文档说明 version 的读取和设置会占用连接，应使用临时变量完成迁移后一次性更新版本。",
+    "knowledgePoints": [
+      "数据库版本",
+      "连接占用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-047",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "RdbStore.rebuilt 属性主要用于判断什么？",
+    "explanation": "rebuilt 用于识别数据库损坏后的重建或修复状态，业务可据此补建表结构或恢复必要数据。",
+    "knowledgePoints": [
+      "rebuilt",
+      "损坏恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "当前事务是否只读"
+      },
+      {
+        "id": "b",
+        "text": "数据库是否发生过重建或修复"
+      },
+      {
+        "id": "c",
+        "text": "当前查询是否命中索引"
+      },
+      {
+        "id": "d",
+        "text": "是否开启深色模式"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "relational-store-048",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 relationalStore 单条数据和字符串字段大小，哪些结论符合当前接口文档？",
+    "explanation": "数据写入上限和结果集共享内存限制需要一起考虑，大文件通常不应直接作为超大行保存。",
+    "knowledgePoints": [
+      "数据大小限制",
+      "共享内存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "options": [
+      {
+        "id": "a",
+        "text": "受共享内存限制，单条数据必须严格小于 2MB"
+      },
+      {
+        "id": "b",
+        "text": "单个字符串字段最大支持写入 8MB"
+      },
+      {
+        "id": "c",
+        "text": "字符串超出 8MB 的部分会被截断"
+      },
+      {
+        "id": "d",
+        "text": "任意大对象都能通过 ResultSet 完整读取"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-049",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "写入压力持续增大并收到错误码 14800047，首先应关注什么？",
+    "explanation": "14800047 对应 WAL 文件超过默认限制，应排查长事务、写入节奏、连接和检查点相关问题。",
+    "knowledgePoints": [
+      "WAL",
+      "错误码14800047"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "options": [
+      {
+        "id": "a",
+        "text": "字体缩放比例"
+      },
+      {
+        "id": "b",
+        "text": "页面路由表"
+      },
+      {
+        "id": "c",
+        "text": "应用图标格式"
+      },
+      {
+        "id": "d",
+        "text": "WAL 文件大小超过默认限制以及长期事务或未及时检查点等原因"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-050",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用批量插入接口处理大量行时，哪些边界需要纳入设计？",
+    "explanation": "批量接口按参数量分批并采用明确的冲突策略；执行中途失败会立即返回错误，而不是静默继续并报告成功，调用方仍需评估业务一致性。",
+    "knowledgePoints": [
+      "批量插入",
+      "参数上限"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "任一批次失败后接口仍会静默继续并返回成功"
+      },
+      {
+        "id": "b",
+        "text": "批次采用 ON_CONFLICT_REPLACE 策略"
+      },
+      {
+        "id": "c",
+        "text": "参数总量按行数乘字段并集计算"
+      },
+      {
+        "id": "d",
+        "text": "接口会按每批 32766 个参数分批"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-051",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "关系型表要参与设备间分布式同步，首先需要调用哪类能力声明分布式表？",
+    "explanation": "setDistributedTables 用于把指定表配置为分布式表，并要求相应的分布式数据同步权限。",
+    "knowledgePoints": [
+      "分布式表",
+      "setDistributedTables"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "getColumnIndex"
+      },
+      {
+        "id": "b",
+        "text": "setDistributedTables"
+      },
+      {
+        "id": "c",
+        "text": "setLocale"
+      },
+      {
+        "id": "d",
+        "text": "queryLockedRow"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "relational-store-052",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "调用 setDistributedTables 不需要声明任何分布式数据同步权限。",
+    "explanation": "接口文档要求 ohos.permission.DISTRIBUTED_DATASYNC，权限和设备能力都应在接入前确认。",
+    "knowledgePoints": [
+      "分布式权限",
+      "DISTRIBUTED_DATASYNC"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-053",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "配置端云分布式表时，哪些说法正确？",
+    "explanation": "分布式表声明、自动同步配置和主动同步是不同层次，业务还要设计错误和冲突处理。",
+    "knowledgePoints": [
+      "端云同步",
+      "DistributedConfig"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "options": [
+      {
+        "id": "a",
+        "text": "未开启自动同步时可主动调用 cloudSync"
+      },
+      {
+        "id": "b",
+        "text": "cloudSync 需要实现对应云服务能力"
+      },
+      {
+        "id": "c",
+        "text": "设置分布式表后所有冲突都会自动按业务规则解决"
+      },
+      {
+        "id": "d",
+        "text": "DistributedConfig 未传时 autoSync 默认 false"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-054",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "cloudSync 的进度回调最适合用于什么？",
+    "explanation": "主动云同步是异步过程，进度信息用于展示、日志和失败定位，不应承担数据写入事务职责。",
+    "knowledgePoints": [
+      "cloudSync",
+      "同步进度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "替代数据库事务"
+      },
+      {
+        "id": "b",
+        "text": "修改应用签名"
+      },
+      {
+        "id": "c",
+        "text": "观察同步阶段和进度，驱动状态展示与错误诊断"
+      },
+      {
+        "id": "d",
+        "text": "执行页面布局测量"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-055",
+    "categoryId": "relational-store",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "设备管理应用需要让部分结构化数据跨设备同步，如何设计分布式表、权限和失败恢复？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "分布式表",
+      "同步恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "referenceAnswer": "只把确有跨设备价值的表设为分布式表，声明并运行时校验 DISTRIBUTED_DATASYNC；明确设备同步或端云同步类型及 autoSync 策略，手动同步时记录每个设备或阶段的结果；本地事务与远端最终状态分开处理，失败可重试但要幂等；订阅远端 dataChange 并在退出时 off，冲突字段保留更新时间或业务版本用于决策。",
+    "scoringPoints": [
+      "最小化分布式表范围",
+      "声明权限并选择同步类型",
+      "记录分设备结果并幂等重试",
+      "订阅变化并设计冲突版本"
+    ]
+  },
+  {
+    "id": "relational-store-056",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "订阅关系型数据库分布式数据变化时，哪些生命周期做法合理？",
+    "explanation": "监听器应成对注册和注销，避免重复回调和对象长期被引用。",
+    "knowledgePoints": [
+      "dataChange",
+      "监听生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 dataChange 监听远端变化"
+      },
+      {
+        "id": "b",
+        "text": "保留原 observer 引用以便 off"
+      },
+      {
+        "id": "c",
+        "text": "页面或服务退出时取消不再需要的监听"
+      },
+      {
+        "id": "d",
+        "text": "每次刷新都注册匿名监听且从不释放"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-057",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ResultSet 创建后默认游标位置通常在哪里？",
+    "explanation": "读取前通常先调用 goToFirstRow 或 goToNextRow；无论成功失败都要及时 close。",
+    "knowledgePoints": [
+      "ResultSet游标",
+      "结果集读取"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "最后一条记录之后"
+      },
+      {
+        "id": "b",
+        "text": "第一条记录索引 0 上"
+      },
+      {
+        "id": "c",
+        "text": "随机记录上"
+      },
+      {
+        "id": "d",
+        "text": "第一条记录之前，即索引 -1"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-058",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "只要 ResultSet 已遍历到最后一行，系统就会立即自动 close，因此无需 finally 释放。",
+    "explanation": "遍历结束不等于资源关闭，应在 finally 或等价清理路径显式 close。",
+    "knowledgePoints": [
+      "ResultSet关闭",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-059",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 setLocale 做本地化排序时，哪些步骤正确？",
+    "explanation": "setLocale 配置排序语言，不负责翻译；不支持的语言要有回退策略。",
+    "knowledgePoints": [
+      "setLocale",
+      "本地化排序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "options": [
+      {
+        "id": "a",
+        "text": "setLocale 会自动翻译字段内容"
+      },
+      {
+        "id": "b",
+        "text": "传入受支持的 ISO 639 语言标识"
+      },
+      {
+        "id": "c",
+        "text": "排序 SQL 使用 COLLATE LOCALES"
+      },
+      {
+        "id": "d",
+        "text": "捕获不支持语言可能返回的 14800001"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-060",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "queryLockedRow 的主要用途是什么？",
+    "explanation": "queryLockedRow 是数据库锁定数据查询能力，返回 ResultSet 后仍需按结果集规范读取和关闭。",
+    "knowledgePoints": [
+      "queryLockedRow",
+      "锁定数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "按条件查询数据库中被锁定的数据"
+      },
+      {
+        "id": "b",
+        "text": "获取屏幕锁定状态"
+      },
+      {
+        "id": "c",
+        "text": "锁定 ArkUI 组件"
+      },
+      {
+        "id": "d",
+        "text": "查询签名证书"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-061",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "rekeyEx 更新加密参数时，可以保留未关闭的 ResultSet 和活动 Transaction，接口会自动迁移它们。",
+    "explanation": "rekeyEx 需要独占数据库访问；未释放结果集、事务或其他进程打开数据库都可能导致失败。",
+    "knowledgePoints": [
+      "rekeyEx",
+      "独占访问"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "answerBoolean": false
+  },
+  {
+    "id": "relational-store-062",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "为什么 rekeyEx 过程中不建议同时启用 AllowedRebuild 作为开库兜底？",
+    "explanation": "加密参数切换要保留新旧参数冗余重试路径，不能让错误密钥直接触发空库重建。",
+    "knowledgePoints": [
+      "rekeyEx",
+      "AllowedRebuild"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "options": [
+      {
+        "id": "a",
+        "text": "会禁用所有查询索引"
+      },
+      {
+        "id": "b",
+        "text": "会改变 bundleName"
+      },
+      {
+        "id": "c",
+        "text": "错误的新加密参数可能被误判为数据库问题并触发重建，造成数据风险"
+      },
+      {
+        "id": "d",
+        "text": "会让字体变小"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
     "id": "napi-001",
     "categoryId": "napi",
     "type": "single",
@@ -21001,6 +23382,794 @@
     ]
   },
   {
+    "id": "debug-release-045",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "工程级和模块级 build-profile.json5 同时配置相同 buildOption 字段时，通常以哪一级为准？",
+    "explanation": "相同字段以模块级为准，不同字段则可继承工程级配置，排查 Release 差异时要同时查看两级文件。",
+    "knowledgePoints": [
+      "buildOption",
+      "配置优先级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "options": [
+      {
+        "id": "a",
+        "text": "工程级配置"
+      },
+      {
+        "id": "b",
+        "text": "app.json5 注释"
+      },
+      {
+        "id": "c",
+        "text": "设备当前主题"
+      },
+      {
+        "id": "d",
+        "text": "模块级配置"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-046",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "工程级 products 至少必须存在什么名称的产品配置？",
+    "explanation": "官方配置说明要求存在 name 为 default 的 product，其他产品可按多目标产物需求补充。",
+    "knowledgePoints": [
+      "products",
+      "default产品"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "tablet-only"
+      },
+      {
+        "id": "b",
+        "text": "preview-only"
+      },
+      {
+        "id": "c",
+        "text": "default"
+      },
+      {
+        "id": "d",
+        "text": "production-only"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-047",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "products 中哪些字段可在构建时覆盖 app.json5 的对应应用信息？",
+    "explanation": "products 可覆盖应用名称、图标和版本信息，适合多目标构建；module.json5 的 abilities 数组不属于这类应用信息覆盖字段，流水线应记录最终生效值。",
+    "knowledgePoints": [
+      "多目标产物",
+      "产品覆盖"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "module.json5 中的 abilities 数组"
+      },
+      {
+        "id": "b",
+        "text": "label"
+      },
+      {
+        "id": "c",
+        "text": "icon"
+      },
+      {
+        "id": "d",
+        "text": "versionCode"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-048",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "artifactName 可以使用任意中文、空格和路径分隔符作为生成包名。",
+    "explanation": "artifactName 只允许数字、英文字母、中划线、下划线和英文句号等规定字符。",
+    "knowledgePoints": [
+      "artifactName",
+      "产物命名"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-049",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "默认 buildModeSet 中专门用于执行 ohosTest 测试套件的模式是哪一个？",
+    "explanation": "默认有 debug、release 和 test，test 模式用于 ohosTest，不应与正式发布产物混用。",
+    "knowledgePoints": [
+      "buildModeSet",
+      "ohosTest"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "options": [
+      {
+        "id": "a",
+        "text": "release"
+      },
+      {
+        "id": "b",
+        "text": "debug"
+      },
+      {
+        "id": "c",
+        "text": "shared"
+      },
+      {
+        "id": "d",
+        "text": "test"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-050",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "同一应用包含多个 HAP 时，哪些配置必须保持一致？",
+    "explanation": "同一 App Pack 内多个 HAP 的 bundleName、版本和 API 兼容字段必须一致；moduleName 用来区分模块，不能全部设置为相同值。",
+    "knowledgePoints": [
+      "多HAP",
+      "配置一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "minAPIVersion 和 targetAPIVersion"
+      },
+      {
+        "id": "b",
+        "text": "每个 HAP 的 moduleName"
+      },
+      {
+        "id": "c",
+        "text": "bundleName"
+      },
+      {
+        "id": "d",
+        "text": "versionCode 和 versionName"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-051",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "HAP 中的 ets、libs 和 resources 目录分别主要承载什么？",
+    "explanation": "HAP 是安装运行基本单元，包含代码、Native 库、资源和自动生成的配置索引。",
+    "knowledgePoints": [
+      "HAP结构",
+      "产物分析"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "路由历史、设备驱动和系统镜像"
+      },
+      {
+        "id": "b",
+        "text": "ArkTS 字节码、Native 共享库和资源文件"
+      },
+      {
+        "id": "c",
+        "text": "证书、数据库和云端日志"
+      },
+      {
+        "id": "d",
+        "text": "页面截图、源码仓库和账号表"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-052",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "HAP 可以把内部 API 和 ArkUI 组件直接导出给其他模块作为通用依赖。",
+    "explanation": "HAP 是安装运行模块，不承担可复用库导出职责；共享代码应根据场景使用 HAR 或 HSP。",
+    "knowledgePoints": [
+      "HAP边界",
+      "模块复用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-053",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "分析 HAP 包体组成时，哪些内容值得分别统计？",
+    "explanation": "应按 ets、libs、resources 等产物目录和模块拆分包体，识别代码、Native 依赖与资源增长；IDE 最近打开的项目列表不属于 HAP 产物。",
+    "knowledgePoints": [
+      "包体分析",
+      "HAP结构"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "options": [
+      {
+        "id": "a",
+        "text": "libs 中的 so 库"
+      },
+      {
+        "id": "b",
+        "text": "resources 与 resources.index"
+      },
+      {
+        "id": "c",
+        "text": "本机 DevEco Studio 的最近打开项目列表"
+      },
+      {
+        "id": "d",
+        "text": "ets 字节码"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-054",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "面向应用市场发布包含多个 HAP 的应用时，应生成并提交什么整体产物？",
+    "explanation": "应用市场发布需要把应用内 HAP 打成 App Pack，pack.info 描述整体和各模块属性。",
+    "knowledgePoints": [
+      "App Pack",
+      "应用发布"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "任意一个 feature HAP"
+      },
+      {
+        "id": "b",
+        "text": "源码 ZIP 直接安装"
+      },
+      {
+        "id": "c",
+        "text": ".app 格式的 App Pack"
+      },
+      {
+        "id": "d",
+        "text": "单独一张截图"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-055",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "如何让流水线生成的 Release 产物具备可追溯性？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "制品追溯",
+      "Release流水线"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "referenceAnswer": "固定源码提交和依赖锁定文件，记录 DevEco、SDK、Hvigor、product、buildMode、版本号和签名证书标识；保存 .app/.hap 的校验摘要、包体报告、pack.info、混淆映射和 SourceMap；测试报告引用同一产物摘要，发布单记录渠道、灰度批次和时间，禁止测试后重新构建另一份未验证产物。",
+    "scoringPoints": [
+      "记录源码、依赖和构建工具版本",
+      "保存最终产物摘要及配套映射",
+      "测试与发布引用同一二进制",
+      "记录签名、渠道和灰度批次"
+    ]
+  },
+  {
+    "id": "debug-release-056",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "应用更新版本准备发布时，哪些版本治理做法合理？",
+    "explanation": "系统和市场使用版本信息识别更新，多模块还必须保持一致。",
+    "knowledgePoints": [
+      "versionCode",
+      "应用更新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用安装卸载与更新开发指导",
+        "url": "https://developer.huawei.com/consumer/cn/doc/doccenter-getting-started/application-package-install-uninstall",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "options": [
+      {
+        "id": "a",
+        "text": "递增 app.json5 或产品覆盖中的 versionCode"
+      },
+      {
+        "id": "b",
+        "text": "确认 versionName 与发布说明一致"
+      },
+      {
+        "id": "c",
+        "text": "核对多 HAP 的版本字段一致"
+      },
+      {
+        "id": "d",
+        "text": "复用旧 versionCode 并只修改页面文字"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-057",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "分阶段发布最适合解决什么问题？",
+    "explanation": "分阶段发布针对已经全量发布过的应用更新，通过比例和生效时间逐步扩大覆盖。",
+    "knowledgePoints": [
+      "分阶段发布",
+      "发布风险"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "替代代码评审"
+      },
+      {
+        "id": "b",
+        "text": "首次发布时跳过审核"
+      },
+      {
+        "id": "c",
+        "text": "自动修复所有崩溃"
+      },
+      {
+        "id": "d",
+        "text": "更新版本先小比例分发并观察质量，降低全量发布风险"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-058",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "应用首次发布也可以直接使用分阶段发布功能。",
+    "explanation": "官方说明分阶段发布用于版本更新，不适用于应用首次发布。",
+    "knowledgePoints": [
+      "首次发布",
+      "灰度边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-059",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "分阶段发布生效后，平台支持哪些状态操作？",
+    "explanation": "灰度过程可动态控制，也可以更新或升级分阶段发布；团队仍要结合质量指标定义暂停和继续标准。",
+    "knowledgePoints": [
+      "灰度控制",
+      "状态管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "options": [
+      {
+        "id": "a",
+        "text": "绕过所有应用审核"
+      },
+      {
+        "id": "b",
+        "text": "逐步提高分发比例"
+      },
+      {
+        "id": "c",
+        "text": "暂停"
+      },
+      {
+        "id": "d",
+        "text": "恢复"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-060",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "灰度阶段错误率显著上升，最先应做什么？",
+    "explanation": "分阶段发布价值在于把风险控制在小范围；异常时先停止扩散并保留可复现证据。",
+    "knowledgePoints": [
+      "灰度止损",
+      "质量门禁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "按预案暂停扩大分发，锁定产物与数据后评估修复或更新版本"
+      },
+      {
+        "id": "b",
+        "text": "立即扩大到 100% 获取更多样本"
+      },
+      {
+        "id": "c",
+        "text": "删除所有历史制品"
+      },
+      {
+        "id": "d",
+        "text": "只修改版本名称不重新验证"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-061",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "多目标构建中避免“测试包与发布包不一致”，哪些措施有效？",
+    "explanation": "发布门禁应围绕已经测试过的不可变制品及其哈希、配置快照和制品 ID；测试后重新构建会产生另一份未被验证的二进制。",
+    "knowledgePoints": [
+      "不可变制品",
+      "流水线门禁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "options": [
+      {
+        "id": "a",
+        "text": "测试通过后再按相同配置重新构建一份发布包"
+      },
+      {
+        "id": "b",
+        "text": "保存最终 product 和 buildMode 配置快照"
+      },
+      {
+        "id": "c",
+        "text": "发布系统只接受已通过门禁的制品 ID"
+      },
+      {
+        "id": "d",
+        "text": "测试报告绑定产物哈希"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-062",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "模块级 buildOption 与工程级同名字段冲突时，工程级字段一定覆盖模块级字段。",
+    "explanation": "同名字段按模块级优先，排查混淆、压缩或构建差异时不能只看工程级文件。",
+    "knowledgePoints": [
+      "配置继承",
+      "模块级优先"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-063",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "useNormalizedOHMUrl 开启后，跨模块导入最需要避免什么？",
+    "explanation": "规范化 OHMUrl 模式要求依赖别名与包名保持一致，并限制跨模块相对或绝对路径导入。",
+    "knowledgePoints": [
+      "useNormalizedOHMUrl",
+      "模块依赖"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用稳定模块边界"
+      },
+      {
+        "id": "b",
+        "text": "通过相对路径或绝对路径跨模块导入"
+      },
+      {
+        "id": "c",
+        "text": "通过依赖包 name 正确引用"
+      },
+      {
+        "id": "d",
+        "text": "在 oh-package.json5 声明依赖"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-064",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "pack.info 需要开发者手工维护每个 ability，构建工具不会生成。",
+    "explanation": "pack.info 由构建工具随 App Pack 或 HAP 产物生成，用于描述 bundle、版本、模块和 ability 等属性。",
+    "knowledgePoints": [
+      "pack.info",
+      "产物元数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "answerBoolean": false
+  },
+  {
     "id": "next-adaptation-001",
     "categoryId": "next-adaptation",
     "type": "single",
@@ -22822,5 +25991,818 @@
       "处理字体缩放、安全区和自由窗口边界",
       "覆盖多设备、多窗口和输入方式验证"
     ]
+  },
+  {
+    "id": "next-adaptation-045",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用希望字体跟随系统缩放，仅在组件中读取 Environment.fontScale 是否足够？",
+    "explanation": "Environment 可提供 fontScale，但是否跟随系统还受应用配置控制，开发与测试要同时检查。",
+    "knowledgePoints": [
+      "fontScale",
+      "应用配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "options": [
+      {
+        "id": "a",
+        "text": "足够，配置文件与字体无关"
+      },
+      {
+        "id": "b",
+        "text": "必须关闭系统无障碍"
+      },
+      {
+        "id": "c",
+        "text": "只修改 versionCode 即可"
+      },
+      {
+        "id": "d",
+        "text": "不够，还需要在应用配置中启用相应的字体缩放跟随策略"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-046",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Environment 中哪个字段用于反映系统是否启用无障碍能力？",
+    "explanation": "Environment 把设备环境属性提供给 ArkUI 状态系统，accessibilityEnabled 可用于适配相关体验。",
+    "knowledgePoints": [
+      "Environment",
+      "accessibilityEnabled"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "bundleName"
+      },
+      {
+        "id": "b",
+        "text": "apiReleaseType"
+      },
+      {
+        "id": "c",
+        "text": "accessibilityEnabled"
+      },
+      {
+        "id": "d",
+        "text": "versionCode"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-047",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "Environment 可提供哪些与“一多”界面适配相关的内置环境值？",
+    "explanation": "Environment 可提供颜色模式、字体缩放和布局方向等设备环境值；versionCode 属于应用版本配置，不是 Environment 的内置环境值。",
+    "knowledgePoints": [
+      "Environment",
+      "设备环境"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "versionCode"
+      },
+      {
+        "id": "b",
+        "text": "colorMode"
+      },
+      {
+        "id": "c",
+        "text": "fontScale 与 fontWeightScale"
+      },
+      {
+        "id": "d",
+        "text": "layoutDirection"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-048",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Environment 提供的环境属性都是可由业务任意修改的复杂对象。",
+    "explanation": "Environment 属性是简单类型且只读，用于描述设备环境；业务状态应放在自己的状态模型中。",
+    "knowledgePoints": [
+      "Environment约束",
+      "只读环境"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-049",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "大字体下一个包含标题、说明和两个按钮的操作区被错误合成一个无障碍节点，最可能应调整什么？",
+    "explanation": "无障碍分组会让服务不再逐个关注子节点，操作控件不应被错误合并成不可独立访问的整体。",
+    "knowledgePoints": [
+      "无障碍分组",
+      "操作粒度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "options": [
+      {
+        "id": "a",
+        "text": "签名证书"
+      },
+      {
+        "id": "b",
+        "text": "数据库版本"
+      },
+      {
+        "id": "c",
+        "text": "Worker数量"
+      },
+      {
+        "id": "d",
+        "text": "accessibilityGroup 的分组粒度，保留需要独立操作的按钮"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-050",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "大字体极限布局应重点验证哪些问题？",
+    "explanation": "大字体适配要检查文字裁切、换行后的布局和控件可操作性，并确认全部内容仍可到达；截图文件名与布局是否可用无关。",
+    "knowledgePoints": [
+      "大字体",
+      "布局验证"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "按钮和输入框是否仍可操作"
+      },
+      {
+        "id": "b",
+        "text": "页面截图文件名是否包含设备型号"
+      },
+      {
+        "id": "c",
+        "text": "文本换行后是否遮挡后续内容"
+      },
+      {
+        "id": "d",
+        "text": "固定高度容器是否裁切文字"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-051",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "TextInput 同时设置 minFontSize、maxFontSize 并启用自适应后，原 fontSize 配置会怎样？",
+    "explanation": "自适应字体由最小、最大字号和布局约束共同决定，不能再假设固定 fontSize 控制最终大小。",
+    "knowledgePoints": [
+      "TextInput",
+      "字体自适应"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TextInput",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-basic-components-textinput.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "只影响占位符颜色"
+      },
+      {
+        "id": "b",
+        "text": "自适应字体生效时 fontSize 不再生效"
+      },
+      {
+        "id": "c",
+        "text": "fontSize 始终最高优先级"
+      },
+      {
+        "id": "d",
+        "text": "输入框会被删除"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "next-adaptation-052",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "无障碍大字体适配的首选方案是把所有文本强制缩回很小字号，以保持原布局不变。",
+    "explanation": "应优先让容器增长、文本换行、结构重排和页面滚动，不能以牺牲可读性规避布局适配。",
+    "knowledgePoints": [
+      "大字体可读性",
+      "结构重排"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-053",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 GridRow 响应式断点，哪些说法正确？",
+    "explanation": "GridRow 断点按可用宽度生效，默认包含 xs、sm、md、lg；自定义断点数组需单调递增且最多支持六个，并非按设备型号硬编码。",
+    "knowledgePoints": [
+      "GridRow",
+      "响应式断点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式栅格布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-grid-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "options": [
+      {
+        "id": "a",
+        "text": "断点只能根据设备型号切换"
+      },
+      {
+        "id": "b",
+        "text": "自定义断点数组应单调递增"
+      },
+      {
+        "id": "c",
+        "text": "最多支持六个断点"
+      },
+      {
+        "id": "d",
+        "text": "默认包含 xs、sm、md、lg"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-054",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "GridRow 默认 md 断点对应的宽度范围是什么？",
+    "explanation": "默认 xs、sm、md、lg 分别覆盖最小、小、中和大宽度，md 为 520vp 到 840vp 之间。",
+    "knowledgePoints": [
+      "GridRow",
+      "md断点"
+    ],
+    "sourceRefs": [
+      {
+        "title": "响应式栅格布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-grid-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "[320, 520) vp"
+      },
+      {
+        "id": "b",
+        "text": "[840, +∞) vp"
+      },
+      {
+        "id": "c",
+        "text": "[520, 840) vp"
+      },
+      {
+        "id": "d",
+        "text": "[0, 320) vp"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-055",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "企业审批页面在系统字体 1x、1.75x、2x 和更高倍率下，应如何设计结构与验收？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "大字体极限布局",
+      "可访问性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "referenceAnswer": "启用字体跟随并读取 fontScale 作为辅助状态；标题、说明和错误信息允许换行，避免固定高度，操作按钮在空间不足时从横排改为纵排；列表、弹窗和双栏区域保证可滚动且焦点可达，纯图标补充语义。覆盖手机、平板分屏、自由窗口、软键盘、横竖屏和长文本，确认内容不裁切、不重叠、操作顺序和屏幕朗读顺序一致。",
+    "scoringPoints": [
+      "启用并验证字体跟随策略",
+      "避免固定高度并允许换行重排",
+      "保证滚动、焦点和语义可达",
+      "覆盖多窗口、键盘和长文本矩阵"
+    ]
+  },
+  {
+    "id": "next-adaptation-056",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "2in1 设备上的高频操作除触摸外，还应覆盖哪些输入体验？",
+    "explanation": "2in1 场景不能只验证触摸，鼠标反馈、键盘焦点和快捷键都影响桌面使用效率；还应单独覆盖触控板滚动，设备序列号输入不是通用交互适配项。",
+    "knowledgePoints": [
+      "2in1",
+      "多输入适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "键盘快捷键事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-events-keyboardshortcut.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "options": [
+      {
+        "id": "a",
+        "text": "鼠标悬停和点击"
+      },
+      {
+        "id": "b",
+        "text": "键盘焦点移动"
+      },
+      {
+        "id": "c",
+        "text": "常用快捷键"
+      },
+      {
+        "id": "d",
+        "text": "设备序列号输入"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-057",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "准备调用只在部分设备类型提供的系统能力时，最可靠的前置检查是什么？",
+    "explanation": "SystemCapability 描述能力支持范围，跨设备产品应在设计和测试阶段确认并准备降级。",
+    "knowledgePoints": [
+      "SystemCapability",
+      "能力降级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "只检查设备品牌字符串"
+      },
+      {
+        "id": "b",
+        "text": "假设编译通过就一定可用"
+      },
+      {
+        "id": "c",
+        "text": "捕获崩溃后重新启动"
+      },
+      {
+        "id": "d",
+        "text": "核对 API 的 SystemCapability 与目标设备能力，并提供不可用时的降级路径"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-058",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "同一 HarmonyOS API 在手机可用，就可以推断它在平板、2in1、车机和穿戴设备上全部可用。",
+    "explanation": "API 支持受 SystemCapability、设备类型和版本影响，必须按目标设备核验。",
+    "knowledgePoints": [
+      "设备能力",
+      "API兼容"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-059",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "设计跨设备能力降级时，哪些做法合理？",
+    "explanation": "能力降级要在构建前核对 SystemCapability，并测试能力存在和缺失两条路径；运行时失败要有替代流程。可选 API 应集中封装，不能散落在页面中。",
+    "knowledgePoints": [
+      "能力降级",
+      "兼容性测试"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "options": [
+      {
+        "id": "a",
+        "text": "测试能力存在和不存在两条路径"
+      },
+      {
+        "id": "b",
+        "text": "构建前核对目标设备的 SystemCapability"
+      },
+      {
+        "id": "c",
+        "text": "运行时对可选能力失败提供可理解的替代流程"
+      },
+      {
+        "id": "d",
+        "text": "把可选 API 调用直接散落在所有页面中"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-060",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "应用检测到 accessibilityEnabled 为 true 后，最合理的响应是什么？",
+    "explanation": "无障碍状态用于优化交互与验证，核心业务结果不应因该状态改变。",
+    "knowledgePoints": [
+      "accessibilityEnabled",
+      "无障碍适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "无障碍属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-accessibility.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "检查语义、焦点、朗读顺序和操作反馈是否完整，而不是改变业务数据"
+      },
+      {
+        "id": "b",
+        "text": "自动删除所有动画和图片"
+      },
+      {
+        "id": "c",
+        "text": "强制退出应用"
+      },
+      {
+        "id": "d",
+        "text": "清空用户设置"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-061",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "fontWeightScale 与 fontScale 表示完全相同的环境属性，可以只保留其中任意一个。",
+    "explanation": "fontScale 描述字号缩放，fontWeightScale 描述字重缩放，两者应分别理解和验证。",
+    "knowledgePoints": [
+      "fontWeightScale",
+      "fontScale"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Environment设备环境查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-environment.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "answerBoolean": false
+  },
+  {
+    "id": "next-adaptation-062",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "自由窗口从宽屏缩到窄屏时，哪些状态应该保持连续？",
+    "explanation": "响应式结构变化不应重置导航、表单、列表等业务上下文，布局和数据状态需要解耦；窗口变化不应无条件重建正在执行的任务。",
+    "knowledgePoints": [
+      "自由窗口",
+      "状态连续性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "options": [
+      {
+        "id": "a",
+        "text": "列表滚动与选中上下文"
+      },
+      {
+        "id": "b",
+        "text": "每次窗口变窄都重新创建正在执行的业务任务"
+      },
+      {
+        "id": "c",
+        "text": "当前页面和导航位置"
+      },
+      {
+        "id": "d",
+        "text": "已输入但未提交的表单内容"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-063",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "超宽窗口中正文被无限拉长导致阅读困难，最合理的布局策略是什么？",
+    "explanation": "宽屏适配不等于所有内容等比拉伸，应控制阅读宽度并按任务需要增加侧栏。",
+    "knowledgePoints": [
+      "超宽布局",
+      "阅读宽度"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用基础功能和兼容性体验建议",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/device-compatible-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "强制切回手机宽度窗口"
+      },
+      {
+        "id": "b",
+        "text": "限制正文最大阅读宽度，把额外空间用于稳定留白或有价值的辅助栏"
+      },
+      {
+        "id": "c",
+        "text": "继续把每行文字拉到窗口全宽"
+      },
+      {
+        "id": "d",
+        "text": "把字体按窗口宽度无限放大"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "next-adaptation-064",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "设备专有能力不可用时，直接保留可点击入口并让调用失败，比提前禁用或提供替代流程更清晰。",
+    "explanation": "可选能力应在入口、说明和执行结果上提供一致降级，避免用户进入必然失败的流程。",
+    "knowledgePoints": [
+      "能力不可用",
+      "交互降级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "系统能力SystemCapability列表",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-references-v5/syscap-list-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "answerBoolean": false
   }
 ]

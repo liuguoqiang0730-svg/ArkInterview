@@ -1862,5 +1862,801 @@
       "共享数据满足 Sendable 并用 AsyncLock 协调",
       "主线程只消费最终结果并更新界面"
     ]
+  },
+  {
+    "id": "arkts-046",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Worker 与宿主线程交换普通对象时，默认采用哪种数据处理方式？",
+    "explanation": "普通对象跨线程通常需要序列化和反序列化，数据越大通信成本越高；需要共享或转移时应选择文档支持的数据类型和机制。",
+    "knowledgePoints": [
+      "Worker",
+      "结构化克隆"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkTS线程间通信概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/interthread-communication-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "把对象永久移动到宿主线程"
+      },
+      {
+        "id": "b",
+        "text": "自动转换为数据库记录"
+      },
+      {
+        "id": "c",
+        "text": "结构化克隆，接收端得到内容相同的新对象"
+      },
+      {
+        "id": "d",
+        "text": "直接共享同一普通对象引用"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-047",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "手动创建 Worker 文件后，为确保它被构建进产物，最关键的工程要求是什么？",
+    "explanation": "Worker 文件必须处于规定源码层级；手动创建时还要同步配置构建信息，DevEco Studio 自动创建则会生成模板和配置。",
+    "knowledgePoints": [
+      "Worker文件",
+      "构建配置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "把 Worker 文件改成 JSON 后缀"
+      },
+      {
+        "id": "b",
+        "text": "文件位于模块 src/main/ets 层级下，并按手动方式补充 build-profile.json5 的 workers 配置"
+      },
+      {
+        "id": "c",
+        "text": "只把文件放进 rawfile 目录"
+      },
+      {
+        "id": "d",
+        "text": "仅在 app.json5 增加页面路由"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-048",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 Worker 的脚本路径和跨包加载，哪些说法符合当前官方文档？",
+    "explanation": "Worker 路径由模块名和 ets 下相对位置构成；不同包形态及规范化 OHMUrl 配置会影响可用写法。",
+    "knowledgePoints": [
+      "Worker路径",
+      "跨包加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "options": [
+      {
+        "id": "a",
+        "text": "Stage 模型可使用 moduleName/ets/relativePath 形式"
+      },
+      {
+        "id": "b",
+        "text": "相对路径形式只支持包内加载"
+      },
+      {
+        "id": "c",
+        "text": "开启 useNormalizedOHMUrl 或三方 HAR 场景要关注相对路径约束"
+      },
+      {
+        "id": "d",
+        "text": "任意绝对磁盘路径都能在设备上加载"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-049",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "Worker 子线程可以直接调用 ArkUI 非线程安全接口更新页面组件。",
+    "explanation": "不同线程拥有独立上下文，Worker 只能使用线程安全库，UI 更新应回到宿主线程处理。",
+    "knowledgePoints": [
+      "线程安全",
+      "ArkUI线程边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-050",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Worker 单次通过序列化机制传输数据时，当前官方文档给出的大小上限是多少？",
+    "explanation": "Worker 单次序列化传输限制为 16MB。大型数据应拆分、转移所有权或使用适合的共享机制，并评估通信成本。",
+    "knowledgePoints": [
+      "Worker通信",
+      "序列化上限"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "64MB"
+      },
+      {
+        "id": "b",
+        "text": "没有上限"
+      },
+      {
+        "id": "c",
+        "text": "16MB"
+      },
+      {
+        "id": "d",
+        "text": "2MB"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-051",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "宿主线程要观察 Worker 消息、全局异常和序列化失败，通常应注册哪些回调？",
+    "explanation": "onmessage 接收业务消息，onAllErrors 捕获全局异常，onmessageerror 处理不可序列化消息；Worker 没有通用的 onprogress 回调。若还要观察线程退出，可另外注册 onexit。",
+    "knowledgePoints": [
+      "Worker回调",
+      "错误隔离"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "onprogress"
+      },
+      {
+        "id": "b",
+        "text": "onmessage"
+      },
+      {
+        "id": "c",
+        "text": "onAllErrors"
+      },
+      {
+        "id": "d",
+        "text": "onmessageerror"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-052",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Worker 的 onexit 回调中，正常退出与异常退出的 code 通常分别是什么？",
+    "explanation": "官方示例说明 onexit 的 code 为 0 表示正常退出，为 1 表示异常退出，可用于区分资源回收路径。",
+    "knowledgePoints": [
+      "onexit",
+      "Worker生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "options": [
+      {
+        "id": "a",
+        "text": "正常为 0，异常为 1"
+      },
+      {
+        "id": "b",
+        "text": "正常为 1，异常为 0"
+      },
+      {
+        "id": "c",
+        "text": "两者始终为 -1"
+      },
+      {
+        "id": "d",
+        "text": "两者都没有 code"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-053",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "调用 terminate() 或 workerPort.close() 后，Worker 会在该调用返回前同步完成全部退出流程。",
+    "explanation": "Worker 退出是异步过程；若注册 onexit，线程真正退出还要等 onexit 回调完成。",
+    "knowledgePoints": [
+      "terminate",
+      "异步退出"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-054",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "管理长期使用的 Worker 时，哪些做法更合理？",
+    "explanation": "Worker 创建销毁成本较高，空闲时仍占资源，因此应控制数量、复用实例并在不需要时主动结束。",
+    "knowledgePoints": [
+      "Worker复用",
+      "资源管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "避免在每个短任务前后频繁创建销毁"
+      },
+      {
+        "id": "b",
+        "text": "认为空闲 Worker 完全不占资源"
+      },
+      {
+        "id": "c",
+        "text": "复用已经创建的 Worker"
+      },
+      {
+        "id": "d",
+        "text": "空闲且不再需要时主动 terminate 或 close"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-055",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "父 Worker 创建了子 Worker，准备销毁整条线程链时应采用什么顺序？",
+    "explanation": "多级 Worker 由开发者管理生命周期。父线程先退出会让子线程消息失去接收方，可能产生不可预期结果。",
+    "knowledgePoints": [
+      "多级Worker",
+      "生命周期顺序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "options": [
+      {
+        "id": "a",
+        "text": "顺序无关，系统会同步回收所有消息"
+      },
+      {
+        "id": "b",
+        "text": "先终止子 Worker，再退出父 Worker"
+      },
+      {
+        "id": "c",
+        "text": "先退出父 Worker，子 Worker 永久保留"
+      },
+      {
+        "id": "d",
+        "text": "只销毁宿主页面即可"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-056",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "图像批处理服务使用长期 Worker 时，如何设计消息协议、故障隔离和资源回收？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "Worker架构",
+      "错误隔离",
+      "资源回收"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Worker简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/worker-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ArkTS线程间通信概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/interthread-communication-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "referenceAnswer": "为每条请求分配可关联的任务标识，只传可序列化、可转移或 Sendable 数据；宿主注册消息、全局错误、序列化错误和退出回调；Worker 内捕获业务异常并返回结构化错误；限制并复用线程，页面或服务结束时停止接收新任务，等待或取消在途任务后 terminate，并确保子 Worker 先退出。",
+    "scoringPoints": [
+      "定义请求标识和结构化结果协议",
+      "区分业务错误、序列化错误和线程全局异常",
+      "控制数据大小并选择克隆、转移或共享机制",
+      "复用线程并按子线程到父线程顺序回收"
+    ]
+  },
+  {
+    "id": "arkts-057",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "自定义 Sendable 类成员的声明需要满足哪些约束？",
+    "explanation": "Sendable 对象要求布局和类型静态稳定，成员必须使用受支持类型并有可确定的初值，也不能使用计算属性名；不能用确定赋值断言绕过初始化要求。",
+    "knowledgePoints": [
+      "Sendable成员",
+      "静态布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "成员必须有可确定的初值"
+      },
+      {
+        "id": "b",
+        "text": "不使用计算属性名"
+      },
+      {
+        "id": "c",
+        "text": "成员可以不初始化并使用 ! 确定赋值断言"
+      },
+      {
+        "id": "d",
+        "text": "成员类型属于 Sendable 支持的数据类型"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-058",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "为什么 Sendable 类成员不支持使用“!”确定赋值断言？",
+    "explanation": "Sendable 成员必须初始化，确定赋值断言会绕过初始化检查，因此不被支持。",
+    "knowledgePoints": [
+      "Sendable初始化",
+      "确定赋值断言"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "options": [
+      {
+        "id": "a",
+        "text": "因为 Sendable 不允许任何成员"
+      },
+      {
+        "id": "b",
+        "text": "因为“!”会自动删除属性"
+      },
+      {
+        "id": "c",
+        "text": "该写法允许成员不初始化，违背 Sendable 成员必须有初值的约束"
+      },
+      {
+        "id": "d",
+        "text": "因为“!”只用于网络请求"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-059",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "普通非 Sendable 类可以实现继承自 ISendable 的接口，从而自动获得跨线程共享能力。",
+    "explanation": "非 Sendable 类禁止实现 Sendable 接口，否则会造成类型被误认为可共享而产生错误使用。",
+    "knowledgePoints": [
+      "ISendable",
+      "接口实现约束"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-060",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "共享模块中的“use shared”指令应放在什么位置？",
+    "explanation": "共享模块指令与 use strict 类似，位置不正确就不能按共享模块规则工作。",
+    "knowledgePoints": [
+      "共享模块",
+      "use shared"
+    ],
+    "sourceRefs": [
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "ArkTS 文件顶层，位于 import 之后、其他语句之前"
+      },
+      {
+        "id": "b",
+        "text": "任意函数内部"
+      },
+      {
+        "id": "c",
+        "text": "文件最后一行"
+      },
+      {
+        "id": "d",
+        "text": "module.json5 的 abilities 数组中"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-061",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于共享模块的导出与加载，哪些结论正确？",
+    "explanation": "共享模块统一模块实例，但不取消 Sendable 和并发同步约束。",
+    "knowledgePoints": [
+      "共享模块",
+      "共享导出"
+    ],
+    "sourceRefs": [
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "options": [
+      {
+        "id": "a",
+        "text": "导出的对象必须可共享"
+      },
+      {
+        "id": "b",
+        "text": "跨并发实例写共享状态仍要处理竞争"
+      },
+      {
+        "id": "c",
+        "text": "可以导出任意普通对象并安全并发写入"
+      },
+      {
+        "id": "d",
+        "text": "同一进程内只加载一次"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkts-062",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "箭头函数可以直接用 @Sendable 装饰并作为 Sendable 函数共享。",
+    "explanation": "官方约束明确指出箭头函数不能标记为 Sendable；需要共享函数时应使用符合规则的 Sendable 函数声明。",
+    "knowledgePoints": [
+      "Sendable函数",
+      "箭头函数"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "answerBoolean": false
+  },
+  {
+    "id": "arkts-063",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "为什么 collections.Array<Array<number>> 不能作为可共享容器类型？",
+    "explanation": "Sendable 泛型容器的模板类型也必须是 Sendable 类型，普通数组不满足这一深层约束。",
+    "knowledgePoints": [
+      "Sendable泛型",
+      "共享容器"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "泛型容器不能跨线程"
+      },
+      {
+        "id": "b",
+        "text": "内层普通 Array 不是 Sendable 类型，泛型模板类型不满足约束"
+      },
+      {
+        "id": "c",
+        "text": "number 不能用于任何容器"
+      },
+      {
+        "id": "d",
+        "text": "collections.Array 只能保存字符串"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-064",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 Sendable 类型转换和上下文访问，哪些说法正确？",
+    "explanation": "类型断言不会改变真实对象能力；跨实例上下文和对象布局都必须保持 Sendable 规则。",
+    "knowledgePoints": [
+      "Sendable转换",
+      "上下文隔离"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "options": [
+      {
+        "id": "a",
+        "text": "不能把普通非 Sendable 实例强转成 Sendable 后当作真实共享对象"
+      },
+      {
+        "id": "b",
+        "text": "Sendable 类内部不能随意读取当前并发实例的普通模块变量"
+      },
+      {
+        "id": "c",
+        "text": "Sendable 对象传给 TS/JS 后仍不能改变其布局"
+      },
+      {
+        "id": "d",
+        "text": "使用 as 后运行时对象会自动重建为 Sendable"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-065",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "多个 Worker 需要读取统一配置并更新少量共享计数时，如何组合共享模块、Sendable 和锁？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "共享模块",
+      "Sendable",
+      "并发同步"
+    ],
+    "sourceRefs": [
+      {
+        "title": "共享模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-sendable-module.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Sendable使用规则与约束",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/sendable-constraints.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 65,
+    "referenceAnswer": "把只加载一次的共享入口声明为 use shared，仅导出 Sendable 配置和服务对象；配置初始化后尽量保持只读，复杂成员也必须满足深层 Sendable 约束；计数更新集中到很小的临界区并使用 AsyncLock 等同步能力，避免在 Sendable 方法里依赖当前线程的普通模块变量；宿主统一管理 Worker 生命周期和异常回调。",
+    "scoringPoints": [
+      "共享模块只导出可共享对象",
+      "配置及嵌套成员满足 Sendable 约束",
+      "共享写入使用锁并缩小临界区",
+      "统一管理线程异常与回收"
+    ]
   }
 ]

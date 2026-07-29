@@ -1827,5 +1827,793 @@
       "补最小复现和自动化回归",
       "归档源码提交、依赖、构建配置与 SourceMap 映射"
     ]
+  },
+  {
+    "id": "debug-release-045",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "工程级和模块级 build-profile.json5 同时配置相同 buildOption 字段时，通常以哪一级为准？",
+    "explanation": "相同字段以模块级为准，不同字段则可继承工程级配置，排查 Release 差异时要同时查看两级文件。",
+    "knowledgePoints": [
+      "buildOption",
+      "配置优先级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "options": [
+      {
+        "id": "a",
+        "text": "工程级配置"
+      },
+      {
+        "id": "b",
+        "text": "app.json5 注释"
+      },
+      {
+        "id": "c",
+        "text": "设备当前主题"
+      },
+      {
+        "id": "d",
+        "text": "模块级配置"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-046",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "工程级 products 至少必须存在什么名称的产品配置？",
+    "explanation": "官方配置说明要求存在 name 为 default 的 product，其他产品可按多目标产物需求补充。",
+    "knowledgePoints": [
+      "products",
+      "default产品"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 46,
+    "options": [
+      {
+        "id": "a",
+        "text": "tablet-only"
+      },
+      {
+        "id": "b",
+        "text": "preview-only"
+      },
+      {
+        "id": "c",
+        "text": "default"
+      },
+      {
+        "id": "d",
+        "text": "production-only"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-047",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "products 中哪些字段可在构建时覆盖 app.json5 的对应应用信息？",
+    "explanation": "products 可覆盖应用名称、图标和版本信息，适合多目标构建；module.json5 的 abilities 数组不属于这类应用信息覆盖字段，流水线应记录最终生效值。",
+    "knowledgePoints": [
+      "多目标产物",
+      "产品覆盖"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 47,
+    "options": [
+      {
+        "id": "a",
+        "text": "module.json5 中的 abilities 数组"
+      },
+      {
+        "id": "b",
+        "text": "label"
+      },
+      {
+        "id": "c",
+        "text": "icon"
+      },
+      {
+        "id": "d",
+        "text": "versionCode"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-048",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "artifactName 可以使用任意中文、空格和路径分隔符作为生成包名。",
+    "explanation": "artifactName 只允许数字、英文字母、中划线、下划线和英文句号等规定字符。",
+    "knowledgePoints": [
+      "artifactName",
+      "产物命名"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 48,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-049",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "默认 buildModeSet 中专门用于执行 ohosTest 测试套件的模式是哪一个？",
+    "explanation": "默认有 debug、release 和 test，test 模式用于 ohosTest，不应与正式发布产物混用。",
+    "knowledgePoints": [
+      "buildModeSet",
+      "ohosTest"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 49,
+    "options": [
+      {
+        "id": "a",
+        "text": "release"
+      },
+      {
+        "id": "b",
+        "text": "debug"
+      },
+      {
+        "id": "c",
+        "text": "shared"
+      },
+      {
+        "id": "d",
+        "text": "test"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-050",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "同一应用包含多个 HAP 时，哪些配置必须保持一致？",
+    "explanation": "同一 App Pack 内多个 HAP 的 bundleName、版本和 API 兼容字段必须一致；moduleName 用来区分模块，不能全部设置为相同值。",
+    "knowledgePoints": [
+      "多HAP",
+      "配置一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 50,
+    "options": [
+      {
+        "id": "a",
+        "text": "minAPIVersion 和 targetAPIVersion"
+      },
+      {
+        "id": "b",
+        "text": "每个 HAP 的 moduleName"
+      },
+      {
+        "id": "c",
+        "text": "bundleName"
+      },
+      {
+        "id": "d",
+        "text": "versionCode 和 versionName"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-051",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "HAP 中的 ets、libs 和 resources 目录分别主要承载什么？",
+    "explanation": "HAP 是安装运行基本单元，包含代码、Native 库、资源和自动生成的配置索引。",
+    "knowledgePoints": [
+      "HAP结构",
+      "产物分析"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 51,
+    "options": [
+      {
+        "id": "a",
+        "text": "路由历史、设备驱动和系统镜像"
+      },
+      {
+        "id": "b",
+        "text": "ArkTS 字节码、Native 共享库和资源文件"
+      },
+      {
+        "id": "c",
+        "text": "证书、数据库和云端日志"
+      },
+      {
+        "id": "d",
+        "text": "页面截图、源码仓库和账号表"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-052",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "HAP 可以把内部 API 和 ArkUI 组件直接导出给其他模块作为通用依赖。",
+    "explanation": "HAP 是安装运行模块，不承担可复用库导出职责；共享代码应根据场景使用 HAR 或 HSP。",
+    "knowledgePoints": [
+      "HAP边界",
+      "模块复用"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 52,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-053",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "分析 HAP 包体组成时，哪些内容值得分别统计？",
+    "explanation": "应按 ets、libs、resources 等产物目录和模块拆分包体，识别代码、Native 依赖与资源增长；IDE 最近打开的项目列表不属于 HAP 产物。",
+    "knowledgePoints": [
+      "包体分析",
+      "HAP结构"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 53,
+    "options": [
+      {
+        "id": "a",
+        "text": "libs 中的 so 库"
+      },
+      {
+        "id": "b",
+        "text": "resources 与 resources.index"
+      },
+      {
+        "id": "c",
+        "text": "本机 DevEco Studio 的最近打开项目列表"
+      },
+      {
+        "id": "d",
+        "text": "ets 字节码"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-054",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "面向应用市场发布包含多个 HAP 的应用时，应生成并提交什么整体产物？",
+    "explanation": "应用市场发布需要把应用内 HAP 打成 App Pack，pack.info 描述整体和各模块属性。",
+    "knowledgePoints": [
+      "App Pack",
+      "应用发布"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 54,
+    "options": [
+      {
+        "id": "a",
+        "text": "任意一个 feature HAP"
+      },
+      {
+        "id": "b",
+        "text": "源码 ZIP 直接安装"
+      },
+      {
+        "id": "c",
+        "text": ".app 格式的 App Pack"
+      },
+      {
+        "id": "d",
+        "text": "单独一张截图"
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-055",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "如何让流水线生成的 Release 产物具备可追溯性？",
+    "explanation": "该题考察完整工程决策，需要同时说明官方能力边界、异常路径和验证方法。",
+    "knowledgePoints": [
+      "制品追溯",
+      "Release流水线"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 55,
+    "referenceAnswer": "固定源码提交和依赖锁定文件，记录 DevEco、SDK、Hvigor、product、buildMode、版本号和签名证书标识；保存 .app/.hap 的校验摘要、包体报告、pack.info、混淆映射和 SourceMap；测试报告引用同一产物摘要，发布单记录渠道、灰度批次和时间，禁止测试后重新构建另一份未验证产物。",
+    "scoringPoints": [
+      "记录源码、依赖和构建工具版本",
+      "保存最终产物摘要及配套映射",
+      "测试与发布引用同一二进制",
+      "记录签名、渠道和灰度批次"
+    ]
+  },
+  {
+    "id": "debug-release-056",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "应用更新版本准备发布时，哪些版本治理做法合理？",
+    "explanation": "系统和市场使用版本信息识别更新，多模块还必须保持一致。",
+    "knowledgePoints": [
+      "versionCode",
+      "应用更新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用安装卸载与更新开发指导",
+        "url": "https://developer.huawei.com/consumer/cn/doc/doccenter-getting-started/application-package-install-uninstall",
+        "publisher": "Huawei Developer"
+      },
+      {
+        "title": "HAP",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/hap-package.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 56,
+    "options": [
+      {
+        "id": "a",
+        "text": "递增 app.json5 或产品覆盖中的 versionCode"
+      },
+      {
+        "id": "b",
+        "text": "确认 versionName 与发布说明一致"
+      },
+      {
+        "id": "c",
+        "text": "核对多 HAP 的版本字段一致"
+      },
+      {
+        "id": "d",
+        "text": "复用旧 versionCode 并只修改页面文字"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-057",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "分阶段发布最适合解决什么问题？",
+    "explanation": "分阶段发布针对已经全量发布过的应用更新，通过比例和生效时间逐步扩大覆盖。",
+    "knowledgePoints": [
+      "分阶段发布",
+      "发布风险"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 57,
+    "options": [
+      {
+        "id": "a",
+        "text": "替代代码评审"
+      },
+      {
+        "id": "b",
+        "text": "首次发布时跳过审核"
+      },
+      {
+        "id": "c",
+        "text": "自动修复所有崩溃"
+      },
+      {
+        "id": "d",
+        "text": "更新版本先小比例分发并观察质量，降低全量发布风险"
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-058",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "应用首次发布也可以直接使用分阶段发布功能。",
+    "explanation": "官方说明分阶段发布用于版本更新，不适用于应用首次发布。",
+    "knowledgePoints": [
+      "首次发布",
+      "灰度边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 58,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-059",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "分阶段发布生效后，平台支持哪些状态操作？",
+    "explanation": "灰度过程可动态控制，也可以更新或升级分阶段发布；团队仍要结合质量指标定义暂停和继续标准。",
+    "knowledgePoints": [
+      "灰度控制",
+      "状态管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 59,
+    "options": [
+      {
+        "id": "a",
+        "text": "绕过所有应用审核"
+      },
+      {
+        "id": "b",
+        "text": "逐步提高分发比例"
+      },
+      {
+        "id": "c",
+        "text": "暂停"
+      },
+      {
+        "id": "d",
+        "text": "恢复"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-060",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "灰度阶段错误率显著上升，最先应做什么？",
+    "explanation": "分阶段发布价值在于把风险控制在小范围；异常时先停止扩散并保留可复现证据。",
+    "knowledgePoints": [
+      "灰度止损",
+      "质量门禁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "分阶段发布",
+        "url": "https://developer.huawei.com/consumer/cn/agconnect/phased-release/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 60,
+    "options": [
+      {
+        "id": "a",
+        "text": "按预案暂停扩大分发，锁定产物与数据后评估修复或更新版本"
+      },
+      {
+        "id": "b",
+        "text": "立即扩大到 100% 获取更多样本"
+      },
+      {
+        "id": "c",
+        "text": "删除所有历史制品"
+      },
+      {
+        "id": "d",
+        "text": "只修改版本名称不重新验证"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-061",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "多目标构建中避免“测试包与发布包不一致”，哪些措施有效？",
+    "explanation": "发布门禁应围绕已经测试过的不可变制品及其哈希、配置快照和制品 ID；测试后重新构建会产生另一份未被验证的二进制。",
+    "knowledgePoints": [
+      "不可变制品",
+      "流水线门禁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 61,
+    "options": [
+      {
+        "id": "a",
+        "text": "测试通过后再按相同配置重新构建一份发布包"
+      },
+      {
+        "id": "b",
+        "text": "保存最终 product 和 buildMode 配置快照"
+      },
+      {
+        "id": "c",
+        "text": "发布系统只接受已通过门禁的制品 ID"
+      },
+      {
+        "id": "d",
+        "text": "测试报告绑定产物哈希"
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-062",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "模块级 buildOption 与工程级同名字段冲突时，工程级字段一定覆盖模块级字段。",
+    "explanation": "同名字段按模块级优先，排查混淆、压缩或构建差异时不能只看工程级文件。",
+    "knowledgePoints": [
+      "配置继承",
+      "模块级优先"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 62,
+    "answerBoolean": false
+  },
+  {
+    "id": "debug-release-063",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "useNormalizedOHMUrl 开启后，跨模块导入最需要避免什么？",
+    "explanation": "规范化 OHMUrl 模式要求依赖别名与包名保持一致，并限制跨模块相对或绝对路径导入。",
+    "knowledgePoints": [
+      "useNormalizedOHMUrl",
+      "模块依赖"
+    ],
+    "sourceRefs": [
+      {
+        "title": "build-profile.json5配置文件说明",
+        "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hvigor-build-profile-V5",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 63,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用稳定模块边界"
+      },
+      {
+        "id": "b",
+        "text": "通过相对路径或绝对路径跨模块导入"
+      },
+      {
+        "id": "c",
+        "text": "通过依赖包 name 正确引用"
+      },
+      {
+        "id": "d",
+        "text": "在 oh-package.json5 声明依赖"
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-064",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "pack.info 需要开发者手工维护每个 ability，构建工具不会生成。",
+    "explanation": "pack.info 由构建工具随 App Pack 或 HAP 产物生成，用于描述 bundle、版本、模块和 ability 等属性。",
+    "knowledgePoints": [
+      "pack.info",
+      "产物元数据"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Stage模型应用包结构",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/application-package-structure-stage.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 64,
+    "answerBoolean": false
   }
 ]
