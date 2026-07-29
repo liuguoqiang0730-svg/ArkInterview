@@ -310,7 +310,7 @@
     "categoryId": "stage-model",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "一个刷题 App 基于 Stage 模型设计时，哪些逻辑放置更合理？",
+    "title": "一个智能家居 App 基于 Stage 模型设计时，哪些逻辑放置更合理？",
     "options": [
       {
         "id": "a",
@@ -322,7 +322,7 @@
       },
       {
         "id": "c",
-        "text": "题目列表 UI 写在 ArkUI 页面组件中"
+        "text": "设备列表 UI 写在 ArkUI 页面组件中"
       },
       {
         "id": "d",

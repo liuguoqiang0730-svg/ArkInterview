@@ -4,7 +4,7 @@
     "categoryId": "arkts",
     "type": "single",
     "difficulty": "medium",
-    "title": "在 ArkTS 严格编译下，向接口提交收藏请求这类结构化数据时，哪种写法更稳妥？",
+    "title": "在 ArkTS 严格编译下，向接口提交创建订单请求这类结构化数据时，哪种写法更稳妥？",
     "options": [
       {
         "id": "a",
@@ -384,7 +384,7 @@
     "difficulty": "medium",
     "title": "ArkTS 中为服务端返回数据建立模型，有助于减少页面层直接依赖松散 JSON 字段带来的风险。",
     "answerBoolean": true,
-    "explanation": "题库、练习记录、错题等服务端数据都有稳定结构。建立模型能让字段含义、可选性和类型更清晰，也更符合 ArkTS 静态类型实践。",
+    "explanation": "商品、订单、物流状态等服务端数据都有稳定结构。建立模型能让字段含义、可选性和类型更清晰，也更符合 ArkTS 静态类型实践。",
     "knowledgePoints": [
       "数据模型",
       "服务端 JSON",

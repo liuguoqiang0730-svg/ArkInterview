@@ -13,6 +13,8 @@ const checkOnly = process.argv.includes('--check');
 const allowedTypes = new Set(['single', 'multiple', 'boolean', 'short']);
 const allowedDifficulties = new Set(['easy', 'medium', 'hard']);
 const allowedStatuses = new Set(['draft', 'published', 'offline']);
+const forbiddenSelfReferentialScenario =
+  /刷题|题库|ArkInterview|Ark 面试通|答题|错题|练习|题单|questionId|questionIds|收藏/i;
 
 const [manifest, categories] = await Promise.all([
   readJson(manifestFile),
@@ -138,6 +140,13 @@ function validateQuestion(question, moduleConfig, location) {
   }
   if (!question.explanation || !String(question.explanation).trim()) {
     errors.push(`${location}: explanation 不能为空`);
+  }
+
+  const selfReferentialMatch = JSON.stringify(question).match(forbiddenSelfReferentialScenario);
+  if (selfReferentialMatch) {
+    errors.push(
+      `${location}: question content must use a real external business scenario, not ArkInterview domain term "${selfReferentialMatch[0]}"`
+    );
   }
 
   validateSources(question, location);

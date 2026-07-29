@@ -195,7 +195,7 @@
     "categoryId": "arkui",
     "type": "single",
     "difficulty": "medium",
-    "title": "在刷题 App 的题目列表页面中，哪种 ArkUI 设计更贴合大量数据展示？",
+    "title": "在资讯 App 的文章信息流页面中，哪种 ArkUI 设计更贴合大量数据展示？",
     "options": [
       {
         "id": "a",
@@ -203,7 +203,7 @@
       },
       {
         "id": "b",
-        "text": "把所有题目都写成独立静态 Text 组件"
+        "text": "把所有文章都写成独立静态 Text 组件"
       },
       {
         "id": "c",
@@ -217,11 +217,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "题目列表属于重复项展示，应优先考虑列表容器、稳定 item 尺寸和可读层级。静态堆叠所有题目会影响维护和性能。",
+    "explanation": "文章信息流属于重复项展示，应优先考虑列表容器、稳定 item 尺寸和可读层级。静态堆叠所有文章会影响维护和性能。",
     "knowledgePoints": [
-      "列表页面",
+      "信息流页面",
       "布局稳定性",
-      "刷题场景"
+      "资讯场景"
     ],
     "sourceRefs": [
       {
@@ -317,7 +317,7 @@
       },
       {
         "id": "d",
-        "text": "保证底部导航、筛选区和答题区在不同窗口下不遮挡"
+        "text": "保证底部导航、筛选区和内容详情区在不同窗口下不遮挡"
       }
     ],
     "correctOptionIds": [
@@ -460,11 +460,11 @@
     "categoryId": "arkui",
     "type": "single",
     "difficulty": "medium",
-    "title": "题目列表支持插入、删除和排序时，ForEach 的 keyGenerator 最适合返回什么？",
+    "title": "商品列表支持插入、删除和排序时，ForEach 的 keyGenerator 最适合返回什么？",
     "options": [
       {
         "id": "a",
-        "text": "题目稳定且唯一的 questionId"
+        "text": "商品稳定且唯一的 productId"
       },
       {
         "id": "b",
@@ -476,7 +476,7 @@
       },
       {
         "id": "d",
-        "text": "所有题目都返回同一个分类 ID"
+        "text": "所有商品都返回同一个分类 ID"
       }
     ],
     "correctOptionIds": [
@@ -751,7 +751,7 @@
     "categoryId": "arkui",
     "type": "single",
     "difficulty": "medium",
-    "title": "使用 Repeat 渲染超过 30 项的长题目列表时，为避免首屏一次性创建全部子组件，最关键的配置是什么？",
+    "title": "使用 Repeat 渲染超过 30 项的长商品列表时，为避免首屏一次性创建全部子组件，最关键的配置是什么？",
     "explanation": "Repeat 省略 virtualScroll 时会全量加载子组件；长列表应优先启用 virtualScroll，使框架按显示区域和预加载区域创建节点。",
     "knowledgePoints": [
       "Repeat",

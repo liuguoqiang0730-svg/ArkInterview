@@ -287,15 +287,15 @@
     "categoryId": "relational-store",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "用 relationalStore 保存答题历史时，哪些设计更合理？",
+    "title": "用 relationalStore 保存订单历史时，哪些设计更合理？",
     "options": [
       {
         "id": "a",
-        "text": "为答题记录设计清晰表结构"
+        "text": "为订单记录设计清晰表结构"
       },
       {
         "id": "b",
-        "text": "按 questionId、categoryId 等字段支持查询"
+        "text": "按 orderId、customerId 等字段支持查询"
       },
       {
         "id": "c",
@@ -311,9 +311,9 @@
       "b",
       "c"
     ],
-    "explanation": "答题历史是结构化数据，适合通过表结构和条件字段查询。事务可用于多步一致性写入，单 key 大字符串不利于查询和维护。",
+    "explanation": "订单历史是结构化数据，适合通过表结构和条件字段查询。事务可用于多步一致性写入，单 key 大字符串不利于查询和维护。",
     "knowledgePoints": [
-      "答题历史",
+      "订单历史",
       "表结构",
       "事务"
     ],
@@ -335,7 +335,7 @@
     "type": "short",
     "difficulty": "medium",
     "title": "简述 RdbStore 中事务能力适合解决什么问题。",
-    "referenceAnswer": "事务适合多步数据库写入需要保持一致性的场景，例如同时写入答题记录、更新分类统计和错题状态。通过 beginTransaction、commit、rollBack 或 rollback 相关能力，可以做到要么全部成功，要么失败回滚。",
+    "referenceAnswer": "事务适合多步数据库写入需要保持一致性的场景，例如同时写入订单、扣减库存和更新优惠券状态。通过 beginTransaction、commit、rollBack 或 rollback 相关能力，可以做到要么全部成功，要么失败回滚。",
     "scoringPoints": [
       "说明多步写入一致性",
       "提到 beginTransaction",
@@ -343,7 +343,7 @@
       "提到回滚能力",
       "能结合业务场景举例"
     ],
-    "explanation": "事务不是为了简单查询，而是为了保证一组写操作的原子性和一致性。刷题记录更新就是典型业务例子。",
+    "explanation": "事务不是为了简单查询，而是为了保证一组写操作的原子性和一致性。订单提交涉及多张表联动更新，就是典型业务例子。",
     "knowledgePoints": [
       "事务",
       "一致性",
@@ -478,11 +478,11 @@
     "categoryId": "relational-store",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "把练习记录落到 relationalStore 时，哪些表设计思路更合理？",
-    "explanation": "练习记录是结构化数据，应按查询需求建模。多步写入需要一致性时应考虑事务，避免把结构化数据退化成不可查询的大字符串。",
+    "title": "把订单记录落到 relationalStore 时，哪些表设计思路更合理？",
+    "explanation": "订单记录是结构化数据，应按查询需求建模。多步写入需要一致性时应考虑事务，避免把结构化数据退化成不可查询的大字符串。",
     "knowledgePoints": [
       "RDB 建模",
-      "答题记录",
+      "订单记录",
       "事务"
     ],
     "sourceRefs": [
@@ -499,7 +499,7 @@
     "options": [
       {
         "id": "a",
-        "text": "为记录设计 questionId、categoryId、isCorrect、answeredAt 等字段"
+        "text": "为记录设计 orderId、customerId、status、createdAt 等字段"
       },
       {
         "id": "b",
@@ -525,12 +525,12 @@
     "categoryId": "relational-store",
     "type": "short",
     "difficulty": "medium",
-    "title": "说明 relationalStore 更适合保存刷题 App 的哪些本地数据。",
+    "title": "说明 relationalStore 更适合保存客户关系管理 App 的哪些本地数据。",
     "explanation": "这道题考察存储选型。不要把所有本地数据都塞 Preferences，也不要为了一个开关就引入复杂数据库。",
     "knowledgePoints": [
       "relationalStore",
       "存储选型",
-      "练习记录"
+      "客户记录"
     ],
     "sourceRefs": [
       {
@@ -543,10 +543,10 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 14,
-    "referenceAnswer": "relationalStore 适合保存结构化、需要条件查询或统计的数据，例如答题历史、分类完成度、正确率统计明细、错题记录和练习会话记录。它比 Preferences 更适合复杂表结构和多条件查询，也更便于后续做统计页面。",
+    "referenceAnswer": "relationalStore 适合保存结构化、需要条件查询或统计的数据，例如客户资料、跟进记录、销售机会、订单明细和联系人关系。它比 Preferences 更适合复杂表结构和多条件查询，也更便于后续做统计页面。",
     "scoringPoints": [
       "说明结构化数据",
-      "举出答题历史、错题、统计等例子",
+      "举出客户、跟进、订单等结构化数据例子",
       "说明相比 Preferences 的优势"
     ]
   },
@@ -555,7 +555,7 @@
     "categoryId": "relational-store",
     "type": "single",
     "difficulty": "medium",
-    "title": "同时插入答题明细并更新分类统计且要求一致时，数据库层应优先考虑什么？",
+    "title": "同时插入订单明细并更新库存统计且要求一致时，数据库层应优先考虑什么？",
     "explanation": "多步数据库写入如果要求要么全部成功要么全部失败，应使用事务能力保证一致性，避免只写入部分数据导致统计和明细不一致。",
     "knowledgePoints": [
       "事务",
@@ -878,7 +878,7 @@
     "categoryId": "relational-store",
     "type": "short",
     "difficulty": "hard",
-    "title": "刷题 App 的本地数据库从版本 1 升级到版本 3，增加错题掌握状态和练习索引，应如何迁移并控制查询性能？",
+    "title": "订单管理 App 的本地数据库从版本 1 升级到版本 3，增加配送状态和订单索引，应如何迁移并控制查询性能？",
     "explanation": "数据库升级既是正确性问题也是性能问题，必须保证原子性、兼容历史数据并用实际查询验证索引价值。",
     "knowledgePoints": [
       "数据库版本",
@@ -907,7 +907,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 22,
-    "referenceAnswer": "打开数据库后读取当前版本，按版本逐级执行迁移：先增加掌握状态字段并回填默认值，再为常用的 categoryId、answeredAt 等过滤排序组合建立合适索引。把 DDL、数据回填和版本号更新放进事务，全部成功后 commit，失败 rollback，不能直接跳过中间迁移。查询使用 RdbPredicates 或参数化 SQL，只选择需要的列并分页；ResultSet 必须及时 close。上线前用真实数据量验证迁移耗时、索引命中和回滚路径，并保留必要备份。",
+    "referenceAnswer": "打开数据库后读取当前版本，按版本逐级执行迁移：先增加配送状态字段并回填默认值，再为常用的 customerId、createdAt 等过滤排序组合建立合适索引。把 DDL、数据回填和版本号更新放进事务，全部成功后 commit，失败 rollback，不能直接跳过中间迁移。查询使用 RdbPredicates 或参数化 SQL，只选择需要的列并分页；ResultSet 必须及时 close。上线前用真实数据量验证迁移耗时、索引命中和回滚路径，并保留必要备份。",
     "scoringPoints": [
       "按旧版本逐级迁移而不是直接覆盖数据库",
       "用事务包住结构变更、数据回填和版本更新",

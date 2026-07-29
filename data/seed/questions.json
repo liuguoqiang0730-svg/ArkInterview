@@ -4,7 +4,7 @@
     "categoryId": "arkts",
     "type": "single",
     "difficulty": "medium",
-    "title": "在 ArkTS 严格编译下，向接口提交收藏请求这类结构化数据时，哪种写法更稳妥？",
+    "title": "在 ArkTS 严格编译下，向接口提交创建订单请求这类结构化数据时，哪种写法更稳妥？",
     "options": [
       {
         "id": "a",
@@ -384,7 +384,7 @@
     "difficulty": "medium",
     "title": "ArkTS 中为服务端返回数据建立模型，有助于减少页面层直接依赖松散 JSON 字段带来的风险。",
     "answerBoolean": true,
-    "explanation": "题库、练习记录、错题等服务端数据都有稳定结构。建立模型能让字段含义、可选性和类型更清晰，也更符合 ArkTS 静态类型实践。",
+    "explanation": "商品、订单、物流状态等服务端数据都有稳定结构。建立模型能让字段含义、可选性和类型更清晰，也更符合 ArkTS 静态类型实践。",
     "knowledgePoints": [
       "数据模型",
       "服务端 JSON",
@@ -1231,7 +1231,7 @@
     "categoryId": "arkui",
     "type": "single",
     "difficulty": "medium",
-    "title": "在刷题 App 的题目列表页面中，哪种 ArkUI 设计更贴合大量数据展示？",
+    "title": "在资讯 App 的文章信息流页面中，哪种 ArkUI 设计更贴合大量数据展示？",
     "options": [
       {
         "id": "a",
@@ -1239,7 +1239,7 @@
       },
       {
         "id": "b",
-        "text": "把所有题目都写成独立静态 Text 组件"
+        "text": "把所有文章都写成独立静态 Text 组件"
       },
       {
         "id": "c",
@@ -1253,11 +1253,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "题目列表属于重复项展示，应优先考虑列表容器、稳定 item 尺寸和可读层级。静态堆叠所有题目会影响维护和性能。",
+    "explanation": "文章信息流属于重复项展示，应优先考虑列表容器、稳定 item 尺寸和可读层级。静态堆叠所有文章会影响维护和性能。",
     "knowledgePoints": [
-      "列表页面",
+      "信息流页面",
       "布局稳定性",
-      "刷题场景"
+      "资讯场景"
     ],
     "sourceRefs": [
       {
@@ -1353,7 +1353,7 @@
       },
       {
         "id": "d",
-        "text": "保证底部导航、筛选区和答题区在不同窗口下不遮挡"
+        "text": "保证底部导航、筛选区和内容详情区在不同窗口下不遮挡"
       }
     ],
     "correctOptionIds": [
@@ -1496,11 +1496,11 @@
     "categoryId": "arkui",
     "type": "single",
     "difficulty": "medium",
-    "title": "题目列表支持插入、删除和排序时，ForEach 的 keyGenerator 最适合返回什么？",
+    "title": "商品列表支持插入、删除和排序时，ForEach 的 keyGenerator 最适合返回什么？",
     "options": [
       {
         "id": "a",
-        "text": "题目稳定且唯一的 questionId"
+        "text": "商品稳定且唯一的 productId"
       },
       {
         "id": "b",
@@ -1512,7 +1512,7 @@
       },
       {
         "id": "d",
-        "text": "所有题目都返回同一个分类 ID"
+        "text": "所有商品都返回同一个分类 ID"
       }
     ],
     "correctOptionIds": [
@@ -1787,7 +1787,7 @@
     "categoryId": "arkui",
     "type": "single",
     "difficulty": "medium",
-    "title": "使用 Repeat 渲染超过 30 项的长题目列表时，为避免首屏一次性创建全部子组件，最关键的配置是什么？",
+    "title": "使用 Repeat 渲染超过 30 项的长商品列表时，为避免首屏一次性创建全部子组件，最关键的配置是什么？",
     "explanation": "Repeat 省略 virtualScroll 时会全量加载子组件；长列表应优先启用 virtualScroll，使框架按显示区域和预加载区域创建节点。",
     "knowledgePoints": [
       "Repeat",
@@ -2344,7 +2344,7 @@
     "categoryId": "stage-model",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "一个刷题 App 基于 Stage 模型设计时，哪些逻辑放置更合理？",
+    "title": "一个智能家居 App 基于 Stage 模型设计时，哪些逻辑放置更合理？",
     "options": [
       {
         "id": "a",
@@ -2356,7 +2356,7 @@
       },
       {
         "id": "c",
-        "text": "题目列表 UI 写在 ArkUI 页面组件中"
+        "text": "设备列表 UI 写在 ArkUI 页面组件中"
       },
       {
         "id": "d",
@@ -3241,15 +3241,15 @@
     "categoryId": "ability-lifecycle",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述 UIAbility 进入后台和重新回到前台时，刷题 App 可以分别做哪些处理。",
-    "referenceAnswer": "进入后台时可暂停计时器、动画或非必要刷新，并保存必要练习状态；回到前台时可刷新学习记录、恢复页面状态或检查本地缓存。处理时要避免重复初始化和阻塞主流程。",
+    "title": "简述 UIAbility 进入后台和重新回到前台时，音视频 App 可以分别做哪些处理。",
+    "referenceAnswer": "进入后台时可暂停播放、动画或非必要刷新，并保存播放进度；回到前台时可恢复播放状态、刷新内容列表或检查本地缓存。处理时要避免重复初始化和阻塞主流程。",
     "scoringPoints": [
       "提到后台暂停不必要任务",
-      "提到保存练习状态",
+      "提到保存播放进度",
       "提到前台恢复或刷新数据",
       "提到避免重复初始化或阻塞"
     ],
-    "explanation": "这道题考察生命周期与业务结合。刷题 App 的答题状态、记录刷新和资源占用都应跟随 UIAbility 前后台变化做合理处理。",
+    "explanation": "这道题考察生命周期与业务结合。音视频 App 的播放状态、内容刷新和资源占用都应跟随 UIAbility 前后台变化做合理处理。",
     "knowledgePoints": [
       "onBackground",
       "onForeground",
@@ -3284,7 +3284,7 @@
       },
       {
         "id": "c",
-        "text": "新增题库分类"
+        "text": "修改数据库表结构"
       },
       {
         "id": "d",
@@ -3294,7 +3294,7 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "窗口销毁阶段与当前 UIAbility 的窗口资源释放相关。工程签名、题库分类和权限结果都不是窗口销毁阶段的职责。",
+    "explanation": "窗口销毁阶段与当前 UIAbility 的窗口资源释放相关。工程签名、数据库表结构和权限结果都不是窗口销毁阶段的职责。",
     "knowledgePoints": [
       "窗口销毁",
       "资源释放",
@@ -4019,11 +4019,11 @@
     "categoryId": "component-communication",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "设计答题页组件通信时，哪些做法更合理？",
+    "title": "设计购物车页面组件通信时，哪些做法更合理？",
     "options": [
       {
         "id": "a",
-        "text": "题目标题、选项等展示数据可由父组件传给子组件"
+        "text": "商品名称、价格等展示数据可由父组件传给子组件"
       },
       {
         "id": "b",
@@ -4097,7 +4097,7 @@
     "categoryId": "component-communication",
     "type": "single",
     "difficulty": "medium",
-    "title": "一个筛选面板需要把用户选择同步回父页面刷新题目列表，优先考虑哪种通信方向？",
+    "title": "一个筛选面板需要把用户选择同步回父页面刷新商品列表，优先考虑哪种通信方向？",
     "options": [
       {
         "id": "a",
@@ -4347,7 +4347,7 @@
       },
       {
         "id": "b",
-        "text": "子组件直接累计全局练习统计"
+        "text": "子组件直接累计全局购物车金额"
       },
       {
         "id": "c",
@@ -4917,23 +4917,23 @@
     "categoryId": "state-management",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "关于刷题 App 的状态设计，哪些做法更合理？",
+    "title": "关于电商 App 的状态设计，哪些做法更合理？",
     "options": [
       {
         "id": "a",
-        "text": "当前题号、已选选项等可作为答题页局部状态"
+        "text": "当前商品规格、购买数量等可作为详情页局部状态"
       },
       {
         "id": "b",
-        "text": "跨页面使用的练习记录可通过统一数据层读取"
+        "text": "跨页面使用的订单草稿可通过统一数据层读取"
       },
       {
         "id": "c",
-        "text": "收藏和错题状态变化后应通知相关页面刷新"
+        "text": "购物车状态变化后应通知相关页面刷新"
       },
       {
         "id": "d",
-        "text": "所有页面都各自维护一份互不关联的正确率副本"
+        "text": "所有页面都各自维护一份互不关联的购物车数量副本"
       }
     ],
     "correctOptionIds": [
@@ -4944,7 +4944,7 @@
     "explanation": "局部交互状态、跨页面数据和事件刷新应分层处理。各页面维护互不关联的统计副本容易导致数据不同步。",
     "knowledgePoints": [
       "状态分层",
-      "练习记录",
+      "订单草稿",
       "页面刷新"
     ],
     "sourceRefs": [
@@ -4995,7 +4995,7 @@
     "categoryId": "state-management",
     "type": "single",
     "difficulty": "medium",
-    "title": "收藏状态在答题页改变后，首页和收藏列表也需要更新，工程上更应关注什么？",
+    "title": "购物车商品数量在详情页改变后，首页和购物车页也需要更新，工程上更应关注什么？",
     "options": [
       {
         "id": "a",
@@ -5003,24 +5003,24 @@
       },
       {
         "id": "b",
-        "text": "每个页面各自猜测收藏数量"
+        "text": "每个页面各自猜测购物车数量"
       },
       {
         "id": "c",
-        "text": "把收藏数量写死在标题里"
+        "text": "把购物车数量写死在标题里"
       },
       {
         "id": "d",
-        "text": "禁用收藏入口"
+        "text": "禁用购物车入口"
       }
     ],
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "跨页面共享的业务数据需要统一数据源，并在状态变化后通知相关页面刷新。否则收藏列表、首页统计和答题页会出现不一致。",
+    "explanation": "跨页面共享的业务数据需要统一数据源，并在状态变化后通知相关页面刷新。否则购物车页、首页角标和商品详情页会出现不一致。",
     "knowledgePoints": [
       "跨页面状态",
-      "收藏状态",
+      "购物车状态",
       "数据一致性"
     ],
     "sourceRefs": [
@@ -5534,7 +5534,7 @@
     "categoryId": "state-management",
     "type": "short",
     "difficulty": "hard",
-    "title": "刷题页包含当前选项、题目对象、全局主题和上次练习模式，如何划分状态作用域并保证正确刷新？",
+    "title": "音视频播放页包含当前进度、媒体对象、全局主题和上次播放倍速，如何划分状态作用域并保证正确刷新？",
     "explanation": "状态设计既要保证变化可观察，也要控制共享范围和刷新范围，避免全局状态膨胀。",
     "knowledgePoints": [
       "状态建模",
@@ -5573,10 +5573,10 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 22,
-    "referenceAnswer": "当前页临时选项属于组件或页面内部状态，在 V2 中可用 @Local；父组件下发的题目用 @Param，复杂题目模型若需观察嵌套属性，应由 @ObservedV2 类和 @Trace 属性建模。全局主题若只需同进程多页面共享，可放 AppStorage 或统一状态模型；上次练习模式需要跨重启保存，可使用 PersistenceV2 或 Preferences。应避免把所有状态都放到全局，按属性粒度建立观测，减少无关组件刷新。",
+    "referenceAnswer": "当前播放进度属于组件或页面内部状态，在 V2 中可用 @Local；父组件下发的媒体对象用 @Param，复杂媒体模型若需观察嵌套属性，应由 @ObservedV2 类和 @Trace 属性建模。全局主题若只需同进程多页面共享，可放 AppStorage 或统一状态模型；上次播放倍速需要跨重启保存，可使用 PersistenceV2 或 Preferences。应避免把所有状态都放到全局，按属性粒度建立观测，减少无关组件刷新。",
     "scoringPoints": [
-      "为当前选择使用组件或页面局部状态",
-      "为父组件题目输入使用 @Param",
+      "为当前播放进度使用组件或页面局部状态",
+      "为父组件媒体输入使用 @Param",
       "说明复杂对象用 @ObservedV2 与 @Trace 精准观测",
       "区分进程共享状态和跨重启持久化状态"
     ]
@@ -5631,7 +5631,7 @@
     "categoryId": "routing",
     "type": "single",
     "difficulty": "medium",
-    "title": "页面 B 由页面 A 跳转进入，页面 B 需要读取传入的 questionId，最对应哪个路由能力？",
+    "title": "页面 B 由页面 A 跳转进入，页面 B 需要读取传入的 productId，最对应哪个路由能力？",
     "options": [
       {
         "id": "a",
@@ -5653,7 +5653,7 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "跳转时通过路由参数传入 questionId，目标页面读取参数应使用 getParams 类能力。back 负责返回，不负责读取当前页面参数。",
+    "explanation": "跳转时通过路由参数传入 productId，目标页面读取参数应使用 getParams 类能力。back 负责返回，不负责读取当前页面参数。",
     "knowledgePoints": [
       "路由导航",
       "参数传递",
@@ -5705,7 +5705,7 @@
     "options": [
       {
         "id": "a",
-        "text": "列表页跳详情页时传 questionId，由详情页再请求题目详情"
+        "text": "列表页跳详情页时传 productId，由详情页再请求商品详情"
       },
       {
         "id": "b",
@@ -5713,7 +5713,7 @@
       },
       {
         "id": "c",
-        "text": "把完整题库 JSON 都放进路由参数，减少接口请求"
+        "text": "把完整商品目录 JSON 都放进路由参数，减少接口请求"
       },
       {
         "id": "d",
@@ -5724,7 +5724,7 @@
       "a",
       "b"
     ],
-    "explanation": "路由参数适合传递页面定位所需的轻量信息，例如 questionId。详情页根据 ID 拉取详情，既能控制参数大小，也能处理参数缺失或数据过期。",
+    "explanation": "路由参数适合传递页面定位所需的轻量信息，例如 productId。详情页根据 ID 拉取详情，既能控制参数大小，也能处理参数缺失或数据过期。",
     "knowledgePoints": [
       "路由导航",
       "参数传递",
@@ -5750,7 +5750,7 @@
     "categoryId": "routing",
     "type": "single",
     "difficulty": "easy",
-    "title": "页面 A 跳转到答题页并希望传入 questionId，通常应使用路由跳转时的哪个能力？",
+    "title": "页面 A 跳转到商品详情页并希望传入 productId，通常应使用路由跳转时的哪个能力？",
     "options": [
       {
         "id": "a",
@@ -5772,11 +5772,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "页面跳转时携带 questionId、mode 等轻量参数，应使用路由参数能力。数据库表结构和权限结果不是页面跳转传参能力。",
+    "explanation": "页面跳转时携带 productId、source 等轻量参数，应使用路由参数能力。数据库表结构和权限结果不是页面跳转传参能力。",
     "knowledgePoints": [
       "路由参数",
       "页面跳转",
-      "questionId"
+      "productId"
     ],
     "sourceRefs": [
       {
@@ -5795,9 +5795,9 @@
     "categoryId": "routing",
     "type": "boolean",
     "difficulty": "medium",
-    "title": "路由参数适合传递页面定位信息，但不适合承载完整题库大对象或大量业务数据。",
+    "title": "路由参数适合传递页面定位信息，但不适合承载完整商品目录大对象或大量业务数据。",
     "answerBoolean": true,
-    "explanation": "路由参数应用于页面定位和轻量上下文。完整题库、练习记录等大量数据应由数据层或服务端接口获取，避免路由栈承担业务数据存储职责。",
+    "explanation": "路由参数应用于页面定位和轻量上下文。完整商品目录、订单列表等大量数据应由数据层或服务端接口获取，避免路由栈承担业务数据存储职责。",
     "knowledgePoints": [
       "路由参数设计",
       "轻量参数",
@@ -5820,23 +5820,23 @@
     "categoryId": "routing",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "关于刷题 App 的路由设计，哪些做法更合理？",
+    "title": "关于电商 App 的路由设计，哪些做法更合理？",
     "options": [
       {
         "id": "a",
-        "text": "训练页传 questionId 到答题页"
+        "text": "商品列表页传 productId 到商品详情页"
       },
       {
         "id": "b",
-        "text": "答题页用 questionIds 表示本轮题目顺序"
+        "text": "商品详情页用 source 表示入口来源"
       },
       {
         "id": "c",
-        "text": "路由参数只传必要上下文，详情数据按 id 加载"
+        "text": "路由参数只传必要上下文，详情数据按 productId 加载"
       },
       {
         "id": "d",
-        "text": "把所有题目解析 JSON 全部塞进路由参数"
+        "text": "把完整商品和评论 JSON 全部塞进路由参数"
       }
     ],
     "correctOptionIds": [
@@ -5844,10 +5844,10 @@
       "b",
       "c"
     ],
-    "explanation": "路由参数应轻量、明确、可恢复。大量解析和完整题目对象应通过题目 id 再加载，避免路由参数过重。",
+    "explanation": "路由参数应轻量、明确、可恢复。完整商品和评论数据应通过 productId 再加载，避免路由参数过重。",
     "knowledgePoints": [
       "路由设计",
-      "题目详情",
+      "商品详情",
       "轻量参数"
     ],
     "sourceRefs": [
@@ -5867,18 +5867,18 @@
     "categoryId": "routing",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述路由参数在答题页中的合理使用方式。",
-    "referenceAnswer": "路由参数可传递 questionId、questionIds、questionIndex、练习模式等轻量上下文；答题页根据这些参数加载题目详情和恢复本轮顺序。不要把完整题库、答案解析等大对象直接塞进路由参数。",
+    "title": "简述路由参数在商品详情页中的合理使用方式。",
+    "referenceAnswer": "路由参数可传递 productId、source、campaignId 等轻量上下文；商品详情页根据这些参数加载商品详情并恢复入口来源。不要把完整商品、评论列表等大对象直接塞进路由参数。",
     "scoringPoints": [
-      "提到 questionId 等轻量参数",
+      "提到 productId 等轻量参数",
       "提到根据参数加载详情",
-      "提到本轮题目顺序或索引",
+      "提到入口来源或活动标识",
       "说明不应传大对象"
     ],
     "explanation": "这道题考察路由参数边界。合理做法是参数用于定位和上下文，业务数据仍由数据层加载。",
     "knowledgePoints": [
       "路由参数",
-      "答题页",
+      "商品详情页",
       "数据加载"
     ],
     "sourceRefs": [
@@ -5898,7 +5898,7 @@
     "categoryId": "routing",
     "type": "single",
     "difficulty": "medium",
-    "title": "从答题页返回题单页时，最贴近页面栈返回语义的路由能力是哪一个？",
+    "title": "从商品详情页返回商品列表页时，最贴近页面栈返回语义的路由能力是哪一个？",
     "options": [
       {
         "id": "a",
@@ -6392,7 +6392,7 @@
     "categoryId": "routing",
     "type": "short",
     "difficulty": "hard",
-    "title": "为首页、题单、答题页和结果页设计 Navigation 路由栈时，应如何处理参数、返回和跨模块页面？",
+    "title": "为首页、商品列表、商品详情和订单确认页设计 Navigation 路由栈时，应如何处理参数、返回和跨模块页面？",
     "explanation": "路由设计应同时保证页面栈语义、参数可恢复性和模块解耦，避免页面之间直接持有大型可变对象。",
     "knowledgePoints": [
       "Navigation",
@@ -6416,7 +6416,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 21,
-    "referenceAnswer": "应用应为每个 Navigation 建立独立 NavPathStack，以稳定页面名注册题单、答题和结果 NavDestination。跳转参数只携带 questionId、sessionId 等定位信息，页面再从仓储获取数据。进入答题页使用 pushPath，提交后如不希望返回到未完成状态可用 replacePath 进入结果页，普通返回使用 pop。跨 HAP/HSP/HAR 页面优先通过系统路由表按名称动态加载。需要登录拦截或未保存提示时，可使用 Navigation 的路由拦截能力统一处理。",
+    "referenceAnswer": "应用应为每个 Navigation 建立独立 NavPathStack，以稳定页面名注册商品列表、商品详情和订单确认 NavDestination。跳转参数只携带 productId、orderDraftId 等定位信息，页面再从仓储获取数据。进入商品详情页使用 pushPath，提交订单后如不希望返回到失效确认页可用 replacePath 进入订单结果页，普通返回使用 pop。跨 HAP/HSP/HAR 页面优先通过系统路由表按名称动态加载。需要登录拦截或未保存提示时，可使用 Navigation 的路由拦截能力统一处理。",
     "scoringPoints": [
       "说明每个 Navigation 使用独立 NavPathStack",
       "参数只传稳定标识而非大型业务对象",
@@ -6663,7 +6663,7 @@
     "categoryId": "network",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "题库 App 请求远程题目列表时，哪些处理更合理？",
+    "title": "电商 App 请求远程商品列表时，哪些处理更合理？",
     "options": [
       {
         "id": "a",
@@ -6687,9 +6687,9 @@
       "b",
       "c"
     ],
-    "explanation": "远程题库请求需要处理超时、响应状态和资源释放。失败时应给用户可理解的反馈或重试入口，而不是静默失败。",
+    "explanation": "远程商品请求需要处理超时、响应状态和资源释放。失败时应给用户可理解的反馈或重试入口，而不是静默失败。",
     "knowledgePoints": [
-      "远程题库",
+      "远程商品",
       "超时",
       "资源释放"
     ],
@@ -6742,7 +6742,7 @@
     "categoryId": "network",
     "type": "single",
     "difficulty": "medium",
-    "title": "远程题库接口返回非 2xx 状态码时，客户端首先应该如何处理？",
+    "title": "商品接口返回非 2xx 状态码时，客户端首先应该如何处理？",
     "options": [
       {
         "id": "a",
@@ -6764,11 +6764,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "HTTP 响应需要结合状态码和响应内容判断请求是否成功。非成功状态应进入错误处理，避免把错误响应当成正常题库数据。",
+    "explanation": "HTTP 响应需要结合状态码和响应内容判断请求是否成功。非成功状态应进入错误处理，避免把错误响应当成正常商品数据。",
     "knowledgePoints": [
       "HTTP 状态码",
       "错误处理",
-      "远程题库"
+      "远程商品"
     ],
     "sourceRefs": [
       {
@@ -6927,7 +6927,7 @@
     "categoryId": "network",
     "type": "short",
     "difficulty": "medium",
-    "title": "远程题库 App 封装 REST API 客户端时应重点考虑什么？",
+    "title": "电商 App 封装 REST API 客户端时应重点考虑什么？",
     "explanation": "这类封装题考察工程稳定性，不能只回答“调用 request”。",
     "knowledgePoints": [
       "REST API",
@@ -6945,7 +6945,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 14,
-    "referenceAnswer": "应统一配置 baseUrl、请求路径、方法、请求头、超时和响应解析；对非 2xx 状态码、网络异常和 JSON 解析失败做明确处理；请求结束后释放 HttpRequest 资源；匿名设备 ID 等客户端标识应通过请求头传递；AI 评分等敏感密钥必须留在服务端。",
+    "referenceAnswer": "应统一配置 baseUrl、请求路径、方法、请求头、超时和响应解析；对非 2xx 状态码、网络异常和 JSON 解析失败做明确处理；请求结束后释放 HttpRequest 资源；用户会话令牌等客户端凭据应通过安全的请求头传递；支付签名等敏感密钥必须留在服务端。",
     "scoringPoints": [
       "统一 baseUrl 和请求配置",
       "处理状态码、异常和解析失败",
@@ -6958,7 +6958,7 @@
     "categoryId": "network",
     "type": "single",
     "difficulty": "medium",
-    "title": "题库接口出现偶发超时时，客户端网络层最应该补齐哪种机制？",
+    "title": "商品列表接口出现偶发超时时，客户端网络层最应该补齐哪种机制？",
     "explanation": "超时场景需要可观测、可控制。封装层应提供超时配置、错误分类和有限重试策略，避免无限重试或静默吞错。",
     "knowledgePoints": [
       "超时处理",
@@ -6991,7 +6991,7 @@
       },
       {
         "id": "d",
-        "text": "忽略错误并返回空题库"
+        "text": "忽略错误并返回空商品列表"
       }
     ],
     "correctOptionIds": [
@@ -7238,7 +7238,7 @@
     "categoryId": "network",
     "type": "short",
     "difficulty": "hard",
-    "title": "远程题库请求偶发超时、断网或返回非 2xx，客户端网络层应如何设计？",
+    "title": "远程商品请求偶发超时、断网或返回非 2xx，客户端网络层应如何设计？",
     "explanation": "可靠网络层不仅要“能请求”，还要有明确的失败分类、重试边界、缓存降级和资源生命周期。",
     "knowledgePoints": [
       "HTTP封装",
@@ -7626,7 +7626,7 @@
       },
       {
         "id": "c",
-        "text": "questionIds"
+        "text": "deviceIds"
       },
       {
         "id": "d",
@@ -8372,23 +8372,23 @@
     "categoryId": "storage",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "设计刷题 App 本地缓存时，哪些数据更适合做本地持久化？",
+    "title": "设计图片编辑 App 本地缓存时，哪些数据更适合做本地持久化？",
     "options": [
       {
         "id": "a",
-        "text": "收藏题目 ID"
+        "text": "最近项目 ID"
       },
       {
         "id": "b",
-        "text": "错题记录和掌握状态"
+        "text": "编辑历史和草稿状态"
       },
       {
         "id": "c",
-        "text": "最近练习时间和答题历史"
+        "text": "最近编辑时间和导出历史"
       },
       {
         "id": "d",
-        "text": "服务端 AI 评分 API Key 明文"
+        "text": "服务端图像处理 API Key 明文"
       }
     ],
     "correctOptionIds": [
@@ -8396,10 +8396,10 @@
       "b",
       "c"
     ],
-    "explanation": "收藏、错题、练习记录属于用户本地数据或缓存，可持久化保存。API Key 属于敏感服务端密钥，不应明文放客户端本地存储。",
+    "explanation": "项目索引、编辑历史和导出记录属于用户本地数据或缓存，可持久化保存。API Key 属于敏感服务端密钥，不应明文放客户端本地存储。",
     "knowledgePoints": [
       "本地缓存",
-      "错题记录",
+      "编辑历史",
       "安全"
     ],
     "sourceRefs": [
@@ -8419,19 +8419,19 @@
     "categoryId": "storage",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述刷题 App 为什么不应该只依赖内存保存答题记录。",
-    "referenceAnswer": "内存数据在应用退出、进程被回收或设备重启后可能丢失。答题历史、错题、收藏和练习进度属于需要长期保留的数据，应根据数据形态持久化到 Preferences、KV-Store 或 RDB Store 等本地存储，并可与服务端同步。",
+    "title": "简述文档编辑 App 为什么不应该只依赖内存保存草稿。",
+    "referenceAnswer": "内存数据在应用退出、进程被回收或设备重启后可能丢失。文档草稿、编辑历史和最近打开记录属于需要长期保留的数据，应根据数据形态持久化到 Preferences、KV-Store 或 RDB Store 等本地存储，并可与服务端同步。",
     "scoringPoints": [
       "提到内存数据易丢失",
-      "提到答题历史、错题或收藏需要保留",
+      "提到文档草稿或编辑历史需要保留",
       "提到本地持久化选型",
       "提到可与服务端同步"
     ],
-    "explanation": "刷题产品的核心价值之一是进度和复盘。只放内存会导致记录丢失，无法形成错题本和练习记录闭环。",
+    "explanation": "文档编辑产品必须保障草稿可靠性。只放内存会在进程回收或设备重启后丢失内容，无法恢复用户未完成的编辑。",
     "knowledgePoints": [
       "本地持久化",
-      "练习记录",
-      "错题本"
+      "草稿记录",
+      "草稿恢复"
     ],
     "sourceRefs": [
       {
@@ -8517,8 +8517,8 @@
     "categoryId": "storage",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "为刷题 App 选择本地持久化方案时，哪些判断是合理的？",
-    "explanation": "应用数据持久化应根据数据规模、结构和查询方式选型。刷题 App 的题库来源在服务端，本地适合保存缓存、收藏、错题和练习记录。",
+    "title": "为电商 App 选择本地持久化方案时，哪些判断是合理的？",
+    "explanation": "应用数据持久化应根据数据规模、结构和查询方式选型。电商 App 的商品目录来源在服务端，本地适合保存商品缓存、购物车、搜索历史和订单草稿。",
     "knowledgePoints": [
       "存储选型",
       "Preferences",
@@ -8543,11 +8543,11 @@
       },
       {
         "id": "b",
-        "text": "结构化答题历史和按条件查询更适合 relationalStore"
+        "text": "结构化订单历史和按条件查询更适合 relationalStore"
       },
       {
         "id": "c",
-        "text": "远程题库仍应以服务端为准，本地只做缓存"
+        "text": "远程商品目录仍应以服务端为准，本地只做缓存"
       },
       {
         "id": "d",
@@ -8565,10 +8565,10 @@
     "categoryId": "storage",
     "type": "single",
     "difficulty": "medium",
-    "title": "大量答题历史需要按分类、时间和正确率统计时，优先考虑哪类本地数据能力？",
-    "explanation": "答题历史属于结构化数据，后续可能按分类、时间和正确率查询，关系型数据库更适合这类表结构和条件查询场景。",
+    "title": "大量订单历史需要按客户、时间和状态统计时，优先考虑哪类本地数据能力？",
+    "explanation": "订单历史属于结构化数据，后续可能按客户、时间和状态查询，关系型数据库更适合这类表结构和条件查询场景。",
     "knowledgePoints": [
-      "答题历史",
+      "订单历史",
       "relationalStore",
       "条件查询"
     ],
@@ -8610,10 +8610,10 @@
     "categoryId": "storage",
     "type": "boolean",
     "difficulty": "easy",
-    "title": "练习记录如果只保存在页面内存中，应用进程被回收或重启后可能丢失，因此应做本地持久化。",
-    "explanation": "练习记录、错题和收藏属于用户长期数据，不能只依赖页面内存状态。应使用合适的本地持久化方案保存。",
+    "title": "收货地址如果只保存在页面内存中，应用进程被回收或重启后可能丢失，因此应做本地持久化。",
+    "explanation": "收货地址和配送偏好属于用户长期数据，不能只依赖页面内存状态。应使用合适的本地持久化方案保存。",
     "knowledgePoints": [
-      "练习记录",
+      "草稿记录",
       "本地持久化",
       "数据可靠性"
     ],
@@ -8635,8 +8635,8 @@
     "categoryId": "storage",
     "type": "short",
     "difficulty": "medium",
-    "title": "区分刷题 App 中“服务端为准”和“本地保存”的数据边界。",
-    "explanation": "这道题考察数据边界。MVP 不强制登录时，本地用户记录尤其要考虑持久化和后续同步扩展。",
+    "title": "区分资讯 App 中“服务端为准”和“本地保存”的数据边界。",
+    "explanation": "这道题考察数据边界。匿名浏览场景下，本地用户记录尤其要考虑持久化和后续登录同步扩展。",
     "knowledgePoints": [
       "数据边界",
       "本地缓存",
@@ -8653,10 +8653,10 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 14,
-    "referenceAnswer": "题库内容、分类、题目发布状态应以服务端为准，本地只做缓存；用户收藏、错题、答题历史、练习进度、最近练习时间适合本地持久化；主题、是否首次启动等小型偏好适合 Preferences；结构化练习记录更适合 relationalStore。",
+    "referenceAnswer": "文章内容、频道和发布状态应以服务端为准，本地只做缓存；用户阅读历史、稍后阅读、离线标记和最近阅读时间适合本地持久化；主题、是否首次启动等小型偏好适合 Preferences；结构化阅读记录更适合 relationalStore。",
     "scoringPoints": [
-      "区分服务端题库和本地用户数据",
-      "说出收藏、错题、记录、进度",
+      "区分服务端内容和本地用户数据",
+      "说出阅读历史、稍后阅读和离线标记",
       "说明 Preferences 与 relationalStore 的选型"
     ]
   },
@@ -8665,10 +8665,10 @@
     "categoryId": "storage",
     "type": "single",
     "difficulty": "medium",
-    "title": "远程题库做本地缓存时，最需要避免哪类问题？",
-    "explanation": "远程题库应以服务端发布状态为准。本地缓存需要有同步和失效策略，避免下架或更新后的题目长期误导用户。",
+    "title": "远程资讯流做本地缓存时，最需要避免哪类问题？",
+    "explanation": "远程资讯流应以服务端发布状态为准。本地缓存需要有同步和失效策略，避免下架或更新后的文章长期误导用户。",
     "knowledgePoints": [
-      "远程题库",
+      "远程资讯",
       "缓存失效",
       "发布状态"
     ],
@@ -8686,11 +8686,11 @@
     "options": [
       {
         "id": "a",
-        "text": "服务端已下架或更新的题目仍长期作为有效题展示"
+        "text": "服务端已下架或更新的文章仍长期作为有效内容展示"
       },
       {
         "id": "b",
-        "text": "缓存题目列表以减少重复网络请求"
+        "text": "缓存文章列表以减少重复网络请求"
       },
       {
         "id": "c",
@@ -8698,7 +8698,7 @@
       },
       {
         "id": "d",
-        "text": "保留用户收藏和错题记录"
+        "text": "保留用户阅读历史和稍后阅读记录"
       }
     ],
     "correctOptionIds": [
@@ -8808,7 +8808,7 @@
     "categoryId": "storage",
     "type": "single",
     "difficulty": "medium",
-    "title": "离线题库包包含较大的图片和 JSON 文件，不需要复杂关系查询时，更适合把主体数据保存在哪里？",
+    "title": "离线地图包包含较大的瓦片图片和 JSON 索引文件，不需要复杂关系查询时，更适合把主体数据保存在哪里？",
     "explanation": "较大的文件型数据适合保存在应用沙箱文件目录，通过文件接口管理；Preferences 会全量加载到内存，不适合承载大量离线包内容。",
     "knowledgePoints": [
       "应用文件",
@@ -8858,7 +8858,7 @@
     "categoryId": "storage",
     "type": "boolean",
     "difficulty": "medium",
-    "title": "Preferences 会在使用时把数据全量加载到内存，因此不适合作为大量题目正文或大型二进制资源的存储方案。",
+    "title": "Preferences 会在使用时把数据全量加载到内存，因此不适合作为大量文章正文或大型二进制资源的存储方案。",
     "explanation": "Preferences 适合轻量配置，访问快但会全量加载，不适合大量数据。大型结构化数据应考虑 RDB，文件资源应使用应用文件存储。",
     "knowledgePoints": [
       "Preferences",
@@ -8930,7 +8930,7 @@
     "categoryId": "storage",
     "type": "short",
     "difficulty": "hard",
-    "title": "为刷题 App 设计本地存储分层，并说明缓存、用户数据和备份的边界。",
+    "title": "为资讯 App 设计本地存储分层，并说明缓存、用户数据和备份的边界。",
     "explanation": "存储设计不能只按 API 名称划分，还要明确数据规模、查询方式、可重建性、一致性和安全等级。",
     "knowledgePoints": [
       "存储分层",
@@ -8964,10 +8964,10 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 21,
-    "referenceAnswer": "主题、上次练习模式等少量配置放 Preferences；收藏、错题、练习明细和分类统计等结构化数据放 relationalStore，并通过事务保证联动更新；远程题库正文和图片可按规模采用 RDB 或应用沙箱文件缓存，保存版本号、校验值和更新时间。服务端题库是内容真源，本地缓存可失效重建；用户答题记录属于重要本地数据，升级时要做数据库迁移，必要时提供备份恢复。敏感数据应评估数据库加密或系统密钥能力，不能把密钥硬编码在客户端。",
+    "referenceAnswer": "主题、上次阅读频道等少量配置放 Preferences；阅读历史、稍后阅读和频道统计等结构化数据放 relationalStore，并通过事务保证联动更新；远程文章正文和图片可按规模采用 RDB 或应用沙箱文件缓存，保存版本号、校验值和更新时间。服务端内容是数据真源，本地缓存可失效重建；用户阅读记录属于重要本地数据，升级时要做数据库迁移，必要时提供备份恢复。敏感数据应评估数据库加密或系统密钥能力，不能把密钥硬编码在客户端。",
     "scoringPoints": [
       "按轻量配置、结构化记录和文件缓存分层",
-      "说明服务端题库与本地缓存的真源边界",
+      "说明服务端内容与本地缓存的真源边界",
       "说明事务、版本迁移和备份恢复",
       "提到敏感数据加密和密钥安全"
     ]
@@ -9437,11 +9437,11 @@
       },
       {
         "id": "c",
-        "text": "最近一次练习的分类 ID"
+        "text": "最近一次筛选的频道 ID"
       },
       {
         "id": "d",
-        "text": "大量按条件查询的答题明细表"
+        "text": "大量按条件查询的订单明细表"
       }
     ],
     "correctOptionIds": [
@@ -9530,11 +9530,11 @@
     "categoryId": "preferences",
     "type": "single",
     "difficulty": "medium",
-    "title": "保存“上次选择的练习模式”这类小型用户偏好，优先使用什么？",
-    "explanation": "练习模式偏好是小型键值数据，适合 Preferences。关系型数据库更适合复杂结构化数据，静态字段不能保证进程重启后的可靠保存。",
+    "title": "保存“上次选择的内容频道”这类小型用户偏好，优先使用什么？",
+    "explanation": "内容频道偏好是小型键值数据，适合 Preferences。关系型数据库更适合复杂结构化数据，静态字段不能保证进程重启后的可靠保存。",
     "knowledgePoints": [
       "Preferences",
-      "练习模式",
+      "内容频道",
       "用户偏好"
     ],
     "sourceRefs": [
@@ -9811,7 +9811,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 21,
-    "referenceAnswer": "先通过合法 Context 和唯一文件名获取 Preferences 实例，读取时提供类型匹配的默认值；更新使用 put、delete 或 clear，XML 模式在完成一组修改后 await flush，并处理失败。长期订阅应在生命周期结束时取消，确定不再使用实例时可移出缓存。Preferences 适合主题、开关、上次选择等少量配置，不适合大量题库、复杂关联查询、跨多步原子写入或多进程并发访问，这些场景应选择文件、relationalStore 或其他合适存储。",
+    "referenceAnswer": "先通过合法 Context 和唯一文件名获取 Preferences 实例，读取时提供类型匹配的默认值；更新使用 put、delete 或 clear，XML 模式在完成一组修改后 await flush，并处理失败。长期订阅应在生命周期结束时取消，确定不再使用实例时可移出缓存。Preferences 适合主题、开关、上次选择等少量配置，不适合大量媒体资源、复杂关联查询、跨多步原子写入或多进程并发访问，这些场景应选择文件、relationalStore 或其他合适存储。",
     "scoringPoints": [
       "说明获取实例、默认值和修改流程",
       "说明 XML 模式需要 flush 并处理错误",
@@ -10107,15 +10107,15 @@
     "categoryId": "relational-store",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "用 relationalStore 保存答题历史时，哪些设计更合理？",
+    "title": "用 relationalStore 保存订单历史时，哪些设计更合理？",
     "options": [
       {
         "id": "a",
-        "text": "为答题记录设计清晰表结构"
+        "text": "为订单记录设计清晰表结构"
       },
       {
         "id": "b",
-        "text": "按 questionId、categoryId 等字段支持查询"
+        "text": "按 orderId、customerId 等字段支持查询"
       },
       {
         "id": "c",
@@ -10131,9 +10131,9 @@
       "b",
       "c"
     ],
-    "explanation": "答题历史是结构化数据，适合通过表结构和条件字段查询。事务可用于多步一致性写入，单 key 大字符串不利于查询和维护。",
+    "explanation": "订单历史是结构化数据，适合通过表结构和条件字段查询。事务可用于多步一致性写入，单 key 大字符串不利于查询和维护。",
     "knowledgePoints": [
-      "答题历史",
+      "订单历史",
       "表结构",
       "事务"
     ],
@@ -10155,7 +10155,7 @@
     "type": "short",
     "difficulty": "medium",
     "title": "简述 RdbStore 中事务能力适合解决什么问题。",
-    "referenceAnswer": "事务适合多步数据库写入需要保持一致性的场景，例如同时写入答题记录、更新分类统计和错题状态。通过 beginTransaction、commit、rollBack 或 rollback 相关能力，可以做到要么全部成功，要么失败回滚。",
+    "referenceAnswer": "事务适合多步数据库写入需要保持一致性的场景，例如同时写入订单、扣减库存和更新优惠券状态。通过 beginTransaction、commit、rollBack 或 rollback 相关能力，可以做到要么全部成功，要么失败回滚。",
     "scoringPoints": [
       "说明多步写入一致性",
       "提到 beginTransaction",
@@ -10163,7 +10163,7 @@
       "提到回滚能力",
       "能结合业务场景举例"
     ],
-    "explanation": "事务不是为了简单查询，而是为了保证一组写操作的原子性和一致性。刷题记录更新就是典型业务例子。",
+    "explanation": "事务不是为了简单查询，而是为了保证一组写操作的原子性和一致性。订单提交涉及多张表联动更新，就是典型业务例子。",
     "knowledgePoints": [
       "事务",
       "一致性",
@@ -10298,11 +10298,11 @@
     "categoryId": "relational-store",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "把练习记录落到 relationalStore 时，哪些表设计思路更合理？",
-    "explanation": "练习记录是结构化数据，应按查询需求建模。多步写入需要一致性时应考虑事务，避免把结构化数据退化成不可查询的大字符串。",
+    "title": "把订单记录落到 relationalStore 时，哪些表设计思路更合理？",
+    "explanation": "订单记录是结构化数据，应按查询需求建模。多步写入需要一致性时应考虑事务，避免把结构化数据退化成不可查询的大字符串。",
     "knowledgePoints": [
       "RDB 建模",
-      "答题记录",
+      "订单记录",
       "事务"
     ],
     "sourceRefs": [
@@ -10319,7 +10319,7 @@
     "options": [
       {
         "id": "a",
-        "text": "为记录设计 questionId、categoryId、isCorrect、answeredAt 等字段"
+        "text": "为记录设计 orderId、customerId、status、createdAt 等字段"
       },
       {
         "id": "b",
@@ -10345,12 +10345,12 @@
     "categoryId": "relational-store",
     "type": "short",
     "difficulty": "medium",
-    "title": "说明 relationalStore 更适合保存刷题 App 的哪些本地数据。",
+    "title": "说明 relationalStore 更适合保存客户关系管理 App 的哪些本地数据。",
     "explanation": "这道题考察存储选型。不要把所有本地数据都塞 Preferences，也不要为了一个开关就引入复杂数据库。",
     "knowledgePoints": [
       "relationalStore",
       "存储选型",
-      "练习记录"
+      "客户记录"
     ],
     "sourceRefs": [
       {
@@ -10363,10 +10363,10 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 14,
-    "referenceAnswer": "relationalStore 适合保存结构化、需要条件查询或统计的数据，例如答题历史、分类完成度、正确率统计明细、错题记录和练习会话记录。它比 Preferences 更适合复杂表结构和多条件查询，也更便于后续做统计页面。",
+    "referenceAnswer": "relationalStore 适合保存结构化、需要条件查询或统计的数据，例如客户资料、跟进记录、销售机会、订单明细和联系人关系。它比 Preferences 更适合复杂表结构和多条件查询，也更便于后续做统计页面。",
     "scoringPoints": [
       "说明结构化数据",
-      "举出答题历史、错题、统计等例子",
+      "举出客户、跟进、订单等结构化数据例子",
       "说明相比 Preferences 的优势"
     ]
   },
@@ -10375,7 +10375,7 @@
     "categoryId": "relational-store",
     "type": "single",
     "difficulty": "medium",
-    "title": "同时插入答题明细并更新分类统计且要求一致时，数据库层应优先考虑什么？",
+    "title": "同时插入订单明细并更新库存统计且要求一致时，数据库层应优先考虑什么？",
     "explanation": "多步数据库写入如果要求要么全部成功要么全部失败，应使用事务能力保证一致性，避免只写入部分数据导致统计和明细不一致。",
     "knowledgePoints": [
       "事务",
@@ -10698,7 +10698,7 @@
     "categoryId": "relational-store",
     "type": "short",
     "difficulty": "hard",
-    "title": "刷题 App 的本地数据库从版本 1 升级到版本 3，增加错题掌握状态和练习索引，应如何迁移并控制查询性能？",
+    "title": "订单管理 App 的本地数据库从版本 1 升级到版本 3，增加配送状态和订单索引，应如何迁移并控制查询性能？",
     "explanation": "数据库升级既是正确性问题也是性能问题，必须保证原子性、兼容历史数据并用实际查询验证索引价值。",
     "knowledgePoints": [
       "数据库版本",
@@ -10727,7 +10727,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 22,
-    "referenceAnswer": "打开数据库后读取当前版本，按版本逐级执行迁移：先增加掌握状态字段并回填默认值，再为常用的 categoryId、answeredAt 等过滤排序组合建立合适索引。把 DDL、数据回填和版本号更新放进事务，全部成功后 commit，失败 rollback，不能直接跳过中间迁移。查询使用 RdbPredicates 或参数化 SQL，只选择需要的列并分页；ResultSet 必须及时 close。上线前用真实数据量验证迁移耗时、索引命中和回滚路径，并保留必要备份。",
+    "referenceAnswer": "打开数据库后读取当前版本，按版本逐级执行迁移：先增加配送状态字段并回填默认值，再为常用的 customerId、createdAt 等过滤排序组合建立合适索引。把 DDL、数据回填和版本号更新放进事务，全部成功后 commit，失败 rollback，不能直接跳过中间迁移。查询使用 RdbPredicates 或参数化 SQL，只选择需要的列并分页；ResultSet 必须及时 close。上线前用真实数据量验证迁移耗时、索引命中和回滚路径，并保留必要备份。",
     "scoringPoints": [
       "按旧版本逐级迁移而不是直接覆盖数据库",
       "用事务包住结构变更、数据回填和版本更新",
@@ -11830,15 +11830,15 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述一个题库 App 的长列表页面可以从哪些方面做性能优化。",
-    "referenceAnswer": "题库列表应避免一次性渲染所有题目，优先使用懒加载列表；重数据处理和筛选排序要避免阻塞主线程；非首屏模块可结合 lazy import 推迟加载；出现卡顿或 AppFreeze 时应结合日志、事件队列和性能工具定位耗时任务。",
+    "title": "简述一个资讯 App 的文章信息流可以从哪些方面做性能优化。",
+    "referenceAnswer": "文章信息流应避免一次性渲染所有内容卡片，优先使用懒加载列表；重数据处理和筛选排序要避免阻塞主线程；非首屏模块可结合 lazy import 推迟加载；出现卡顿或 AppFreeze 时应结合日志、事件队列和性能工具定位耗时任务。",
     "scoringPoints": [
       "提到长列表懒加载",
       "提到避免主线程耗时任务",
       "提到可用 lazy import 优化冷启动",
       "提到结合日志或性能工具定位卡顿"
     ],
-    "explanation": "题库 App 常见瓶颈是长列表渲染、筛选排序和冷启动加载。官方文档分别给出了长列表懒加载、lazy import 和 AppFreeze 分析思路，可以组合成面试回答。",
+    "explanation": "资讯 App 常见瓶颈是长列表渲染、筛选排序和冷启动加载。官方文档分别给出了长列表懒加载、lazy import 和 AppFreeze 分析思路，可以组合成面试回答。",
     "knowledgePoints": [
       "长列表优化",
       "冷启动",
@@ -11874,7 +11874,7 @@
     "categoryId": "performance",
     "type": "single",
     "difficulty": "medium",
-    "title": "题库列表达到上百道后，首页或训练页列表性能优先关注哪一点？",
+    "title": "商品列表达到上百项后，首页或分类页列表性能优先关注哪一点？",
     "options": [
       {
         "id": "a",
@@ -11882,7 +11882,7 @@
       },
       {
         "id": "b",
-        "text": "把所有题目都渲染成一个超长 Text"
+        "text": "把所有商品都渲染成一个超长 Text"
       },
       {
         "id": "c",
@@ -11896,11 +11896,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "长列表性能优化的核心是避免一次性加载所有元素。题库规模上升后，列表容器、懒加载和稳定 item 结构比堆叠静态组件更重要。",
+    "explanation": "长列表性能优化的核心是避免一次性加载所有元素。商品规模上升后，列表容器、懒加载和稳定 item 结构比堆叠静态组件更重要。",
     "knowledgePoints": [
       "长列表",
       "懒加载",
-      "题库规模"
+      "商品规模"
     ],
     "sourceRefs": [
       {
@@ -11944,7 +11944,7 @@
     "categoryId": "performance",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "刷题 App 做性能优化时，哪些方向更贴近官方建议和真实场景？",
+    "title": "电商 App 做性能优化时，哪些方向更贴近官方建议和真实场景？",
     "options": [
       {
         "id": "a",
@@ -12001,7 +12001,7 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "hard",
-    "title": "简述如何排查一个答题页点击后短时间无响应的问题。",
+    "title": "简述如何排查一个图片编辑页点击滤镜后短时间无响应的问题。",
     "referenceAnswer": "先确认是否发生 AppFreeze 或主线程长任务，查看 HiLog、事件队列和近期耗时任务；检查点击处理是否同步执行了大量计算、JSON 解析或数据库操作；把重任务拆到合适的数据层或异步流程，并减少 UI 构建阶段的同步工作。",
     "scoringPoints": [
       "提到 AppFreeze 或主线程长任务",
@@ -12033,7 +12033,7 @@
     "categoryId": "performance",
     "type": "single",
     "difficulty": "medium",
-    "title": "大量题库数据不是首屏必须展示时，哪种优化方向更适合降低冷启动压力？",
+    "title": "大量报表模块数据不是首屏必须展示时，哪种优化方向更适合降低冷启动压力？",
     "options": [
       {
         "id": "a",
@@ -12041,11 +12041,11 @@
       },
       {
         "id": "b",
-        "text": "冷启动时同步解析所有模块题目"
+        "text": "冷启动时同步解析所有报表数据"
       },
       {
         "id": "c",
-        "text": "在启动阶段循环渲染所有题卡"
+        "text": "在启动阶段循环渲染所有图表"
       },
       {
         "id": "d",
@@ -12059,7 +12059,7 @@
     "knowledgePoints": [
       "冷启动",
       "按需加载",
-      "题库模块"
+      "报表模块"
     ],
     "sourceRefs": [
       {
@@ -12312,7 +12312,7 @@
     "categoryId": "performance",
     "type": "single",
     "difficulty": "medium",
-    "title": "答题页需要对大量文本做 CPU 密集型分词统计，为避免阻塞 UI，优先应如何处理？",
+    "title": "文档编辑页需要对大量文本做 CPU 密集型分词统计，为避免阻塞 UI，优先应如何处理？",
     "options": [
       {
         "id": "a",
@@ -12394,7 +12394,7 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "hard",
-    "title": "简述如何为长题库列表调优 cachedCount，并判断调优是否有效。",
+    "title": "简述如何为长商品列表调优 cachedCount，并判断调优是否有效。",
     "referenceAnswer": "先在目标手机和平板上建立可复现的快速滑动场景，记录白块、掉帧、CPU 和内存基线。使用 LazyForEach 或 Repeat 虚拟滚动并保证稳定 key，再从较小 cachedCount 开始逐步调整，观察可视区外预加载是否足以覆盖快速滑动。cachedCount 增大能减少临时创建造成的白块，但会增加布局、CPU 和内存；应选择满足流畅度且资源开销可接受的最小值。调整后用相同数据量、相同设备和操作路径复测，而不是凭主观感觉判断。",
     "scoringPoints": [
       "建立固定设备、数据量和滑动路径的性能基线",
@@ -12653,7 +12653,7 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "hard",
-    "title": "用户反馈“冷启动慢，进入答题页后点击选项偶尔卡住”，你会如何分阶段定位？",
+    "title": "用户反馈“冷启动慢，进入图片编辑页后点击滤镜偶尔卡住”，你会如何分阶段定位？",
     "explanation": "性能排查应从可复现指标和阶段数据开始，再针对瓶颈修改，不能先凭感觉改缓存数量或并发线程数。",
     "knowledgePoints": [
       "性能诊断",
@@ -12867,7 +12867,7 @@
       },
       {
         "id": "c",
-        "text": "修改题库答案"
+        "text": "修改业务数据库数据"
       },
       {
         "id": "d",
@@ -13012,7 +13012,7 @@
       },
       {
         "id": "b",
-        "text": "questionIds"
+        "text": "productIds"
       },
       {
         "id": "c",
@@ -13208,7 +13208,7 @@
       },
       {
         "id": "d",
-        "text": "题库数据文件 questions.json"
+        "text": "业务数据文件 products.json"
       }
     ],
     "correctOptionIds": [
@@ -13249,7 +13249,7 @@
       },
       {
         "id": "b",
-        "text": "通过 categoryId 引用题库分类"
+        "text": "通过 productId 引用商品数据"
       },
       {
         "id": "c",
@@ -13831,14 +13831,14 @@
     "categoryId": "next-adaptation",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述一个刷题 App 做 HarmonyOS NEXT 适配时，你会重点验证哪些方面。",
-    "referenceAnswer": "应重点验证 ArkTS 严格语法、Stage 模型页面和生命周期、build-profile.json5 的 SDK/产品/签名配置，以及手机、平板、折叠屏和多窗口下的布局与功能。刷题 App 还要重点检查长列表、答题页、底部导航和记录页在不同窗口尺寸下是否可用。",
+    "title": "简述一个资讯 App 做 HarmonyOS NEXT 适配时，你会重点验证哪些方面。",
+    "referenceAnswer": "应重点验证 ArkTS 严格语法、Stage 模型页面和生命周期、build-profile.json5 的 SDK/产品/签名配置，以及手机、平板、折叠屏和多窗口下的布局与功能。资讯 App 还要重点检查信息流、文章详情、侧栏导航和阅读记录页在不同窗口尺寸下是否可用。",
     "scoringPoints": [
       "提到 ArkTS 严格语法或迁移差异",
       "提到 Stage 模型和生命周期",
       "提到 build-profile.json5 配置",
       "提到平板、折叠屏、多窗口适配",
-      "能结合刷题 App 页面场景说明"
+      "能结合资讯 App 页面场景说明"
     ],
     "explanation": "这类问题考察系统化适配思路。官方文档分别覆盖 ArkTS 适配、工程构建配置和多设备兼容性体验，回答应把它们落到具体 App 页面和交互上。",
     "knowledgePoints": [
@@ -13877,7 +13877,7 @@
     "categoryId": "next-adaptation",
     "type": "single",
     "difficulty": "medium",
-    "title": "题库 App 在平板多窗口模式下右侧内容被截断，优先属于哪类适配问题？",
+    "title": "新闻阅读 App 在平板多窗口模式下右侧内容被截断，优先属于哪类适配问题？",
     "options": [
       {
         "id": "a",
@@ -14004,13 +14004,13 @@
     "categoryId": "next-adaptation",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述刷题 App 适配平板优先布局时的几个验证点。",
-    "referenceAnswer": "应验证首页模块区和统计区不会被拉伸失衡，训练列表和题目预览双栏可用，答题页题干、选项、解析和题卡状态不遮挡，底部导航常驻且不覆盖内容，多窗口尺寸变化下仍能滚动和操作。",
+    "title": "简述企业协作 App 适配平板优先布局时的几个验证点。",
+    "referenceAnswer": "应验证工作台和数据概览不会被拉伸失衡，项目列表和详情双栏可用，文档编辑区、工具栏、评论区和成员面板不遮挡，主导航常驻且不覆盖内容，多窗口尺寸变化下仍能滚动和操作。",
     "scoringPoints": [
       "提到首页布局",
-      "提到训练列表和预览",
-      "提到答题页内容不遮挡",
-      "提到底部导航",
+      "提到项目列表和详情",
+      "提到编辑区和工具面板不遮挡",
+      "提到主导航",
       "提到多窗口尺寸变化"
     ],
     "explanation": "平板优先不是只放大手机页面，而是要检查信息密度、双栏结构、导航常驻和多窗口可用性。",
@@ -14278,7 +14278,7 @@
     "categoryId": "next-adaptation",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "平板优先的刷题 App 做兼容性验证时，哪些场景应纳入测试矩阵？",
+    "title": "平板优先的企业协作 App 做兼容性验证时，哪些场景应纳入测试矩阵？",
     "options": [
       {
         "id": "a",
@@ -14362,7 +14362,7 @@
     "categoryId": "next-adaptation",
     "type": "single",
     "difficulty": "easy",
-    "title": "题库页面在宽屏上左右留白很大，用户还需频繁进入题目详情，哪种布局改造更合理？",
+    "title": "商品列表页面在宽屏上左右留白很大，用户还需频繁进入商品详情，哪种布局改造更合理？",
     "options": [
       {
         "id": "a",
@@ -14378,13 +14378,13 @@
       },
       {
         "id": "d",
-        "text": "取消题目详情，只显示题目 ID"
+        "text": "取消商品详情，只显示商品 ID"
       }
     ],
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "宽屏可利用分栏同时展示题单和详情，提高浏览与切换效率；窄窗口再回到单列导航。这符合响应式布局根据窗口范围改变页面结构的思路。",
+    "explanation": "宽屏可利用分栏同时展示商品列表和详情，提高浏览与切换效率；窄窗口再回到单列导航。这符合响应式布局根据窗口范围改变页面结构的思路。",
     "knowledgePoints": [
       "分栏布局",
       "列表详情",
@@ -14413,8 +14413,8 @@
     "categoryId": "next-adaptation",
     "type": "short",
     "difficulty": "hard",
-    "title": "简述如何用“一次开发，多端部署”思路设计刷题 App 的手机、平板和自由窗口布局。",
-    "referenceAnswer": "业务数据、答题状态和服务层应尽量复用，UI 不按设备型号拆成三套完全独立代码，而是以当前窗口或容器尺寸建立断点。窄窗口采用单列题单与详情导航；中宽窗口可显示题单加题目双栏；更宽窗口再控制阅读最大宽度、侧栏比例和留白，避免内容无限拉伸。使用自适应能力处理局部拉伸、均分和隐藏，使用断点、媒体查询或 GridRow/GridCol 在跨度较大时改变结构。同时验证横竖屏、全屏/分屏/自由窗口、字体缩放、底部安全区以及触摸、键盘和鼠标交互，保证窗口变化时任务状态连续。",
+    "title": "简述如何用“一次开发，多端部署”思路设计电商 App 的手机、平板和自由窗口布局。",
+    "referenceAnswer": "业务数据、购物车状态和服务层应尽量复用，UI 不按设备型号拆成三套完全独立代码，而是以当前窗口或容器尺寸建立断点。窄窗口采用单列商品列表与详情导航；中宽窗口可显示商品列表加详情双栏；更宽窗口再控制阅读最大宽度、侧栏比例和留白，避免内容无限拉伸。使用自适应能力处理局部拉伸、均分和隐藏，使用断点、媒体查询或 GridRow/GridCol 在跨度较大时改变结构。同时验证横竖屏、全屏/分屏/自由窗口、字体缩放、底部安全区以及触摸、键盘和鼠标交互，保证窗口变化时任务状态连续。",
     "scoringPoints": [
       "业务逻辑和数据层复用，避免按设备复制整套实现",
       "按窗口或容器尺寸建立断点，而不是只看设备型号",
@@ -14574,7 +14574,7 @@
     "categoryId": "next-adaptation",
     "type": "single",
     "difficulty": "easy",
-    "title": "一个只有图标、没有可见文字的收藏按钮，为帮助屏幕朗读识别其含义，应优先补充什么？",
+    "title": "一个只有图标、没有可见文字的通知按钮，为帮助屏幕朗读识别其含义，应优先补充什么？",
     "explanation": "accessibilityText 可为没有文字信息的组件提供可朗读名称，让无障碍服务说明当前控件的含义。",
     "knowledgePoints": [
       "无障碍",
@@ -14678,7 +14678,7 @@
     "categoryId": "next-adaptation",
     "type": "short",
     "difficulty": "hard",
-    "title": "为刷题 App 制定“一多”适配测试矩阵，应覆盖哪些布局、交互和可访问性场景？",
+    "title": "为企业协作 App 制定“一多”适配测试矩阵，应覆盖哪些布局、交互和可访问性场景？",
     "explanation": "“一次开发，多端部署”需要按窗口、输入和可访问性组合验证，不能只按设备型号做一次静态截图。",
     "knowledgePoints": [
       "一多",
@@ -14722,7 +14722,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 24,
-    "referenceAnswer": "布局至少覆盖手机窄屏、平板横竖屏、折叠展开、分屏与自由窗口连续缩放，并按当前窗口 width 或 GridRow 断点切换单栏和双栏；检查长题干、系统大字体、软键盘、深浅色和安全区域。交互要覆盖触屏、鼠标、键盘焦点、快捷键和返回行为。可访问性要为图标按钮提供可朗读文本，检查选中状态和焦点顺序。每个尺寸都验证内容不裁切、不重叠、左右栏滚动独立且导航状态一致，并保存真机或模拟器截图做回归。",
+    "referenceAnswer": "布局至少覆盖手机窄屏、平板横竖屏、折叠展开、分屏与自由窗口连续缩放，并按当前窗口 width 或 GridRow 断点切换单栏和双栏；检查长标题、系统大字体、软键盘、深浅色和安全区域。交互要覆盖触屏、鼠标、键盘焦点、快捷键和返回行为。可访问性要为图标按钮提供可朗读文本，检查选中状态和焦点顺序。每个尺寸都验证内容不裁切、不重叠、左右栏滚动独立且导航状态一致，并保存真机或模拟器截图做回归。",
     "scoringPoints": [
       "覆盖多种窗口宽度、方向、折叠和分屏",
       "覆盖长文本、大字体、深浅色和安全区域",

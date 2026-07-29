@@ -239,11 +239,11 @@
     "categoryId": "component-communication",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "设计答题页组件通信时，哪些做法更合理？",
+    "title": "设计购物车页面组件通信时，哪些做法更合理？",
     "options": [
       {
         "id": "a",
-        "text": "题目标题、选项等展示数据可由父组件传给子组件"
+        "text": "商品名称、价格等展示数据可由父组件传给子组件"
       },
       {
         "id": "b",
@@ -317,7 +317,7 @@
     "categoryId": "component-communication",
     "type": "single",
     "difficulty": "medium",
-    "title": "一个筛选面板需要把用户选择同步回父页面刷新题目列表，优先考虑哪种通信方向？",
+    "title": "一个筛选面板需要把用户选择同步回父页面刷新商品列表，优先考虑哪种通信方向？",
     "options": [
       {
         "id": "a",
@@ -567,7 +567,7 @@
       },
       {
         "id": "b",
-        "text": "子组件直接累计全局练习统计"
+        "text": "子组件直接累计全局购物车金额"
       },
       {
         "id": "c",

@@ -464,11 +464,11 @@
       },
       {
         "id": "c",
-        "text": "最近一次练习的分类 ID"
+        "text": "最近一次筛选的频道 ID"
       },
       {
         "id": "d",
-        "text": "大量按条件查询的答题明细表"
+        "text": "大量按条件查询的订单明细表"
       }
     ],
     "correctOptionIds": [
@@ -557,11 +557,11 @@
     "categoryId": "preferences",
     "type": "single",
     "difficulty": "medium",
-    "title": "保存“上次选择的练习模式”这类小型用户偏好，优先使用什么？",
-    "explanation": "练习模式偏好是小型键值数据，适合 Preferences。关系型数据库更适合复杂结构化数据，静态字段不能保证进程重启后的可靠保存。",
+    "title": "保存“上次选择的内容频道”这类小型用户偏好，优先使用什么？",
+    "explanation": "内容频道偏好是小型键值数据，适合 Preferences。关系型数据库更适合复杂结构化数据，静态字段不能保证进程重启后的可靠保存。",
     "knowledgePoints": [
       "Preferences",
-      "练习模式",
+      "内容频道",
       "用户偏好"
     ],
     "sourceRefs": [
@@ -838,7 +838,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 21,
-    "referenceAnswer": "先通过合法 Context 和唯一文件名获取 Preferences 实例，读取时提供类型匹配的默认值；更新使用 put、delete 或 clear，XML 模式在完成一组修改后 await flush，并处理失败。长期订阅应在生命周期结束时取消，确定不再使用实例时可移出缓存。Preferences 适合主题、开关、上次选择等少量配置，不适合大量题库、复杂关联查询、跨多步原子写入或多进程并发访问，这些场景应选择文件、relationalStore 或其他合适存储。",
+    "referenceAnswer": "先通过合法 Context 和唯一文件名获取 Preferences 实例，读取时提供类型匹配的默认值；更新使用 put、delete 或 clear，XML 模式在完成一组修改后 await flush，并处理失败。长期订阅应在生命周期结束时取消，确定不再使用实例时可移出缓存。Preferences 适合主题、开关、上次选择等少量配置，不适合大量媒体资源、复杂关联查询、跨多步原子写入或多进程并发访问，这些场景应选择文件、relationalStore 或其他合适存储。",
     "scoringPoints": [
       "说明获取实例、默认值和修改流程",
       "说明 XML 模式需要 flush 并处理错误",

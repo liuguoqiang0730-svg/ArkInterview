@@ -49,7 +49,7 @@
     "categoryId": "routing",
     "type": "single",
     "difficulty": "medium",
-    "title": "页面 B 由页面 A 跳转进入，页面 B 需要读取传入的 questionId，最对应哪个路由能力？",
+    "title": "页面 B 由页面 A 跳转进入，页面 B 需要读取传入的 productId，最对应哪个路由能力？",
     "options": [
       {
         "id": "a",
@@ -71,7 +71,7 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "跳转时通过路由参数传入 questionId，目标页面读取参数应使用 getParams 类能力。back 负责返回，不负责读取当前页面参数。",
+    "explanation": "跳转时通过路由参数传入 productId，目标页面读取参数应使用 getParams 类能力。back 负责返回，不负责读取当前页面参数。",
     "knowledgePoints": [
       "路由导航",
       "参数传递",
@@ -123,7 +123,7 @@
     "options": [
       {
         "id": "a",
-        "text": "列表页跳详情页时传 questionId，由详情页再请求题目详情"
+        "text": "列表页跳详情页时传 productId，由详情页再请求商品详情"
       },
       {
         "id": "b",
@@ -131,7 +131,7 @@
       },
       {
         "id": "c",
-        "text": "把完整题库 JSON 都放进路由参数，减少接口请求"
+        "text": "把完整商品目录 JSON 都放进路由参数，减少接口请求"
       },
       {
         "id": "d",
@@ -142,7 +142,7 @@
       "a",
       "b"
     ],
-    "explanation": "路由参数适合传递页面定位所需的轻量信息，例如 questionId。详情页根据 ID 拉取详情，既能控制参数大小，也能处理参数缺失或数据过期。",
+    "explanation": "路由参数适合传递页面定位所需的轻量信息，例如 productId。详情页根据 ID 拉取详情，既能控制参数大小，也能处理参数缺失或数据过期。",
     "knowledgePoints": [
       "路由导航",
       "参数传递",
@@ -168,7 +168,7 @@
     "categoryId": "routing",
     "type": "single",
     "difficulty": "easy",
-    "title": "页面 A 跳转到答题页并希望传入 questionId，通常应使用路由跳转时的哪个能力？",
+    "title": "页面 A 跳转到商品详情页并希望传入 productId，通常应使用路由跳转时的哪个能力？",
     "options": [
       {
         "id": "a",
@@ -190,11 +190,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "页面跳转时携带 questionId、mode 等轻量参数，应使用路由参数能力。数据库表结构和权限结果不是页面跳转传参能力。",
+    "explanation": "页面跳转时携带 productId、source 等轻量参数，应使用路由参数能力。数据库表结构和权限结果不是页面跳转传参能力。",
     "knowledgePoints": [
       "路由参数",
       "页面跳转",
-      "questionId"
+      "productId"
     ],
     "sourceRefs": [
       {
@@ -213,9 +213,9 @@
     "categoryId": "routing",
     "type": "boolean",
     "difficulty": "medium",
-    "title": "路由参数适合传递页面定位信息，但不适合承载完整题库大对象或大量业务数据。",
+    "title": "路由参数适合传递页面定位信息，但不适合承载完整商品目录大对象或大量业务数据。",
     "answerBoolean": true,
-    "explanation": "路由参数应用于页面定位和轻量上下文。完整题库、练习记录等大量数据应由数据层或服务端接口获取，避免路由栈承担业务数据存储职责。",
+    "explanation": "路由参数应用于页面定位和轻量上下文。完整商品目录、订单列表等大量数据应由数据层或服务端接口获取，避免路由栈承担业务数据存储职责。",
     "knowledgePoints": [
       "路由参数设计",
       "轻量参数",
@@ -238,23 +238,23 @@
     "categoryId": "routing",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "关于刷题 App 的路由设计，哪些做法更合理？",
+    "title": "关于电商 App 的路由设计，哪些做法更合理？",
     "options": [
       {
         "id": "a",
-        "text": "训练页传 questionId 到答题页"
+        "text": "商品列表页传 productId 到商品详情页"
       },
       {
         "id": "b",
-        "text": "答题页用 questionIds 表示本轮题目顺序"
+        "text": "商品详情页用 source 表示入口来源"
       },
       {
         "id": "c",
-        "text": "路由参数只传必要上下文，详情数据按 id 加载"
+        "text": "路由参数只传必要上下文，详情数据按 productId 加载"
       },
       {
         "id": "d",
-        "text": "把所有题目解析 JSON 全部塞进路由参数"
+        "text": "把完整商品和评论 JSON 全部塞进路由参数"
       }
     ],
     "correctOptionIds": [
@@ -262,10 +262,10 @@
       "b",
       "c"
     ],
-    "explanation": "路由参数应轻量、明确、可恢复。大量解析和完整题目对象应通过题目 id 再加载，避免路由参数过重。",
+    "explanation": "路由参数应轻量、明确、可恢复。完整商品和评论数据应通过 productId 再加载，避免路由参数过重。",
     "knowledgePoints": [
       "路由设计",
-      "题目详情",
+      "商品详情",
       "轻量参数"
     ],
     "sourceRefs": [
@@ -285,18 +285,18 @@
     "categoryId": "routing",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述路由参数在答题页中的合理使用方式。",
-    "referenceAnswer": "路由参数可传递 questionId、questionIds、questionIndex、练习模式等轻量上下文；答题页根据这些参数加载题目详情和恢复本轮顺序。不要把完整题库、答案解析等大对象直接塞进路由参数。",
+    "title": "简述路由参数在商品详情页中的合理使用方式。",
+    "referenceAnswer": "路由参数可传递 productId、source、campaignId 等轻量上下文；商品详情页根据这些参数加载商品详情并恢复入口来源。不要把完整商品、评论列表等大对象直接塞进路由参数。",
     "scoringPoints": [
-      "提到 questionId 等轻量参数",
+      "提到 productId 等轻量参数",
       "提到根据参数加载详情",
-      "提到本轮题目顺序或索引",
+      "提到入口来源或活动标识",
       "说明不应传大对象"
     ],
     "explanation": "这道题考察路由参数边界。合理做法是参数用于定位和上下文，业务数据仍由数据层加载。",
     "knowledgePoints": [
       "路由参数",
-      "答题页",
+      "商品详情页",
       "数据加载"
     ],
     "sourceRefs": [
@@ -316,7 +316,7 @@
     "categoryId": "routing",
     "type": "single",
     "difficulty": "medium",
-    "title": "从答题页返回题单页时，最贴近页面栈返回语义的路由能力是哪一个？",
+    "title": "从商品详情页返回商品列表页时，最贴近页面栈返回语义的路由能力是哪一个？",
     "options": [
       {
         "id": "a",
@@ -810,7 +810,7 @@
     "categoryId": "routing",
     "type": "short",
     "difficulty": "hard",
-    "title": "为首页、题单、答题页和结果页设计 Navigation 路由栈时，应如何处理参数、返回和跨模块页面？",
+    "title": "为首页、商品列表、商品详情和订单确认页设计 Navigation 路由栈时，应如何处理参数、返回和跨模块页面？",
     "explanation": "路由设计应同时保证页面栈语义、参数可恢复性和模块解耦，避免页面之间直接持有大型可变对象。",
     "knowledgePoints": [
       "Navigation",
@@ -834,7 +834,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 21,
-    "referenceAnswer": "应用应为每个 Navigation 建立独立 NavPathStack，以稳定页面名注册题单、答题和结果 NavDestination。跳转参数只携带 questionId、sessionId 等定位信息，页面再从仓储获取数据。进入答题页使用 pushPath，提交后如不希望返回到未完成状态可用 replacePath 进入结果页，普通返回使用 pop。跨 HAP/HSP/HAR 页面优先通过系统路由表按名称动态加载。需要登录拦截或未保存提示时，可使用 Navigation 的路由拦截能力统一处理。",
+    "referenceAnswer": "应用应为每个 Navigation 建立独立 NavPathStack，以稳定页面名注册商品列表、商品详情和订单确认 NavDestination。跳转参数只携带 productId、orderDraftId 等定位信息，页面再从仓储获取数据。进入商品详情页使用 pushPath，提交订单后如不希望返回到失效确认页可用 replacePath 进入订单结果页，普通返回使用 pop。跨 HAP/HSP/HAR 页面优先通过系统路由表按名称动态加载。需要登录拦截或未保存提示时，可使用 Navigation 的路由拦截能力统一处理。",
     "scoringPoints": [
       "说明每个 Navigation 使用独立 NavPathStack",
       "参数只传稳定标识而非大型业务对象",

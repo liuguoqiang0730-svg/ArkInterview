@@ -171,7 +171,7 @@
       },
       {
         "id": "c",
-        "text": "修改题库答案"
+        "text": "修改业务数据库数据"
       },
       {
         "id": "d",
@@ -316,7 +316,7 @@
       },
       {
         "id": "b",
-        "text": "questionIds"
+        "text": "productIds"
       },
       {
         "id": "c",
@@ -512,7 +512,7 @@
       },
       {
         "id": "d",
-        "text": "题库数据文件 questions.json"
+        "text": "业务数据文件 products.json"
       }
     ],
     "correctOptionIds": [
@@ -553,7 +553,7 @@
       },
       {
         "id": "b",
-        "text": "通过 categoryId 引用题库分类"
+        "text": "通过 productId 引用商品数据"
       },
       {
         "id": "c",

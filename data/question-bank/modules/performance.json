@@ -121,15 +121,15 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述一个题库 App 的长列表页面可以从哪些方面做性能优化。",
-    "referenceAnswer": "题库列表应避免一次性渲染所有题目，优先使用懒加载列表；重数据处理和筛选排序要避免阻塞主线程；非首屏模块可结合 lazy import 推迟加载；出现卡顿或 AppFreeze 时应结合日志、事件队列和性能工具定位耗时任务。",
+    "title": "简述一个资讯 App 的文章信息流可以从哪些方面做性能优化。",
+    "referenceAnswer": "文章信息流应避免一次性渲染所有内容卡片，优先使用懒加载列表；重数据处理和筛选排序要避免阻塞主线程；非首屏模块可结合 lazy import 推迟加载；出现卡顿或 AppFreeze 时应结合日志、事件队列和性能工具定位耗时任务。",
     "scoringPoints": [
       "提到长列表懒加载",
       "提到避免主线程耗时任务",
       "提到可用 lazy import 优化冷启动",
       "提到结合日志或性能工具定位卡顿"
     ],
-    "explanation": "题库 App 常见瓶颈是长列表渲染、筛选排序和冷启动加载。官方文档分别给出了长列表懒加载、lazy import 和 AppFreeze 分析思路，可以组合成面试回答。",
+    "explanation": "资讯 App 常见瓶颈是长列表渲染、筛选排序和冷启动加载。官方文档分别给出了长列表懒加载、lazy import 和 AppFreeze 分析思路，可以组合成面试回答。",
     "knowledgePoints": [
       "长列表优化",
       "冷启动",
@@ -165,7 +165,7 @@
     "categoryId": "performance",
     "type": "single",
     "difficulty": "medium",
-    "title": "题库列表达到上百道后，首页或训练页列表性能优先关注哪一点？",
+    "title": "商品列表达到上百项后，首页或分类页列表性能优先关注哪一点？",
     "options": [
       {
         "id": "a",
@@ -173,7 +173,7 @@
       },
       {
         "id": "b",
-        "text": "把所有题目都渲染成一个超长 Text"
+        "text": "把所有商品都渲染成一个超长 Text"
       },
       {
         "id": "c",
@@ -187,11 +187,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "长列表性能优化的核心是避免一次性加载所有元素。题库规模上升后，列表容器、懒加载和稳定 item 结构比堆叠静态组件更重要。",
+    "explanation": "长列表性能优化的核心是避免一次性加载所有元素。商品规模上升后，列表容器、懒加载和稳定 item 结构比堆叠静态组件更重要。",
     "knowledgePoints": [
       "长列表",
       "懒加载",
-      "题库规模"
+      "商品规模"
     ],
     "sourceRefs": [
       {
@@ -235,7 +235,7 @@
     "categoryId": "performance",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "刷题 App 做性能优化时，哪些方向更贴近官方建议和真实场景？",
+    "title": "电商 App 做性能优化时，哪些方向更贴近官方建议和真实场景？",
     "options": [
       {
         "id": "a",
@@ -292,7 +292,7 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "hard",
-    "title": "简述如何排查一个答题页点击后短时间无响应的问题。",
+    "title": "简述如何排查一个图片编辑页点击滤镜后短时间无响应的问题。",
     "referenceAnswer": "先确认是否发生 AppFreeze 或主线程长任务，查看 HiLog、事件队列和近期耗时任务；检查点击处理是否同步执行了大量计算、JSON 解析或数据库操作；把重任务拆到合适的数据层或异步流程，并减少 UI 构建阶段的同步工作。",
     "scoringPoints": [
       "提到 AppFreeze 或主线程长任务",
@@ -324,7 +324,7 @@
     "categoryId": "performance",
     "type": "single",
     "difficulty": "medium",
-    "title": "大量题库数据不是首屏必须展示时，哪种优化方向更适合降低冷启动压力？",
+    "title": "大量报表模块数据不是首屏必须展示时，哪种优化方向更适合降低冷启动压力？",
     "options": [
       {
         "id": "a",
@@ -332,11 +332,11 @@
       },
       {
         "id": "b",
-        "text": "冷启动时同步解析所有模块题目"
+        "text": "冷启动时同步解析所有报表数据"
       },
       {
         "id": "c",
-        "text": "在启动阶段循环渲染所有题卡"
+        "text": "在启动阶段循环渲染所有图表"
       },
       {
         "id": "d",
@@ -350,7 +350,7 @@
     "knowledgePoints": [
       "冷启动",
       "按需加载",
-      "题库模块"
+      "报表模块"
     ],
     "sourceRefs": [
       {
@@ -603,7 +603,7 @@
     "categoryId": "performance",
     "type": "single",
     "difficulty": "medium",
-    "title": "答题页需要对大量文本做 CPU 密集型分词统计，为避免阻塞 UI，优先应如何处理？",
+    "title": "文档编辑页需要对大量文本做 CPU 密集型分词统计，为避免阻塞 UI，优先应如何处理？",
     "options": [
       {
         "id": "a",
@@ -685,7 +685,7 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "hard",
-    "title": "简述如何为长题库列表调优 cachedCount，并判断调优是否有效。",
+    "title": "简述如何为长商品列表调优 cachedCount，并判断调优是否有效。",
     "referenceAnswer": "先在目标手机和平板上建立可复现的快速滑动场景，记录白块、掉帧、CPU 和内存基线。使用 LazyForEach 或 Repeat 虚拟滚动并保证稳定 key，再从较小 cachedCount 开始逐步调整，观察可视区外预加载是否足以覆盖快速滑动。cachedCount 增大能减少临时创建造成的白块，但会增加布局、CPU 和内存；应选择满足流畅度且资源开销可接受的最小值。调整后用相同数据量、相同设备和操作路径复测，而不是凭主观感觉判断。",
     "scoringPoints": [
       "建立固定设备、数据量和滑动路径的性能基线",
@@ -944,7 +944,7 @@
     "categoryId": "performance",
     "type": "short",
     "difficulty": "hard",
-    "title": "用户反馈“冷启动慢，进入答题页后点击选项偶尔卡住”，你会如何分阶段定位？",
+    "title": "用户反馈“冷启动慢，进入图片编辑页后点击滤镜偶尔卡住”，你会如何分阶段定位？",
     "explanation": "性能排查应从可复现指标和阶段数据开始，再针对瓶颈修改，不能先凭感觉改缓存数量或并发线程数。",
     "knowledgePoints": [
       "性能诊断",

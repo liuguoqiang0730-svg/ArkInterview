@@ -292,15 +292,15 @@
     "categoryId": "ability-lifecycle",
     "type": "short",
     "difficulty": "medium",
-    "title": "简述 UIAbility 进入后台和重新回到前台时，刷题 App 可以分别做哪些处理。",
-    "referenceAnswer": "进入后台时可暂停计时器、动画或非必要刷新，并保存必要练习状态；回到前台时可刷新学习记录、恢复页面状态或检查本地缓存。处理时要避免重复初始化和阻塞主流程。",
+    "title": "简述 UIAbility 进入后台和重新回到前台时，音视频 App 可以分别做哪些处理。",
+    "referenceAnswer": "进入后台时可暂停播放、动画或非必要刷新，并保存播放进度；回到前台时可恢复播放状态、刷新内容列表或检查本地缓存。处理时要避免重复初始化和阻塞主流程。",
     "scoringPoints": [
       "提到后台暂停不必要任务",
-      "提到保存练习状态",
+      "提到保存播放进度",
       "提到前台恢复或刷新数据",
       "提到避免重复初始化或阻塞"
     ],
-    "explanation": "这道题考察生命周期与业务结合。刷题 App 的答题状态、记录刷新和资源占用都应跟随 UIAbility 前后台变化做合理处理。",
+    "explanation": "这道题考察生命周期与业务结合。音视频 App 的播放状态、内容刷新和资源占用都应跟随 UIAbility 前后台变化做合理处理。",
     "knowledgePoints": [
       "onBackground",
       "onForeground",
@@ -335,7 +335,7 @@
       },
       {
         "id": "c",
-        "text": "新增题库分类"
+        "text": "修改数据库表结构"
       },
       {
         "id": "d",
@@ -345,7 +345,7 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "窗口销毁阶段与当前 UIAbility 的窗口资源释放相关。工程签名、题库分类和权限结果都不是窗口销毁阶段的职责。",
+    "explanation": "窗口销毁阶段与当前 UIAbility 的窗口资源释放相关。工程签名、数据库表结构和权限结果都不是窗口销毁阶段的职责。",
     "knowledgePoints": [
       "窗口销毁",
       "资源释放",

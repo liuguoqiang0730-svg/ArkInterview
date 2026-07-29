@@ -238,7 +238,7 @@
     "categoryId": "network",
     "type": "multiple",
     "difficulty": "medium",
-    "title": "题库 App 请求远程题目列表时，哪些处理更合理？",
+    "title": "电商 App 请求远程商品列表时，哪些处理更合理？",
     "options": [
       {
         "id": "a",
@@ -262,9 +262,9 @@
       "b",
       "c"
     ],
-    "explanation": "远程题库请求需要处理超时、响应状态和资源释放。失败时应给用户可理解的反馈或重试入口，而不是静默失败。",
+    "explanation": "远程商品请求需要处理超时、响应状态和资源释放。失败时应给用户可理解的反馈或重试入口，而不是静默失败。",
     "knowledgePoints": [
-      "远程题库",
+      "远程商品",
       "超时",
       "资源释放"
     ],
@@ -317,7 +317,7 @@
     "categoryId": "network",
     "type": "single",
     "difficulty": "medium",
-    "title": "远程题库接口返回非 2xx 状态码时，客户端首先应该如何处理？",
+    "title": "商品接口返回非 2xx 状态码时，客户端首先应该如何处理？",
     "options": [
       {
         "id": "a",
@@ -339,11 +339,11 @@
     "correctOptionIds": [
       "a"
     ],
-    "explanation": "HTTP 响应需要结合状态码和响应内容判断请求是否成功。非成功状态应进入错误处理，避免把错误响应当成正常题库数据。",
+    "explanation": "HTTP 响应需要结合状态码和响应内容判断请求是否成功。非成功状态应进入错误处理，避免把错误响应当成正常商品数据。",
     "knowledgePoints": [
       "HTTP 状态码",
       "错误处理",
-      "远程题库"
+      "远程商品"
     ],
     "sourceRefs": [
       {
@@ -502,7 +502,7 @@
     "categoryId": "network",
     "type": "short",
     "difficulty": "medium",
-    "title": "远程题库 App 封装 REST API 客户端时应重点考虑什么？",
+    "title": "电商 App 封装 REST API 客户端时应重点考虑什么？",
     "explanation": "这类封装题考察工程稳定性，不能只回答“调用 request”。",
     "knowledgePoints": [
       "REST API",
@@ -520,7 +520,7 @@
     "reviewStatus": "verified",
     "status": "published",
     "order": 14,
-    "referenceAnswer": "应统一配置 baseUrl、请求路径、方法、请求头、超时和响应解析；对非 2xx 状态码、网络异常和 JSON 解析失败做明确处理；请求结束后释放 HttpRequest 资源；匿名设备 ID 等客户端标识应通过请求头传递；AI 评分等敏感密钥必须留在服务端。",
+    "referenceAnswer": "应统一配置 baseUrl、请求路径、方法、请求头、超时和响应解析；对非 2xx 状态码、网络异常和 JSON 解析失败做明确处理；请求结束后释放 HttpRequest 资源；用户会话令牌等客户端凭据应通过安全的请求头传递；支付签名等敏感密钥必须留在服务端。",
     "scoringPoints": [
       "统一 baseUrl 和请求配置",
       "处理状态码、异常和解析失败",
@@ -533,7 +533,7 @@
     "categoryId": "network",
     "type": "single",
     "difficulty": "medium",
-    "title": "题库接口出现偶发超时时，客户端网络层最应该补齐哪种机制？",
+    "title": "商品列表接口出现偶发超时时，客户端网络层最应该补齐哪种机制？",
     "explanation": "超时场景需要可观测、可控制。封装层应提供超时配置、错误分类和有限重试策略，避免无限重试或静默吞错。",
     "knowledgePoints": [
       "超时处理",
@@ -566,7 +566,7 @@
       },
       {
         "id": "d",
-        "text": "忽略错误并返回空题库"
+        "text": "忽略错误并返回空商品列表"
       }
     ],
     "correctOptionIds": [
@@ -813,7 +813,7 @@
     "categoryId": "network",
     "type": "short",
     "difficulty": "hard",
-    "title": "远程题库请求偶发超时、断网或返回非 2xx，客户端网络层应如何设计？",
+    "title": "远程商品请求偶发超时、断网或返回非 2xx，客户端网络层应如何设计？",
     "explanation": "可靠网络层不仅要“能请求”，还要有明确的失败分类、重试边界、缓存降级和资源生命周期。",
     "knowledgePoints": [
       "HTTP封装",
