@@ -318,6 +318,51 @@ async function runChecks() {
   assert(favoritePractice.total === 1, 'favorite practice should include favorite question');
   assert(favoritePractice.items[0].isFavorite === true, 'favorite practice should include favorite marker');
 
+  await postJson('/api/answers/submit', {
+    questionId: 'q-smoke-multiple',
+    selectedOptionIds: ['c']
+  });
+  await postJson('/api/users/me/favorites', { questionId: 'q-smoke-multiple' });
+
+  const wrongsBeforeBatch = await getJson('/api/users/me/wrongs');
+  assert(wrongsBeforeBatch.items.length === 2, 'wrong list should include every wrong question');
+  const rejectedWrongBatch = await postJson('/api/users/me/wrongs/mastered', {
+    questionIds: ['q-smoke-single', 'q-smoke-missing']
+  }, false);
+  assert(rejectedWrongBatch.status === 409, 'stale wrong batches should be rejected atomically');
+  const wrongsAfterRejectedBatch = await getJson('/api/users/me/wrongs');
+  assert(
+    wrongsAfterRejectedBatch.items.every((item) => item.wrong.mastered === false),
+    'a rejected wrong batch should not update any question'
+  );
+
+  const masteredBatch = await postJson('/api/users/me/wrongs/mastered', {
+    questionIds: ['q-smoke-single', 'q-smoke-multiple']
+  });
+  assert(masteredBatch.items.length === 2, 'wrong batches should return every updated question id');
+  const allWrongs = await getJson('/api/users/me/wrongs');
+  assert(allWrongs.items.length === 2, 'wrong list should retain mastered questions for review');
+  assert(
+    allWrongs.items.every((item) => item.wrong.mastered === true),
+    'wrong list should expose mastered state'
+  );
+  const emptyWrongPractice = await getJson('/api/practice/session?mode=wrongs&count=5');
+  assert(emptyWrongPractice.total === 0, 'wrong practice should exclude mastered questions');
+
+  const rejectedFavoriteBatch = await postJson('/api/users/me/favorites/remove', {
+    questionIds: ['q-smoke-single', 'q-smoke-missing']
+  }, false);
+  assert(rejectedFavoriteBatch.status === 409, 'stale favorite batches should be rejected atomically');
+  const favoritesAfterRejectedBatch = await getJson('/api/users/me/favorites');
+  assert(favoritesAfterRejectedBatch.items.length === 2, 'a rejected favorite batch should not remove any question');
+
+  const removedFavorites = await postJson('/api/users/me/favorites/remove', {
+    questionIds: ['q-smoke-single', 'q-smoke-multiple']
+  });
+  assert(removedFavorites.items.length === 2, 'favorite batches should return every removed question id');
+  const emptyFavorites = await getJson('/api/users/me/favorites');
+  assert(emptyFavorites.items.length === 0, 'favorite batches should remove all selected questions');
+
   const isolatedStats = await getJson('/api/users/me/stats', 'smoke-test-secondary');
   assert(isolatedStats.totalAnswers === 0, 'a second anonymous device should have isolated answer stats');
   assert(isolatedStats.recentRecords.length === 0, 'a second anonymous device should have no recent records');

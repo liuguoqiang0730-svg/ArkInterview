@@ -195,8 +195,28 @@ export class ApiClient {
     return result.items;
   }
 
+  async removeFavorites(questionIds: string[]): Promise<string[]> {
+    const payload: QuestionIdsRequest = {
+      questionIds: questionIds
+    };
+    const result = await this.request<ListResult<string>>(
+      '/users/me/favorites/remove',
+      'POST',
+      payload
+    );
+    return result.items;
+  }
+
   async markWrongMastered(questionId: string): Promise<void> {
     await this.request<ItemResult<object>>(`/users/me/wrongs/${encodeURIComponent(questionId)}/mastered`, 'POST');
+  }
+
+  async markWrongsMastered(questionIds: string[]): Promise<string[]> {
+    const payload: QuestionIdsRequest = {
+      questionIds: questionIds
+    };
+    const result = await this.request<ListResult<string>>('/users/me/wrongs/mastered', 'POST', payload);
+    return result.items;
   }
 
   private async request<T>(
@@ -347,6 +367,10 @@ export interface PracticeSessionOptions {
 
 interface FavoriteQuestionRequest {
   questionId: string;
+}
+
+interface QuestionIdsRequest {
+  questionIds: string[];
 }
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';

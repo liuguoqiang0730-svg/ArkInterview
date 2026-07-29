@@ -570,6 +570,20 @@ function boundedInteger(value, fallback, min, max) {
   return Math.min(max, Math.max(min, parsed));
 }
 
+function batchQuestionIds(payload) {
+  if (!Array.isArray(payload.questionIds)) {
+    throw httpError(400, 'questionIds 必须是数组');
+  }
+  const ids = [...new Set(payload.questionIds
+    .filter((item) => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter(Boolean))];
+  if (ids.length === 0 || ids.length > 200) {
+    throw httpError(400, '批量操作必须包含 1 至 200 个题目 ID');
+  }
+  return ids;
+}
+
 function isValidDateKey(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
     return false;
@@ -831,7 +845,7 @@ async function routeApi(
   }
 
   if (method === 'GET' && pathname === '/api/users/me/wrongs') {
-    const ids = new Set(Object.values(user.wrongs).filter((wrong) => !wrong.mastered).map((wrong) => wrong.questionId));
+    const ids = new Set(Object.values(user.wrongs).map((wrong) => wrong.questionId));
     const items = db.questions
       .filter((question) => ids.has(question.id))
       .map((question) => ({
@@ -839,6 +853,25 @@ async function routeApi(
         wrong: user.wrongs[question.id]
       }));
     sendJson(res, 200, { items });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/users/me/wrongs/mastered') {
+    const questionIds = batchQuestionIds(await parseBody(req));
+    const missingIds = questionIds.filter((questionId) => !user.wrongs[questionId]);
+    if (missingIds.length > 0) {
+      throw httpError(409, `错题状态已变化：${missingIds.join(', ')}`);
+    }
+    const updatedAt = nowIso();
+    const wrongs = questionIds.map((questionId) => {
+      const wrong = user.wrongs[questionId];
+      wrong.mastered = true;
+      wrong.updatedAt = updatedAt;
+      return wrong;
+    });
+    user.updatedAt = updatedAt;
+    store.setWrongs(user, wrongs, touchMetadata(db, updatedAt));
+    sendJson(res, 200, { items: questionIds });
     return;
   }
 
@@ -878,6 +911,20 @@ async function routeApi(
     user.updatedAt = nowIso();
     store.addFavorite(user, question.id, touchMetadata(db, user.updatedAt));
     sendJson(res, 201, { items: user.favorites });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/users/me/favorites/remove') {
+    const questionIds = batchQuestionIds(await parseBody(req));
+    const missingIds = questionIds.filter((questionId) => !user.favorites.includes(questionId));
+    if (missingIds.length > 0) {
+      throw httpError(409, `收藏状态已变化：${missingIds.join(', ')}`);
+    }
+    const removing = new Set(questionIds);
+    user.favorites = user.favorites.filter((questionId) => !removing.has(questionId));
+    user.updatedAt = nowIso();
+    store.removeFavorites(user, questionIds, touchMetadata(db, user.updatedAt));
+    sendJson(res, 200, { items: questionIds });
     return;
   }
 

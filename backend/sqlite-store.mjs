@@ -663,6 +663,17 @@ export class SqliteStore {
     save();
   }
 
+  setWrongs(user, wrongs, metadata) {
+    const save = this.database.transaction(() => {
+      this.saveMetadataRecord(metadata);
+      this.saveUserRecord(user);
+      for (const wrong of wrongs) {
+        this.saveWrongRecord(user.id, wrong, user.updatedAt);
+      }
+    });
+    save();
+  }
+
   addFavorite(user, questionId, metadata) {
     const save = this.database.transaction(() => {
       this.saveMetadataRecord(metadata);
@@ -683,6 +694,20 @@ export class SqliteStore {
       this.database.prepare(
         'DELETE FROM favorites WHERE user_id = ? AND question_id = ?'
       ).run(user.id, questionId);
+    });
+    save();
+  }
+
+  removeFavorites(user, questionIds, metadata) {
+    const save = this.database.transaction(() => {
+      this.saveMetadataRecord(metadata);
+      this.saveUserRecord(user);
+      const remove = this.database.prepare(
+        'DELETE FROM favorites WHERE user_id = ? AND question_id = ?'
+      );
+      for (const questionId of questionIds) {
+        remove.run(user.id, questionId);
+      }
     });
     save();
   }

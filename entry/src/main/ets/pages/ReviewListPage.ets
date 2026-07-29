@@ -38,6 +38,9 @@ struct ReviewListPage {
   @State private sortMode: string = 'default';
   @State private wrongScope: string = 'active';
   @State private busyQuestionId: string = '';
+  @State private selectionMode: boolean = false;
+  @State private selectedQuestionIds: string[] = [];
+  @State private bulkBusy: boolean = false;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -50,6 +53,8 @@ struct ReviewListPage {
 
   async loadQuestions(): Promise<void> {
     this.loading = true;
+    this.selectionMode = false;
+    this.selectedQuestionIds = [];
     try {
       if (this.mode === 'favorites') {
         this.questions = await store.loadFavorites();
@@ -172,6 +177,16 @@ struct ReviewListPage {
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Start)
 
+        Button(this.selectionMode ? '完成' : '批量')
+          .height(32)
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.selectionMode ? '#ffffff' : COLOR_GREEN)
+          .backgroundColor(this.selectionMode ? COLOR_GREEN : COLOR_SOFT_GREEN)
+          .borderRadius(8)
+          .margin({ right: 8 })
+          .onClick(() => this.toggleSelectionMode())
+
         Text(`${this.filteredQuestions().length}/${this.questions.length}`)
           .fontSize(13)
           .fontWeight(FontWeight.Bold)
@@ -225,6 +240,10 @@ struct ReviewListPage {
         .margin({ top: 12 })
         .onClick(() => this.openReviewAt(0))
 
+      if (this.selectionMode) {
+        this.BatchPanel()
+      }
+
       if (this.hasActiveFilters()) {
         Row() {
           Text(this.activeFilterText())
@@ -254,6 +273,63 @@ struct ReviewListPage {
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
     .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: 7 })
+  }
+
+  @Builder
+  BatchPanel() {
+    Column() {
+      Divider()
+        .color(COLOR_LINE)
+
+      Row() {
+        Column() {
+          Text(`已选择 ${this.selectedQuestionIds.length} 题`)
+            .fontSize(14)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+          Text('选择范围可跨越当前筛选条件')
+            .fontSize(11)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 3 })
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+
+        Button(this.allFilteredSelected() ? '取消当前' : '全选当前')
+          .height(32)
+          .fontSize(12)
+          .fontColor(COLOR_BLUE)
+          .backgroundColor(COLOR_SOFT_BLUE)
+          .borderRadius(8)
+          .onClick(() => this.toggleCurrentSelection())
+
+        Button('清空')
+          .height(32)
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .enabled(this.selectedQuestionIds.length > 0)
+          .backgroundColor('#eef2f6')
+          .borderRadius(8)
+          .margin({ left: 8 })
+          .onClick(() => this.clearSelection())
+      }
+      .width('100%')
+      .margin({ top: 12 })
+
+      Button(this.bulkBusy ? '处理中' : this.batchActionText())
+        .width('100%')
+        .height(40)
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.selectedQuestionIds.length > 0 ? '#ffffff' : COLOR_MUTED)
+        .enabled(this.selectedQuestionIds.length > 0 && !this.bulkBusy)
+        .backgroundColor(this.selectedQuestionIds.length > 0 ? this.batchActionColor() : '#eef2f6')
+        .borderRadius(8)
+        .margin({ top: 10 })
+        .onClick(() => this.runBatchAction())
+    }
+    .width('100%')
+    .margin({ top: 14 })
   }
 
   @Builder
@@ -287,9 +363,17 @@ struct ReviewListPage {
         .borderRadius(8)
         .border({ width: 1, color: COLOR_LINE })
       } else {
-        ForEach(this.filteredQuestions(), (question: Question, index: number) => {
-          this.QuestionItem(question, index)
-        }, (question: Question) => question.id)
+        Flex({
+          direction: FlexDirection.Row,
+          wrap: FlexWrap.Wrap,
+          justifyContent: FlexAlign.SpaceBetween,
+          alignItems: ItemAlign.Start
+        }) {
+          ForEach(this.filteredQuestions(), (question: Question, index: number) => {
+            this.QuestionItem(question, index)
+          }, (question: Question) => question.id)
+        }
+        .width('100%')
       }
     }
     .width('100%')
@@ -299,6 +383,13 @@ struct ReviewListPage {
   QuestionItem(question: Question, index: number) {
     Column() {
       Row() {
+        if (this.selectionMode) {
+          Checkbox({ name: `review-${question.id}`, group: 'reviewBatch' })
+            .select(this.isQuestionSelected(question.id))
+            .selectedColor(COLOR_GREEN)
+            .margin({ right: 8 })
+            .onChange((selected: boolean) => this.setQuestionSelected(question.id, selected))
+        }
         Text(this.typeLabel(question.type))
           .fontSize(12)
           .fontColor(this.typeColor(question.type))
@@ -319,24 +410,6 @@ struct ReviewListPage {
           .padding({ left: 8, right: 8, top: 4, bottom: 4 })
           .borderRadius(8)
           .margin({ left: 6 })
-        if (question.wrong) {
-          Text(`错 ${question.wrong.wrongCount} 次`)
-            .fontSize(12)
-            .fontColor(COLOR_RED)
-            .backgroundColor(COLOR_SOFT_RED)
-            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-            .borderRadius(8)
-            .margin({ left: 6 })
-        }
-        if (question.wrong && question.wrong.mastered === true) {
-          Text('已掌握')
-            .fontSize(12)
-            .fontColor(COLOR_GREEN)
-            .backgroundColor(COLOR_SOFT_GREEN)
-            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-            .borderRadius(8)
-            .margin({ left: 6 })
-        }
       }
       .width('100%')
 
@@ -417,12 +490,15 @@ struct ReviewListPage {
       .width('100%')
       .margin({ top: 12 })
     }
-    .width('100%')
+    .width(this.isTablet ? '49.4%' : '100%')
     .padding(14)
     .margin({ top: 12 })
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
-    .border({ width: 1, color: COLOR_LINE })
+    .border({
+      width: this.isQuestionSelected(question.id) ? 2 : 1,
+      color: this.isQuestionSelected(question.id) ? COLOR_GREEN : COLOR_LINE
+    })
     .shadow({ radius: 10, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
   }
 
@@ -826,6 +902,116 @@ struct ReviewListPage {
     return false;
   }
 
+  toggleSelectionMode(): void {
+    if (this.bulkBusy) {
+      return;
+    }
+    this.selectionMode = !this.selectionMode;
+    if (!this.selectionMode) {
+      this.selectedQuestionIds = [];
+    }
+  }
+
+  isQuestionSelected(questionId: string): boolean {
+    return this.containsString(this.selectedQuestionIds, questionId);
+  }
+
+  setQuestionSelected(questionId: string, selected: boolean): void {
+    const next: string[] = [];
+    for (const id of this.selectedQuestionIds) {
+      if (id !== questionId) {
+        next.push(id);
+      }
+    }
+    if (selected) {
+      next.push(questionId);
+    }
+    this.selectedQuestionIds = next;
+  }
+
+  clearSelection(): void {
+    if (!this.bulkBusy) {
+      this.selectedQuestionIds = [];
+    }
+  }
+
+  allFilteredSelected(): boolean {
+    const filtered = this.filteredQuestions();
+    if (filtered.length === 0) {
+      return false;
+    }
+    for (const question of filtered) {
+      if (!this.isQuestionSelected(question.id)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  toggleCurrentSelection(): void {
+    if (this.bulkBusy) {
+      return;
+    }
+    const filtered = this.filteredQuestions();
+    const shouldRemove = this.allFilteredSelected();
+    const next: string[] = [];
+    for (const id of this.selectedQuestionIds) {
+      let isCurrent = false;
+      for (const question of filtered) {
+        if (question.id === id) {
+          isCurrent = true;
+          break;
+        }
+      }
+      if (!shouldRemove || !isCurrent) {
+        next.push(id);
+      }
+    }
+    if (!shouldRemove) {
+      for (const question of filtered) {
+        if (!this.containsString(next, question.id)) {
+          next.push(question.id);
+        }
+      }
+    }
+    this.selectedQuestionIds = next;
+  }
+
+  batchActionText(): string {
+    return this.mode === 'favorites' ? '批量取消收藏' : '批量标记掌握';
+  }
+
+  batchActionColor(): string {
+    return this.mode === 'favorites' ? COLOR_ORANGE : COLOR_BLUE;
+  }
+
+  async runBatchAction(): Promise<void> {
+    if (this.bulkBusy || this.selectedQuestionIds.length === 0) {
+      return;
+    }
+    const ids: string[] = [];
+    for (const id of this.selectedQuestionIds) {
+      ids.push(id);
+    }
+    this.bulkBusy = true;
+    try {
+      if (this.mode === 'favorites') {
+        await store.removeFavorites(ids);
+        this.removeQuestionsFromList(ids);
+        AppToast.show(this.getUIContext(), `已取消 ${ids.length} 道收藏`);
+      } else {
+        await store.markWrongsMastered(ids);
+        this.markQuestionsMastered(ids);
+        AppToast.show(this.getUIContext(), `已将 ${ids.length} 道错题标记为掌握`);
+      }
+      this.selectedQuestionIds = [];
+    } catch (error) {
+      AppToast.show(this.getUIContext(), `批量操作失败：${String(error)}`);
+    } finally {
+      this.bulkBusy = false;
+    }
+  }
+
   openReviewAt(index: number): void {
     const items = this.filteredQuestions();
     if (items.length === 0 || index < 0 || index >= items.length) {
@@ -851,6 +1037,7 @@ struct ReviewListPage {
     try {
       await store.removeFavorite(questionId);
       this.removeQuestionFromList(questionId);
+      this.setQuestionSelected(questionId, false);
       AppToast.show(this.getUIContext(), '已取消收藏');
     } catch (error) {
       AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
@@ -867,6 +1054,7 @@ struct ReviewListPage {
     try {
       await store.markWrongMastered(questionId);
       this.markQuestionMastered(questionId);
+      this.setQuestionSelected(questionId, false);
       AppToast.show(this.getUIContext(), '已标记掌握');
     } catch (error) {
       AppToast.show(this.getUIContext(), `操作失败：${String(error)}`);
@@ -885,10 +1073,31 @@ struct ReviewListPage {
     this.questions = next;
   }
 
+  removeQuestionsFromList(questionIds: string[]): void {
+    const next: Question[] = [];
+    for (const question of this.questions) {
+      if (!this.containsString(questionIds, question.id)) {
+        next.push(question);
+      }
+    }
+    this.questions = next;
+  }
+
   markQuestionMastered(questionId: string): void {
     const next: Question[] = [];
     for (const question of this.questions) {
       if (question.id === questionId && question.wrong) {
+        question.wrong.mastered = true;
+      }
+      next.push(question);
+    }
+    this.questions = next;
+  }
+
+  markQuestionsMastered(questionIds: string[]): void {
+    const next: Question[] = [];
+    for (const question of this.questions) {
+      if (this.containsString(questionIds, question.id) && question.wrong) {
         question.wrong.mastered = true;
       }
       next.push(question);

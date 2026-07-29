@@ -240,11 +240,23 @@ Query 参数：
 
 ### GET /api/users/me/wrongs
 
-返回错题列表。
+返回全部错题，包括已标记掌握的题目。客户端通过每题的 `wrong.mastered` 区分未掌握和已掌握；`mode=wrongs` 的练习会话仍只抽取未掌握错题。
 
 ### POST /api/users/me/wrongs/{questionId}/mastered
 
 将错题标记为已掌握。
+
+### POST /api/users/me/wrongs/mastered
+
+批量将错题标记为已掌握。一次支持 1 至 200 个去重后的题目 ID，整批校验通过后在一个 SQLite 事务中写入。
+
+```json
+{
+  "questionIds": ["arkts-001", "arkui-001"]
+}
+```
+
+若任一题目的错题状态已经不存在，返回 `409`，整批不写入。
 
 ### GET /api/users/me/favorites
 
@@ -263,6 +275,10 @@ Query 参数：
 ### DELETE /api/users/me/favorites/{questionId}
 
 取消收藏。
+
+### POST /api/users/me/favorites/remove
+
+批量取消收藏。请求体同批量标记掌握接口，一次支持 1 至 200 个题目 ID。若任一题目已不在收藏列表中，返回 `409`，整批不写入。
 
 ## 管理后台
 

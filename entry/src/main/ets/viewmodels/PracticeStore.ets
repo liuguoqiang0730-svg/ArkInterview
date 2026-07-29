@@ -1,4 +1,4 @@
-import { ApiClient, PracticeSessionOptions } from '../services/ApiClient';
+import { ApiClient, ApiRequestError, PracticeSessionOptions } from '../services/ApiClient';
 import {
   Category,
   PageResult,
@@ -68,8 +68,40 @@ export class PracticeStore {
     await this.api.removeFavorite(questionId);
   }
 
+  async removeFavorites(questionIds: string[]): Promise<void> {
+    try {
+      await this.api.removeFavorites(questionIds);
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.statusCode !== 404) {
+        throw error;
+      }
+      if (!(error instanceof ApiRequestError)) {
+        throw new Error(String(error));
+      }
+      for (const questionId of questionIds) {
+        await this.api.removeFavorite(questionId);
+      }
+    }
+  }
+
   async markWrongMastered(questionId: string): Promise<void> {
     await this.api.markWrongMastered(questionId);
+  }
+
+  async markWrongsMastered(questionIds: string[]): Promise<void> {
+    try {
+      await this.api.markWrongsMastered(questionIds);
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.statusCode !== 404) {
+        throw error;
+      }
+      if (!(error instanceof ApiRequestError)) {
+        throw new Error(String(error));
+      }
+      for (const questionId of questionIds) {
+        await this.api.markWrongMastered(questionId);
+      }
+    }
   }
 }
 
