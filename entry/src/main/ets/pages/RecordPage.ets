@@ -1,6 +1,12 @@
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
-import { CategoryStats, PracticeRecordItem, QuestionType, UserStats } from '../models/QuestionModels';
+import {
+  CategoryStats,
+  DailyPracticeStats,
+  PracticeRecordItem,
+  QuestionType,
+  UserStats
+} from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
@@ -32,6 +38,7 @@ struct RecordPage {
   @State private loading: boolean = true;
   @State private loadError: string = '';
   @State private isTablet: boolean = false;
+  @State private selectedRange: string = '7d';
   private observedStatsVersion: number = 0;
 
   aboutToAppear(): void {
@@ -194,6 +201,7 @@ struct RecordPage {
 
       Scroll() {
         Column() {
+          this.TrendPanel()
           this.RecentRecordsPanel()
           this.CategoryProgressList()
         }
@@ -215,6 +223,7 @@ struct RecordPage {
     Scroll() {
       Column() {
         this.SummaryPanel()
+        this.TrendPanel()
         if (this.isEmptyRecord()) {
           this.EmptyRecordPanel()
         } else {
@@ -301,6 +310,142 @@ struct RecordPage {
     .margin({ left: 3, right: 3 })
     .backgroundColor(bgColor)
     .borderRadius(8)
+  }
+
+  @Builder
+  TrendPanel() {
+    Column() {
+      Row() {
+        Column() {
+          Text('正确率趋势')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+          Text(this.rangeSummary())
+            .fontSize(11)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 3 })
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+
+        Row() {
+          this.RangeOption('7 天', '7d')
+          this.RangeOption('30 天', '30d')
+          this.RangeOption('全部', 'all')
+        }
+        .padding(3)
+        .backgroundColor('#eef2f6')
+        .borderRadius(8)
+      }
+      .width('100%')
+
+      Row() {
+        this.TrendMetric('作答', String(this.periodAttempts()))
+        Divider()
+          .vertical(true)
+          .height(30)
+          .color(COLOR_LINE)
+        this.TrendMetric('判分', String(this.periodGradedAttempts()))
+        Divider()
+          .vertical(true)
+          .height(30)
+          .color(COLOR_LINE)
+        this.TrendMetric('正确率', FormatUtils.percent(this.periodAccuracy()))
+      }
+      .width('100%')
+      .margin({ top: 18, bottom: 14 })
+
+      if (this.trendItems().length === 0) {
+        Column() {
+          Text('当前时间范围还没有可展示的数据')
+            .fontSize(13)
+            .fontColor(COLOR_MUTED)
+        }
+        .width('100%')
+        .height(108)
+        .justifyContent(FlexAlign.Center)
+        .backgroundColor('#f8fafc')
+        .borderRadius(8)
+      } else {
+        Row() {
+          ForEach(this.trendItems(), (item: DailyPracticeStats) => {
+            this.DailyTrendBar(item)
+          }, (item: DailyPracticeStats) => item.date)
+        }
+        .width('100%')
+        .height(108)
+        .alignItems(VerticalAlign.Bottom)
+        .padding({ left: 4, right: 4, top: 6 })
+        .border({ width: { bottom: 1 }, color: COLOR_LINE })
+      }
+    }
+    .width('100%')
+    .padding(16)
+    .margin({ top: 14 })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  RangeOption(label: string, value: string) {
+    Button(label)
+      .height(28)
+      .padding({ left: this.isTablet ? 12 : 9, right: this.isTablet ? 12 : 9 })
+      .fontSize(11)
+      .fontWeight(this.selectedRange === value ? FontWeight.Bold : FontWeight.Normal)
+      .fontColor(this.selectedRange === value ? COLOR_GREEN : COLOR_MUTED)
+      .backgroundColor(this.selectedRange === value ? COLOR_SURFACE : '#00000000')
+      .borderRadius(6)
+      .shadow({
+        radius: this.selectedRange === value ? 6 : 0,
+        color: this.selectedRange === value ? COLOR_SHADOW : '#00000000',
+        offsetX: 0,
+        offsetY: 2
+      })
+      .onClick(() => {
+        this.selectedRange = value;
+      })
+  }
+
+  @Builder
+  TrendMetric(label: string, value: string) {
+    Column() {
+      Text(value)
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_TEXT)
+      Text(label)
+        .fontSize(10)
+        .fontColor(COLOR_MUTED)
+        .margin({ top: 3 })
+    }
+    .layoutWeight(1)
+  }
+
+  @Builder
+  DailyTrendBar(item: DailyPracticeStats) {
+    Column() {
+      Text(this.dailyAccuracyLabel(item))
+        .fontSize(9)
+        .fontColor(this.trendColor(item))
+        .maxLines(1)
+      Column()
+        .width(this.isTablet ? 16 : 12)
+        .height(this.trendBarHeight(item))
+        .backgroundColor(this.trendColor(item))
+        .borderRadius({ topLeft: 4, topRight: 4 })
+        .margin({ top: 4 })
+      Text(this.shortDate(item.date))
+        .fontSize(9)
+        .fontColor(COLOR_MUTED)
+        .margin({ top: 5 })
+        .maxLines(1)
+    }
+    .layoutWeight(1)
+    .height('100%')
+    .justifyContent(FlexAlign.End)
   }
 
   @Builder
@@ -655,6 +800,150 @@ struct RecordPage {
 
   isEmptyRecord(): boolean {
     return (this.stats?.totalAnswers ?? 0) === 0;
+  }
+
+  selectedDailyStats(): DailyPracticeStats[] {
+    const source = this.dailyStatsSource();
+    if (this.selectedRange === 'all') {
+      return source;
+    }
+    const days = this.selectedRange === '30d' ? 30 : 7;
+    const startDate = this.rangeStartDate(days);
+    const result = new Array<DailyPracticeStats>();
+    source.forEach((item: DailyPracticeStats) => {
+      if (item.date >= startDate) {
+        result.push(item);
+      }
+    });
+    return result;
+  }
+
+  dailyStatsSource(): DailyPracticeStats[] {
+    if (this.stats?.dailyStats !== undefined) {
+      return this.stats.dailyStats;
+    }
+    const result = new Array<DailyPracticeStats>();
+    (this.stats?.recentRecords ?? []).forEach((record: PracticeRecordItem) => {
+      const date = this.recordDate(record.submittedAt);
+      let daily = result.find((item: DailyPracticeStats) => item.date === date);
+      if (daily === undefined) {
+        daily = {
+          date,
+          attempts: 0,
+          gradedAttempts: 0,
+          correct: 0,
+          accuracy: 0
+        };
+        result.push(daily);
+      }
+      daily.attempts += 1;
+      if (record.isCorrect !== null) {
+        daily.gradedAttempts += 1;
+        if (record.isCorrect) {
+          daily.correct += 1;
+        }
+        daily.accuracy = daily.correct / daily.gradedAttempts;
+      }
+    });
+    result.sort((left: DailyPracticeStats, right: DailyPracticeStats) => left.date.localeCompare(right.date));
+    return result;
+  }
+
+  trendItems(): DailyPracticeStats[] {
+    const selected = this.selectedDailyStats();
+    const limit = this.isTablet ? 12 : 7;
+    const start = Math.max(0, selected.length - limit);
+    return selected.slice(start);
+  }
+
+  periodAttempts(): number {
+    let total = 0;
+    this.selectedDailyStats().forEach((item: DailyPracticeStats) => {
+      total += item.attempts;
+    });
+    return total;
+  }
+
+  periodGradedAttempts(): number {
+    let total = 0;
+    this.selectedDailyStats().forEach((item: DailyPracticeStats) => {
+      total += item.gradedAttempts;
+    });
+    return total;
+  }
+
+  periodCorrectAnswers(): number {
+    let total = 0;
+    this.selectedDailyStats().forEach((item: DailyPracticeStats) => {
+      total += item.correct;
+    });
+    return total;
+  }
+
+  periodAccuracy(): number {
+    const gradedAttempts = this.periodGradedAttempts();
+    if (gradedAttempts === 0) {
+      return 0;
+    }
+    return this.periodCorrectAnswers() / gradedAttempts;
+  }
+
+  rangeSummary(): string {
+    if (this.selectedRange === '30d') {
+      return '近 30 天活跃日表现';
+    }
+    if (this.selectedRange === 'all') {
+      return '累计活跃日表现';
+    }
+    return '近 7 天活跃日表现';
+  }
+
+  rangeStartDate(days: number): string {
+    const shanghaiNow = Date.now() + 8 * 60 * 60 * 1000;
+    const start = shanghaiNow - (days - 1) * 24 * 60 * 60 * 1000;
+    return new Date(start).toISOString().substring(0, 10);
+  }
+
+  dailyAccuracyLabel(item: DailyPracticeStats): string {
+    if (item.gradedAttempts === 0) {
+      return '自评';
+    }
+    return FormatUtils.percent(item.accuracy);
+  }
+
+  trendBarHeight(item: DailyPracticeStats): number {
+    if (item.gradedAttempts === 0) {
+      return 12;
+    }
+    return 14 + Math.round(item.accuracy * 48);
+  }
+
+  trendColor(item: DailyPracticeStats): string {
+    if (item.gradedAttempts === 0) {
+      return COLOR_BLUE;
+    }
+    if (item.accuracy >= 0.8) {
+      return COLOR_GREEN;
+    }
+    if (item.accuracy >= 0.5) {
+      return COLOR_ORANGE;
+    }
+    return COLOR_RED;
+  }
+
+  shortDate(value: string): string {
+    if (value.length < 10) {
+      return value;
+    }
+    return `${value.substring(5, 7)}/${value.substring(8, 10)}`;
+  }
+
+  recordDate(value: string): string {
+    const timestamp = Date.parse(value);
+    if (!Number.isFinite(timestamp)) {
+      return value.substring(0, 10);
+    }
+    return new Date(timestamp + 8 * 60 * 60 * 1000).toISOString().substring(0, 10);
   }
 
   formatDate(value?: string): string {

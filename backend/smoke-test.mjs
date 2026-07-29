@@ -285,6 +285,11 @@ async function runChecks() {
   assert(practiceStats.recentRecords[0].categoryName === 'ArkTS', 'recent records should include category name');
   assert(practiceStats.recentRecords[0].questionType === 'single', 'recent records should include question type');
   assert(practiceStats.recentRecords[0].isCorrect === false, 'recent records should be ordered newest first');
+  assert(practiceStats.dailyStats.length === 1, 'same-day answers should share one daily stats item');
+  assert(practiceStats.dailyStats[0].attempts === 2, 'daily stats should count all answer attempts');
+  assert(practiceStats.dailyStats[0].gradedAttempts === 2, 'daily stats should count graded attempts');
+  assert(practiceStats.dailyStats[0].correct === 1, 'daily stats should count correct answers');
+  assert(practiceStats.dailyStats[0].accuracy === 0.5, 'daily stats should calculate graded accuracy');
   const wrongPractice = await getJson('/api/practice/session?mode=wrongs&count=5');
   assert(wrongPractice.total === 1, 'wrong practice should include wrong question');
 
@@ -296,6 +301,7 @@ async function runChecks() {
   const isolatedStats = await getJson('/api/users/me/stats', 'smoke-test-secondary');
   assert(isolatedStats.totalAnswers === 0, 'a second anonymous device should have isolated answer stats');
   assert(isolatedStats.recentRecords.length === 0, 'a second anonymous device should have no recent records');
+  assert(isolatedStats.dailyStats.length === 0, 'a second anonymous device should have no daily stats');
   const isolatedWrongs = await getJson('/api/users/me/wrongs', 'smoke-test-secondary');
   assert(isolatedWrongs.items.length === 0, 'a second anonymous device should not inherit wrong questions');
   const isolatedFavorites = await getJson('/api/users/me/favorites', 'smoke-test-secondary');

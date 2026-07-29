@@ -449,24 +449,45 @@ function statsFor(db, user) {
   const masteredWrongCount = Object.values(user.wrongs).filter((wrong) => wrong.mastered).length;
   const questionMap = new Map(db.questions.map((question) => [question.id, question]));
   const categoryNameMap = new Map(db.categories.map((category) => [category.id, category.name]));
+  const dailyMap = new Map();
   const categoryMap = new Map(db.categories.map((category) => [category.id, {
     categoryId: category.id,
     name: category.name,
     attempts: 0,
+    gradedAttempts: 0,
     answeredQuestionIds: new Set(),
     correct: 0,
     totalPublished: db.questions.filter((question) => question.categoryId === category.id && question.status === 'published').length
   }]));
 
   for (const answer of user.answers) {
+    const date = shanghaiDateKey(answer.submittedAt);
+    const daily = dailyMap.get(date) || {
+      date,
+      attempts: 0,
+      gradedAttempts: 0,
+      correct: 0
+    };
+    daily.attempts += 1;
+    if (answer.isCorrect !== null) {
+      daily.gradedAttempts += 1;
+      if (answer.isCorrect) {
+        daily.correct += 1;
+      }
+    }
+    dailyMap.set(date, daily);
+
     const item = categoryMap.get(answer.categoryId);
     if (!item) {
       continue;
     }
     item.attempts += 1;
     item.answeredQuestionIds.add(answer.questionId);
-    if (answer.isCorrect) {
-      item.correct += 1;
+    if (answer.isCorrect !== null) {
+      item.gradedAttempts += 1;
+      if (answer.isCorrect) {
+        item.correct += 1;
+      }
     }
   }
 
@@ -494,6 +515,17 @@ function statsFor(db, user) {
     favoriteCount: user.favorites.length,
     lastPracticedAt: user.answers.at(-1)?.submittedAt || null,
     recentRecords,
+    dailyStats: Array.from(dailyMap.values())
+      .sort((left, right) => left.date.localeCompare(right.date))
+      .map((item) => ({
+        date: item.date,
+        attempts: item.attempts,
+        gradedAttempts: item.gradedAttempts,
+        correct: item.correct,
+        accuracy: item.gradedAttempts === 0
+          ? 0
+          : Number((item.correct / item.gradedAttempts).toFixed(4))
+      })),
     categories: Array.from(categoryMap.values()).map((item) => {
       const answered = item.answeredQuestionIds.size;
       return {
@@ -504,10 +536,18 @@ function statsFor(db, user) {
         correct: item.correct,
         totalPublished: item.totalPublished,
         completionRate: item.totalPublished === 0 ? 0 : Number((answered / item.totalPublished).toFixed(4)),
-        accuracy: item.attempts === 0 ? 0 : Number((item.correct / item.attempts).toFixed(4))
+        accuracy: item.gradedAttempts === 0 ? 0 : Number((item.correct / item.gradedAttempts).toFixed(4))
       };
     })
   };
+}
+
+function shanghaiDateKey(value) {
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) {
+    return String(value).slice(0, 10);
+  }
+  return new Date(timestamp + 8 * 60 * 60 * 1000).toISOString().slice(0, 10);
 }
 
 async function parseBody(req) {

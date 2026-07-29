@@ -115,6 +115,14 @@ export interface PracticeRecordItem {
   submittedAt: string;
 }
 
+export interface DailyPracticeStats {
+  date: string;
+  attempts: number;
+  gradedAttempts: number;
+  correct: number;
+  accuracy: number;
+}
+
 export interface UserStats {
   totalAnswers: number;
   answeredQuestionCount: number;
@@ -125,5 +133,6 @@ export interface UserStats {
   favoriteCount: number;
   lastPracticedAt?: string;
   recentRecords?: PracticeRecordItem[];
+  dailyStats?: DailyPracticeStats[];
   categories: CategoryStats[];
 }

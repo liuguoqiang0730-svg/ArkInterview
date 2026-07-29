@@ -212,11 +212,19 @@ GET /api/practice/session?mode=favorites&count=20
 
 ### GET /api/users/me/stats
 
-返回答题数量、正确率、分类完成度、最近练习时间和最近 12 次作答记录。
+返回答题数量、正确率、分类完成度、最近练习时间、最近 12 次作答记录和按日聚合的历史趋势。
 
-分类统计中的 `attempts` 是作答次数，`answered` 是去重后的已答题目数，`completionRate` 基于去重题目数计算。
+分类统计中的 `attempts` 是作答次数，`answered` 是去重后的已答题目数，`completionRate` 基于去重题目数计算。分类正确率只统计可以自动判分的客观题，`isCorrect=null` 的简答题不计入正确率分母。
 
 `recentRecords` 按提交时间倒序返回，包含作答记录 ID、题目 ID、题干、分类、题型、判定结果和提交时间。简答题的 `isCorrect` 为 `null`；历史题目下架后仍保留作答记录，题干显示为“题目已下架”。
+
+`dailyStats` 按北京时间自然日升序返回历史活跃日，字段包括：
+
+- `date`：`YYYY-MM-DD` 日期。
+- `attempts`：当天全部提交次数。
+- `gradedAttempts`：当天可自动判分的提交次数。
+- `correct`：当天正确次数。
+- `accuracy`：`correct / gradedAttempts`；当天只有简答题时为 `0`。
 
 ### GET /api/users/me/wrongs
 
