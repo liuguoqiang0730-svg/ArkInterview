@@ -426,7 +426,37 @@ struct RecordPage {
         this.TrendMetric('正确率', FormatUtils.percent(this.periodAccuracy()))
       }
       .width('100%')
-      .margin({ top: 18, bottom: 14 })
+      .margin({ top: 18, bottom: 10 })
+
+      Column() {
+        Row() {
+          Text(this.periodComparisonTitle())
+            .fontSize(11)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+            .layoutWeight(1)
+          Text(this.periodComparisonState())
+            .fontSize(11)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.periodComparisonColor())
+        }
+        .width('100%')
+
+        Text(this.periodComparisonDetail())
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(18)
+          .maxLines(2)
+          .width('100%')
+          .margin({ top: 3 })
+      }
+      .width('100%')
+      .padding({ top: 9, bottom: 9 })
+      .margin({ bottom: 14 })
+      .border({
+        width: { top: 1, bottom: 1 },
+        color: COLOR_LINE
+      })
 
       if (this.trendItems().length === 0) {
         Column() {
@@ -1101,6 +1131,136 @@ struct RecordPage {
       return 0;
     }
     return this.periodCorrectAnswers() / gradedAttempts;
+  }
+
+  previousPeriodDailyStats(): DailyPracticeStats[] {
+    if (this.selectedRange === 'all') {
+      return [];
+    }
+    const days = this.selectedRange === '30d' ? 30 : 7;
+    const currentStart = this.rangeStartDate(days);
+    const previousStart = this.rangeStartDate(days * 2);
+    const result = new Array<DailyPracticeStats>();
+    this.dailyStatsSource().forEach((item: DailyPracticeStats) => {
+      if (item.date >= previousStart && item.date < currentStart) {
+        result.push(item);
+      }
+    });
+    return result;
+  }
+
+  previousPeriodAttempts(): number {
+    let total = 0;
+    this.previousPeriodDailyStats().forEach((item: DailyPracticeStats) => {
+      total += item.attempts;
+    });
+    return total;
+  }
+
+  previousPeriodGradedAttempts(): number {
+    let total = 0;
+    this.previousPeriodDailyStats().forEach((item: DailyPracticeStats) => {
+      total += item.gradedAttempts;
+    });
+    return total;
+  }
+
+  previousPeriodCorrectAnswers(): number {
+    let total = 0;
+    this.previousPeriodDailyStats().forEach((item: DailyPracticeStats) => {
+      total += item.correct;
+    });
+    return total;
+  }
+
+  previousPeriodAccuracy(): number {
+    const gradedAttempts = this.previousPeriodGradedAttempts();
+    if (gradedAttempts === 0) {
+      return 0;
+    }
+    return this.previousPeriodCorrectAnswers() / gradedAttempts;
+  }
+
+  periodComparisonTitle(): string {
+    if (this.selectedRange === 'all') {
+      return '累计统计';
+    }
+    return this.selectedRange === '30d' ? '对比前 30 天' : '对比前 7 天';
+  }
+
+  periodComparisonState(): string {
+    if (this.selectedRange === 'all') {
+      return '不做环比';
+    }
+    if (this.hasRecordFilters() && !this.historyFilterApiAvailable) {
+      return '等待服务升级';
+    }
+    if (this.previousPeriodAttempts() === 0) {
+      return '暂无基线';
+    }
+    if (this.periodAttempts() === 0) {
+      return '本期未练习';
+    }
+    if (this.periodGradedAttempts() === 0 || this.previousPeriodGradedAttempts() === 0) {
+      return '判分不足';
+    }
+    const delta = this.periodAccuracy() - this.previousPeriodAccuracy();
+    if (delta > 0) {
+      return '正确率提升';
+    }
+    if (delta < 0) {
+      return '正确率下降';
+    }
+    return '正确率持平';
+  }
+
+  periodComparisonDetail(): string {
+    if (this.selectedRange === 'all') {
+      return '累计范围展示全部历史，不与任意长度的前置周期比较。';
+    }
+    if (this.hasRecordFilters() && !this.historyFilterApiAvailable) {
+      return '当前仅有最近记录的筛选结果，服务端提供完整筛选历史后再计算环比。';
+    }
+    const previousAttempts = this.previousPeriodAttempts();
+    if (previousAttempts === 0) {
+      return '上一周期没有作答记录，完成下一周期后即可形成有效对比。';
+    }
+    if (this.periodAttempts() === 0) {
+      return `本周期暂无作答；上一周期共作答 ${previousAttempts} 次。`;
+    }
+    const attemptDelta = this.periodAttempts() - previousAttempts;
+    if (this.periodGradedAttempts() === 0 || this.previousPeriodGradedAttempts() === 0) {
+      return `作答 ${this.signedInteger(attemptDelta)} 次；客观题判分不足，暂不比较正确率。`;
+    }
+    const accuracyPoints = (this.periodAccuracy() - this.previousPeriodAccuracy()) * 100;
+    return `作答 ${this.signedInteger(attemptDelta)} 次 · 正确率 ${this.signedDecimal(accuracyPoints)} 个百分点`;
+  }
+
+  periodComparisonColor(): string {
+    if (this.selectedRange === 'all' ||
+      (this.hasRecordFilters() && !this.historyFilterApiAvailable) ||
+      this.previousPeriodAttempts() === 0 ||
+      this.periodGradedAttempts() === 0 ||
+      this.previousPeriodGradedAttempts() === 0) {
+      return COLOR_MUTED;
+    }
+    const delta = this.periodAccuracy() - this.previousPeriodAccuracy();
+    if (delta > 0) {
+      return COLOR_GREEN;
+    }
+    if (delta < 0) {
+      return COLOR_RED;
+    }
+    return COLOR_BLUE;
+  }
+
+  signedInteger(value: number): string {
+    return value > 0 ? `+${value}` : String(value);
+  }
+
+  signedDecimal(value: number): string {
+    const formatted = value.toFixed(1);
+    return value > 0 ? `+${formatted}` : formatted;
   }
 
   rangeSummary(): string {
