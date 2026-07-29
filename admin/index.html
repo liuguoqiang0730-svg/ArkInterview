@@ -22,32 +22,47 @@
     <main id="authView" class="auth-layout">
       <section class="auth-panel" aria-labelledby="authTitle">
         <p class="eyebrow">Protected Console</p>
-        <h2 id="authTitle">管理员验证</h2>
+        <h2 id="authTitle">管理员登录</h2>
         <form id="authForm" class="auth-form">
-          <label for="adminOperatorInput">操作员标识</label>
+          <label for="adminUsernameInput">用户名</label>
           <input
-            id="adminOperatorInput"
-            name="adminOperator"
+            id="adminUsernameInput"
+            name="username"
             type="text"
-            minlength="2"
-            maxlength="64"
+            minlength="3"
+            maxlength="32"
             autocomplete="username"
-            placeholder="姓名、工号或值班账号"
+            placeholder="输入管理员用户名"
             required
           >
-          <label for="adminTokenInput">管理员令牌</label>
+          <label for="adminPasswordInput">密码</label>
           <input
-            id="adminTokenInput"
-            name="adminToken"
+            id="adminPasswordInput"
+            name="password"
             type="password"
-            minlength="32"
+            minlength="12"
+            maxlength="128"
             autocomplete="current-password"
-            spellcheck="false"
             required
           >
-          <button class="primary-button" type="submit">进入后台</button>
+          <button class="primary-button" type="submit">登录</button>
           <p id="authMessage" class="auth-message" role="alert"></p>
         </form>
+        <details id="bootstrapPanel" class="bootstrap-panel">
+          <summary>首次初始化管理员</summary>
+          <form id="bootstrapForm" class="auth-form bootstrap-form">
+            <label for="bootstrapTokenInput">部署管理令牌</label>
+            <input id="bootstrapTokenInput" type="password" minlength="32" autocomplete="off" required>
+            <label for="bootstrapUsernameInput">用户名</label>
+            <input id="bootstrapUsernameInput" type="text" minlength="3" maxlength="32" autocomplete="username" required>
+            <label for="bootstrapDisplayNameInput">显示名称</label>
+            <input id="bootstrapDisplayNameInput" type="text" minlength="2" maxlength="64" required>
+            <label for="bootstrapPasswordInput">初始密码</label>
+            <input id="bootstrapPasswordInput" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+            <button class="secondary-button" type="submit">创建超级管理员</button>
+            <p id="bootstrapMessage" class="auth-message" role="alert"></p>
+          </form>
+        </details>
       </section>
     </main>
 
@@ -55,6 +70,7 @@
       <nav class="admin-tabs" aria-label="后台功能">
         <button class="admin-tab active" type="button" data-view="questions">题库管理</button>
         <button class="admin-tab" type="button" data-view="leaderboard">排行榜审计</button>
+        <button class="admin-tab" type="button" data-view="operators">管理员</button>
       </nav>
 
       <div id="questionManagementView" class="management-view">
@@ -292,6 +308,21 @@
                 <option value="active">正常账号</option>
                 <option value="suspended">已封禁</option>
               </select>
+              <input
+                id="auditOperatorFilter"
+                type="search"
+                maxlength="64"
+                placeholder="操作人"
+                aria-label="按操作人筛选"
+              >
+              <label class="audit-date-field">
+                从
+                <input id="auditFromFilter" type="date" aria-label="审计开始日期">
+              </label>
+              <label class="audit-date-field">
+                至
+                <input id="auditToFilter" type="date" aria-label="审计结束日期">
+              </label>
               <button class="secondary-button" type="submit">查询</button>
             </form>
           </div>
@@ -330,6 +361,43 @@
               <button id="auditNextPage" class="icon-button" type="button" title="下一页" aria-label="下一页">→</button>
             </div>
           </div>
+        </section>
+      </div>
+
+      <div id="operatorManagementView" class="management-view" hidden>
+        <section class="panel operator-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Administrator Access</p>
+              <h2>管理员与角色</h2>
+            </div>
+            <span id="operatorCount" class="visible-count">0 人</span>
+          </div>
+          <form id="operatorCreateForm" class="operator-form">
+            <label>
+              用户名
+              <input name="username" minlength="3" maxlength="32" required>
+            </label>
+            <label>
+              显示名称
+              <input name="displayName" minlength="2" maxlength="64" required>
+            </label>
+            <label>
+              角色
+              <select name="role">
+                <option value="content_editor">题库编辑</option>
+                <option value="moderator">排行榜审核</option>
+                <option value="super_admin">超级管理员</option>
+              </select>
+            </label>
+            <label>
+              初始密码
+              <input name="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+            </label>
+            <button class="primary-button" type="submit">创建管理员</button>
+            <p id="operatorMessage" class="auth-message" role="alert"></p>
+          </form>
+          <div id="operatorList" class="operator-list"></div>
         </section>
       </div>
     </main>

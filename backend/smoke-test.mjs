@@ -13,6 +13,7 @@ const dbFile = path.join(tempDir, 'smoke-db.json');
 const port = 8791;
 const baseUrl = `http://127.0.0.1:${port}`;
 const adminToken = 'arkinterview-smoke-admin-token-2026-07-23';
+let adminAccessToken = adminToken;
 
 await mkdir(tempRoot, { recursive: true });
 await mkdir(tempDir, { recursive: true });
@@ -135,6 +136,41 @@ async function runChecks() {
   });
   assert(invalidTokenResponse.status === 401, 'admin API should reject an invalid token');
 
+  const adminAuthStatus = await getJson('/api/admin/auth/status');
+  assert(adminAuthStatus.bootstrapAvailable === true, 'fresh storage should require administrator bootstrap');
+  const bootstrap = await postJson('/api/admin/auth/bootstrap', {
+    username: 'smoke-owner',
+    displayName: '烟雾测试管理员',
+    password: 'Smoke-owner-password-2026'
+  });
+  assert(bootstrap.accessToken.startsWith('ark_admin_'), 'bootstrap should issue an administrator session');
+  assert(bootstrap.admin.role === 'super_admin', 'bootstrap should create a super administrator');
+  adminAccessToken = bootstrap.accessToken;
+  const adminProfile = await getJson('/api/admin/auth/me');
+  assert(adminProfile.admin.displayName === '烟雾测试管理员', 'admin session should resolve its server identity');
+  const moderator = await postJson('/api/admin/operators', {
+    username: 'smoke-moderator',
+    displayName: '烟雾测试审核员',
+    password: 'Smoke-moderator-password-2026',
+    role: 'moderator'
+  });
+  assert(moderator.item.role === 'moderator', 'super administrators should create scoped accounts');
+  const moderatorLogin = await postJson('/api/admin/auth/login', {
+    username: 'smoke-moderator',
+    password: 'Smoke-moderator-password-2026'
+  });
+  const ownerAccessToken = adminAccessToken;
+  adminAccessToken = moderatorLogin.accessToken;
+  const forbiddenQuestions = await fetch(`${baseUrl}/api/admin/questions`, {
+    headers: requestHeaders('/api/admin/questions')
+  });
+  assert(forbiddenQuestions.status === 403, 'moderators should not read question management data');
+  const allowedAudit = await fetch(`${baseUrl}/api/admin/leaderboard/users`, {
+    headers: requestHeaders('/api/admin/leaderboard/users')
+  });
+  assert(allowedAudit.status === 200, 'moderators should read leaderboard audit data');
+  adminAccessToken = ownerAccessToken;
+
   const preflightResponse = await fetch(`${baseUrl}/api/admin/questions`, {
     method: 'OPTIONS',
     headers: {
@@ -148,11 +184,6 @@ async function runChecks() {
     preflightResponse.headers.get('access-control-allow-headers')?.toLowerCase().includes('authorization'),
     'admin API preflight should allow the Authorization header'
   );
-  assert(
-    preflightResponse.headers.get('access-control-allow-headers')?.toLowerCase().includes('x-admin-operator'),
-    'admin API preflight should allow the operator identity header'
-  );
-
   const leaderboardAudit = await getJson('/api/admin/leaderboard/users');
   assert(leaderboardAudit.summary.totalAccounts === 0, 'anonymous users should not enter account audit');
   assert(Array.isArray(leaderboardAudit.items), 'leaderboard audit should return an item list');
@@ -559,8 +590,7 @@ function requestHeaders(pathname, extraHeaders = {}, deviceId = 'smoke-test') {
   return {
     'X-Device-Id': deviceId,
     ...(pathname.startsWith('/api/admin/') ? {
-      Authorization: `Bearer ${adminToken}`,
-      'X-Admin-Operator': 'smoke-admin'
+      Authorization: `Bearer ${adminAccessToken}`
     } : {}),
     ...extraHeaders
   };

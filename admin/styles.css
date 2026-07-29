@@ -127,6 +127,23 @@ h2 {
   line-height: 1.5;
 }
 
+.bootstrap-panel {
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.bootstrap-panel summary {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bootstrap-form {
+  margin-top: 14px;
+}
+
 .layout {
   width: min(1320px, calc(100% - 32px));
   margin: 24px auto 40px;
@@ -555,12 +572,25 @@ button:disabled {
 }
 
 .audit-filters input {
-  width: min(260px, 34vw);
+  width: min(220px, 28vw);
 }
 
 .audit-filters select {
   width: auto;
   min-width: 128px;
+}
+
+.audit-filters input[type="date"] {
+  width: 138px;
+}
+
+.audit-date-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .audit-note {
@@ -785,6 +815,69 @@ button:disabled {
   color: var(--text);
 }
 
+.operator-panel {
+  overflow: hidden;
+}
+
+.operator-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr)) auto;
+  align-items: end;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.operator-form label,
+.operator-item label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.operator-form .auth-message {
+  grid-column: 1 / -1;
+}
+
+.operator-list {
+  display: grid;
+}
+
+.operator-item {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.2fr) repeat(4, minmax(130px, 1fr)) auto;
+  align-items: end;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.operator-item:last-child {
+  border-bottom: 0;
+}
+
+.operator-identity {
+  display: grid;
+  align-self: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.operator-identity strong,
+.operator-identity code,
+.operator-identity span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operator-identity code,
+.operator-identity span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -840,11 +933,35 @@ button:disabled {
     align-items: flex-start;
     flex-direction: column;
   }
+
+  .operator-form,
+  .operator-item {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .operator-identity {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 480px) {
   .topbar {
-    align-items: flex-start;
+    align-items: stretch;
+    flex-direction: column;
+    padding-block: 18px;
+  }
+
+  .topbar-actions {
+    justify-content: space-between;
+  }
+
+  .operator-badge {
+    flex: 1;
+    max-width: none;
+  }
+
+  h1 {
+    font-size: 26px;
   }
 
   .question-form {
@@ -890,9 +1007,18 @@ button:disabled {
     width: 100%;
   }
 
+  .audit-date-field {
+    width: calc(50% - 4px);
+  }
+
+  .audit-date-field input[type="date"] {
+    min-width: 0;
+    width: 100%;
+  }
+
   .admin-tabs {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: 100%;
   }
 
@@ -909,6 +1035,16 @@ button:disabled {
 
   .audit-page-actions select {
     width: 76px;
+  }
+
+  .operator-form,
+  .operator-item {
+    grid-template-columns: 1fr;
+  }
+
+  .operator-identity,
+  .operator-form .auth-message {
+    grid-column: auto;
   }
 
   .question-controls select,

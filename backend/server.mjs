@@ -2,7 +2,8 @@ import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
+import { AdminAuthService } from './admin-auth-service.mjs';
 import { AuthService } from './auth-service.mjs';
 import { HuaweiAccountClient } from './huawei-account-client.mjs';
 import { LeaderboardAdminService } from './leaderboard-admin-service.mjs';
@@ -76,36 +77,6 @@ function assertValidServerConfig() {
       'HUAWEI_CLIENT_ID, HUAWEI_CLIENT_SECRET, and HUAWEI_REDIRECT_URI must be configured together'
     );
   }
-}
-
-function authorizeAdmin(req) {
-  if (!adminToken) {
-    throw httpError(503, '管理接口未启用，请先配置 ADMIN_TOKEN');
-  }
-
-  const authorization = req.headers.authorization;
-  const value = Array.isArray(authorization) ? authorization[0] : authorization;
-  const match = typeof value === 'string' ? value.match(/^Bearer\s+(.+)$/i) : null;
-  if (!match || !safeSecretEqual(match[1].trim(), adminToken)) {
-    throw httpError(401, '管理员令牌无效或缺失');
-  }
-}
-
-function getAdminOperator(req) {
-  const header = req.headers['x-admin-operator'];
-  const value = Array.isArray(header) ? header[0] : header;
-  const encoded = String(value || '').trim();
-  try {
-    return decodeURIComponent(encoded);
-  } catch {
-    throw httpError(400, '操作员标识编码无效');
-  }
-}
-
-function safeSecretEqual(left, right) {
-  const leftDigest = createHash('sha256').update(left).digest();
-  const rightDigest = createHash('sha256').update(right).digest();
-  return timingSafeEqual(leftDigest, rightDigest);
 }
 
 function touchMetadata(db, timestamp = nowIso()) {
@@ -692,7 +663,7 @@ function sendJson(res, status, data, extraHeaders = {}) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device-Id, X-Admin-Operator',
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device-Id',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     ...extraHeaders
   });
@@ -737,6 +708,7 @@ async function routeApi(
   url,
   store,
   authService,
+  adminAuthService,
   leaderboardService,
   leaderboardAdminService
 ) {
@@ -750,7 +722,15 @@ async function routeApi(
   }
 
   if (pathname.startsWith('/api/admin/')) {
-    await routeAdmin(req, res, db, url, store, leaderboardAdminService);
+    await routeAdmin(
+      req,
+      res,
+      db,
+      url,
+      store,
+      adminAuthService,
+      leaderboardAdminService
+    );
     return;
   }
 
@@ -1001,16 +981,94 @@ async function routeApi(
   notFound(res);
 }
 
-async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
+async function routeAdmin(
+  req,
+  res,
+  db,
+  url,
+  store,
+  adminAuthService,
+  leaderboardAdminService
+) {
   const { pathname, searchParams } = url;
   const method = req.method || 'GET';
-  authorizeAdmin(req);
+
+  if (method === 'GET' && pathname === '/api/admin/auth/status') {
+    sendJson(res, 200, adminAuthService.status(), { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/admin/auth/bootstrap') {
+    const payload = await parseBody(req);
+    const result = adminAuthService.bootstrap({
+      authorization: req.headers.authorization,
+      username: payload.username,
+      password: payload.password,
+      displayName: payload.displayName
+    });
+    sendJson(res, 201, result, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/admin/auth/login') {
+    const payload = await parseBody(req);
+    const result = adminAuthService.login({
+      username: payload.username,
+      password: payload.password
+    });
+    sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  const principal = adminAuthService.resolvePrincipal(req.headers.authorization);
+
+  if (method === 'GET' && pathname === '/api/admin/auth/me') {
+    sendJson(res, 200, { admin: principal.admin }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/admin/auth/logout') {
+    adminAuthService.logout(principal);
+    sendJson(res, 200, { success: true }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/admin/operators') {
+    adminAuthService.requirePermission(principal, 'admin:manage');
+    sendJson(res, 200, { items: adminAuthService.listUsers() }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/admin/operators') {
+    adminAuthService.requirePermission(principal, 'admin:manage');
+    const payload = await parseBody(req);
+    const item = adminAuthService.createUser(payload);
+    sendJson(res, 201, { item }, { 'Cache-Control': 'no-store' });
+    return;
+  }
+
+  const adminOperatorMatch = pathname.match(/^\/api\/admin\/operators\/([^/]+)$/);
+  if (method === 'PATCH' && adminOperatorMatch) {
+    adminAuthService.requirePermission(principal, 'admin:manage');
+    const payload = await parseBody(req);
+    const item = adminAuthService.updateUser(
+      decodeURIComponent(adminOperatorMatch[1]),
+      payload,
+      principal.admin.id
+    );
+    sendJson(res, 200, { item }, { 'Cache-Control': 'no-store' });
+    return;
+  }
 
   if (method === 'GET' && pathname === '/api/admin/leaderboard/users') {
+    adminAuthService.requirePermission(principal, 'leaderboard:read');
     const result = leaderboardAdminService.listUsers({
       risk: searchParams.get('risk') || 'all',
       status: searchParams.get('status') || 'all',
       query: searchParams.get('q') || '',
+      operator: searchParams.get('operator') || '',
+      from: searchParams.get('from') || '',
+      to: searchParams.get('to') || '',
       page: searchParams.get('page') || 1,
       pageSize: searchParams.get('pageSize') || 20
     });
@@ -1020,24 +1078,27 @@ async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
 
   const leaderboardUserMatch = pathname.match(/^\/api\/admin\/leaderboard\/users\/([^/]+)\/status$/);
   if (method === 'PATCH' && leaderboardUserMatch) {
+    adminAuthService.requirePermission(principal, 'leaderboard:moderate');
     const payload = await parseBody(req);
     const item = leaderboardAdminService.updateUserStatus({
       userId: decodeURIComponent(leaderboardUserMatch[1]),
       status: payload.status,
       reason: payload.reason,
       note: payload.note,
-      operator: getAdminOperator(req)
+      operator: principal.admin.displayName
     });
     sendJson(res, 200, { item }, { 'Cache-Control': 'no-store' });
     return;
   }
 
   if (method === 'GET' && pathname === '/api/admin/categories') {
+    adminAuthService.requirePermission(principal, 'questions:read');
     sendJson(res, 200, { items: db.categories.sort((a, b) => a.order - b.order) });
     return;
   }
 
   if (method === 'POST' && pathname === '/api/admin/categories') {
+    adminAuthService.requirePermission(principal, 'questions:write');
     const payload = await parseBody(req);
     const item = normalizeCategoryPayload(payload, {}, db.categories.length + 1);
     validateCategory(item);
@@ -1052,6 +1113,7 @@ async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
 
   const adminCategoryMatch = pathname.match(/^\/api\/admin\/categories\/([^/]+)$/);
   if (method === 'PATCH' && adminCategoryMatch) {
+    adminAuthService.requirePermission(principal, 'questions:write');
     const category = db.categories.find((item) => item.id === adminCategoryMatch[1]);
     if (!category) {
       notFound(res);
@@ -1067,11 +1129,13 @@ async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
   }
 
   if (method === 'GET' && pathname === '/api/admin/questions') {
+    adminAuthService.requirePermission(principal, 'questions:read');
     sendJson(res, 200, { items: db.questions });
     return;
   }
 
   if (method === 'POST' && pathname === '/api/admin/questions') {
+    adminAuthService.requirePermission(principal, 'questions:write');
     const payload = await parseBody(req);
     const item = normalizeQuestionPayload(payload);
     validateQuestion(item, db);
@@ -1082,6 +1146,7 @@ async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
   }
 
   if (method === 'PATCH' && pathname === '/api/admin/questions/batch-status') {
+    adminAuthService.requirePermission(principal, 'questions:write');
     const payload = await parseBody(req);
     const requestedIds = Array.isArray(payload.questionIds) ? payload.questionIds : [];
     const questionIds = [...new Set(requestedIds.map((id) => String(id).trim()).filter(Boolean))];
@@ -1113,6 +1178,7 @@ async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
 
   const adminQuestionMatch = pathname.match(/^\/api\/admin\/questions\/([^/]+)$/);
   if (method === 'PATCH' && adminQuestionMatch) {
+    adminAuthService.requirePermission(principal, 'questions:write');
     const question = db.questions.find((item) => item.id === adminQuestionMatch[1]);
     if (!question) {
       notFound(res);
@@ -1180,6 +1246,11 @@ async function main() {
     accessTtlSeconds: process.env.AUTH_ACCESS_TTL_SECONDS,
     refreshTtlSeconds: process.env.AUTH_REFRESH_TTL_SECONDS
   });
+  const adminAuthService = new AdminAuthService({
+    store,
+    legacyToken: adminToken,
+    sessionTtlSeconds: process.env.ADMIN_SESSION_TTL_SECONDS
+  });
   const leaderboardService = new LeaderboardService({
     store,
     db
@@ -1211,6 +1282,7 @@ async function main() {
           url,
           store,
           authService,
+          adminAuthService,
           leaderboardService,
           leaderboardAdminService
         );
@@ -1244,9 +1316,10 @@ async function main() {
     if (importedLegacy) {
       console.log(`Imported legacy JSON storage: ${legacyDbFile}`);
     }
-    console.log(adminToken
-      ? 'Admin API authentication enabled.'
-      : 'Admin API disabled: configure ADMIN_TOKEN to enable management access.');
+    const adminStatus = adminAuthService.status();
+    console.log(adminStatus.enabled
+      ? `Admin authentication enabled${adminStatus.bootstrapAvailable ? ' (bootstrap required).' : '.'}`
+      : 'Admin API disabled: configure ADMIN_TOKEN to initialize the first administrator.');
     console.log(authService.isHuaweiConfigured()
       ? 'Huawei Account login enabled.'
       : 'Huawei Account login disabled: configure HUAWEI_CLIENT_ID, HUAWEI_CLIENT_SECRET, and HUAWEI_REDIRECT_URI.');

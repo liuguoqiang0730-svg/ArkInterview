@@ -4,7 +4,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-const schemaVersion = 5;
+const schemaVersion = 6;
 
 export function resolveDatabasePaths(defaultStorageDir) {
   const configuredDbFile = process.env.DB_FILE
@@ -231,6 +231,33 @@ export class SqliteStore {
 
         CREATE INDEX IF NOT EXISTS idx_user_moderation_events_user
           ON user_moderation_events(user_id, created_at DESC);
+
+        CREATE TABLE IF NOT EXISTS admin_users (
+          id TEXT PRIMARY KEY,
+          username TEXT NOT NULL UNIQUE COLLATE NOCASE,
+          display_name TEXT NOT NULL,
+          role TEXT NOT NULL,
+          password_salt TEXT NOT NULL,
+          password_hash TEXT NOT NULL,
+          status TEXT NOT NULL DEFAULT 'active',
+          last_login_at TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS admin_sessions (
+          id TEXT PRIMARY KEY,
+          admin_user_id TEXT NOT NULL,
+          token_hash TEXT NOT NULL UNIQUE,
+          expires_at TEXT NOT NULL,
+          revoked_at TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL,
+          FOREIGN KEY (admin_user_id) REFERENCES admin_users(id) ON DELETE CASCADE
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_admin_sessions_user
+          ON admin_sessions(admin_user_id, revoked_at, expires_at);
       `);
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
@@ -298,6 +325,37 @@ export class SqliteStore {
           "ALTER TABLE user_moderation_events ADD COLUMN note TEXT NOT NULL DEFAULT ''"
         );
       }
+      this.database.pragma('user_version = 5');
+    }
+    if (currentVersion >= 1 && currentVersion <= 5) {
+      this.database.exec(`
+        CREATE TABLE IF NOT EXISTS admin_users (
+          id TEXT PRIMARY KEY,
+          username TEXT NOT NULL UNIQUE COLLATE NOCASE,
+          display_name TEXT NOT NULL,
+          role TEXT NOT NULL,
+          password_salt TEXT NOT NULL,
+          password_hash TEXT NOT NULL,
+          status TEXT NOT NULL DEFAULT 'active',
+          last_login_at TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS admin_sessions (
+          id TEXT PRIMARY KEY,
+          admin_user_id TEXT NOT NULL,
+          token_hash TEXT NOT NULL UNIQUE,
+          expires_at TEXT NOT NULL,
+          revoked_at TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL,
+          FOREIGN KEY (admin_user_id) REFERENCES admin_users(id) ON DELETE CASCADE
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_admin_sessions_user
+          ON admin_sessions(admin_user_id, revoked_at, expires_at);
+      `);
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
     this.assertSupportedSchema();
@@ -671,6 +729,159 @@ export class SqliteStore {
       }
     });
     moderate();
+  }
+
+  countAdminUsers() {
+    return Number(this.database.prepare(
+      'SELECT COUNT(*) AS count FROM admin_users'
+    ).get().count);
+  }
+
+  listAdminUsers() {
+    return this.database.prepare(
+      `SELECT id, username, display_name, role, status, last_login_at, created_at, updated_at
+       FROM admin_users
+       ORDER BY created_at, username`
+    ).all().map(mapAdminUser);
+  }
+
+  findAdminUserById(userId) {
+    const row = this.database.prepare(
+      `SELECT id, username, display_name, role, password_salt, password_hash,
+              status, last_login_at, created_at, updated_at
+       FROM admin_users
+       WHERE id = ?`
+    ).get(userId);
+    return row ? mapAdminUser(row, { includePassword: true }) : undefined;
+  }
+
+  findAdminUserByUsername(username) {
+    const row = this.database.prepare(
+      `SELECT id, username, display_name, role, password_salt, password_hash,
+              status, last_login_at, created_at, updated_at
+       FROM admin_users
+       WHERE username = ? COLLATE NOCASE`
+    ).get(username);
+    return row ? mapAdminUser(row, { includePassword: true }) : undefined;
+  }
+
+  createAdminUser(user) {
+    this.database.prepare(
+      `INSERT INTO admin_users (
+         id, username, display_name, role, password_salt, password_hash,
+         status, last_login_at, created_at, updated_at
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      user.id,
+      user.username,
+      user.displayName,
+      user.role,
+      user.passwordSalt,
+      user.passwordHash,
+      user.status,
+      user.lastLoginAt || null,
+      user.createdAt,
+      user.updatedAt
+    );
+  }
+
+  updateAdminUser(user, { revokeSessions = false } = {}) {
+    const update = this.database.transaction(() => {
+      this.database.prepare(
+        `UPDATE admin_users
+         SET display_name = ?,
+             role = ?,
+             password_salt = ?,
+             password_hash = ?,
+             status = ?,
+             last_login_at = ?,
+             updated_at = ?
+         WHERE id = ?`
+      ).run(
+        user.displayName,
+        user.role,
+        user.passwordSalt,
+        user.passwordHash,
+        user.status,
+        user.lastLoginAt || null,
+        user.updatedAt,
+        user.id
+      );
+      if (revokeSessions) {
+        this.database.prepare(
+          `UPDATE admin_sessions
+           SET revoked_at = ?, updated_at = ?
+           WHERE admin_user_id = ? AND revoked_at IS NULL`
+        ).run(user.updatedAt, user.updatedAt, user.id);
+      }
+    });
+    update();
+  }
+
+  createAdminSession(user, session) {
+    const create = this.database.transaction(() => {
+      this.database.prepare(
+        `UPDATE admin_users
+         SET last_login_at = ?, updated_at = ?
+         WHERE id = ?`
+      ).run(user.lastLoginAt, user.updatedAt, user.id);
+      this.database.prepare(
+        `INSERT INTO admin_sessions (
+           id, admin_user_id, token_hash, expires_at, revoked_at, created_at, updated_at
+         ) VALUES (?, ?, ?, ?, NULL, ?, ?)`
+      ).run(
+        session.id,
+        user.id,
+        session.tokenHash,
+        session.expiresAt,
+        session.createdAt,
+        session.updatedAt
+      );
+    });
+    create();
+  }
+
+  findActiveAdminSession(tokenHash, now) {
+    const row = this.database.prepare(
+      `SELECT session.id AS session_id,
+              session.admin_user_id,
+              session.expires_at,
+              admin.username,
+              admin.display_name,
+              admin.role,
+              admin.status
+       FROM admin_sessions session
+       JOIN admin_users admin ON admin.id = session.admin_user_id
+       WHERE session.token_hash = ?
+         AND session.revoked_at IS NULL
+         AND session.expires_at > ?
+         AND admin.status = 'active'`
+    ).get(tokenHash, now);
+    if (!row) {
+      return undefined;
+    }
+    return {
+      session: {
+        id: row.session_id,
+        adminUserId: row.admin_user_id,
+        expiresAt: row.expires_at
+      },
+      user: {
+        id: row.admin_user_id,
+        username: row.username,
+        displayName: row.display_name,
+        role: row.role,
+        status: row.status
+      }
+    };
+  }
+
+  revokeAdminSession(sessionId, revokedAt) {
+    this.database.prepare(
+      `UPDATE admin_sessions
+       SET revoked_at = ?, updated_at = ?
+       WHERE id = ? AND revoked_at IS NULL`
+    ).run(revokedAt, revokedAt, sessionId);
   }
 
   recordAnswer(user, answer, wrong, metadata) {
@@ -1126,4 +1337,22 @@ function mapSession(row) {
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };
+}
+
+function mapAdminUser(row, { includePassword = false } = {}) {
+  const user = {
+    id: row.id,
+    username: row.username,
+    displayName: row.display_name,
+    role: row.role,
+    status: row.status,
+    lastLoginAt: row.last_login_at || null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+  if (includePassword) {
+    user.passwordSalt = row.password_salt;
+    user.passwordHash = row.password_hash;
+  }
+  return user;
 }

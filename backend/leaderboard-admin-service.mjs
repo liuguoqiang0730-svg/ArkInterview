@@ -21,12 +21,18 @@ export class LeaderboardAdminService {
     risk: riskInput = 'all',
     status: statusInput = 'all',
     query: queryInput = '',
+    operator: operatorInput = '',
+    from: fromInput = '',
+    to: toInput = '',
     page: pageInput = 1,
     pageSize: pageSizeInput = defaultPageSize
   } = {}) {
     const risk = String(riskInput || 'all').trim();
     const status = String(statusInput || 'all').trim();
     const query = String(queryInput || '').trim().toLocaleLowerCase('zh-CN');
+    const operator = String(operatorInput || '').trim().toLocaleLowerCase('zh-CN');
+    const from = normalizeDateFilter(fromInput, 'from');
+    const to = normalizeDateFilter(toInput, 'to');
     const requestedPage = positiveInteger(pageInput, 'page');
     const pageSize = positiveInteger(pageSizeInput, 'pageSize', maximumPageSize);
     if (!validRiskFilters.has(risk)) {
@@ -38,19 +44,38 @@ export class LeaderboardAdminService {
     if (query.length > 100) {
       throw new LeaderboardAdminError(400, '搜索内容不能超过 100 个字符');
     }
+    if (operator.length > 64) {
+      throw new LeaderboardAdminError(400, '操作人筛选不能超过 64 个字符');
+    }
+    if (from && to && from.timestamp > to.timestamp) {
+      throw new LeaderboardAdminError(400, '开始日期不能晚于结束日期');
+    }
 
     const allItems = this.buildAuditItems();
+    const moderationFilterActive = Boolean(operator || from || to);
 
     const filteredItems = allItems
       .filter((item) => status === 'all' || item.status === status)
       .filter((item) => riskMatches(item.riskLevel, risk))
       .filter((item) => !query || searchText(item).includes(query))
+      .map((item) => {
+        if (!moderationFilterActive) {
+          return { ...item, matchedModeration: null };
+        }
+        const matchedModeration = item.moderationEvents.find((event) => (
+          (!operator || event.operator.toLocaleLowerCase('zh-CN').includes(operator)) &&
+          (!from || Date.parse(event.createdAt) >= from.timestamp) &&
+          (!to || Date.parse(event.createdAt) <= to.timestamp)
+        ));
+        return matchedModeration ? { ...item, matchedModeration } : null;
+      })
+      .filter(Boolean)
       .sort(compareAuditItems);
     const totalItems = filteredItems.length;
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
     const page = Math.min(requestedPage, totalPages);
     const offset = (page - 1) * pageSize;
-    const items = filteredItems.slice(offset, offset + pageSize);
+    const items = filteredItems.slice(offset, offset + pageSize).map(publicAuditItem);
 
     return {
       generatedAt: this.nowIso(),
@@ -74,6 +99,14 @@ export class LeaderboardAdminService {
         totalPages,
         hasPrevious: page > 1,
         hasNext: page < totalPages
+      },
+      filters: {
+        risk,
+        status,
+        query: String(queryInput || '').trim(),
+        operator: String(operatorInput || '').trim(),
+        from: from?.value || '',
+        to: to?.value || ''
       },
       items
     };
@@ -190,8 +223,14 @@ function buildAuditItem(user, attempts, events, score) {
     riskLevel: frequency.riskLevel,
     riskReasons: frequency.riskReasons,
     lastModeration: events[0] || null,
+    moderationEvents: events,
     moderationCount: events.length
   };
+}
+
+function publicAuditItem(item) {
+  const { moderationEvents, ...publicItem } = item;
+  return publicItem;
 }
 
 function analyzeFrequency(attempts) {
@@ -248,6 +287,31 @@ function groupByUser(items) {
     grouped.set(item.userId, current);
   }
   return grouped;
+}
+
+function normalizeDateFilter(value, field) {
+  const normalized = String(value || '').trim();
+  if (!normalized) {
+    return null;
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+    throw new LeaderboardAdminError(400, `${field} 必须使用 YYYY-MM-DD 格式`);
+  }
+  const [year, month, day] = normalized.split('-').map(Number);
+  const calendarDate = new Date(Date.UTC(year, month - 1, day));
+  if (
+    calendarDate.getUTCFullYear() !== year ||
+    calendarDate.getUTCMonth() !== month - 1 ||
+    calendarDate.getUTCDate() !== day
+  ) {
+    throw new LeaderboardAdminError(400, `${field} 日期无效`);
+  }
+  const suffix = field === 'to' ? 'T23:59:59.999+08:00' : 'T00:00:00.000+08:00';
+  const timestamp = Date.parse(`${normalized}${suffix}`);
+  if (!Number.isFinite(timestamp)) {
+    throw new LeaderboardAdminError(400, `${field} 日期无效`);
+  }
+  return { value: normalized, timestamp };
 }
 
 function uniqueUsers(db) {

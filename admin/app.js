@@ -10,9 +10,13 @@ const state = {
   selectedQuestionIds: new Set(),
   batchPending: false,
   activeView: 'questions',
+  adminUsers: [],
   auditRisk: 'all',
   auditStatus: 'all',
   auditQuery: '',
+  auditOperator: '',
+  auditFrom: '',
+  auditTo: '',
   auditPage: 1,
   auditPageSize: 20,
   audit: {
@@ -35,7 +39,7 @@ const state = {
   },
   moderationTarget: null,
   adminToken: sessionStorage.getItem('arkinterview.adminToken') || '',
-  adminOperator: sessionStorage.getItem('arkinterview.adminOperator') || ''
+  adminProfile: null
 };
 
 const els = {
@@ -43,11 +47,19 @@ const els = {
   adminView: document.querySelector('#adminView'),
   questionManagementView: document.querySelector('#questionManagementView'),
   leaderboardAuditView: document.querySelector('#leaderboardAuditView'),
+  operatorManagementView: document.querySelector('#operatorManagementView'),
   adminTabs: [...document.querySelectorAll('.admin-tab')],
   authForm: document.querySelector('#authForm'),
-  adminOperatorInput: document.querySelector('#adminOperatorInput'),
-  adminTokenInput: document.querySelector('#adminTokenInput'),
+  adminUsernameInput: document.querySelector('#adminUsernameInput'),
+  adminPasswordInput: document.querySelector('#adminPasswordInput'),
   authMessage: document.querySelector('#authMessage'),
+  bootstrapPanel: document.querySelector('#bootstrapPanel'),
+  bootstrapForm: document.querySelector('#bootstrapForm'),
+  bootstrapTokenInput: document.querySelector('#bootstrapTokenInput'),
+  bootstrapUsernameInput: document.querySelector('#bootstrapUsernameInput'),
+  bootstrapDisplayNameInput: document.querySelector('#bootstrapDisplayNameInput'),
+  bootstrapPasswordInput: document.querySelector('#bootstrapPasswordInput'),
+  bootstrapMessage: document.querySelector('#bootstrapMessage'),
   categoryCount: document.querySelector('#categoryCount'),
   questionCount: document.querySelector('#questionCount'),
   publishedCount: document.querySelector('#publishedCount'),
@@ -88,6 +100,9 @@ const els = {
   auditSearchInput: document.querySelector('#auditSearchInput'),
   auditRiskFilter: document.querySelector('#auditRiskFilter'),
   auditStatusFilter: document.querySelector('#auditStatusFilter'),
+  auditOperatorFilter: document.querySelector('#auditOperatorFilter'),
+  auditFromFilter: document.querySelector('#auditFromFilter'),
+  auditToFilter: document.querySelector('#auditToFilter'),
   auditMessage: document.querySelector('#auditMessage'),
   auditTableBody: document.querySelector('#auditTableBody'),
   auditEmpty: document.querySelector('#auditEmpty'),
@@ -96,6 +111,10 @@ const els = {
   auditPreviousPage: document.querySelector('#auditPreviousPage'),
   auditPageNumber: document.querySelector('#auditPageNumber'),
   auditNextPage: document.querySelector('#auditNextPage'),
+  operatorCount: document.querySelector('#operatorCount'),
+  operatorCreateForm: document.querySelector('#operatorCreateForm'),
+  operatorMessage: document.querySelector('#operatorMessage'),
+  operatorList: document.querySelector('#operatorList'),
   moderationDialog: document.querySelector('#moderationDialog'),
   moderationForm: document.querySelector('#moderationForm'),
   moderationTitle: document.querySelector('#moderationTitle'),
@@ -137,7 +156,6 @@ async function request(path, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
     ...(state.adminToken ? { Authorization: `Bearer ${state.adminToken}` } : {}),
-    ...(state.adminOperator ? { 'X-Admin-Operator': encodeURIComponent(state.adminOperator) } : {}),
     ...(options.headers || {})
   };
   const response = await fetch(path, {
@@ -160,23 +178,23 @@ function showAdmin() {
   els.refreshButton.hidden = false;
   els.logoutButton.hidden = false;
   els.adminOperatorBadge.hidden = false;
-  els.adminOperatorBadge.textContent = state.adminOperator;
+  els.adminOperatorBadge.textContent = `${state.adminProfile.displayName} · ${roleLabel(state.adminProfile.role)}`;
   els.authMessage.textContent = '';
-  els.adminOperatorInput.value = '';
-  els.adminTokenInput.value = '';
+  els.adminUsernameInput.value = '';
+  els.adminPasswordInput.value = '';
 }
 
 function lockAdmin(message = '') {
   state.adminToken = '';
-  state.adminOperator = '';
+  state.adminProfile = null;
   state.categories = [];
   state.questions = [];
+  state.adminUsers = [];
   state.editingQuestionId = null;
   state.audit.items = [];
   state.moderationTarget = null;
   state.selectedQuestionIds.clear();
   sessionStorage.removeItem('arkinterview.adminToken');
-  sessionStorage.removeItem('arkinterview.adminOperator');
   els.authView.hidden = false;
   els.adminView.hidden = true;
   els.refreshButton.hidden = true;
@@ -190,27 +208,36 @@ function lockAdmin(message = '') {
   if (els.questionEditorDialog.open) {
     els.questionEditorDialog.close();
   }
-  els.adminOperatorInput.focus();
+  els.adminUsernameInput.focus();
+  loadAuthStatus().catch(() => {});
 }
 
-async function unlockAdmin(token, operator) {
-  state.adminToken = token.trim();
-  state.adminOperator = operator.trim().replace(/\s+/g, ' ');
+async function unlockAdmin(result) {
+  state.adminToken = result.accessToken.trim();
+  state.adminProfile = result.admin;
   await loadData();
   sessionStorage.setItem('arkinterview.adminToken', state.adminToken);
-  sessionStorage.setItem('arkinterview.adminOperator', state.adminOperator);
   showAdmin();
 }
 
 async function loadData() {
-  const [categories, questions, audit] = await Promise.all([
-    request('/api/admin/categories'),
-    request('/api/admin/questions'),
-    request(auditRequestPath())
+  if (!state.adminProfile) {
+    const profile = await request('/api/admin/auth/me');
+    state.adminProfile = profile.admin;
+  }
+  const canReadQuestions = hasPermission('questions:read');
+  const canReadAudit = hasPermission('leaderboard:read');
+  const canManageAdmins = hasPermission('admin:manage');
+  const [categories, questions, audit, admins] = await Promise.all([
+    canReadQuestions ? request('/api/admin/categories') : Promise.resolve({ items: [] }),
+    canReadQuestions ? request('/api/admin/questions') : Promise.resolve({ items: [] }),
+    canReadAudit ? request(auditRequestPath()) : Promise.resolve(null),
+    canManageAdmins ? request('/api/admin/operators') : Promise.resolve({ items: [] })
   ]);
   state.categories = categories.items;
   state.questions = questions.items;
-  state.audit = audit;
+  state.audit = audit || state.audit;
+  state.adminUsers = admins.items;
   state.selectedQuestionIds = new Set(
     [...state.selectedQuestionIds].filter((id) => state.questions.some((question) => question.id === id))
   );
@@ -218,19 +245,69 @@ async function loadData() {
 }
 
 function render() {
-  renderStats();
-  renderCategoryInput();
-  renderCategories();
-  renderQuestions();
-  renderAudit();
+  renderAvailableViews();
+  if (hasPermission('questions:read')) {
+    renderStats();
+    renderCategoryInput();
+    renderCategories();
+    renderQuestions();
+  }
+  if (hasPermission('leaderboard:read')) {
+    renderAudit();
+  }
+  if (hasPermission('admin:manage')) {
+    renderAdminUsers();
+  }
   setActiveView(state.activeView);
-  syncQuestionTypeFields();
+  if (hasPermission('questions:read')) {
+    syncQuestionTypeFields();
+  }
+}
+
+function hasPermission(permission) {
+  return Boolean(state.adminProfile?.permissions?.includes(permission));
+}
+
+function roleLabel(role) {
+  return {
+    super_admin: '超级管理员',
+    content_editor: '题库编辑',
+    moderator: '排行榜审核'
+  }[role] || role;
+}
+
+function availableViews() {
+  return [
+    ...(hasPermission('questions:read') ? ['questions'] : []),
+    ...(hasPermission('leaderboard:read') ? ['leaderboard'] : []),
+    ...(hasPermission('admin:manage') ? ['operators'] : [])
+  ];
+}
+
+function renderAvailableViews() {
+  const available = new Set(availableViews());
+  for (const button of els.adminTabs) {
+    button.hidden = !available.has(button.dataset.view);
+  }
+}
+
+async function loadAuthStatus() {
+  const response = await fetch('/api/admin/auth/status', {
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const status = await response.json().catch(() => ({}));
+  els.bootstrapPanel.hidden = !status.bootstrapAvailable;
+  if (!status.enabled && !els.authMessage.textContent) {
+    els.authMessage.textContent = '后台尚未启用，请先在服务端配置 ADMIN_TOKEN。';
+  }
 }
 
 function setActiveView(view) {
-  state.activeView = view === 'leaderboard' ? 'leaderboard' : 'questions';
+  const available = availableViews();
+  state.activeView = available.includes(view) ? view : available[0] || 'questions';
   els.questionManagementView.hidden = state.activeView !== 'questions';
   els.leaderboardAuditView.hidden = state.activeView !== 'leaderboard';
+  els.operatorManagementView.hidden = state.activeView !== 'operators';
   for (const button of els.adminTabs) {
     const active = button.dataset.view === state.activeView;
     button.classList.toggle('active', active);
@@ -277,6 +354,95 @@ function renderAudit() {
   els.auditNextPage.disabled = !pagination.hasNext;
 }
 
+function renderAdminUsers() {
+  els.operatorCount.textContent = `${state.adminUsers.length} 人`;
+  els.operatorList.replaceChildren(...state.adminUsers.map(adminUserItem));
+}
+
+function adminUserItem(item) {
+  const article = document.createElement('article');
+  article.className = 'operator-item';
+  article.innerHTML = `
+    <div class="operator-identity">
+      <strong>${escapeHtml(item.displayName)}</strong>
+      <code>${escapeHtml(item.username)}</code>
+      <span>${item.lastLoginAt ? `最近登录 ${escapeHtml(formatDate(item.lastLoginAt))}` : '尚未登录'}</span>
+    </div>
+    <label>
+      显示名称
+      <input name="displayName" minlength="2" maxlength="64" value="${escapeHtml(item.displayName)}">
+    </label>
+    <label>
+      角色
+      <select name="role">
+        ${adminRoleOptions(item.role)}
+      </select>
+    </label>
+    <label>
+      状态
+      <select name="status">
+        <option value="active"${item.status === 'active' ? ' selected' : ''}>启用</option>
+        <option value="disabled"${item.status === 'disabled' ? ' selected' : ''}>停用</option>
+      </select>
+    </label>
+    <label>
+      重置密码
+      <input name="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" placeholder="留空则不修改">
+    </label>
+    <button class="secondary-button" type="button">保存</button>
+  `;
+  article.querySelector('button').addEventListener('click', () => saveAdminUser(item.id, article));
+  return article;
+}
+
+function adminRoleOptions(selectedRole) {
+  return [
+    ['content_editor', '题库编辑'],
+    ['moderator', '排行榜审核'],
+    ['super_admin', '超级管理员']
+  ].map(([value, label]) => (
+    `<option value="${value}"${selectedRole === value ? ' selected' : ''}>${label}</option>`
+  )).join('');
+}
+
+async function saveAdminUser(userId, article) {
+  const button = article.querySelector('button');
+  const editingCurrentAdmin = userId === state.adminProfile.id;
+  const previousRole = state.adminProfile.role;
+  const payload = {
+    displayName: article.querySelector('[name="displayName"]').value.trim(),
+    role: article.querySelector('[name="role"]').value,
+    status: article.querySelector('[name="status"]').value
+  };
+  const password = article.querySelector('[name="password"]').value;
+  if (password) {
+    payload.password = password;
+  }
+  button.disabled = true;
+  els.operatorMessage.textContent = '正在保存...';
+  try {
+    const result = await request(`/api/admin/operators/${encodeURIComponent(userId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    });
+    state.adminUsers = state.adminUsers.map((item) => item.id === userId ? result.item : item);
+    if (editingCurrentAdmin && (password || result.item.role !== previousRole)) {
+      lockAdmin('当前账号的密码或角色已更新，请重新登录。');
+      return;
+    }
+    if (editingCurrentAdmin) {
+      state.adminProfile = result.item;
+      showAdmin();
+    }
+    els.operatorMessage.textContent = '管理员信息已更新';
+    renderAdminUsers();
+  } catch (error) {
+    els.operatorMessage.textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+}
+
 function auditRow(item) {
   const row = document.createElement('tr');
   const riskLabels = {
@@ -288,15 +454,17 @@ function auditRow(item) {
   const riskReason = item.riskReasons.length > 0
     ? item.riskReasons.join('；')
     : '未发现异常频率';
-  const latestAction = item.lastModeration
-    ? `${item.lastModeration.action === 'suspend' ? '封禁' : '解封'}：${item.lastModeration.reason}`
+  const displayedModeration = item.matchedModeration || item.lastModeration;
+  const latestAction = displayedModeration
+    ? `${displayedModeration.action === 'suspend' ? '封禁' : '解封'}：${displayedModeration.reason}`
     : '';
-  const latestOperator = item.lastModeration
-    ? `${item.lastModeration.operator} · ${formatDate(item.lastModeration.createdAt)}`
+  const latestOperator = displayedModeration
+    ? `${displayedModeration.operator} · ${formatDate(displayedModeration.createdAt)}`
     : '';
-  const latestNote = item.lastModeration?.note
-    ? `备注：${item.lastModeration.note}`
+  const latestNote = displayedModeration?.note
+    ? `备注：${displayedModeration.note}`
     : '';
+  const canModerate = hasPermission('leaderboard:moderate');
   row.innerHTML = `
     <td>
       <strong class="account-name">${escapeHtml(item.displayName || '未设置昵称')}</strong>
@@ -326,16 +494,14 @@ function auditRow(item) {
       <span class="audit-secondary">${item.status === 'suspended' ? '封禁期间不公开' : item.leaderboardOptIn ? '当前参与排行' : '当前未参与'}</span>
     </td>
     <td class="audit-action-cell">
-      <button
+      ${canModerate ? `<button
         class="${item.status === 'suspended' ? 'small-button' : 'danger-outline-button'}"
         type="button"
         data-action="moderate"
-      >${item.status === 'suspended' ? '解封' : '封禁'}</button>
+      >${item.status === 'suspended' ? '解封' : '封禁'}</button>` : ''}
     </td>
   `;
-  row.querySelector('[data-action="moderate"]').addEventListener('click', () => {
-    openModerationDialog(item);
-  });
+  row.querySelector('[data-action="moderate"]')?.addEventListener('click', () => openModerationDialog(item));
   return row;
 }
 
@@ -348,6 +514,15 @@ function auditRequestPath() {
   });
   if (state.auditQuery) {
     params.set('q', state.auditQuery);
+  }
+  if (state.auditOperator) {
+    params.set('operator', state.auditOperator);
+  }
+  if (state.auditFrom) {
+    params.set('from', state.auditFrom);
+  }
+  if (state.auditTo) {
+    params.set('to', state.auditTo);
   }
   return `/api/admin/leaderboard/users?${params.toString()}`;
 }
@@ -381,7 +556,7 @@ function openModerationDialog(item) {
   els.moderationSubmitButton.className = suspending ? 'danger-button' : 'primary-button';
   els.moderationReasonInput.value = '';
   els.moderationNoteInput.value = '';
-  els.moderationOperator.textContent = state.adminOperator;
+  els.moderationOperator.textContent = state.adminProfile.displayName;
   els.moderationMessage.textContent = '';
   els.moderationDialog.showModal();
   els.moderationReasonInput.focus();
@@ -943,6 +1118,9 @@ for (const button of els.adminTabs) {
 els.auditFilterForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   state.auditQuery = els.auditSearchInput.value.trim();
+  state.auditOperator = els.auditOperatorFilter.value.trim();
+  state.auditFrom = els.auditFromFilter.value;
+  state.auditTo = els.auditToFilter.value;
   state.auditPage = 1;
   await loadAuditData().catch(() => {});
 });
@@ -1001,12 +1179,17 @@ els.moderationDialog.addEventListener('click', (event) => {
 els.authForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const button = els.authForm.querySelector('button[type="submit"]');
-  const operator = els.adminOperatorInput.value.trim();
-  const token = els.adminTokenInput.value.trim();
   button.disabled = true;
-  els.authMessage.textContent = '验证中...';
+  els.authMessage.textContent = '登录中...';
   try {
-    await unlockAdmin(token, operator);
+    const result = await request('/api/admin/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: els.adminUsernameInput.value.trim(),
+        password: els.adminPasswordInput.value
+      })
+    });
+    await unlockAdmin(result);
   } catch (error) {
     lockAdmin(error.message);
   } finally {
@@ -1014,7 +1197,61 @@ els.authForm.addEventListener('submit', async (event) => {
   }
 });
 
-els.logoutButton.addEventListener('click', () => {
+els.bootstrapForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = els.bootstrapForm.querySelector('button[type="submit"]');
+  button.disabled = true;
+  els.bootstrapMessage.textContent = '正在创建超级管理员...';
+  try {
+    const result = await request('/api/admin/auth/bootstrap', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${els.bootstrapTokenInput.value.trim()}`
+      },
+      body: JSON.stringify({
+        username: els.bootstrapUsernameInput.value.trim(),
+        displayName: els.bootstrapDisplayNameInput.value.trim(),
+        password: els.bootstrapPasswordInput.value
+      })
+    });
+    els.bootstrapForm.reset();
+    await unlockAdmin(result);
+  } catch (error) {
+    els.bootstrapMessage.textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
+els.operatorCreateForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = els.operatorCreateForm.querySelector('button[type="submit"]');
+  const data = new FormData(els.operatorCreateForm);
+  button.disabled = true;
+  els.operatorMessage.textContent = '正在创建管理员...';
+  try {
+    const result = await request('/api/admin/operators', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: data.get('username'),
+        displayName: data.get('displayName'),
+        role: data.get('role'),
+        password: data.get('password')
+      })
+    });
+    state.adminUsers.push(result.item);
+    els.operatorCreateForm.reset();
+    els.operatorMessage.textContent = '管理员已创建';
+    renderAdminUsers();
+  } catch (error) {
+    els.operatorMessage.textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
+els.logoutButton.addEventListener('click', async () => {
+  await request('/api/admin/auth/logout', { method: 'POST' }).catch(() => {});
   lockAdmin();
 });
 
@@ -1031,7 +1268,7 @@ els.refreshButton.addEventListener('click', async () => {
   }
 });
 
-if (state.adminToken && state.adminOperator) {
+if (state.adminToken) {
   loadData()
     .then(showAdmin)
     .catch((error) => lockAdmin(error.message));

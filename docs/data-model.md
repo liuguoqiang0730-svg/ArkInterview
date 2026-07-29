@@ -1,6 +1,6 @@
 # 数据模型
 
-运行时数据保存在 `backend/storage/arkinterview.sqlite`，当前 Schema 版本为 `5`。题库源文件仍按模块维护在 `data/question-bank/modules/*.json`，构建后同步到 SQLite；用户私有数据不进入 Git。
+运行时数据保存在 `backend/storage/arkinterview.sqlite`，当前 Schema 版本为 `6`。题库源文件仍按模块维护在 `data/question-bank/modules/*.json`，构建后同步到 SQLite；用户私有数据不进入 Git。
 
 SQLite 当前使用以下业务表：
 
@@ -10,6 +10,8 @@ SQLite 当前使用以下业务表：
 - `user_identities`：保存经过服务端验证的华为账号等外部身份与内部用户的映射。
 - `auth_sessions`：保存 ArkInterview 自己签发的登录会话，包括访问令牌哈希、刷新令牌哈希、各自过期时间和吊销时间。
 - `user_moderation_events`：保存管理员对登录账号执行的封禁/解封动作、原因、操作人、内部备注和时间，作为不可由客户端修改的操作审计记录。
+- `admin_users`：管理员账号、显示名称、角色、状态及加盐 `scrypt` 密码摘要。
+- `admin_sessions`：管理员短期会话令牌摘要、过期时间和吊销状态；数据库不保存明文令牌。
 
 已关联外部身份的用户使用 `account/<users.id>` 形式的内部设备锚点加载运行时状态；该格式不符合客户端设备 ID 约束，不能通过请求头使用。真实匿名设备 ID 不再直接映射到账户用户，因此客户端漏传访问令牌或退出登录后，只能进入独立匿名空间，不能依靠设备 ID 读取账户数据。
 
@@ -124,3 +126,11 @@ SQLite 当前使用以下业务表：
 - 封禁动作在同一事务中更新用户状态、写入 `user_moderation_events` 并吊销该用户全部有效登录会话。解封不会恢复旧会话，用户必须重新登录。
 - `user_moderation_events.operator` 必填，`note` 可为空；从 v4 升级的历史记录使用 `legacy-admin` 作为操作人并保留空备注。
 - 已封禁的华为身份不能通过新的 Authorization Code 再次创建 ArkInterview 会话。
+
+## 管理员权限
+
+- `super_admin` 拥有管理员管理、题库读写和排行榜治理权限。
+- `content_editor` 只拥有题库读写权限。
+- `moderator` 只拥有排行榜查看和封禁/解封权限。
+- 首个超级管理员必须使用部署环境中的 `ADMIN_TOKEN` 初始化；后续人工操作统一使用管理员会话。
+- 管理员角色、密码或启用状态变化时，现有会话会被吊销；任何时候至少保留一个启用的超级管理员。

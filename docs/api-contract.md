@@ -286,16 +286,55 @@ Query 参数：
 
 ## 管理后台
 
-所有 `/api/admin/*` 请求都必须携带服务端环境变量 `ADMIN_TOKEN` 对应的 Bearer Token：
+人工使用后台时，先通过管理员账号登录取得短期会话令牌，后续请求使用该 Bearer Token：
 
 ```http
-Authorization: Bearer <ADMIN_TOKEN>
+Authorization: Bearer <ark_admin_access_token>
 ```
 
-- 未携带或令牌错误：返回 `401`。
-- 服务端未配置 `ADMIN_TOKEN`：返回 `503`，管理接口关闭。
-- `ADMIN_TOKEN` 至少 32 个字符，不能写入仓库或前端源码。
+- 未携带、过期或令牌错误：返回 `401`。
+- 权限不足：返回 `403`。
+- `ADMIN_TOKEN` 只保留给首次初始化、部署脚本和远程题库发布，不再作为人工操作人身份。
+- `ADMIN_TOKEN` 至少 32 个字符，不能写入仓库或前端源码；首次初始化完成后仍需保留给自动化任务。
 - 公网调用必须使用 HTTPS。
+
+角色权限：
+
+- `super_admin`：管理员管理、题库读写、排行榜审计与封禁。
+- `content_editor`：题库读写。
+- `moderator`：排行榜审计与封禁。
+
+### GET /api/admin/auth/status
+
+无需登录。返回后台是否启用，以及当前数据库是否仍允许初始化首个管理员。
+
+### POST /api/admin/auth/bootstrap
+
+仅当数据库中还没有管理员时可调用。请求头携带 `ADMIN_TOKEN`，请求体提供 `username`、`displayName` 和至少 12 个字符的 `password`；成功后创建唯一的首个超级管理员并返回短期会话。重复初始化返回 `409`。
+
+### POST /api/admin/auth/login
+
+使用管理员用户名和密码登录，返回 `ark_admin_` 开头的短期访问令牌及管理员角色、权限。密码使用服务端加盐 `scrypt` 哈希保存，数据库不保存明文。
+
+### GET /api/admin/auth/me
+
+返回当前管理员身份、角色和权限。
+
+### POST /api/admin/auth/logout
+
+撤销当前管理员会话。
+
+### GET /api/admin/operators
+
+仅超级管理员可用，返回管理员账号列表，不返回密码哈希或会话令牌。
+
+### POST /api/admin/operators
+
+仅超级管理员可用。创建 `super_admin`、`content_editor` 或 `moderator` 账号。
+
+### PATCH /api/admin/operators/{id}
+
+仅超级管理员可用。支持修改显示名称、角色、状态和密码。角色、密码或停用状态发生变化时撤销该账号的现有会话；系统禁止停用当前账号，并且必须至少保留一个启用的超级管理员。
 
 ### GET /api/admin/leaderboard/users
 
@@ -304,14 +343,16 @@ Authorization: Bearer <ADMIN_TOKEN>
 - `risk`：`all`、`flagged`、`normal`、`review` 或 `high`。
 - `status`：`all`、`active` 或 `suspended`。
 - `q`：按展示名、内部用户 ID 或身份提供方搜索，最长 100 个字符。
+- `operator`：按审核操作人名称模糊筛选，最长 64 个字符。
+- `from`、`to`：按北京时间筛选审核记录日期，格式为 `YYYY-MM-DD`。
 - `page`：页码，默认 `1`。
 - `pageSize`：每页数量，默认 `20`，最大 `100`。
 
-响应包含账号总数、参与数、待复核数、封禁数，以及当前页账号的历史积分、有效提交数、正确率、60 秒/5 分钟峰值、风险原因和最近一次管理员操作。`pagination` 返回 `page`、`pageSize`、`totalItems`、`totalPages`、`hasPrevious` 和 `hasNext`。异常检测只提供复核信号，不会自动封禁。
+响应包含账号总数、参与数、待复核数、封禁数，以及当前页账号的历史积分、有效提交数、正确率、60 秒/5 分钟峰值、风险原因和最近一次管理员操作。使用操作人或日期筛选时，`matchedModeration` 返回实际命中的历史审核记录。`pagination` 返回 `page`、`pageSize`、`totalItems`、`totalPages`、`hasPrevious` 和 `hasNext`。异常检测只提供复核信号，不会自动封禁。
 
 ### PATCH /api/admin/leaderboard/users/{userId}/status
 
-封禁或解封已绑定账号。除管理 Bearer Token 外，必须发送 `X-Admin-Operator` 请求头；操作人名称为 2 至 64 个字符，浏览器端应使用 `encodeURIComponent` 编码，服务端会解码后写入审计记录。请求体：
+封禁或解封已绑定账号。服务端直接使用已验证管理员会话中的显示名称作为操作人，客户端不能覆盖。请求体：
 
 ```json
 {
@@ -327,7 +368,6 @@ Authorization: Bearer <ADMIN_TOKEN>
 - 封禁会立即从公开排行榜移除账号、吊销全部有效 ArkInterview 登录会话，并阻止该华为身份重新登录。
 - 解封后旧会话不会恢复，用户需要重新登录。
 - 每次状态变化都会把操作、原因、操作人、内部备注和时间写入独立审计记录；重复设置相同状态返回 `409`。
-- 当前操作人身份仍建立在共享管理令牌可信的前提上，不等同于独立管理员账号鉴权。
 
 ### GET /api/admin/categories
 

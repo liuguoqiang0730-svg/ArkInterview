@@ -117,6 +117,15 @@ try {
   assert.equal(restored.lastModeration.action, 'restore');
   assert.equal(restored.lastModeration.operator, '复核管理员');
   assert.equal(restored.moderationCount, 2, 'suspend and restore actions should both remain auditable');
+  const operatorFiltered = service.listUsers({ operator: '刘国强' });
+  assert.equal(operatorFiltered.items.length, 1);
+  assert.equal(operatorFiltered.items[0].matchedModeration.operator, '刘国强');
+  assert.equal(
+    service.listUsers({ from: '2026-07-24', to: '2026-07-24' }).items.length,
+    1,
+    'moderation dates should use Beijing calendar boundaries'
+  );
+  assert.equal(service.listUsers({ from: '2026-07-25' }).items.length, 0);
   assert.throws(
     () => auth.resolvePrincipal(`Bearer ${riskyLogin.accessToken}`, 'unused-device'),
     (error) => error instanceof AuthError && error.status === 401,
@@ -152,6 +161,11 @@ try {
     () => service.listUsers({ pageSize: 101 }),
     (error) => error instanceof LeaderboardAdminError && error.status === 400,
     'audit pagination should enforce the maximum page size'
+  );
+  assert.throws(
+    () => service.listUsers({ from: '2026-07-25', to: '2026-07-24' }),
+    (error) => error instanceof LeaderboardAdminError && error.status === 400,
+    'moderation date ranges should reject reversed boundaries'
   );
   assert.throws(
     () => service.updateUserStatus({
