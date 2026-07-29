@@ -914,5 +914,854 @@
       "为高频过滤排序字段设计索引并分页查询",
       "关闭 ResultSet，并验证迁移失败与备份恢复路径"
     ]
+  },
+  {
+    "id": "relational-store-023",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "使用 RdbPredicates 按创建时间从新到旧排序，应调用哪个方法？",
+    "explanation": "orderByDesc 按指定字段降序排列，适合最新记录优先展示。",
+    "knowledgePoints": [
+      "RdbPredicates",
+      "orderByDesc",
+      "排序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "orderByDesc"
+      },
+      {
+        "id": "b",
+        "text": "orderByAsc"
+      },
+      {
+        "id": "c",
+        "text": "distinct"
+      },
+      {
+        "id": "d",
+        "text": "groupBy"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-024",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 RdbPredicates 做偏移分页时，哪些说法正确？",
+    "explanation": "官方接口对 offsetAs 和 limitAs 的组合有明确约束，分页时还应配合稳定排序。",
+    "knowledgePoints": [
+      "RdbPredicates",
+      "limitAs",
+      "offsetAs",
+      "分页"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "limitAs 用于限制返回行数"
+      },
+      {
+        "id": "b",
+        "text": "offsetAs 用于跳过前面的行"
+      },
+      {
+        "id": "c",
+        "text": "offsetAs 应与 limitAs 配合，否则不会返回结果"
+      },
+      {
+        "id": "d",
+        "text": "想返回 offset 后全部行时可将 limit 设置为小于等于 0"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-025",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "RdbPredicates 中哪些能力可用于结果集组织或索引提示？",
+    "explanation": "distinct、groupBy 和 indexedBy 都属于关系查询谓词能力，线程通知与数据库谓词无关。",
+    "knowledgePoints": [
+      "distinct",
+      "groupBy",
+      "indexedBy"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "distinct 去重"
+      },
+      {
+        "id": "b",
+        "text": "groupBy 分组"
+      },
+      {
+        "id": "c",
+        "text": "indexedBy 指定索引"
+      },
+      {
+        "id": "d",
+        "text": "notifyAll 唤醒线程"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-026",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "创建加密关系型数据库时，StoreConfig 中最直接的开关是什么？",
+    "explanation": "StoreConfig.encrypt 控制数据库是否加密，默认值为 false。",
+    "knowledgePoints": [
+      "StoreConfig",
+      "encrypt",
+      "数据库加密"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "encrypt: true"
+      },
+      {
+        "id": "b",
+        "text": "persist: false"
+      },
+      {
+        "id": "c",
+        "text": "isReadOnly: true"
+      },
+      {
+        "id": "d",
+        "text": "allowRebuild: true"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-027",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "自行提供数据库加密密钥时，哪些做法符合安全要求？",
+    "explanation": "示例中的固定密钥仅用于演示。生产环境应安全生成和保存，并在使用后清除内存副本。",
+    "knowledgePoints": [
+      "数据库加密",
+      "密钥管理",
+      "内存清理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "从安全密钥服务获取密钥而不是硬编码"
+      },
+      {
+        "id": "b",
+        "text": "使用完后通过 fill(0) 清理内存中的密钥数组"
+      },
+      {
+        "id": "c",
+        "text": "在日志中打印完整密钥便于排查"
+      },
+      {
+        "id": "d",
+        "text": "限制密钥生命周期和可见范围"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-028",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "API 22 需要修改现有数据库的加密属性或密钥，应使用哪个能力？",
+    "explanation": "rekeyEx 用于调整关系型数据库加密配置；操作前应评估备份、失败恢复和密钥管理。",
+    "knowledgePoints": [
+      "rekeyEx",
+      "数据库加密",
+      "密钥轮换"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "rekeyEx"
+      },
+      {
+        "id": "b",
+        "text": "querySql"
+      },
+      {
+        "id": "c",
+        "text": "beginTransaction"
+      },
+      {
+        "id": "d",
+        "text": "getColumnIndex"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-029",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "同一进程中不能同时创建两个同名关系型数据库实例，因此数据库命名和单例管理需要统一。",
+    "explanation": "同名数据库实例应由统一的数据访问层复用，避免重复创建引发错误。",
+    "knowledgePoints": [
+      "RdbStore",
+      "数据库实例",
+      "命名约束"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-030",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "配置 persist: false 的内存数据库有哪些限制？",
+    "explanation": "内存数据库主要用于临时关系数据，官方明确限制加密、备份恢复、跨进程和分布式等能力。",
+    "knowledgePoints": [
+      "内存数据库",
+      "persist",
+      "StoreConfig"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "不支持加密"
+      },
+      {
+        "id": "b",
+        "text": "不支持备份与恢复"
+      },
+      {
+        "id": "c",
+        "text": "不支持跨进程和分布式能力"
+      },
+      {
+        "id": "d",
+        "text": "进程结束后仍保证永久保存"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-031",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "通过只读方式打开的 RdbStore 执行写操作会失败并返回相应错误。",
+    "explanation": "只读配置应与数据访问层职责一致，不能依赖运行时忽略写入。",
+    "knowledgePoints": [
+      "RdbStore",
+      "只读数据库"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-032",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "完成查询并读取 ResultSet 后，必须执行哪项资源管理？",
+    "explanation": "ResultSet 持有数据库查询资源，应在使用完成或异常路径中及时关闭。",
+    "knowledgePoints": [
+      "ResultSet",
+      "close",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "调用 close 释放结果集"
+      },
+      {
+        "id": "b",
+        "text": "把 ResultSet 永久保存在全局变量"
+      },
+      {
+        "id": "c",
+        "text": "再次调用 getRdbStore"
+      },
+      {
+        "id": "d",
+        "text": "删除数据库文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-033",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 ResultSet.getRows 批量异步读取时，哪些说法正确？",
+    "explanation": "getRows 是结果集读取接口，会推进游标且存在并发调用限制，不承担事务提交。",
+    "knowledgePoints": [
+      "ResultSet",
+      "getRows",
+      "并发访问"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "getRows 会自动向后移动结果集位置"
+      },
+      {
+        "id": "b",
+        "text": "执行期间不应并发调用同一 ResultSet 的其他接口"
+      },
+      {
+        "id": "c",
+        "text": "读取完成后仍需关闭 ResultSet"
+      },
+      {
+        "id": "d",
+        "text": "getRows 会自动提交所有写事务"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-034",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 API 23 的 LiteResultSet，哪些说法正确？",
+    "explanation": "LiteResultSet 避免预先统计行数，但不是实时视图，数据变化后需要重新查询。",
+    "knowledgePoints": [
+      "LiteResultSet",
+      "queryWithoutRowCount",
+      "查询性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "LiteResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-LiteResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "可由 queryWithoutRowCount 获得"
+      },
+      {
+        "id": "b",
+        "text": "不提供 rowCount"
+      },
+      {
+        "id": "c",
+        "text": "数据变化后不会实时反映，应重新查询"
+      },
+      {
+        "id": "d",
+        "text": "天然支持任意跨进程写入"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-035",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "一个 RdbStore 同时最多可创建多少个 Transaction 对象？",
+    "explanation": "官方 Transaction 接口说明同一 RdbStore 最多创建 4 个事务对象，但写事务仍受更严格的并发约束。",
+    "knowledgePoints": [
+      "Transaction",
+      "事务数量限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "4 个"
+      },
+      {
+        "id": "b",
+        "text": "1 个"
+      },
+      {
+        "id": "c",
+        "text": "16 个"
+      },
+      {
+        "id": "d",
+        "text": "没有数量限制"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-036",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "并发启动第二个写事务收到错误 14800024，合理处理是什么？",
+    "explanation": "关系型数据库同一时刻只允许一个写事务。应减少事务持有时间，并对可重试冲突进行有界重试。",
+    "knowledgePoints": [
+      "写事务",
+      "错误码 14800024",
+      "并发控制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "缩短当前写事务并等待或重试，确保同一时刻只有一个写事务"
+      },
+      {
+        "id": "b",
+        "text": "立即删除数据库"
+      },
+      {
+        "id": "c",
+        "text": "把所有 SQL 改为字符串拼接"
+      },
+      {
+        "id": "d",
+        "text": "无限创建新的 RdbStore"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-037",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "通过 Transaction 对象执行的数据变更不会触发 RdbStore 的 dataChange 监听，因此不能把该监听当作事务内变更通知。",
+    "explanation": "事务对象和 RdbStore 变更订阅存在边界，业务若依赖刷新，应在提交成功后主动发出明确状态通知。",
+    "knowledgePoints": [
+      "Transaction",
+      "dataChange",
+      "数据刷新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-038",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "执行数据库 restore 前，哪些准备是合理的？",
+    "explanation": "恢复会替换数据库内容，应先释放查询资源，并明确备份有效性、失败处理和业务停写边界。",
+    "knowledgePoints": [
+      "restore",
+      "ResultSet",
+      "备份恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库备份与恢复",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-backup-and-restore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "关闭仍在使用的 ResultSet"
+      },
+      {
+        "id": "b",
+        "text": "确认备份文件和恢复策略"
+      },
+      {
+        "id": "c",
+        "text": "处理恢复失败并保留可回退路径"
+      },
+      {
+        "id": "d",
+        "text": "让查询继续无限持有旧结果集"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-039",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "allowRebuild 在数据库损坏时重建的是空数据库，应用仍需重新创建表结构并恢复必要数据。",
+    "explanation": "自动重建不是数据恢复。它能让数据库重新可打开，但业务结构和内容需要应用重新建立。",
+    "knowledgePoints": [
+      "allowRebuild",
+      "数据库损坏",
+      "数据恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库备份与恢复",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-backup-and-restore.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-040",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 executeSql 的适用边界，哪些说法正确？",
+    "explanation": "executeSql 不是通用查询或事务入口，应按 SQL 类型使用专门接口。",
+    "knowledgePoints": [
+      "executeSql",
+      "querySql",
+      "事务接口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "options": [
+      {
+        "id": "a",
+        "text": "适合执行不返回结果集的 SQL"
+      },
+      {
+        "id": "b",
+        "text": "查询应使用 querySql 或 query 等接口"
+      },
+      {
+        "id": "c",
+        "text": "不应使用它执行 ATTACH"
+      },
+      {
+        "id": "d",
+        "text": "事务控制应使用事务相关接口"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-041",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "StoreConfig.customDir 自定义数据库目录路径的长度上限是多少？",
+    "explanation": "customDir 路径最大为 128 字节，设计目录结构时要同时考虑合法路径和沙箱边界。",
+    "knowledgePoints": [
+      "StoreConfig",
+      "customDir",
+      "路径限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "128 字节"
+      },
+      {
+        "id": "b",
+        "text": "32 字节"
+      },
+      {
+        "id": "c",
+        "text": "1024 字节"
+      },
+      {
+        "id": "d",
+        "text": "没有上限"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-042",
+    "categoryId": "relational-store",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "订单列表按商户和创建时间分页查询，且本地数据库包含敏感地址信息，应如何设计索引、分页和加密？",
+    "explanation": "性能和安全要一起设计：索引服务于真实查询，加密密钥不能硬编码，分页还要保证顺序稳定。",
+    "knowledgePoints": [
+      "联合索引",
+      "分页",
+      "数据库加密",
+      "ResultSet"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "LiteResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-LiteResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "referenceAnswer": "根据高频条件建立与查询一致的联合索引，例如 merchantId 与 createdAt，并用稳定排序配合 limitAs、offsetAs；数据量大且不需要总行数时可评估 queryWithoutRowCount，但数据变化后要重新查询。StoreConfig 开启 encrypt，密钥从安全服务获取、限制生命周期并在使用后清零。所有 ResultSet 及时 close，用真实数据验证索引收益、分页稳定性和加密数据库升级恢复路径。",
+    "scoringPoints": [
+      "联合索引匹配过滤与排序字段",
+      "稳定排序并正确组合 limitAs 与 offsetAs",
+      "开启数据库加密并安全管理密钥",
+      "关闭结果集并用真实数据验证性能和恢复"
+    ]
   }
 ]

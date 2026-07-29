@@ -1036,6 +1036,834 @@
     ]
   },
   {
+    "id": "arkts-026",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "关于 Promise 的三种状态，哪项描述正确？",
+    "explanation": "Promise 的状态只能从 pending 进入 fulfilled 或 rejected，状态确定后不会再次改变。",
+    "knowledgePoints": [
+      "Promise",
+      "异步状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "pending 表示处理中，fulfilled 表示已完成，rejected 表示已拒绝"
+      },
+      {
+        "id": "b",
+        "text": "fulfilled 可以再次变回 pending"
+      },
+      {
+        "id": "c",
+        "text": "rejected 只能由网络错误触发"
+      },
+      {
+        "id": "d",
+        "text": "Promise 创建后一定立即进入 fulfilled"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-027",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 ArkTS 中 async 函数的行为，哪些说法正确？",
+    "explanation": "async 把同步返回值和异常统一映射到 Promise 完成或拒绝状态，但不会取消 ArkTS 的静态类型约束。",
+    "knowledgePoints": [
+      "async",
+      "Promise",
+      "异常传播"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "async 函数返回 Promise"
+      },
+      {
+        "id": "b",
+        "text": "函数体正常返回的值会成为 Promise 的兑现值"
+      },
+      {
+        "id": "c",
+        "text": "函数体抛出的异常会使 Promise 被拒绝"
+      },
+      {
+        "id": "d",
+        "text": "async 函数可以绕过所有类型检查"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-028",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "调用可能被拒绝的异步接口时，哪种写法最便于在当前调用层统一处理异常？",
+    "explanation": "await 会把 Promise 的拒绝表现为可被当前 async 函数中 try/catch 捕获的异常，适合在明确边界进行恢复或转换。",
+    "knowledgePoints": [
+      "await",
+      "try/catch",
+      "异常边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 async 函数内用 try/catch 包裹 await 调用"
+      },
+      {
+        "id": "b",
+        "text": "只调用 Promise，不使用 await、then 或 catch"
+      },
+      {
+        "id": "c",
+        "text": "把异常对象转换为普通字符串后忽略"
+      },
+      {
+        "id": "d",
+        "text": "在每次调用前创建新的 Worker"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-029",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "从 API 18 开始，可以通过 errorManager 的全局未处理拒绝监听能力发现未被消费的 Promise rejection。",
+    "explanation": "API 18 提供 globalUnhandledRejectionDetected 等能力，用于监听未处理的 Promise 拒绝；业务仍应优先在可恢复的调用边界显式处理。",
+    "knowledgePoints": [
+      "Promise rejection",
+      "errorManager"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-030",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "TaskPool 任务返回一个仍处于 pending 状态的 Promise 时，哪项判断正确？",
+    "explanation": "Promise 本身不能作为跨线程结果传递。TaskPool 任务应在工作线程内 await 异步过程，并返回满足跨线程传输要求的最终值。",
+    "knowledgePoints": [
+      "TaskPool",
+      "Promise",
+      "跨线程传输"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TaskPool简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/taskpool-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "任务执行会失败，应等待 Promise 完成后再返回可跨线程传递的结果"
+      },
+      {
+        "id": "b",
+        "text": "TaskPool 会永久保存这个 Promise 并自动跨线程恢复"
+      },
+      {
+        "id": "c",
+        "text": "Promise 会被隐式转换为字符串"
+      },
+      {
+        "id": "d",
+        "text": "只要任务优先级足够高就可以正常返回"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-031",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "TaskPool 的 IDLE 优先级任务通常在什么条件下执行？",
+    "explanation": "IDLE 是最低优先级，适合不要求立即完成的后台工作；它只在工作线程都空闲时调度，且一次执行一个。",
+    "knowledgePoints": [
+      "TaskPool",
+      "任务优先级",
+      "IDLE"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TaskPool简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/taskpool-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "options": [
+      {
+        "id": "a",
+        "text": "所有工作线程空闲时执行，并且同一时间只执行一个 IDLE 任务"
+      },
+      {
+        "id": "b",
+        "text": "始终抢占 HIGH 优先级任务"
+      },
+      {
+        "id": "c",
+        "text": "只能在主线程同步执行"
+      },
+      {
+        "id": "d",
+        "text": "提交后立即创建永久独占线程"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-032",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "需要从子线程取消已提交的 TaskPool 任务时，API 18 推荐如何传递取消目标？",
+    "explanation": "Task 对象本身不可跨线程传递。API 18 可获取任务 ID，并借助 Sendable 数据把 ID 传到其他线程执行取消。",
+    "knowledgePoints": [
+      "TaskPool",
+      "任务取消",
+      "Sendable"
+    ],
+    "sourceRefs": [
+      {
+        "title": "取消TaskPool任务",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/multi-thread-cancel-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "把 Task ID 放入可跨线程传递的 Sendable 对象，在子线程调用 taskpool.cancel(id)"
+      },
+      {
+        "id": "b",
+        "text": "直接把 Task 实例作为普通对象传到子线程"
+      },
+      {
+        "id": "c",
+        "text": "通过修改任务函数名称取消"
+      },
+      {
+        "id": "d",
+        "text": "销毁整个应用进程"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-033",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "AsyncLock 适合解决哪些并发控制问题？",
+    "explanation": "AsyncLock 可跨线程引用，并以异步、非阻塞方式协调临界区；它也可用于同一线程异步任务的顺序控制。",
+    "knowledgePoints": [
+      "AsyncLock",
+      "互斥",
+      "异步顺序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步锁",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-async-lock-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "多个线程对共享数据的异步互斥访问"
+      },
+      {
+        "id": "b",
+        "text": "同一线程中多个异步流程的执行顺序控制"
+      },
+      {
+        "id": "c",
+        "text": "替代所有数据库事务"
+      },
+      {
+        "id": "d",
+        "text": "让耗时同步循环自动变成异步"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-034",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "ArkTS 只提供异步锁而不提供阻塞式锁，有助于避免线程因等待锁而阻塞及形成传统死锁。",
+    "explanation": "异步锁通过 Promise 等待锁资源，不阻塞执行线程；调用方通常需要使用 await 明确等待临界区完成。",
+    "knowledgePoints": [
+      "AsyncLock",
+      "非阻塞锁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步锁",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-async-lock-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-035",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "ConditionVariable 提供哪些典型能力？",
+    "explanation": "条件变量用于等待条件变化以及通知一个或全部等待者，不承担组件生命周期控制。",
+    "knowledgePoints": [
+      "ConditionVariable",
+      "等待通知"
+    ],
+    "sourceRefs": [
+      {
+        "title": "条件变量",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-condition-variable-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "wait 或 waitFor 等待通知或超时"
+      },
+      {
+        "id": "b",
+        "text": "notifyOne 唤醒一个等待者"
+      },
+      {
+        "id": "c",
+        "text": "notifyAll 唤醒全部等待者"
+      },
+      {
+        "id": "d",
+        "text": "强制终止任意 UIAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-036",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "多线程共享 ArkTS collections 容器时，哪些约束需要注意？",
+    "explanation": "共享容器通过引用传递减少大数据复制，但并不自动提供线程安全；元素类型和并发修改都要按官方约束处理。",
+    "knowledgePoints": [
+      "ArkTS collections",
+      "Sendable",
+      "线程安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkTS共享容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-collections-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "容器以引用方式跨线程共享，适合较大数据"
+      },
+      {
+        "id": "b",
+        "text": "容器元素需要满足 Sendable 要求"
+      },
+      {
+        "id": "c",
+        "text": "容器本身不保证线程安全，并发结构修改应使用锁协调"
+      },
+      {
+        "id": "d",
+        "text": "共享后每个线程都会得到完全独立的深拷贝"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-037",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个集合需要频繁按索引读取，插入删除主要发生在尾部，优先考虑哪种线性容器？",
+    "explanation": "ArrayList 基于连续、动态数组组织，随机读取效率较好；LinkedList 更适合频繁的中间插入删除。",
+    "knowledgePoints": [
+      "ArrayList",
+      "线性容器",
+      "数据结构选型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/linear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "ArrayList"
+      },
+      {
+        "id": "b",
+        "text": "LinkedList"
+      },
+      {
+        "id": "c",
+        "text": "Stack"
+      },
+      {
+        "id": "d",
+        "text": "Queue"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-038",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "关于 Queue 与 Stack 的访问顺序，哪些说法正确？",
+    "explanation": "Queue 用于先进先出的排队处理，Stack 用于后进先出的层级回退等场景，元素类型并不限于字符串。",
+    "knowledgePoints": [
+      "Queue",
+      "Stack",
+      "线性容器"
+    ],
+    "sourceRefs": [
+      {
+        "title": "线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/linear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "Queue 通常遵循先进先出"
+      },
+      {
+        "id": "b",
+        "text": "Stack 通常遵循后进先出"
+      },
+      {
+        "id": "c",
+        "text": "Queue 和 Stack 都按键排序"
+      },
+      {
+        "id": "d",
+        "text": "Stack 只能存储字符串"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-039",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要让键值数据按自定义键顺序遍历时，HashMap 与 TreeMap 中应优先选择哪一个？",
+    "explanation": "TreeMap 基于有序树结构并支持自定义排序；HashMap 更强调快速键查找，但不保证遍历顺序。",
+    "knowledgePoints": [
+      "TreeMap",
+      "HashMap",
+      "有序映射"
+    ],
+    "sourceRefs": [
+      {
+        "title": "非线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/nonlinear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "options": [
+      {
+        "id": "a",
+        "text": "TreeMap"
+      },
+      {
+        "id": "b",
+        "text": "HashMap"
+      },
+      {
+        "id": "c",
+        "text": "HashSet"
+      },
+      {
+        "id": "d",
+        "text": "Deque"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-040",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在键值数量较少且更关注内存占用的场景中，哪个容器是官方文档给出的轻量选择？",
+    "explanation": "LightWeightMap 以更紧凑的数据组织方式降低小规模映射的内存成本，适合数据量不大的场景。",
+    "knowledgePoints": [
+      "LightWeightMap",
+      "容器内存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "非线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/nonlinear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "options": [
+      {
+        "id": "a",
+        "text": "LightWeightMap"
+      },
+      {
+        "id": "b",
+        "text": "TreeMap"
+      },
+      {
+        "id": "c",
+        "text": "LinkedList"
+      },
+      {
+        "id": "d",
+        "text": "PriorityQueue"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-041",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "懒加载模块对冷启动阶段的主要作用是什么？",
+    "explanation": "懒加载把模块执行推迟到首次使用，有助于冷启动，但首次真正访问时仍会同步执行模块代码。",
+    "knowledgePoints": [
+      "lazy import",
+      "冷启动",
+      "模块加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "懒加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-lazy-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "延后模块源码执行，减少启动阶段不必要的解析与执行"
+      },
+      {
+        "id": "b",
+        "text": "把所有模块永久从安装包删除"
+      },
+      {
+        "id": "c",
+        "text": "把同步接口自动改成网络接口"
+      },
+      {
+        "id": "d",
+        "text": "保证首次使用模块时完全没有耗时"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-042",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "使用 lazy import 后，模块首次被真正访问时仍可能同步执行并造成交互卡顿，因此不能无差别地给所有模块加懒加载。",
+    "explanation": "懒加载只是转移执行时机。应把它用于启动阶段不需要、且首次使用时延迟可接受的模块，并测量实际收益。",
+    "knowledgePoints": [
+      "lazy import",
+      "首次访问性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "懒加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-lazy-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-043",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "使用变量路径进行动态 import 时，构建配置可能需要补充哪类声明以确保运行时模块被打包？",
+    "explanation": "变量动态 import 无法像常量路径那样在构建期完整解析依赖，可能需要通过 runtimeOnly 声明运行时依赖。",
+    "knowledgePoints": [
+      "dynamic import",
+      "runtimeOnly",
+      "模块打包"
+    ],
+    "sourceRefs": [
+      {
+        "title": "动态加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-dynamic-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "runtimeOnly"
+      },
+      {
+        "id": "b",
+        "text": "compileOnly"
+      },
+      {
+        "id": "c",
+        "text": "testOnly"
+      },
+      {
+        "id": "d",
+        "text": "previewOnly"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-044",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "同一个 ETS 文件中若对相关导入未完整使用懒加载标记，模块延迟执行可能失效。",
+    "explanation": "同一文件对模块的普通导入可能提前触发其加载，使其他懒加载导入失去预期效果，因此要检查导入链的一致性。",
+    "knowledgePoints": [
+      "lazy import",
+      "导入一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "懒加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-lazy-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-045",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "企业协作应用把文档解析任务放入 TaskPool 后，如何设计取消、异常处理和共享状态保护？",
+    "explanation": "可靠并发设计要同时覆盖结果传输、取消、异常和共享状态，不能只把函数提交到 TaskPool。",
+    "knowledgePoints": [
+      "TaskPool",
+      "任务取消",
+      "AsyncLock",
+      "Sendable"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TaskPool简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/taskpool-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "取消TaskPool任务",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/multi-thread-cancel-task.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "异步锁",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-async-lock-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ArkTS共享容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-collections-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "referenceAnswer": "把可并行的解析函数声明为可并发任务，在任务内部 await 所有异步步骤并用 try/catch 转换可识别错误；通过 Task ID 和 Sendable 控制对象跨线程传递取消请求，不传 Task 或 pending Promise；共享容器中的数据应满足 Sendable 要求，并使用 AsyncLock 保护并发结构修改；主线程根据完成、拒绝或取消结果更新界面，不执行重解析。",
+    "scoringPoints": [
+      "任务内部 await 并捕获异常",
+      "通过 Task ID 与 Sendable 传递取消请求",
+      "共享数据满足 Sendable 并用 AsyncLock 协调",
+      "主线程只消费最终结果并更新界面"
+    ]
+  },
+  {
     "id": "arkui-001",
     "categoryId": "arkui",
     "type": "single",
@@ -2031,6 +2859,861 @@
       "说明 LazyForEach 依赖 IDataSource 和数据变化通知",
       "说明 Repeat 支持懒加载与节点复用",
       "指出 Repeat 的多模板能力及其适用场景"
+    ]
+  },
+  {
+    "id": "arkui-026",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "自定义组件需要先测量子节点再决定自身尺寸，应重写哪个方法？",
+    "explanation": "onMeasureSize 在布局测量阶段调用，可测量子节点并返回自定义组件尺寸。",
+    "knowledgePoints": [
+      "自定义布局",
+      "onMeasureSize",
+      "测量"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-page-custom-components-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "onMeasureSize"
+      },
+      {
+        "id": "b",
+        "text": "onPlaceChildren"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "d",
+        "text": "onPageShow"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-027",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "自定义组件已经完成子节点测量，接下来要确定各子节点的位置，应使用哪个方法？",
+    "explanation": "onPlaceChildren 用于根据测量结果放置子节点，职责与尺寸测量分离。",
+    "knowledgePoints": [
+      "自定义布局",
+      "onPlaceChildren",
+      "放置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-page-custom-components-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "onPlaceChildren"
+      },
+      {
+        "id": "b",
+        "text": "onMeasureSize"
+      },
+      {
+        "id": "c",
+        "text": "onWillApplyTheme"
+      },
+      {
+        "id": "d",
+        "text": "onBackPress"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-028",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "在 DynamicLayout 的 onMeasure 或 onLayout 中修改状态变量，可能触发重复布局，因此官方不建议这样做。",
+    "explanation": "测量和布局回调应保持确定性，只根据约束和既有状态计算结果，状态更新应放在布局流程之外。",
+    "knowledgePoints": [
+      "DynamicLayout",
+      "布局回调",
+      "状态更新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "动态布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-dynamiclayout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-029",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 DynamicLayout，哪些说法正确？",
+    "explanation": "DynamicLayout 面向运行时布局切换，并保持子树状态；算法对象需要采用文档规定的观察方式。",
+    "knowledgePoints": [
+      "DynamicLayout",
+      "响应式布局",
+      "状态保留"
+    ],
+    "sourceRefs": [
+      {
+        "title": "动态布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-dynamiclayout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "可在 Row、Column、Stack、Grid 或自定义算法间切换"
+      },
+      {
+        "id": "b",
+        "text": "切换布局算法时可保留子组件状态"
+      },
+      {
+        "id": "c",
+        "text": "布局算法类应使用 @ObservedV2 观察，而不是把算法对象直接作为 @State"
+      },
+      {
+        "id": "d",
+        "text": "只能在应用首次启动时选择一次布局"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-030",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "针对多尺寸窗口选择布局容器时，哪些匹配是合理的？",
+    "explanation": "不同容器解决不同布局关系，响应式界面应按结构选择容器，而不是依赖大量绝对坐标。",
+    "knowledgePoints": [
+      "布局容器",
+      "响应式布局",
+      "GridRow"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "Row 或 Column 适合线性排列"
+      },
+      {
+        "id": "b",
+        "text": "Stack 适合层叠显示"
+      },
+      {
+        "id": "c",
+        "text": "RelativeContainer 适合基于锚点的二维布局"
+      },
+      {
+        "id": "d",
+        "text": "GridRow 适合按断点适配多设备栅格"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-031",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "大量使用绝对定位会削弱窗口尺寸变化时的适配能力，而且绝对定位的子节点通常不会参与父容器尺寸计算。",
+    "explanation": "绝对位置适合少量明确叠加场景，不适合作为主要响应式布局手段。",
+    "knowledgePoints": [
+      "绝对定位",
+      "父子测量",
+      "响应式布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-032",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在线性布局中，需要某个子组件占满分配固定尺寸后剩余的空间，应优先使用什么属性？",
+    "explanation": "layoutWeight 用于按权重分配线性容器剩余空间，能随窗口尺寸变化调整。",
+    "knowledgePoints": [
+      "layoutWeight",
+      "线性布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "layoutWeight"
+      },
+      {
+        "id": "b",
+        "text": "zIndex"
+      },
+      {
+        "id": "c",
+        "text": "visibility"
+      },
+      {
+        "id": "d",
+        "text": "responseRegion"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-033",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "页面刚创建就调用 getRectangleById，偶尔得到旧位置或零尺寸，首要原因是什么？",
+    "explanation": "节点树创建和最终布局完成并非同一时刻。过早查询几何信息可能得到尚未更新的结果。",
+    "knowledgePoints": [
+      "getRectangleById",
+      "布局时序",
+      "几何信息"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局问题定位",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-debug.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "布局流程可能尚未稳定完成"
+      },
+      {
+        "id": "b",
+        "text": "组件 ID 只能是数字"
+      },
+      {
+        "id": "c",
+        "text": "接口只支持深色模式"
+      },
+      {
+        "id": "d",
+        "text": "必须先创建数据库事务"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-034",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "需要可靠感知组件尺寸变化时，可采用哪些方式？",
+    "explanation": "尺寸获取要尊重布局时序。监听区域变化或在稳定时机查询，并对结果做有效性检查。",
+    "knowledgePoints": [
+      "onAreaChange",
+      "布局调试",
+      "尺寸变化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局问题定位",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-debug.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 onAreaChange 监听区域变化"
+      },
+      {
+        "id": "b",
+        "text": "等待布局稳定后再查询节点几何信息"
+      },
+      {
+        "id": "c",
+        "text": "校验查询结果是否为非零有效尺寸"
+      },
+      {
+        "id": "d",
+        "text": "在 build 中无限循环查询"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-035",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "父子组件绑定同类手势，默认子组件优先，但希望父组件优先识别，应使用哪种绑定？",
+    "explanation": "priorityGesture 可提高父组件手势相对默认子组件手势的识别优先级。",
+    "knowledgePoints": [
+      "priorityGesture",
+      "手势优先级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势绑定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-binding.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "priorityGesture"
+      },
+      {
+        "id": "b",
+        "text": "parallelGesture"
+      },
+      {
+        "id": "c",
+        "text": "transition"
+      },
+      {
+        "id": "d",
+        "text": "geometryTransition"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-036",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 parallelGesture，哪些描述正确？",
+    "explanation": "并行手势让多个识别器独立响应，并不是传统事件冒泡，也不会天然让某一方失败。",
+    "knowledgePoints": [
+      "parallelGesture",
+      "手势并行",
+      "事件模型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势绑定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-binding.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "可让父子层级的手势并行识别"
+      },
+      {
+        "id": "b",
+        "text": "适合希望两个识别器都响应的场景"
+      },
+      {
+        "id": "c",
+        "text": "等同于强制子手势失败"
+      },
+      {
+        "id": "d",
+        "text": "不应把它理解为事件冒泡"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-037",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "SequenceGesture 中前一个手势识别失败时，后续手势通常会怎样？",
+    "explanation": "顺序手势要求按配置顺序依次成功，前序失败会破坏整个序列。",
+    "knowledgePoints": [
+      "SequenceGesture",
+      "组合手势"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "组合手势失败，后续手势不再成功完成序列"
+      },
+      {
+        "id": "b",
+        "text": "自动改为 ParallelGesture"
+      },
+      {
+        "id": "c",
+        "text": "后续手势忽略顺序继续成功"
+      },
+      {
+        "id": "d",
+        "text": "系统把失败手势替换为点击"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-038",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ExclusiveGesture 的核心语义是什么？",
+    "explanation": "互斥手势用于多个候选识别器竞争同一次输入，获胜者响应，其余识别失败。",
+    "knowledgePoints": [
+      "ExclusiveGesture",
+      "手势竞争"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "多个候选手势竞争，先成功识别的手势获胜，其他手势失败"
+      },
+      {
+        "id": "b",
+        "text": "所有手势必须同时成功"
+      },
+      {
+        "id": "c",
+        "text": "所有手势按固定顺序执行"
+      },
+      {
+        "id": "d",
+        "text": "只允许绑定一个手势"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-039",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "希望当前组件参与命中响应，同时不阻塞同层兄弟组件，应考虑哪种 HitTestMode？",
+    "explanation": "Transparent 允许当前组件响应且不阻塞兄弟组件；Block 会阻塞相关后续命中，None 则当前组件不响应。",
+    "knowledgePoints": [
+      "HitTestMode",
+      "Transparent",
+      "触摸命中"
+    ],
+    "sourceRefs": [
+      {
+        "title": "多层级手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-multi-level-gesture.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "options": [
+      {
+        "id": "a",
+        "text": "Transparent"
+      },
+      {
+        "id": "b",
+        "text": "Block"
+      },
+      {
+        "id": "c",
+        "text": "None"
+      },
+      {
+        "id": "d",
+        "text": "Default 之外不存在其他模式"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-040",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "onGestureJudgeBegin 可以在手势达到判定条件时，根据业务规则接受或拒绝该手势。",
+    "explanation": "手势判定回调适合在识别阶段解决内外层冲突或业务条件限制，而不是等手势完成后再补救。",
+    "knowledgePoints": [
+      "onGestureJudgeBegin",
+      "手势判定"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势判定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-gesture-judge.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-041",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个始终挂在组件树上的面板只改变透明度和位置，通常更适合哪种动画？",
+    "explanation": "出现/消失转场服务于节点上树和下树；节点始终存在时，直接对属性做动画更符合生命周期。",
+    "knowledgePoints": [
+      "属性动画",
+      "转场动画",
+      "节点生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "转场动画概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-transition-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "属性动画"
+      },
+      {
+        "id": "b",
+        "text": "出现/消失转场"
+      },
+      {
+        "id": "c",
+        "text": "页面冷启动动画"
+      },
+      {
+        "id": "d",
+        "text": "数据库事务动画"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-042",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "TransitionEffect 可以表达哪些转场组合？",
+    "explanation": "TransitionEffect 可通过 combine 组合效果，并通过 asymmetric 分别定义进入与退出。",
+    "knowledgePoints": [
+      "TransitionEffect",
+      "combine",
+      "asymmetric"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组件内转场",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-enter-exit-transition.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "options": [
+      {
+        "id": "a",
+        "text": "透明度与位移组合"
+      },
+      {
+        "id": "b",
+        "text": "旋转或移动效果"
+      },
+      {
+        "id": "c",
+        "text": "进入和退出使用不对称效果"
+      },
+      {
+        "id": "d",
+        "text": "自动修改服务端数据"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-043",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "Navigation 同时配置全局自定义转场和某个 NavDestination 的局部自定义转场时，哪个优先？",
+    "explanation": "官方文档说明全局自定义转场优先级更高，二者同时配置时应避免误判实际生效来源。",
+    "knowledgePoints": [
+      "Navigation",
+      "自定义转场",
+      "优先级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation转场动画",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-animation.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "全局 customNavContentTransition"
+      },
+      {
+        "id": "b",
+        "text": "NavDestination 局部 customTransition"
+      },
+      {
+        "id": "c",
+        "text": "系统随机选择"
+      },
+      {
+        "id": "d",
+        "text": "两个转场必须串行执行"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-044",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 geometryTransition 做共享元素转场时，哪些做法是必要或推荐的？",
+    "explanation": "共享元素依赖相同 ID 建立几何关联，并需要协调节点切换及页面默认转场。",
+    "knowledgePoints": [
+      "geometryTransition",
+      "共享元素",
+      "Navigation"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation转场动画",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-animation.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "options": [
+      {
+        "id": "a",
+        "text": "两端组件绑定相同的 geometryTransition id"
+      },
+      {
+        "id": "b",
+        "text": "正确控制两端组件的出现与消失"
+      },
+      {
+        "id": "c",
+        "text": "避免系统默认转场与共享元素效果叠加干扰"
+      },
+      {
+        "id": "d",
+        "text": "给两端组件设置完全不同的 id"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-045",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "资讯流页面外层支持横滑切换频道，卡片内部支持横滑图片，如何定位并解决手势冲突？",
+    "explanation": "手势冲突处理的关键是先定义谁应响应，再选择对应的识别和命中机制。",
+    "knowledgePoints": [
+      "手势冲突",
+      "priorityGesture",
+      "HitTestMode",
+      "手势判定"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势绑定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-binding.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "多层级手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-multi-level-gesture.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "手势判定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-gesture-judge.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "referenceAnswer": "先确认父子组件绑定的手势类型、方向阈值和命中区域，再根据产品意图选择机制：只允许一方响应时用 priorityGesture 或 onGestureJudgeBegin 按方向、区域拒绝另一方；两者应同时响应时使用 parallelGesture；多个候选互斥时使用 ExclusiveGesture；必要时用 responseRegion 和 HitTestMode 调整命中范围。最后在边缘、斜滑、多指和快速滑动场景验证。",
+    "scoringPoints": [
+      "识别父子手势、方向阈值和命中区域",
+      "按需求选择优先、并行、互斥或判定回调",
+      "使用 responseRegion 或 HitTestMode 调整命中",
+      "覆盖边缘和复杂输入场景验证"
     ]
   },
   {
@@ -10736,6 +12419,855 @@
     ]
   },
   {
+    "id": "relational-store-023",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "使用 RdbPredicates 按创建时间从新到旧排序，应调用哪个方法？",
+    "explanation": "orderByDesc 按指定字段降序排列，适合最新记录优先展示。",
+    "knowledgePoints": [
+      "RdbPredicates",
+      "orderByDesc",
+      "排序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 23,
+    "options": [
+      {
+        "id": "a",
+        "text": "orderByDesc"
+      },
+      {
+        "id": "b",
+        "text": "orderByAsc"
+      },
+      {
+        "id": "c",
+        "text": "distinct"
+      },
+      {
+        "id": "d",
+        "text": "groupBy"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-024",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 RdbPredicates 做偏移分页时，哪些说法正确？",
+    "explanation": "官方接口对 offsetAs 和 limitAs 的组合有明确约束，分页时还应配合稳定排序。",
+    "knowledgePoints": [
+      "RdbPredicates",
+      "limitAs",
+      "offsetAs",
+      "分页"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 24,
+    "options": [
+      {
+        "id": "a",
+        "text": "limitAs 用于限制返回行数"
+      },
+      {
+        "id": "b",
+        "text": "offsetAs 用于跳过前面的行"
+      },
+      {
+        "id": "c",
+        "text": "offsetAs 应与 limitAs 配合，否则不会返回结果"
+      },
+      {
+        "id": "d",
+        "text": "想返回 offset 后全部行时可将 limit 设置为小于等于 0"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-025",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "RdbPredicates 中哪些能力可用于结果集组织或索引提示？",
+    "explanation": "distinct、groupBy 和 indexedBy 都属于关系查询谓词能力，线程通知与数据库谓词无关。",
+    "knowledgePoints": [
+      "distinct",
+      "groupBy",
+      "indexedBy"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "distinct 去重"
+      },
+      {
+        "id": "b",
+        "text": "groupBy 分组"
+      },
+      {
+        "id": "c",
+        "text": "indexedBy 指定索引"
+      },
+      {
+        "id": "d",
+        "text": "notifyAll 唤醒线程"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-026",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "创建加密关系型数据库时，StoreConfig 中最直接的开关是什么？",
+    "explanation": "StoreConfig.encrypt 控制数据库是否加密，默认值为 false。",
+    "knowledgePoints": [
+      "StoreConfig",
+      "encrypt",
+      "数据库加密"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "encrypt: true"
+      },
+      {
+        "id": "b",
+        "text": "persist: false"
+      },
+      {
+        "id": "c",
+        "text": "isReadOnly: true"
+      },
+      {
+        "id": "d",
+        "text": "allowRebuild: true"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-027",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "自行提供数据库加密密钥时，哪些做法符合安全要求？",
+    "explanation": "示例中的固定密钥仅用于演示。生产环境应安全生成和保存，并在使用后清除内存副本。",
+    "knowledgePoints": [
+      "数据库加密",
+      "密钥管理",
+      "内存清理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "从安全密钥服务获取密钥而不是硬编码"
+      },
+      {
+        "id": "b",
+        "text": "使用完后通过 fill(0) 清理内存中的密钥数组"
+      },
+      {
+        "id": "c",
+        "text": "在日志中打印完整密钥便于排查"
+      },
+      {
+        "id": "d",
+        "text": "限制密钥生命周期和可见范围"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-028",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "API 22 需要修改现有数据库的加密属性或密钥，应使用哪个能力？",
+    "explanation": "rekeyEx 用于调整关系型数据库加密配置；操作前应评估备份、失败恢复和密钥管理。",
+    "knowledgePoints": [
+      "rekeyEx",
+      "数据库加密",
+      "密钥轮换"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "rekeyEx"
+      },
+      {
+        "id": "b",
+        "text": "querySql"
+      },
+      {
+        "id": "c",
+        "text": "beginTransaction"
+      },
+      {
+        "id": "d",
+        "text": "getColumnIndex"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-029",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "同一进程中不能同时创建两个同名关系型数据库实例，因此数据库命名和单例管理需要统一。",
+    "explanation": "同名数据库实例应由统一的数据访问层复用，避免重复创建引发错误。",
+    "knowledgePoints": [
+      "RdbStore",
+      "数据库实例",
+      "命名约束"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-030",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "配置 persist: false 的内存数据库有哪些限制？",
+    "explanation": "内存数据库主要用于临时关系数据，官方明确限制加密、备份恢复、跨进程和分布式等能力。",
+    "knowledgePoints": [
+      "内存数据库",
+      "persist",
+      "StoreConfig"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "不支持加密"
+      },
+      {
+        "id": "b",
+        "text": "不支持备份与恢复"
+      },
+      {
+        "id": "c",
+        "text": "不支持跨进程和分布式能力"
+      },
+      {
+        "id": "d",
+        "text": "进程结束后仍保证永久保存"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-031",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "通过只读方式打开的 RdbStore 执行写操作会失败并返回相应错误。",
+    "explanation": "只读配置应与数据访问层职责一致，不能依赖运行时忽略写入。",
+    "knowledgePoints": [
+      "RdbStore",
+      "只读数据库"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-032",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "完成查询并读取 ResultSet 后，必须执行哪项资源管理？",
+    "explanation": "ResultSet 持有数据库查询资源，应在使用完成或异常路径中及时关闭。",
+    "knowledgePoints": [
+      "ResultSet",
+      "close",
+      "资源释放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "调用 close 释放结果集"
+      },
+      {
+        "id": "b",
+        "text": "把 ResultSet 永久保存在全局变量"
+      },
+      {
+        "id": "c",
+        "text": "再次调用 getRdbStore"
+      },
+      {
+        "id": "d",
+        "text": "删除数据库文件"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-033",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 ResultSet.getRows 批量异步读取时，哪些说法正确？",
+    "explanation": "getRows 是结果集读取接口，会推进游标且存在并发调用限制，不承担事务提交。",
+    "knowledgePoints": [
+      "ResultSet",
+      "getRows",
+      "并发访问"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "getRows 会自动向后移动结果集位置"
+      },
+      {
+        "id": "b",
+        "text": "执行期间不应并发调用同一 ResultSet 的其他接口"
+      },
+      {
+        "id": "c",
+        "text": "读取完成后仍需关闭 ResultSet"
+      },
+      {
+        "id": "d",
+        "text": "getRows 会自动提交所有写事务"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-034",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 API 23 的 LiteResultSet，哪些说法正确？",
+    "explanation": "LiteResultSet 避免预先统计行数，但不是实时视图，数据变化后需要重新查询。",
+    "knowledgePoints": [
+      "LiteResultSet",
+      "queryWithoutRowCount",
+      "查询性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "LiteResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-LiteResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "可由 queryWithoutRowCount 获得"
+      },
+      {
+        "id": "b",
+        "text": "不提供 rowCount"
+      },
+      {
+        "id": "c",
+        "text": "数据变化后不会实时反映，应重新查询"
+      },
+      {
+        "id": "d",
+        "text": "天然支持任意跨进程写入"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-035",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "一个 RdbStore 同时最多可创建多少个 Transaction 对象？",
+    "explanation": "官方 Transaction 接口说明同一 RdbStore 最多创建 4 个事务对象，但写事务仍受更严格的并发约束。",
+    "knowledgePoints": [
+      "Transaction",
+      "事务数量限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "4 个"
+      },
+      {
+        "id": "b",
+        "text": "1 个"
+      },
+      {
+        "id": "c",
+        "text": "16 个"
+      },
+      {
+        "id": "d",
+        "text": "没有数量限制"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-036",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "并发启动第二个写事务收到错误 14800024，合理处理是什么？",
+    "explanation": "关系型数据库同一时刻只允许一个写事务。应减少事务持有时间，并对可重试冲突进行有界重试。",
+    "knowledgePoints": [
+      "写事务",
+      "错误码 14800024",
+      "并发控制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "缩短当前写事务并等待或重试，确保同一时刻只有一个写事务"
+      },
+      {
+        "id": "b",
+        "text": "立即删除数据库"
+      },
+      {
+        "id": "c",
+        "text": "把所有 SQL 改为字符串拼接"
+      },
+      {
+        "id": "d",
+        "text": "无限创建新的 RdbStore"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-037",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "通过 Transaction 对象执行的数据变更不会触发 RdbStore 的 dataChange 监听，因此不能把该监听当作事务内变更通知。",
+    "explanation": "事务对象和 RdbStore 变更订阅存在边界，业务若依赖刷新，应在提交成功后主动发出明确状态通知。",
+    "knowledgePoints": [
+      "Transaction",
+      "dataChange",
+      "数据刷新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Transaction",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-Transaction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-038",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "执行数据库 restore 前，哪些准备是合理的？",
+    "explanation": "恢复会替换数据库内容，应先释放查询资源，并明确备份有效性、失败处理和业务停写边界。",
+    "knowledgePoints": [
+      "restore",
+      "ResultSet",
+      "备份恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库备份与恢复",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-backup-and-restore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "关闭仍在使用的 ResultSet"
+      },
+      {
+        "id": "b",
+        "text": "确认备份文件和恢复策略"
+      },
+      {
+        "id": "c",
+        "text": "处理恢复失败并保留可回退路径"
+      },
+      {
+        "id": "d",
+        "text": "让查询继续无限持有旧结果集"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "relational-store-039",
+    "categoryId": "relational-store",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "allowRebuild 在数据库损坏时重建的是空数据库，应用仍需重新创建表结构并恢复必要数据。",
+    "explanation": "自动重建不是数据恢复。它能让数据库重新可打开，但业务结构和内容需要应用重新建立。",
+    "knowledgePoints": [
+      "allowRebuild",
+      "数据库损坏",
+      "数据恢复"
+    ],
+    "sourceRefs": [
+      {
+        "title": "关系型数据库备份与恢复",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-backup-and-restore.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "answerBoolean": true
+  },
+  {
+    "id": "relational-store-040",
+    "categoryId": "relational-store",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 executeSql 的适用边界，哪些说法正确？",
+    "explanation": "executeSql 不是通用查询或事务入口，应按 SQL 类型使用专门接口。",
+    "knowledgePoints": [
+      "executeSql",
+      "querySql",
+      "事务接口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbStore",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbStore.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "options": [
+      {
+        "id": "a",
+        "text": "适合执行不返回结果集的 SQL"
+      },
+      {
+        "id": "b",
+        "text": "查询应使用 querySql 或 query 等接口"
+      },
+      {
+        "id": "c",
+        "text": "不应使用它执行 ATTACH"
+      },
+      {
+        "id": "d",
+        "text": "事务控制应使用事务相关接口"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "relational-store-041",
+    "categoryId": "relational-store",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "StoreConfig.customDir 自定义数据库目录路径的长度上限是多少？",
+    "explanation": "customDir 路径最大为 128 字节，设计目录结构时要同时考虑合法路径和沙箱边界。",
+    "knowledgePoints": [
+      "StoreConfig",
+      "customDir",
+      "路径限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "StoreConfig",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-i.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "128 字节"
+      },
+      {
+        "id": "b",
+        "text": "32 字节"
+      },
+      {
+        "id": "c",
+        "text": "1024 字节"
+      },
+      {
+        "id": "d",
+        "text": "没有上限"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "relational-store-042",
+    "categoryId": "relational-store",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "订单列表按商户和创建时间分页查询，且本地数据库包含敏感地址信息，应如何设计索引、分页和加密？",
+    "explanation": "性能和安全要一起设计：索引服务于真实查询，加密密钥不能硬编码，分页还要保证顺序稳定。",
+    "knowledgePoints": [
+      "联合索引",
+      "分页",
+      "数据库加密",
+      "ResultSet"
+    ],
+    "sourceRefs": [
+      {
+        "title": "RdbPredicates",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-RdbPredicates.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "关系型数据库加密",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-encryption.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-ResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "LiteResultSet",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/arkts-apis-data-relationalStore-LiteResultSet.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "referenceAnswer": "根据高频条件建立与查询一致的联合索引，例如 merchantId 与 createdAt，并用稳定排序配合 limitAs、offsetAs；数据量大且不需要总行数时可评估 queryWithoutRowCount，但数据变化后要重新查询。StoreConfig 开启 encrypt，密钥从安全服务获取、限制生命周期并在使用后清零。所有 ResultSet 及时 close，用真实数据验证索引收益、分页稳定性和加密数据库升级恢复路径。",
+    "scoringPoints": [
+      "联合索引匹配过滤与排序字段",
+      "稳定排序并正确组合 limitAs 与 offsetAs",
+      "开启数据库加密并安全管理密钥",
+      "关闭结果集并用真实数据验证性能和恢复"
+    ]
+  },
+  {
     "id": "napi-001",
     "categoryId": "napi",
     "type": "single",
@@ -13700,6 +16232,831 @@
     ]
   },
   {
+    "id": "debug-release-025",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "应用常见故障类型与系统故障名称的对应关系，哪些正确？",
+    "explanation": "系统按 Native 崩溃、JS/ArkTS 崩溃和卡死等类型记录故障，定位方法和日志结构不同。",
+    "knowledgePoints": [
+      "CppCrash",
+      "JsCrash",
+      "AppFreeze"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用故障检测概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/fault-detection-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "未处理 Native 信号可能形成 CppCrash"
+      },
+      {
+        "id": "b",
+        "text": "未处理 JS 或 ArkTS 异常可能形成 JsCrash"
+      },
+      {
+        "id": "c",
+        "text": "主线程长时间无响应可能形成 AppFreeze"
+      },
+      {
+        "id": "d",
+        "text": "所有故障都只记录为 HiLogInfo"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-026",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "使用 errorManager 捕获未处理异常后，应用的默认退出行为会怎样？",
+    "explanation": "errorManager 监听改变了默认退出行为。若应用仅需采集日志，更适合使用 HiAppEvent；若接管异常，应快速处理并退出。",
+    "knowledgePoints": [
+      "errorManager",
+      "异常退出",
+      "应用一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "监听后应用不会按默认流程退出，官方建议处理后同步退出以避免不一致状态"
+      },
+      {
+        "id": "b",
+        "text": "监听只会复制日志，不影响退出"
+      },
+      {
+        "id": "c",
+        "text": "系统会自动修复业务状态并继续运行"
+      },
+      {
+        "id": "d",
+        "text": "监听会自动重启 UIAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-027",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "同一 JsError 若已被 errorManager 捕获，HiAppEvent 将不能再以崩溃事件订阅到该异常。",
+    "explanation": "两套机制不能被误认为会对同一异常重复完整上报，选型时要明确是接管异常还是只采集故障。",
+    "knowledgePoints": [
+      "errorManager",
+      "HiAppEvent",
+      "JsError"
+    ],
+    "sourceRefs": [
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-028",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "API 18 推荐使用哪些 errorManager 全局监听？",
+    "explanation": "API 18 推荐使用 globalErrorOccurred 监听进程异常，并使用 globalUnhandledRejectionDetected 监听未处理的 Promise 拒绝；注册后还应在适当生命周期解除监听。",
+    "knowledgePoints": [
+      "errorManager",
+      "API 18",
+      "全局错误"
+    ],
+    "sourceRefs": [
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "globalErrorOccurred"
+      },
+      {
+        "id": "b",
+        "text": "globalUnhandledRejectionDetected"
+      },
+      {
+        "id": "c",
+        "text": "globalErrorRecovered"
+      },
+      {
+        "id": "d",
+        "text": "onPageShowOnly"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-029",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "设备上的应用故障日志通常位于哪个目录？",
+    "explanation": "faultlogger 目录保存系统生成的应用故障日志，开发调试时可通过受支持工具拉取。",
+    "knowledgePoints": [
+      "faultlogger",
+      "故障日志路径"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "/data/log/faultlog/faultlogger"
+      },
+      {
+        "id": "b",
+        "text": "/system/etc/app/config"
+      },
+      {
+        "id": "c",
+        "text": "/data/local/tmp/source"
+      },
+      {
+        "id": "d",
+        "text": "/vendor/fonts"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-030",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "同一应用进程的 CppCrash 故障日志最多保留多少份，超过后如何处理？",
+    "explanation": "系统限制单个进程或应用的 CppCrash 日志数量，排障时要及时导出，避免旧现场被覆盖。",
+    "knowledgePoints": [
+      "CppCrash",
+      "日志保留"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "最多 10 份，删除最旧日志"
+      },
+      {
+        "id": "b",
+        "text": "最多 1 份，拒绝记录新日志"
+      },
+      {
+        "id": "c",
+        "text": "最多 100 份，删除最新日志"
+      },
+      {
+        "id": "d",
+        "text": "永久无限保留"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-031",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "应用不应自行安装处理系统崩溃信号的 signal handler，否则可能干扰系统生成完整 CppCrash 日志。",
+    "explanation": "对系统崩溃信号的自定义接管可能破坏标准故障采集链路，应使用官方故障机制。",
+    "knowledgePoints": [
+      "CppCrash",
+      "signal handler",
+      "故障采集"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-032",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "可以通过哪些官方方式获取或订阅 CppCrash 信息？",
+    "explanation": "DevEco Studio、HiAppEvent 和 hdc 都是官方支持路径；应用私有目录仍受沙箱和权限限制。",
+    "knowledgePoints": [
+      "CppCrash",
+      "FaultLog",
+      "HiAppEvent",
+      "hdc"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "DevEco Studio FaultLog"
+      },
+      {
+        "id": "b",
+        "text": "HiAppEvent"
+      },
+      {
+        "id": "c",
+        "text": "hdc 拉取 faultlogger 日志"
+      },
+      {
+        "id": "d",
+        "text": "读取任意其他应用私有目录"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-033",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "分析 JsCrash 时，最核心的两类信息是什么？",
+    "explanation": "错误消息描述异常，调用栈定位代码路径，是 JsCrash 初步分析的核心。",
+    "knowledgePoints": [
+      "JsCrash",
+      "Error message",
+      "StackTrace"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "Error message"
+      },
+      {
+        "id": "b",
+        "text": "StackTrace"
+      },
+      {
+        "id": "c",
+        "text": "屏幕亮度"
+      },
+      {
+        "id": "d",
+        "text": "蓝牙设备名称"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-034",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "Release 包经过优化或混淆后，JsCrash 栈难以直接对应源码，应依赖什么还原？",
+    "explanation": "SourceMap 必须与实际发布构建匹配，才能把压缩或混淆后的行列信息映射回源码。",
+    "knowledgePoints": [
+      "JsCrash",
+      "SourceMap",
+      "Release"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "与该构建产物匹配的 SourceMap"
+      },
+      {
+        "id": "b",
+        "text": "任意历史版本的日志"
+      },
+      {
+        "id": "c",
+        "text": "数据库备份文件"
+      },
+      {
+        "id": "d",
+        "text": "设备壁纸"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-035",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "从 API 20 开始，JsCrash 日志可记录最近 10 次页面切换历史，帮助还原崩溃前路径。",
+    "explanation": "页面切换历史是辅助上下文，仍需结合错误消息、栈、版本和用户操作复现。",
+    "knowledgePoints": [
+      "JsCrash",
+      "页面切换历史",
+      "API 20"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-036",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Promise 被拒绝但没有被处理时，默认一定会生成 JsCrash 并退出应用吗？",
+    "explanation": "未处理 Promise 拒绝与同步未捕获异常的默认行为不同，不能只依赖崩溃日志发现。",
+    "knowledgePoints": [
+      "Promise rejection",
+      "JsCrash",
+      "异常监控"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "不一定，应通过未处理拒绝监听发现并治理"
+      },
+      {
+        "id": "b",
+        "text": "一定立即形成 NativeCrash"
+      },
+      {
+        "id": "c",
+        "text": "一定被编译器静态消除"
+      },
+      {
+        "id": "d",
+        "text": "只会在 Debug 包发生"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-037",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "异步任务崩溃日志中的 SubmitterStacktrace 主要用于定位什么？",
+    "explanation": "异步执行栈与提交栈可能分离，SubmitterStacktrace 帮助找到任务来源调用链。",
+    "knowledgePoints": [
+      "SubmitterStacktrace",
+      "异步崩溃",
+      "调用链"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "任务由哪条调用链提交"
+      },
+      {
+        "id": "b",
+        "text": "数据库表结构"
+      },
+      {
+        "id": "c",
+        "text": "安装包签名证书"
+      },
+      {
+        "id": "d",
+        "text": "当前屏幕分辨率"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-038",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "HiAppEvent 支持哪些事件类型？",
+    "explanation": "HiAppEvent 统一承载行为、故障、统计和安全等应用事件。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "事件类型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "行为事件"
+      },
+      {
+        "id": "b",
+        "text": "故障事件"
+      },
+      {
+        "id": "c",
+        "text": "统计事件"
+      },
+      {
+        "id": "d",
+        "text": "安全事件"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-039",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "HiAppEvent.addWatcher 涉及同步 I/O，性能敏感场景不应在主线程高频调用。",
+    "explanation": "监听器通常应在合适的初始化阶段添加，并避免在主线程热路径重复注册。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "addWatcher",
+      "主线程性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-040",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "重复使用同一个 watcher name 调用 addWatcher 会发生什么？",
+    "explanation": "watcher 名称用于唯一标识监听器，同名重复配置会覆盖，命名和生命周期应集中管理。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "watcher name",
+      "监听管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "options": [
+      {
+        "id": "a",
+        "text": "后一次配置覆盖同名 watcher"
+      },
+      {
+        "id": "b",
+        "text": "自动创建两个完全独立的同名 watcher"
+      },
+      {
+        "id": "c",
+        "text": "系统立即卸载应用"
+      },
+      {
+        "id": "d",
+        "text": "名称会被自动随机修改"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-041",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "如果未处理崩溃导致应用在 HiAppEvent 回调执行前退出，相关回调可能在应用下次启动时到达。",
+    "explanation": "故障上报逻辑要能处理延迟到下次启动的事件，不能假设回调总在崩溃现场同步完成。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "崩溃回调",
+      "延迟上报"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-042",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "订阅崩溃事件时，可用于分析现场的字段包括哪些？",
+    "explanation": "异常、日志、内存、外部日志和页面切换等上下文应结合分析，不能只看单一字段。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "崩溃事件字段",
+      "故障上下文"
+    ],
+    "sourceRefs": [
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "options": [
+      {
+        "id": "a",
+        "text": "exception"
+      },
+      {
+        "id": "b",
+        "text": "hilog"
+      },
+      {
+        "id": "c",
+        "text": "memory"
+      },
+      {
+        "id": "d",
+        "text": "external_log 与 page_switch_log"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-043",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "HarmonyOS 自动化测试体系通常可以覆盖哪些能力？",
+    "explanation": "官方测试工具支持本地与设备测试、UI 自动化和覆盖率，用于在发布前建立可重复验证。",
+    "knowledgePoints": [
+      "自动化测试",
+      "Hypium",
+      "覆盖率"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS测试服务",
+        "url": "https://developer.huawei.com/consumer/cn/testing/get-started/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "本地单元测试"
+      },
+      {
+        "id": "b",
+        "text": "设备或模拟器上的 Instrument Test"
+      },
+      {
+        "id": "c",
+        "text": "UI 自动化测试"
+      },
+      {
+        "id": "d",
+        "text": "代码覆盖率统计"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-044",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "线上 Release 版本偶发 ArkTS 崩溃，如何建立可复现、可定位、可回归的排障流程？",
+    "explanation": "线上崩溃治理不是只看一条栈，而是把故障采集、产物映射、复现和回归串成可重复流程。",
+    "knowledgePoints": [
+      "Release 排障",
+      "SourceMap",
+      "HiAppEvent",
+      "自动化回归"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HarmonyOS测试服务",
+        "url": "https://developer.huawei.com/consumer/cn/testing/get-started/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "referenceAnswer": "先锁定应用版本、构建产物和设备环境，通过 HiAppEvent 或 FaultLog 获取错误消息、StackTrace、页面切换、hilog 和内存上下文；使用与发布包完全匹配的 SourceMap 还原源码位置，并结合 SubmitterStacktrace 追踪异步任务来源。围绕触发路径补充最小复现和自动化回归用例，修复后使用同一 Release 配置重建验证，同时保留构建号、源码提交、依赖锁定文件、SourceMap 和签名产物映射，确保后续能够重现。",
+    "scoringPoints": [
+      "锁定版本、设备和故障上下文",
+      "用匹配的 SourceMap 与提交栈还原源码",
+      "补最小复现和自动化回归",
+      "归档源码提交、依赖、构建配置与 SourceMap 映射"
+    ]
+  },
+  {
     "id": "next-adaptation-001",
     "categoryId": "next-adaptation",
     "type": "single",
@@ -14728,6 +18085,798 @@
       "覆盖长文本、大字体、深浅色和安全区域",
       "覆盖触屏、鼠标、键盘与返回操作",
       "覆盖无障碍语义、焦点和截图回归"
+    ]
+  },
+  {
+    "id": "next-adaptation-025",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "未显式配置 app.json5 的 fontSizeScale 时，应用字体默认如何处理？",
+    "explanation": "fontSizeScale 缺省值为 nonFollowSystem。需要支持字体无障碍缩放时，应显式评估并配置跟随策略。",
+    "knowledgePoints": [
+      "fontSizeScale",
+      "字体缩放",
+      "app.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "默认 nonFollowSystem，不跟随系统字体缩放"
+      },
+      {
+        "id": "b",
+        "text": "默认固定跟随 3.2 倍"
+      },
+      {
+        "id": "c",
+        "text": "默认只在平板跟随系统"
+      },
+      {
+        "id": "d",
+        "text": "默认由每个 Text 随机决定"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-026",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 fontSizeMaxScale，哪些说法正确？",
+    "explanation": "fontSizeMaxScale 约束字体最大缩放，不负责图片或整个界面的等比缩放。",
+    "knowledgePoints": [
+      "fontSizeMaxScale",
+      "字体无障碍",
+      "app.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "只有 fontSizeScale 为 followSystem 时才生效"
+      },
+      {
+        "id": "b",
+        "text": "用于限制应用字体跟随系统时的最大放大倍数"
+      },
+      {
+        "id": "c",
+        "text": "缺省最大值为 3.2"
+      },
+      {
+        "id": "d",
+        "text": "会强制所有图片同比放大"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-027",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "需要立即读取可折叠设备当前物理折叠状态，应调用哪个接口？",
+    "explanation": "display.getFoldStatus 返回当前 FoldStatus，用于区分折叠、半折叠、展开等状态。",
+    "knowledgePoints": [
+      "display",
+      "getFoldStatus",
+      "折叠状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "display.getFoldStatus()"
+      },
+      {
+        "id": "b",
+        "text": "display.getDefaultDisplaySync().width"
+      },
+      {
+        "id": "c",
+        "text": "window.resize()"
+      },
+      {
+        "id": "d",
+        "text": "mediaquery.matchMediaSync()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-028",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要持续响应设备物理折叠状态变化，应监听哪个事件？",
+    "explanation": "foldStatusChange 专门通知物理折叠状态变化，离开页面或能力销毁时应取消监听。",
+    "knowledgePoints": [
+      "display",
+      "foldStatusChange",
+      "折叠屏"
+    ],
+    "sourceRefs": [
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "display.on('foldStatusChange')"
+      },
+      {
+        "id": "b",
+        "text": "display.on('add')"
+      },
+      {
+        "id": "c",
+        "text": "window.on('keyboardHeightChange')"
+      },
+      {
+        "id": "d",
+        "text": "router.on('fold')"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-029",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "物理折叠状态变化与屏幕显示模式变化不是同一个概念，应分别使用 foldStatusChange 和 foldDisplayModeChange 监听。",
+    "explanation": "折叠角度状态与系统选择的显示区域模式属于不同维度，适配逻辑不能混用事件。",
+    "knowledgePoints": [
+      "FoldStatus",
+      "FoldDisplayMode",
+      "事件监听"
+    ],
+    "sourceRefs": [
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-030",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "FolderStack 在基础布局能力上继承自哪个容器？",
+    "explanation": "FolderStack 继承 Stack 的层叠布局，并增加折叠屏悬停分区能力。",
+    "knowledgePoints": [
+      "FolderStack",
+      "Stack",
+      "悬停态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "Stack"
+      },
+      {
+        "id": "b",
+        "text": "GridRow"
+      },
+      {
+        "id": "c",
+        "text": "List"
+      },
+      {
+        "id": "d",
+        "text": "Navigation"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-031",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "FolderStackOptions.upperItems 的作用是什么？",
+    "explanation": "upperItems 中的子组件在悬停态移到上半屏，其他内容组织在下半屏，从而避让折痕区域。",
+    "knowledgePoints": [
+      "FolderStack",
+      "upperItems",
+      "折痕避让"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "options": [
+      {
+        "id": "a",
+        "text": "指定悬停态时自动避让折痕并移动到上半屏的子组件 ID"
+      },
+      {
+        "id": "b",
+        "text": "指定所有组件的字体大小"
+      },
+      {
+        "id": "c",
+        "text": "配置网络白名单"
+      },
+      {
+        "id": "d",
+        "text": "声明数据库索引"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-032",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "FolderStack 的悬停态能力针对双折叠设备设计，并非所有可折叠设备都会生效。",
+    "explanation": "设备能力存在差异，应用仍需在目标设备矩阵上验证，并提供普通布局回退。",
+    "knowledgePoints": [
+      "FolderStack",
+      "设备差异",
+      "悬停态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-033",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "当 FolderStack 的父节点是 if/else 条件渲染节点时，其折叠屏悬停能力可能失效。",
+    "explanation": "这是组件文档明确列出的限制。应调整节点结构，避免把 FolderStack 直接置于该条件渲染父节点下。",
+    "knowledgePoints": [
+      "FolderStack",
+      "条件渲染",
+      "组件限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-034",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "FolderStack 的悬停状态回调信息可帮助获得哪些上下文？",
+    "explanation": "HoverEventParam 提供折叠、悬停、方向和窗口模式信息，便于组合判断布局。",
+    "knowledgePoints": [
+      "FolderStack",
+      "onHoverStatusChange",
+      "HoverEventParam"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "当前折叠状态"
+      },
+      {
+        "id": "b",
+        "text": "是否处于悬停态"
+      },
+      {
+        "id": "c",
+        "text": "应用方向"
+      },
+      {
+        "id": "d",
+        "text": "窗口模式"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-035",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "module.json5 的 supportWindowMode 可以声明哪些窗口模式？",
+    "explanation": "supportWindowMode 描述 UIAbility 支持的全屏、分屏和悬浮窗口模式。",
+    "knowledgePoints": [
+      "supportWindowMode",
+      "窗口模式",
+      "module.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "模块配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "fullscreen"
+      },
+      {
+        "id": "b",
+        "text": "split"
+      },
+      {
+        "id": "c",
+        "text": "floating"
+      },
+      {
+        "id": "d",
+        "text": "database"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-036",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "自由窗口状态下同时配置 fullscreen 和 split 时，target API 小于 15 与大于等于 15 的默认启动窗口表现可能不同。",
+    "explanation": "官方配置文档说明 target API 小于 15 时可按悬浮模式启动，大于等于 15 时按全屏模式启动，升级目标版本要回归窗口行为。",
+    "knowledgePoints": [
+      "supportWindowMode",
+      "target API",
+      "自由窗口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "模块配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-037",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于原子化服务的 resizeable 配置，哪些说法正确？",
+    "explanation": "resizeable 缺省为 false。开启前应确保布局确实能够适应横屏和折叠状态变化。",
+    "knowledgePoints": [
+      "resizeable",
+      "原子化服务",
+      "窗口适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "模块配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "从 API 20 开始支持"
+      },
+      {
+        "id": "b",
+        "text": "设置为 true 表示可随窗口宽高变化自适应"
+      },
+      {
+        "id": "c",
+        "text": "已适配平板横屏和折叠展开态时建议开启"
+      },
+      {
+        "id": "d",
+        "text": "缺省值为 true"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-038",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "媒体查询的 device-width 只在应用初始化时保存一次，折叠屏展开后不会实时更新，因此不应单独依赖它响应折叠变化。",
+    "explanation": "动态窗口适配应使用会随显示区域变化的特征或专用折叠状态事件，而不是把 device-width 当作实时窗口宽度。",
+    "knowledgePoints": [
+      "媒体查询",
+      "device-width",
+      "折叠屏"
+    ],
+    "sourceRefs": [
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-039",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "多设备响应式布局中，媒体查询适合监听哪些特征变化？",
+    "explanation": "媒体查询可以按多种媒体特征切换布局或样式，回调会在匹配状态变化时通知。",
+    "knowledgePoints": [
+      "媒体查询",
+      "响应式布局",
+      "媒体特征"
+    ],
+    "sourceRefs": [
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "options": [
+      {
+        "id": "a",
+        "text": "显示区域尺寸条件"
+      },
+      {
+        "id": "b",
+        "text": "横竖屏方向"
+      },
+      {
+        "id": "c",
+        "text": "深浅色模式"
+      },
+      {
+        "id": "d",
+        "text": "设备是否为圆屏"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-040",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "自由窗口下处于 FLOATING 模式的窗口尺寸变化会受 WindowLimits 约束，而非自由窗口状态下主窗口通常不受该限制。",
+    "explanation": "WindowLimits 的生效范围与窗口类型和自由窗口状态有关，不能把同一限制假设套用于所有设备模式。",
+    "knowledgePoints": [
+      "WindowLimits",
+      "自由窗口",
+      "FLOATING"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Window",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkts-apis-window-Window.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-041",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "setWindowLimits 配置的尺寸超出系统允许范围时，接口返回的限制通常是什么？",
+    "explanation": "系统仍保留设备级窗口边界，常规配置结果取应用请求和系统限制的交集。",
+    "knowledgePoints": [
+      "setWindowLimits",
+      "窗口尺寸",
+      "系统限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Window",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkts-apis-window-Window.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "应用请求与系统默认限制的交集"
+      },
+      {
+        "id": "b",
+        "text": "始终原样返回应用请求"
+      },
+      {
+        "id": "c",
+        "text": "全部清零"
+      },
+      {
+        "id": "d",
+        "text": "自动切换为固定全屏"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-042",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "expandSafeArea 扩展的是组件绘制区域，默认不通过重新布局来改变其子组件位置。",
+    "explanation": "沉浸式背景可以扩展到系统避让区，但标题、按钮等关键内容仍需按安全区组织。",
+    "knowledgePoints": [
+      "expandSafeArea",
+      "绘制区域",
+      "沉浸式"
+    ],
+    "sourceRefs": [
+      {
+        "title": "安全区域",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-043",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 expandSafeArea 时，哪些限制需要注意？",
+    "explanation": "安全区扩展与组件尺寸、边界位置和容器嵌套相关，需要逐层验证，不能假设全局继承。",
+    "knowledgePoints": [
+      "expandSafeArea",
+      "滚动容器",
+      "固定尺寸"
+    ],
+    "sourceRefs": [
+      {
+        "title": "安全区域",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "属性只作用于当前组件，不会自动传递给父子组件"
+      },
+      {
+        "id": "b",
+        "text": "滚动容器内使用时可能需要沿嵌套链配置相关节点"
+      },
+      {
+        "id": "c",
+        "text": "固定宽高会限制部分方向的扩展效果"
+      },
+      {
+        "id": "d",
+        "text": "设置一次后全应用所有页面自动生效"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-044",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "如何为手机、平板、折叠屏和 2in1 设计一套“一多”自适应界面方案？",
+    "explanation": "“一多”不是简单放大手机界面，而是共享业务能力、按可用窗口与交互能力重组信息结构。",
+    "knowledgePoints": [
+      "一多",
+      "响应式布局",
+      "折叠屏",
+      "自由窗口",
+      "字体缩放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Window",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkts-apis-window-Window.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "安全区域",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "referenceAnswer": "以同一业务能力和数据模型为基础，按窗口显示区域而不是设备名称选择布局断点；使用 Row、Column、GridRow、RelativeContainer、媒体查询或 DynamicLayout 组织单列、双列和多列结构。监听窗口尺寸、方向以及 foldStatusChange，悬停场景可用 FolderStack 并提供普通布局回退。字体显式配置跟随系统及最大缩放并验证长文本，沉浸式背景与关键内容分别处理安全区；自由窗口配置支持模式和 WindowLimits，但接受系统边界。最后覆盖手机横竖屏、平板分屏、折叠折叠/展开/悬停、2in1 鼠标键盘与字体放大测试，保证核心功能不增加不必要步骤。",
+    "scoringPoints": [
+      "按窗口尺寸和断点组织多套布局而非硬编码设备名",
+      "监听窗口、方向和折叠状态并提供悬停回退",
+      "处理字体缩放、安全区和自由窗口边界",
+      "覆盖多设备、多窗口和输入方式验证"
     ]
   }
 ]

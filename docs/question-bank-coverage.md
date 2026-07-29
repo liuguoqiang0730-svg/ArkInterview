@@ -1,13 +1,13 @@
 # 题库模块覆盖清单
 
-更新时间：2026-07-23
+更新时间：2026-07-29
 
 本文档用于规划 Ark 面试通后续题库扩充，避免重复 ID、重复题干和重复考察角度。事实依据仍以每道题的 `sourceRefs` 为准，本清单只负责记录覆盖范围和下一批方向。
 
 ## 当前总览
 
 - 分类模块：16
-- 已发布题目：360
+- 已发布题目：460
 - 所有模块均已有题目
 - 题库源目录：`data/question-bank/modules/*.json`
 - 聚合输出：`data/seed/questions.json`
@@ -24,8 +24,8 @@
 
 | 模块 | 当前题数 | 已用 ID | 已覆盖重点 | 下一批优先方向 |
 | --- | ---: | --- | --- | --- |
-| ArkTS | 25 | `arkts-001` - `arkts-025` | 静态类型、TS 迁移、Promise、TaskPool/Worker、Sendable、结构化克隆、AsyncLock、共享模块 | 错误类型、集合容器、模块懒加载、并发异常治理 |
-| ArkUI | 25 | `arkui-001` - `arkui-025` | 组件生命周期、声明式 UI、ForEach/LazyForEach/Repeat、模板复用、@ReusableV2 | 布局测量、转场动画、手势冲突、组件复用性能分析 |
+| ArkTS | 45 | `arkts-001` - `arkts-045` | 静态类型、Promise/async/await、TaskPool 取消与异常、AsyncLock/ConditionVariable、共享容器、线性/非线性容器、懒加载/动态加载 | Worker 错误隔离、Sendable 深层约束、模块副作用、性能诊断 |
+| ArkUI | 45 | `arkui-001` - `arkui-045` | 组件生命周期、渲染控制、布局测量/放置、DynamicLayout、布局调试、手势优先/并行/互斥/判定、转场与共享元素 | 组件复用性能实测、复杂滚动嵌套、无障碍焦点、动效性能诊断 |
 | Stage 模型 | 22 | `stage-model-001` - `stage-model-022` | AbilityStage、UIAbility、WindowStage、AppStartup、Context、HAP/HAR/HSP、多模块启动依赖 | 进程模型、ExtensionAbility、跨进程场景、应用故障恢复 |
 | Ability 生命周期 | 21 | `ability-lifecycle-001` - `ability-lifecycle-021` | 冷启动、窗口阶段、前后台切换、启动模式、onNewWant、状态恢复、回调顺序 | Want 参数、多实例任务管理、异常退出恢复、资源释放边界 |
 | 组件通信 | 22 | `component-communication-001` - `component-communication-022` | V1/V2 父子通信、@Param/@Event/@Once、Provider/Consumer、状态上提 | 跨页面边界、复杂对象契约、V1/V2 混用、事件总线取舍 |
@@ -35,13 +35,23 @@
 | 权限申请 | 21 | `permissions-001` - `permissions-021` | 权限声明、AtManager、运行时授权、单次授权、设置页申请、状态监听 | 特殊权限、隐私弹窗、重复拒绝策略、权限组边界 |
 | 数据存储 | 21 | `storage-001` - `storage-021` | Preferences/KV/RDB 选型、应用沙箱文件、文件 I/O、备份恢复、缓存边界 | 数据加密、跨版本迁移、空间治理、文件并发访问 |
 | Preferences | 21 | `preferences-001` - `preferences-021` | get/put/flush、has/getAll、XML/GSKV、多进程限制、删除与缓存 | 观察器、加密数据、容量边界、异常恢复 |
-| relationalStore | 22 | `relational-store-001` - `relational-store-022` | CRUD、谓词、ResultSet、事务、版本迁移、备份、StoreConfig | 分页排序、索引设计、加密数据库、慢查询分析 |
+| relationalStore | 42 | `relational-store-001` - `relational-store-042` | CRUD、谓词分页/排序/索引提示、ResultSet/LiteResultSet、事务并发、加密与密钥轮换、备份恢复、内存/只读数据库 | 慢查询工具、FTS、分布式表、复杂迁移压测 |
 | NAPI | 24 | `napi-001` - `napi-024` | 模块注册、参数解析、异步任务、Promise、ArrayBuffer、线程安全函数、引用生命周期 | Native 异常映射、资源清理、并发取消、性能测量 |
 | 性能优化 | 24 | `performance-001` - `performance-024` | 长列表、稳定 key、缓存、冷启动阶段、Profiler Self Time、精准刷新范围 | 内存泄漏、图片资源、网络性能、布局与帧率分析 |
-| 调试与发布 | 24 | `debug-release-001` - `debug-release-024` | SDK/签名、HiLog、HAP/HAR/HSP、同签名要求、混淆、发布流水线 | 崩溃日志、自动化测试、包体分析、可复现构建 |
-| HarmonyOS NEXT 适配 | 24 | `next-adaptation-001` - `next-adaptation-024` | 多窗口、媒体查询、GridRow、深浅色、无障碍、安全区、键鼠与 PC 适配 | 折叠状态、字体缩放、2in1 悬停、自由窗口极限尺寸 |
+| 调试与发布 | 44 | `debug-release-001` - `debug-release-044` | SDK/签名、HiLog、CppCrash/JsCrash/AppFreeze、errorManager、HiAppEvent、SourceMap、自动化测试、可复现排障 | 包体组成分析、性能测试、流水线制品追溯、灰度与回滚 |
+| HarmonyOS NEXT 适配 | 44 | `next-adaptation-001` - `next-adaptation-044` | 多窗口、媒体查询、GridRow、字体缩放、折叠状态、FolderStack 悬停、安全区、WindowLimits、键鼠与 PC 适配 | 多屏协同、自由窗口高级交互、无障碍大字体极限布局、设备能力降级 |
 
 ## 最近批次
+
+2026-07-29 新增 100 道（总数 360 -> 460）：
+
+- ArkTS：`arkts-026` - `arkts-045`
+- ArkUI：`arkui-026` - `arkui-045`
+- relationalStore：`relational-store-023` - `relational-store-042`
+- 调试与发布：`debug-release-025` - `debug-release-044`
+- HarmonyOS NEXT 适配：`next-adaptation-025` - `next-adaptation-044`
+
+本批五个高价值薄弱模块各补 20 道，覆盖 Promise 异常治理、TaskPool 取消、共享容器、布局测量、手势冲突、转场、RDB 分页/事务/加密、崩溃现场、SourceMap、测试、折叠屏、字体缩放、悬停态与自由窗口边界。题型分布：单选 40、多选 32、判断 23、简答 5。
 
 2026-07-23 新增 100 道（总数 260 -> 360）：
 
@@ -72,12 +82,12 @@
 
 ## 下一轮建议
 
-下一轮不要继续平均铺量，优先补真实面试价值高且当前仍缺少的角度：
+下一轮继续按真实面试价值和未覆盖角度扩充：
 
-1. ArkTS：错误类型、集合容器、并发取消与异常治理。
-2. ArkUI：布局测量、转场动画、手势冲突与复用性能分析。
-3. relationalStore：分页、索引、加密数据库与慢查询定位。
-4. 调试发布：崩溃日志、自动化测试、包体分析和可复现构建。
-5. NEXT 适配：折叠状态、字体缩放、2in1 悬停与自由窗口边界。
+1. ArkTS：Worker 错误隔离、Sendable 深层约束、模块副作用和性能诊断。
+2. ArkUI：组件复用性能实测、复杂滚动嵌套、无障碍焦点和动效性能。
+3. relationalStore：慢查询工具、FTS、分布式表和复杂迁移压测。
+4. 调试发布：包体组成分析、性能测试、流水线制品追溯和灰度回滚。
+5. NEXT 适配：多屏协同、自由窗口高级交互、大字体极限布局和设备能力降级。
 
 每批可按 50 - 100 道规划，但必须先建立 ID 与考察角度清单；同一个官方页面可以提炼多个角度，不得只替换场景名重复同一结论。

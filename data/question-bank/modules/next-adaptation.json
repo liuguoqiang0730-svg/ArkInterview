@@ -1029,5 +1029,797 @@
       "覆盖触屏、鼠标、键盘与返回操作",
       "覆盖无障碍语义、焦点和截图回归"
     ]
+  },
+  {
+    "id": "next-adaptation-025",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "未显式配置 app.json5 的 fontSizeScale 时，应用字体默认如何处理？",
+    "explanation": "fontSizeScale 缺省值为 nonFollowSystem。需要支持字体无障碍缩放时，应显式评估并配置跟随策略。",
+    "knowledgePoints": [
+      "fontSizeScale",
+      "字体缩放",
+      "app.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "默认 nonFollowSystem，不跟随系统字体缩放"
+      },
+      {
+        "id": "b",
+        "text": "默认固定跟随 3.2 倍"
+      },
+      {
+        "id": "c",
+        "text": "默认只在平板跟随系统"
+      },
+      {
+        "id": "d",
+        "text": "默认由每个 Text 随机决定"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-026",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 fontSizeMaxScale，哪些说法正确？",
+    "explanation": "fontSizeMaxScale 约束字体最大缩放，不负责图片或整个界面的等比缩放。",
+    "knowledgePoints": [
+      "fontSizeMaxScale",
+      "字体无障碍",
+      "app.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "只有 fontSizeScale 为 followSystem 时才生效"
+      },
+      {
+        "id": "b",
+        "text": "用于限制应用字体跟随系统时的最大放大倍数"
+      },
+      {
+        "id": "c",
+        "text": "缺省最大值为 3.2"
+      },
+      {
+        "id": "d",
+        "text": "会强制所有图片同比放大"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-027",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "需要立即读取可折叠设备当前物理折叠状态，应调用哪个接口？",
+    "explanation": "display.getFoldStatus 返回当前 FoldStatus，用于区分折叠、半折叠、展开等状态。",
+    "knowledgePoints": [
+      "display",
+      "getFoldStatus",
+      "折叠状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "display.getFoldStatus()"
+      },
+      {
+        "id": "b",
+        "text": "display.getDefaultDisplaySync().width"
+      },
+      {
+        "id": "c",
+        "text": "window.resize()"
+      },
+      {
+        "id": "d",
+        "text": "mediaquery.matchMediaSync()"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-028",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要持续响应设备物理折叠状态变化，应监听哪个事件？",
+    "explanation": "foldStatusChange 专门通知物理折叠状态变化，离开页面或能力销毁时应取消监听。",
+    "knowledgePoints": [
+      "display",
+      "foldStatusChange",
+      "折叠屏"
+    ],
+    "sourceRefs": [
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "display.on('foldStatusChange')"
+      },
+      {
+        "id": "b",
+        "text": "display.on('add')"
+      },
+      {
+        "id": "c",
+        "text": "window.on('keyboardHeightChange')"
+      },
+      {
+        "id": "d",
+        "text": "router.on('fold')"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-029",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "物理折叠状态变化与屏幕显示模式变化不是同一个概念，应分别使用 foldStatusChange 和 foldDisplayModeChange 监听。",
+    "explanation": "折叠角度状态与系统选择的显示区域模式属于不同维度，适配逻辑不能混用事件。",
+    "knowledgePoints": [
+      "FoldStatus",
+      "FoldDisplayMode",
+      "事件监听"
+    ],
+    "sourceRefs": [
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-030",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "FolderStack 在基础布局能力上继承自哪个容器？",
+    "explanation": "FolderStack 继承 Stack 的层叠布局，并增加折叠屏悬停分区能力。",
+    "knowledgePoints": [
+      "FolderStack",
+      "Stack",
+      "悬停态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "Stack"
+      },
+      {
+        "id": "b",
+        "text": "GridRow"
+      },
+      {
+        "id": "c",
+        "text": "List"
+      },
+      {
+        "id": "d",
+        "text": "Navigation"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-031",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "FolderStackOptions.upperItems 的作用是什么？",
+    "explanation": "upperItems 中的子组件在悬停态移到上半屏，其他内容组织在下半屏，从而避让折痕区域。",
+    "knowledgePoints": [
+      "FolderStack",
+      "upperItems",
+      "折痕避让"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "options": [
+      {
+        "id": "a",
+        "text": "指定悬停态时自动避让折痕并移动到上半屏的子组件 ID"
+      },
+      {
+        "id": "b",
+        "text": "指定所有组件的字体大小"
+      },
+      {
+        "id": "c",
+        "text": "配置网络白名单"
+      },
+      {
+        "id": "d",
+        "text": "声明数据库索引"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-032",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "FolderStack 的悬停态能力针对双折叠设备设计，并非所有可折叠设备都会生效。",
+    "explanation": "设备能力存在差异，应用仍需在目标设备矩阵上验证，并提供普通布局回退。",
+    "knowledgePoints": [
+      "FolderStack",
+      "设备差异",
+      "悬停态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-033",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "当 FolderStack 的父节点是 if/else 条件渲染节点时，其折叠屏悬停能力可能失效。",
+    "explanation": "这是组件文档明确列出的限制。应调整节点结构，避免把 FolderStack 直接置于该条件渲染父节点下。",
+    "knowledgePoints": [
+      "FolderStack",
+      "条件渲染",
+      "组件限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-034",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "FolderStack 的悬停状态回调信息可帮助获得哪些上下文？",
+    "explanation": "HoverEventParam 提供折叠、悬停、方向和窗口模式信息，便于组合判断布局。",
+    "knowledgePoints": [
+      "FolderStack",
+      "onHoverStatusChange",
+      "HoverEventParam"
+    ],
+    "sourceRefs": [
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "当前折叠状态"
+      },
+      {
+        "id": "b",
+        "text": "是否处于悬停态"
+      },
+      {
+        "id": "c",
+        "text": "应用方向"
+      },
+      {
+        "id": "d",
+        "text": "窗口模式"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-035",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "module.json5 的 supportWindowMode 可以声明哪些窗口模式？",
+    "explanation": "supportWindowMode 描述 UIAbility 支持的全屏、分屏和悬浮窗口模式。",
+    "knowledgePoints": [
+      "supportWindowMode",
+      "窗口模式",
+      "module.json5"
+    ],
+    "sourceRefs": [
+      {
+        "title": "模块配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "fullscreen"
+      },
+      {
+        "id": "b",
+        "text": "split"
+      },
+      {
+        "id": "c",
+        "text": "floating"
+      },
+      {
+        "id": "d",
+        "text": "database"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-036",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "自由窗口状态下同时配置 fullscreen 和 split 时，target API 小于 15 与大于等于 15 的默认启动窗口表现可能不同。",
+    "explanation": "官方配置文档说明 target API 小于 15 时可按悬浮模式启动，大于等于 15 时按全屏模式启动，升级目标版本要回归窗口行为。",
+    "knowledgePoints": [
+      "supportWindowMode",
+      "target API",
+      "自由窗口"
+    ],
+    "sourceRefs": [
+      {
+        "title": "模块配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-037",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于原子化服务的 resizeable 配置，哪些说法正确？",
+    "explanation": "resizeable 缺省为 false。开启前应确保布局确实能够适应横屏和折叠状态变化。",
+    "knowledgePoints": [
+      "resizeable",
+      "原子化服务",
+      "窗口适配"
+    ],
+    "sourceRefs": [
+      {
+        "title": "模块配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "从 API 20 开始支持"
+      },
+      {
+        "id": "b",
+        "text": "设置为 true 表示可随窗口宽高变化自适应"
+      },
+      {
+        "id": "c",
+        "text": "已适配平板横屏和折叠展开态时建议开启"
+      },
+      {
+        "id": "d",
+        "text": "缺省值为 true"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-038",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "媒体查询的 device-width 只在应用初始化时保存一次，折叠屏展开后不会实时更新，因此不应单独依赖它响应折叠变化。",
+    "explanation": "动态窗口适配应使用会随显示区域变化的特征或专用折叠状态事件，而不是把 device-width 当作实时窗口宽度。",
+    "knowledgePoints": [
+      "媒体查询",
+      "device-width",
+      "折叠屏"
+    ],
+    "sourceRefs": [
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-039",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "多设备响应式布局中，媒体查询适合监听哪些特征变化？",
+    "explanation": "媒体查询可以按多种媒体特征切换布局或样式，回调会在匹配状态变化时通知。",
+    "knowledgePoints": [
+      "媒体查询",
+      "响应式布局",
+      "媒体特征"
+    ],
+    "sourceRefs": [
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "options": [
+      {
+        "id": "a",
+        "text": "显示区域尺寸条件"
+      },
+      {
+        "id": "b",
+        "text": "横竖屏方向"
+      },
+      {
+        "id": "c",
+        "text": "深浅色模式"
+      },
+      {
+        "id": "d",
+        "text": "设备是否为圆屏"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "next-adaptation-040",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "自由窗口下处于 FLOATING 模式的窗口尺寸变化会受 WindowLimits 约束，而非自由窗口状态下主窗口通常不受该限制。",
+    "explanation": "WindowLimits 的生效范围与窗口类型和自由窗口状态有关，不能把同一限制假设套用于所有设备模式。",
+    "knowledgePoints": [
+      "WindowLimits",
+      "自由窗口",
+      "FLOATING"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Window",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkts-apis-window-Window.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-041",
+    "categoryId": "next-adaptation",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "setWindowLimits 配置的尺寸超出系统允许范围时，接口返回的限制通常是什么？",
+    "explanation": "系统仍保留设备级窗口边界，常规配置结果取应用请求和系统限制的交集。",
+    "knowledgePoints": [
+      "setWindowLimits",
+      "窗口尺寸",
+      "系统限制"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Window",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkts-apis-window-Window.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "应用请求与系统默认限制的交集"
+      },
+      {
+        "id": "b",
+        "text": "始终原样返回应用请求"
+      },
+      {
+        "id": "c",
+        "text": "全部清零"
+      },
+      {
+        "id": "d",
+        "text": "自动切换为固定全屏"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "next-adaptation-042",
+    "categoryId": "next-adaptation",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "expandSafeArea 扩展的是组件绘制区域，默认不通过重新布局来改变其子组件位置。",
+    "explanation": "沉浸式背景可以扩展到系统避让区，但标题、按钮等关键内容仍需按安全区组织。",
+    "knowledgePoints": [
+      "expandSafeArea",
+      "绘制区域",
+      "沉浸式"
+    ],
+    "sourceRefs": [
+      {
+        "title": "安全区域",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "answerBoolean": true
+  },
+  {
+    "id": "next-adaptation-043",
+    "categoryId": "next-adaptation",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 expandSafeArea 时，哪些限制需要注意？",
+    "explanation": "安全区扩展与组件尺寸、边界位置和容器嵌套相关，需要逐层验证，不能假设全局继承。",
+    "knowledgePoints": [
+      "expandSafeArea",
+      "滚动容器",
+      "固定尺寸"
+    ],
+    "sourceRefs": [
+      {
+        "title": "安全区域",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "属性只作用于当前组件，不会自动传递给父子组件"
+      },
+      {
+        "id": "b",
+        "text": "滚动容器内使用时可能需要沿嵌套链配置相关节点"
+      },
+      {
+        "id": "c",
+        "text": "固定宽高会限制部分方向的扩展效果"
+      },
+      {
+        "id": "d",
+        "text": "设置一次后全应用所有页面自动生效"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "next-adaptation-044",
+    "categoryId": "next-adaptation",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "如何为手机、平板、折叠屏和 2in1 设计一套“一多”自适应界面方案？",
+    "explanation": "“一多”不是简单放大手机界面，而是共享业务能力、按可用窗口与交互能力重组信息结构。",
+    "knowledgePoints": [
+      "一多",
+      "响应式布局",
+      "折叠屏",
+      "自由窗口",
+      "字体缩放"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "媒体查询",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-media-query.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "屏幕属性",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/js-apis-display.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "FolderStack",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-container-folderstack.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "应用配置文件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/app-configuration-file.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "Window",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkts-apis-window-Window.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "安全区域",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkui/arkui-ts/ts-universal-attributes-expand-safe-area.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "referenceAnswer": "以同一业务能力和数据模型为基础，按窗口显示区域而不是设备名称选择布局断点；使用 Row、Column、GridRow、RelativeContainer、媒体查询或 DynamicLayout 组织单列、双列和多列结构。监听窗口尺寸、方向以及 foldStatusChange，悬停场景可用 FolderStack 并提供普通布局回退。字体显式配置跟随系统及最大缩放并验证长文本，沉浸式背景与关键内容分别处理安全区；自由窗口配置支持模式和 WindowLimits，但接受系统边界。最后覆盖手机横竖屏、平板分屏、折叠折叠/展开/悬停、2in1 鼠标键盘与字体放大测试，保证核心功能不增加不必要步骤。",
+    "scoringPoints": [
+      "按窗口尺寸和断点组织多套布局而非硬编码设备名",
+      "监听窗口、方向和折叠状态并提供悬停回退",
+      "处理字体缩放、安全区和自由窗口边界",
+      "覆盖多设备、多窗口和输入方式验证"
+    ]
   }
 ]

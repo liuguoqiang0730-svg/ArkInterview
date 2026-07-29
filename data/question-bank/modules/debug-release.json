@@ -1002,5 +1002,830 @@
       "核对跨模块依赖和路由表",
       "检查混淆保留规则并在真机 release 包复测"
     ]
+  },
+  {
+    "id": "debug-release-025",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "应用常见故障类型与系统故障名称的对应关系，哪些正确？",
+    "explanation": "系统按 Native 崩溃、JS/ArkTS 崩溃和卡死等类型记录故障，定位方法和日志结构不同。",
+    "knowledgePoints": [
+      "CppCrash",
+      "JsCrash",
+      "AppFreeze"
+    ],
+    "sourceRefs": [
+      {
+        "title": "应用故障检测概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/fault-detection-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 25,
+    "options": [
+      {
+        "id": "a",
+        "text": "未处理 Native 信号可能形成 CppCrash"
+      },
+      {
+        "id": "b",
+        "text": "未处理 JS 或 ArkTS 异常可能形成 JsCrash"
+      },
+      {
+        "id": "c",
+        "text": "主线程长时间无响应可能形成 AppFreeze"
+      },
+      {
+        "id": "d",
+        "text": "所有故障都只记录为 HiLogInfo"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-026",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "使用 errorManager 捕获未处理异常后，应用的默认退出行为会怎样？",
+    "explanation": "errorManager 监听改变了默认退出行为。若应用仅需采集日志，更适合使用 HiAppEvent；若接管异常，应快速处理并退出。",
+    "knowledgePoints": [
+      "errorManager",
+      "异常退出",
+      "应用一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "监听后应用不会按默认流程退出，官方建议处理后同步退出以避免不一致状态"
+      },
+      {
+        "id": "b",
+        "text": "监听只会复制日志，不影响退出"
+      },
+      {
+        "id": "c",
+        "text": "系统会自动修复业务状态并继续运行"
+      },
+      {
+        "id": "d",
+        "text": "监听会自动重启 UIAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-027",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "同一 JsError 若已被 errorManager 捕获，HiAppEvent 将不能再以崩溃事件订阅到该异常。",
+    "explanation": "两套机制不能被误认为会对同一异常重复完整上报，选型时要明确是接管异常还是只采集故障。",
+    "knowledgePoints": [
+      "errorManager",
+      "HiAppEvent",
+      "JsError"
+    ],
+    "sourceRefs": [
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-028",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "API 18 推荐使用哪些 errorManager 全局监听？",
+    "explanation": "API 18 推荐使用 globalErrorOccurred 监听进程异常，并使用 globalUnhandledRejectionDetected 监听未处理的 Promise 拒绝；注册后还应在适当生命周期解除监听。",
+    "knowledgePoints": [
+      "errorManager",
+      "API 18",
+      "全局错误"
+    ],
+    "sourceRefs": [
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "globalErrorOccurred"
+      },
+      {
+        "id": "b",
+        "text": "globalUnhandledRejectionDetected"
+      },
+      {
+        "id": "c",
+        "text": "globalErrorRecovered"
+      },
+      {
+        "id": "d",
+        "text": "onPageShowOnly"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-029",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "设备上的应用故障日志通常位于哪个目录？",
+    "explanation": "faultlogger 目录保存系统生成的应用故障日志，开发调试时可通过受支持工具拉取。",
+    "knowledgePoints": [
+      "faultlogger",
+      "故障日志路径"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "/data/log/faultlog/faultlogger"
+      },
+      {
+        "id": "b",
+        "text": "/system/etc/app/config"
+      },
+      {
+        "id": "c",
+        "text": "/data/local/tmp/source"
+      },
+      {
+        "id": "d",
+        "text": "/vendor/fonts"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-030",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "同一应用进程的 CppCrash 故障日志最多保留多少份，超过后如何处理？",
+    "explanation": "系统限制单个进程或应用的 CppCrash 日志数量，排障时要及时导出，避免旧现场被覆盖。",
+    "knowledgePoints": [
+      "CppCrash",
+      "日志保留"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "最多 10 份，删除最旧日志"
+      },
+      {
+        "id": "b",
+        "text": "最多 1 份，拒绝记录新日志"
+      },
+      {
+        "id": "c",
+        "text": "最多 100 份，删除最新日志"
+      },
+      {
+        "id": "d",
+        "text": "永久无限保留"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-031",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "应用不应自行安装处理系统崩溃信号的 signal handler，否则可能干扰系统生成完整 CppCrash 日志。",
+    "explanation": "对系统崩溃信号的自定义接管可能破坏标准故障采集链路，应使用官方故障机制。",
+    "knowledgePoints": [
+      "CppCrash",
+      "signal handler",
+      "故障采集"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-032",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "可以通过哪些官方方式获取或订阅 CppCrash 信息？",
+    "explanation": "DevEco Studio、HiAppEvent 和 hdc 都是官方支持路径；应用私有目录仍受沙箱和权限限制。",
+    "knowledgePoints": [
+      "CppCrash",
+      "FaultLog",
+      "HiAppEvent",
+      "hdc"
+    ],
+    "sourceRefs": [
+      {
+        "title": "CppCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/cppcrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "DevEco Studio FaultLog"
+      },
+      {
+        "id": "b",
+        "text": "HiAppEvent"
+      },
+      {
+        "id": "c",
+        "text": "hdc 拉取 faultlogger 日志"
+      },
+      {
+        "id": "d",
+        "text": "读取任意其他应用私有目录"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "debug-release-033",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "分析 JsCrash 时，最核心的两类信息是什么？",
+    "explanation": "错误消息描述异常，调用栈定位代码路径，是 JsCrash 初步分析的核心。",
+    "knowledgePoints": [
+      "JsCrash",
+      "Error message",
+      "StackTrace"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "Error message"
+      },
+      {
+        "id": "b",
+        "text": "StackTrace"
+      },
+      {
+        "id": "c",
+        "text": "屏幕亮度"
+      },
+      {
+        "id": "d",
+        "text": "蓝牙设备名称"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "debug-release-034",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "Release 包经过优化或混淆后，JsCrash 栈难以直接对应源码，应依赖什么还原？",
+    "explanation": "SourceMap 必须与实际发布构建匹配，才能把压缩或混淆后的行列信息映射回源码。",
+    "knowledgePoints": [
+      "JsCrash",
+      "SourceMap",
+      "Release"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "与该构建产物匹配的 SourceMap"
+      },
+      {
+        "id": "b",
+        "text": "任意历史版本的日志"
+      },
+      {
+        "id": "c",
+        "text": "数据库备份文件"
+      },
+      {
+        "id": "d",
+        "text": "设备壁纸"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-035",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "从 API 20 开始，JsCrash 日志可记录最近 10 次页面切换历史，帮助还原崩溃前路径。",
+    "explanation": "页面切换历史是辅助上下文，仍需结合错误消息、栈、版本和用户操作复现。",
+    "knowledgePoints": [
+      "JsCrash",
+      "页面切换历史",
+      "API 20"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-036",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "Promise 被拒绝但没有被处理时，默认一定会生成 JsCrash 并退出应用吗？",
+    "explanation": "未处理 Promise 拒绝与同步未捕获异常的默认行为不同，不能只依赖崩溃日志发现。",
+    "knowledgePoints": [
+      "Promise rejection",
+      "JsCrash",
+      "异常监控"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "不一定，应通过未处理拒绝监听发现并治理"
+      },
+      {
+        "id": "b",
+        "text": "一定立即形成 NativeCrash"
+      },
+      {
+        "id": "c",
+        "text": "一定被编译器静态消除"
+      },
+      {
+        "id": "d",
+        "text": "只会在 Debug 包发生"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-037",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "异步任务崩溃日志中的 SubmitterStacktrace 主要用于定位什么？",
+    "explanation": "异步执行栈与提交栈可能分离，SubmitterStacktrace 帮助找到任务来源调用链。",
+    "knowledgePoints": [
+      "SubmitterStacktrace",
+      "异步崩溃",
+      "调用链"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "任务由哪条调用链提交"
+      },
+      {
+        "id": "b",
+        "text": "数据库表结构"
+      },
+      {
+        "id": "c",
+        "text": "安装包签名证书"
+      },
+      {
+        "id": "d",
+        "text": "当前屏幕分辨率"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-038",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "HiAppEvent 支持哪些事件类型？",
+    "explanation": "HiAppEvent 统一承载行为、故障、统计和安全等应用事件。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "事件类型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "行为事件"
+      },
+      {
+        "id": "b",
+        "text": "故障事件"
+      },
+      {
+        "id": "c",
+        "text": "统计事件"
+      },
+      {
+        "id": "d",
+        "text": "安全事件"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-039",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "HiAppEvent.addWatcher 涉及同步 I/O，性能敏感场景不应在主线程高频调用。",
+    "explanation": "监听器通常应在合适的初始化阶段添加，并避免在主线程热路径重复注册。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "addWatcher",
+      "主线程性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-040",
+    "categoryId": "debug-release",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "重复使用同一个 watcher name 调用 addWatcher 会发生什么？",
+    "explanation": "watcher 名称用于唯一标识监听器，同名重复配置会覆盖，命名和生命周期应集中管理。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "watcher name",
+      "监听管理"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "options": [
+      {
+        "id": "a",
+        "text": "后一次配置覆盖同名 watcher"
+      },
+      {
+        "id": "b",
+        "text": "自动创建两个完全独立的同名 watcher"
+      },
+      {
+        "id": "c",
+        "text": "系统立即卸载应用"
+      },
+      {
+        "id": "d",
+        "text": "名称会被自动随机修改"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "debug-release-041",
+    "categoryId": "debug-release",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "如果未处理崩溃导致应用在 HiAppEvent 回调执行前退出，相关回调可能在应用下次启动时到达。",
+    "explanation": "故障上报逻辑要能处理延迟到下次启动的事件，不能假设回调总在崩溃现场同步完成。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "崩溃回调",
+      "延迟上报"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HiAppEvent概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-intro.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "answerBoolean": true
+  },
+  {
+    "id": "debug-release-042",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "订阅崩溃事件时，可用于分析现场的字段包括哪些？",
+    "explanation": "异常、日志、内存、外部日志和页面切换等上下文应结合分析，不能只看单一字段。",
+    "knowledgePoints": [
+      "HiAppEvent",
+      "崩溃事件字段",
+      "故障上下文"
+    ],
+    "sourceRefs": [
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "options": [
+      {
+        "id": "a",
+        "text": "exception"
+      },
+      {
+        "id": "b",
+        "text": "hilog"
+      },
+      {
+        "id": "c",
+        "text": "memory"
+      },
+      {
+        "id": "d",
+        "text": "external_log 与 page_switch_log"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-043",
+    "categoryId": "debug-release",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "HarmonyOS 自动化测试体系通常可以覆盖哪些能力？",
+    "explanation": "官方测试工具支持本地与设备测试、UI 自动化和覆盖率，用于在发布前建立可重复验证。",
+    "knowledgePoints": [
+      "自动化测试",
+      "Hypium",
+      "覆盖率"
+    ],
+    "sourceRefs": [
+      {
+        "title": "HarmonyOS测试服务",
+        "url": "https://developer.huawei.com/consumer/cn/testing/get-started/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "本地单元测试"
+      },
+      {
+        "id": "b",
+        "text": "设备或模拟器上的 Instrument Test"
+      },
+      {
+        "id": "c",
+        "text": "UI 自动化测试"
+      },
+      {
+        "id": "d",
+        "text": "代码覆盖率统计"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "debug-release-044",
+    "categoryId": "debug-release",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "线上 Release 版本偶发 ArkTS 崩溃，如何建立可复现、可定位、可回归的排障流程？",
+    "explanation": "线上崩溃治理不是只看一条栈，而是把故障采集、产物映射、复现和回归串成可重复流程。",
+    "knowledgePoints": [
+      "Release 排障",
+      "SourceMap",
+      "HiAppEvent",
+      "自动化回归"
+    ],
+    "sourceRefs": [
+      {
+        "title": "JsCrash故障分析",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/jscrash-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "订阅崩溃事件",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/hiappevent-watcher-crash-events-arkts.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "HarmonyOS测试服务",
+        "url": "https://developer.huawei.com/consumer/cn/testing/get-started/",
+        "publisher": "Huawei Developer"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "referenceAnswer": "先锁定应用版本、构建产物和设备环境，通过 HiAppEvent 或 FaultLog 获取错误消息、StackTrace、页面切换、hilog 和内存上下文；使用与发布包完全匹配的 SourceMap 还原源码位置，并结合 SubmitterStacktrace 追踪异步任务来源。围绕触发路径补充最小复现和自动化回归用例，修复后使用同一 Release 配置重建验证，同时保留构建号、源码提交、依赖锁定文件、SourceMap 和签名产物映射，确保后续能够重现。",
+    "scoringPoints": [
+      "锁定版本、设备和故障上下文",
+      "用匹配的 SourceMap 与提交栈还原源码",
+      "补最小复现和自动化回归",
+      "归档源码提交、依赖、构建配置与 SourceMap 映射"
+    ]
   }
 ]

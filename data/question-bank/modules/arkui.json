@@ -996,5 +996,860 @@
       "说明 Repeat 支持懒加载与节点复用",
       "指出 Repeat 的多模板能力及其适用场景"
     ]
+  },
+  {
+    "id": "arkui-026",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "自定义组件需要先测量子节点再决定自身尺寸，应重写哪个方法？",
+    "explanation": "onMeasureSize 在布局测量阶段调用，可测量子节点并返回自定义组件尺寸。",
+    "knowledgePoints": [
+      "自定义布局",
+      "onMeasureSize",
+      "测量"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-page-custom-components-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "onMeasureSize"
+      },
+      {
+        "id": "b",
+        "text": "onPlaceChildren"
+      },
+      {
+        "id": "c",
+        "text": "aboutToDisappear"
+      },
+      {
+        "id": "d",
+        "text": "onPageShow"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-027",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "自定义组件已经完成子节点测量，接下来要确定各子节点的位置，应使用哪个方法？",
+    "explanation": "onPlaceChildren 用于根据测量结果放置子节点，职责与尺寸测量分离。",
+    "knowledgePoints": [
+      "自定义布局",
+      "onPlaceChildren",
+      "放置"
+    ],
+    "sourceRefs": [
+      {
+        "title": "自定义组件布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/state-management/arkts-page-custom-components-layout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "onPlaceChildren"
+      },
+      {
+        "id": "b",
+        "text": "onMeasureSize"
+      },
+      {
+        "id": "c",
+        "text": "onWillApplyTheme"
+      },
+      {
+        "id": "d",
+        "text": "onBackPress"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-028",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "在 DynamicLayout 的 onMeasure 或 onLayout 中修改状态变量，可能触发重复布局，因此官方不建议这样做。",
+    "explanation": "测量和布局回调应保持确定性，只根据约束和既有状态计算结果，状态更新应放在布局流程之外。",
+    "knowledgePoints": [
+      "DynamicLayout",
+      "布局回调",
+      "状态更新"
+    ],
+    "sourceRefs": [
+      {
+        "title": "动态布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-dynamiclayout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-029",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "关于 DynamicLayout，哪些说法正确？",
+    "explanation": "DynamicLayout 面向运行时布局切换，并保持子树状态；算法对象需要采用文档规定的观察方式。",
+    "knowledgePoints": [
+      "DynamicLayout",
+      "响应式布局",
+      "状态保留"
+    ],
+    "sourceRefs": [
+      {
+        "title": "动态布局",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-dynamiclayout.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "options": [
+      {
+        "id": "a",
+        "text": "可在 Row、Column、Stack、Grid 或自定义算法间切换"
+      },
+      {
+        "id": "b",
+        "text": "切换布局算法时可保留子组件状态"
+      },
+      {
+        "id": "c",
+        "text": "布局算法类应使用 @ObservedV2 观察，而不是把算法对象直接作为 @State"
+      },
+      {
+        "id": "d",
+        "text": "只能在应用首次启动时选择一次布局"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-030",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "针对多尺寸窗口选择布局容器时，哪些匹配是合理的？",
+    "explanation": "不同容器解决不同布局关系，响应式界面应按结构选择容器，而不是依赖大量绝对坐标。",
+    "knowledgePoints": [
+      "布局容器",
+      "响应式布局",
+      "GridRow"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "Row 或 Column 适合线性排列"
+      },
+      {
+        "id": "b",
+        "text": "Stack 适合层叠显示"
+      },
+      {
+        "id": "c",
+        "text": "RelativeContainer 适合基于锚点的二维布局"
+      },
+      {
+        "id": "d",
+        "text": "GridRow 适合按断点适配多设备栅格"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-031",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "大量使用绝对定位会削弱窗口尺寸变化时的适配能力，而且绝对定位的子节点通常不会参与父容器尺寸计算。",
+    "explanation": "绝对位置适合少量明确叠加场景，不适合作为主要响应式布局手段。",
+    "knowledgePoints": [
+      "绝对定位",
+      "父子测量",
+      "响应式布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-032",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "在线性布局中，需要某个子组件占满分配固定尺寸后剩余的空间，应优先使用什么属性？",
+    "explanation": "layoutWeight 用于按权重分配线性容器剩余空间，能随窗口尺寸变化调整。",
+    "knowledgePoints": [
+      "layoutWeight",
+      "线性布局"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局开发概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-development-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "layoutWeight"
+      },
+      {
+        "id": "b",
+        "text": "zIndex"
+      },
+      {
+        "id": "c",
+        "text": "visibility"
+      },
+      {
+        "id": "d",
+        "text": "responseRegion"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-033",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "页面刚创建就调用 getRectangleById，偶尔得到旧位置或零尺寸，首要原因是什么？",
+    "explanation": "节点树创建和最终布局完成并非同一时刻。过早查询几何信息可能得到尚未更新的结果。",
+    "knowledgePoints": [
+      "getRectangleById",
+      "布局时序",
+      "几何信息"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局问题定位",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-debug.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "布局流程可能尚未稳定完成"
+      },
+      {
+        "id": "b",
+        "text": "组件 ID 只能是数字"
+      },
+      {
+        "id": "c",
+        "text": "接口只支持深色模式"
+      },
+      {
+        "id": "d",
+        "text": "必须先创建数据库事务"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-034",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "需要可靠感知组件尺寸变化时，可采用哪些方式？",
+    "explanation": "尺寸获取要尊重布局时序。监听区域变化或在稳定时机查询，并对结果做有效性检查。",
+    "knowledgePoints": [
+      "onAreaChange",
+      "布局调试",
+      "尺寸变化"
+    ],
+    "sourceRefs": [
+      {
+        "title": "布局问题定位",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-layout-debug.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "options": [
+      {
+        "id": "a",
+        "text": "使用 onAreaChange 监听区域变化"
+      },
+      {
+        "id": "b",
+        "text": "等待布局稳定后再查询节点几何信息"
+      },
+      {
+        "id": "c",
+        "text": "校验查询结果是否为非零有效尺寸"
+      },
+      {
+        "id": "d",
+        "text": "在 build 中无限循环查询"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-035",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "父子组件绑定同类手势，默认子组件优先，但希望父组件优先识别，应使用哪种绑定？",
+    "explanation": "priorityGesture 可提高父组件手势相对默认子组件手势的识别优先级。",
+    "knowledgePoints": [
+      "priorityGesture",
+      "手势优先级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势绑定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-binding.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "priorityGesture"
+      },
+      {
+        "id": "b",
+        "text": "parallelGesture"
+      },
+      {
+        "id": "c",
+        "text": "transition"
+      },
+      {
+        "id": "d",
+        "text": "geometryTransition"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-036",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 parallelGesture，哪些描述正确？",
+    "explanation": "并行手势让多个识别器独立响应，并不是传统事件冒泡，也不会天然让某一方失败。",
+    "knowledgePoints": [
+      "parallelGesture",
+      "手势并行",
+      "事件模型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势绑定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-binding.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "可让父子层级的手势并行识别"
+      },
+      {
+        "id": "b",
+        "text": "适合希望两个识别器都响应的场景"
+      },
+      {
+        "id": "c",
+        "text": "等同于强制子手势失败"
+      },
+      {
+        "id": "d",
+        "text": "不应把它理解为事件冒泡"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "d"
+    ]
+  },
+  {
+    "id": "arkui-037",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "SequenceGesture 中前一个手势识别失败时，后续手势通常会怎样？",
+    "explanation": "顺序手势要求按配置顺序依次成功，前序失败会破坏整个序列。",
+    "knowledgePoints": [
+      "SequenceGesture",
+      "组合手势"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "组合手势失败，后续手势不再成功完成序列"
+      },
+      {
+        "id": "b",
+        "text": "自动改为 ParallelGesture"
+      },
+      {
+        "id": "c",
+        "text": "后续手势忽略顺序继续成功"
+      },
+      {
+        "id": "d",
+        "text": "系统把失败手势替换为点击"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-038",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "ExclusiveGesture 的核心语义是什么？",
+    "explanation": "互斥手势用于多个候选识别器竞争同一次输入，获胜者响应，其余识别失败。",
+    "knowledgePoints": [
+      "ExclusiveGesture",
+      "手势竞争"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "多个候选手势竞争，先成功识别的手势获胜，其他手势失败"
+      },
+      {
+        "id": "b",
+        "text": "所有手势必须同时成功"
+      },
+      {
+        "id": "c",
+        "text": "所有手势按固定顺序执行"
+      },
+      {
+        "id": "d",
+        "text": "只允许绑定一个手势"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-039",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "希望当前组件参与命中响应，同时不阻塞同层兄弟组件，应考虑哪种 HitTestMode？",
+    "explanation": "Transparent 允许当前组件响应且不阻塞兄弟组件；Block 会阻塞相关后续命中，None 则当前组件不响应。",
+    "knowledgePoints": [
+      "HitTestMode",
+      "Transparent",
+      "触摸命中"
+    ],
+    "sourceRefs": [
+      {
+        "title": "多层级手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-multi-level-gesture.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "options": [
+      {
+        "id": "a",
+        "text": "Transparent"
+      },
+      {
+        "id": "b",
+        "text": "Block"
+      },
+      {
+        "id": "c",
+        "text": "None"
+      },
+      {
+        "id": "d",
+        "text": "Default 之外不存在其他模式"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-040",
+    "categoryId": "arkui",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "onGestureJudgeBegin 可以在手势达到判定条件时，根据业务规则接受或拒绝该手势。",
+    "explanation": "手势判定回调适合在识别阶段解决内外层冲突或业务条件限制，而不是等手势完成后再补救。",
+    "knowledgePoints": [
+      "onGestureJudgeBegin",
+      "手势判定"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势判定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-gesture-judge.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkui-041",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个始终挂在组件树上的面板只改变透明度和位置，通常更适合哪种动画？",
+    "explanation": "出现/消失转场服务于节点上树和下树；节点始终存在时，直接对属性做动画更符合生命周期。",
+    "knowledgePoints": [
+      "属性动画",
+      "转场动画",
+      "节点生命周期"
+    ],
+    "sourceRefs": [
+      {
+        "title": "转场动画概述",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-transition-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "属性动画"
+      },
+      {
+        "id": "b",
+        "text": "出现/消失转场"
+      },
+      {
+        "id": "c",
+        "text": "页面冷启动动画"
+      },
+      {
+        "id": "d",
+        "text": "数据库事务动画"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-042",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "TransitionEffect 可以表达哪些转场组合？",
+    "explanation": "TransitionEffect 可通过 combine 组合效果，并通过 asymmetric 分别定义进入与退出。",
+    "knowledgePoints": [
+      "TransitionEffect",
+      "combine",
+      "asymmetric"
+    ],
+    "sourceRefs": [
+      {
+        "title": "组件内转场",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-enter-exit-transition.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "options": [
+      {
+        "id": "a",
+        "text": "透明度与位移组合"
+      },
+      {
+        "id": "b",
+        "text": "旋转或移动效果"
+      },
+      {
+        "id": "c",
+        "text": "进入和退出使用不对称效果"
+      },
+      {
+        "id": "d",
+        "text": "自动修改服务端数据"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-043",
+    "categoryId": "arkui",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "Navigation 同时配置全局自定义转场和某个 NavDestination 的局部自定义转场时，哪个优先？",
+    "explanation": "官方文档说明全局自定义转场优先级更高，二者同时配置时应避免误判实际生效来源。",
+    "knowledgePoints": [
+      "Navigation",
+      "自定义转场",
+      "优先级"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation转场动画",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-animation.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "全局 customNavContentTransition"
+      },
+      {
+        "id": "b",
+        "text": "NavDestination 局部 customTransition"
+      },
+      {
+        "id": "c",
+        "text": "系统随机选择"
+      },
+      {
+        "id": "d",
+        "text": "两个转场必须串行执行"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkui-044",
+    "categoryId": "arkui",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "使用 geometryTransition 做共享元素转场时，哪些做法是必要或推荐的？",
+    "explanation": "共享元素依赖相同 ID 建立几何关联，并需要协调节点切换及页面默认转场。",
+    "knowledgePoints": [
+      "geometryTransition",
+      "共享元素",
+      "Navigation"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Navigation转场动画",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-navigation-animation.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "options": [
+      {
+        "id": "a",
+        "text": "两端组件绑定相同的 geometryTransition id"
+      },
+      {
+        "id": "b",
+        "text": "正确控制两端组件的出现与消失"
+      },
+      {
+        "id": "c",
+        "text": "避免系统默认转场与共享元素效果叠加干扰"
+      },
+      {
+        "id": "d",
+        "text": "给两端组件设置完全不同的 id"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkui-045",
+    "categoryId": "arkui",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "资讯流页面外层支持横滑切换频道，卡片内部支持横滑图片，如何定位并解决手势冲突？",
+    "explanation": "手势冲突处理的关键是先定义谁应响应，再选择对应的识别和命中机制。",
+    "knowledgePoints": [
+      "手势冲突",
+      "priorityGesture",
+      "HitTestMode",
+      "手势判定"
+    ],
+    "sourceRefs": [
+      {
+        "title": "手势绑定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-binding.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "组合手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-combined-gestures.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "多层级手势",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-multi-level-gesture.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "手势判定",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-gesture-events-gesture-judge.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "referenceAnswer": "先确认父子组件绑定的手势类型、方向阈值和命中区域，再根据产品意图选择机制：只允许一方响应时用 priorityGesture 或 onGestureJudgeBegin 按方向、区域拒绝另一方；两者应同时响应时使用 parallelGesture；多个候选互斥时使用 ExclusiveGesture；必要时用 responseRegion 和 HitTestMode 调整命中范围。最后在边缘、斜滑、多指和快速滑动场景验证。",
+    "scoringPoints": [
+      "识别父子手势、方向阈值和命中区域",
+      "按需求选择优先、并行、互斥或判定回调",
+      "使用 responseRegion 或 HitTestMode 调整命中",
+      "覆盖边缘和复杂输入场景验证"
+    ]
   }
 ]

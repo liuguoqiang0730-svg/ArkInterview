@@ -1034,5 +1034,833 @@
       "说明 Sendable 解决对象跨并发实例传递或共享",
       "指出共享写入仍需锁或只读冻结策略"
     ]
+  },
+  {
+    "id": "arkts-026",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "easy",
+    "title": "关于 Promise 的三种状态，哪项描述正确？",
+    "explanation": "Promise 的状态只能从 pending 进入 fulfilled 或 rejected，状态确定后不会再次改变。",
+    "knowledgePoints": [
+      "Promise",
+      "异步状态"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 26,
+    "options": [
+      {
+        "id": "a",
+        "text": "pending 表示处理中，fulfilled 表示已完成，rejected 表示已拒绝"
+      },
+      {
+        "id": "b",
+        "text": "fulfilled 可以再次变回 pending"
+      },
+      {
+        "id": "c",
+        "text": "rejected 只能由网络错误触发"
+      },
+      {
+        "id": "d",
+        "text": "Promise 创建后一定立即进入 fulfilled"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-027",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "关于 ArkTS 中 async 函数的行为，哪些说法正确？",
+    "explanation": "async 把同步返回值和异常统一映射到 Promise 完成或拒绝状态，但不会取消 ArkTS 的静态类型约束。",
+    "knowledgePoints": [
+      "async",
+      "Promise",
+      "异常传播"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 27,
+    "options": [
+      {
+        "id": "a",
+        "text": "async 函数返回 Promise"
+      },
+      {
+        "id": "b",
+        "text": "函数体正常返回的值会成为 Promise 的兑现值"
+      },
+      {
+        "id": "c",
+        "text": "函数体抛出的异常会使 Promise 被拒绝"
+      },
+      {
+        "id": "d",
+        "text": "async 函数可以绕过所有类型检查"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-028",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "调用可能被拒绝的异步接口时，哪种写法最便于在当前调用层统一处理异常？",
+    "explanation": "await 会把 Promise 的拒绝表现为可被当前 async 函数中 try/catch 捕获的异常，适合在明确边界进行恢复或转换。",
+    "knowledgePoints": [
+      "await",
+      "try/catch",
+      "异常边界"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 28,
+    "options": [
+      {
+        "id": "a",
+        "text": "在 async 函数内用 try/catch 包裹 await 调用"
+      },
+      {
+        "id": "b",
+        "text": "只调用 Promise，不使用 await、then 或 catch"
+      },
+      {
+        "id": "c",
+        "text": "把异常对象转换为普通字符串后忽略"
+      },
+      {
+        "id": "d",
+        "text": "在每次调用前创建新的 Worker"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-029",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "从 API 18 开始，可以通过 errorManager 的全局未处理拒绝监听能力发现未被消费的 Promise rejection。",
+    "explanation": "API 18 提供 globalUnhandledRejectionDetected 等能力，用于监听未处理的 Promise 拒绝；业务仍应优先在可恢复的调用边界显式处理。",
+    "knowledgePoints": [
+      "Promise rejection",
+      "errorManager"
+    ],
+    "sourceRefs": [
+      {
+        "title": "Promise异步并发",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/async-concurrency-overview.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "errorManager错误管理",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/dfx/errormanager-guidelines.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 29,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-030",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "TaskPool 任务返回一个仍处于 pending 状态的 Promise 时，哪项判断正确？",
+    "explanation": "Promise 本身不能作为跨线程结果传递。TaskPool 任务应在工作线程内 await 异步过程，并返回满足跨线程传输要求的最终值。",
+    "knowledgePoints": [
+      "TaskPool",
+      "Promise",
+      "跨线程传输"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TaskPool简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/taskpool-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 30,
+    "options": [
+      {
+        "id": "a",
+        "text": "任务执行会失败，应等待 Promise 完成后再返回可跨线程传递的结果"
+      },
+      {
+        "id": "b",
+        "text": "TaskPool 会永久保存这个 Promise 并自动跨线程恢复"
+      },
+      {
+        "id": "c",
+        "text": "Promise 会被隐式转换为字符串"
+      },
+      {
+        "id": "d",
+        "text": "只要任务优先级足够高就可以正常返回"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-031",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "TaskPool 的 IDLE 优先级任务通常在什么条件下执行？",
+    "explanation": "IDLE 是最低优先级，适合不要求立即完成的后台工作；它只在工作线程都空闲时调度，且一次执行一个。",
+    "knowledgePoints": [
+      "TaskPool",
+      "任务优先级",
+      "IDLE"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TaskPool简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/taskpool-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 31,
+    "options": [
+      {
+        "id": "a",
+        "text": "所有工作线程空闲时执行，并且同一时间只执行一个 IDLE 任务"
+      },
+      {
+        "id": "b",
+        "text": "始终抢占 HIGH 优先级任务"
+      },
+      {
+        "id": "c",
+        "text": "只能在主线程同步执行"
+      },
+      {
+        "id": "d",
+        "text": "提交后立即创建永久独占线程"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-032",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "需要从子线程取消已提交的 TaskPool 任务时，API 18 推荐如何传递取消目标？",
+    "explanation": "Task 对象本身不可跨线程传递。API 18 可获取任务 ID，并借助 Sendable 数据把 ID 传到其他线程执行取消。",
+    "knowledgePoints": [
+      "TaskPool",
+      "任务取消",
+      "Sendable"
+    ],
+    "sourceRefs": [
+      {
+        "title": "取消TaskPool任务",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/multi-thread-cancel-task.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 32,
+    "options": [
+      {
+        "id": "a",
+        "text": "把 Task ID 放入可跨线程传递的 Sendable 对象，在子线程调用 taskpool.cancel(id)"
+      },
+      {
+        "id": "b",
+        "text": "直接把 Task 实例作为普通对象传到子线程"
+      },
+      {
+        "id": "c",
+        "text": "通过修改任务函数名称取消"
+      },
+      {
+        "id": "d",
+        "text": "销毁整个应用进程"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-033",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "AsyncLock 适合解决哪些并发控制问题？",
+    "explanation": "AsyncLock 可跨线程引用，并以异步、非阻塞方式协调临界区；它也可用于同一线程异步任务的顺序控制。",
+    "knowledgePoints": [
+      "AsyncLock",
+      "互斥",
+      "异步顺序"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步锁",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-async-lock-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 33,
+    "options": [
+      {
+        "id": "a",
+        "text": "多个线程对共享数据的异步互斥访问"
+      },
+      {
+        "id": "b",
+        "text": "同一线程中多个异步流程的执行顺序控制"
+      },
+      {
+        "id": "c",
+        "text": "替代所有数据库事务"
+      },
+      {
+        "id": "d",
+        "text": "让耗时同步循环自动变成异步"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-034",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "ArkTS 只提供异步锁而不提供阻塞式锁，有助于避免线程因等待锁而阻塞及形成传统死锁。",
+    "explanation": "异步锁通过 Promise 等待锁资源，不阻塞执行线程；调用方通常需要使用 await 明确等待临界区完成。",
+    "knowledgePoints": [
+      "AsyncLock",
+      "非阻塞锁"
+    ],
+    "sourceRefs": [
+      {
+        "title": "异步锁",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-async-lock-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 34,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-035",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "medium",
+    "title": "ConditionVariable 提供哪些典型能力？",
+    "explanation": "条件变量用于等待条件变化以及通知一个或全部等待者，不承担组件生命周期控制。",
+    "knowledgePoints": [
+      "ConditionVariable",
+      "等待通知"
+    ],
+    "sourceRefs": [
+      {
+        "title": "条件变量",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-condition-variable-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 35,
+    "options": [
+      {
+        "id": "a",
+        "text": "wait 或 waitFor 等待通知或超时"
+      },
+      {
+        "id": "b",
+        "text": "notifyOne 唤醒一个等待者"
+      },
+      {
+        "id": "c",
+        "text": "notifyAll 唤醒全部等待者"
+      },
+      {
+        "id": "d",
+        "text": "强制终止任意 UIAbility"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-036",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "hard",
+    "title": "多线程共享 ArkTS collections 容器时，哪些约束需要注意？",
+    "explanation": "共享容器通过引用传递减少大数据复制，但并不自动提供线程安全；元素类型和并发修改都要按官方约束处理。",
+    "knowledgePoints": [
+      "ArkTS collections",
+      "Sendable",
+      "线程安全"
+    ],
+    "sourceRefs": [
+      {
+        "title": "ArkTS共享容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-collections-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 36,
+    "options": [
+      {
+        "id": "a",
+        "text": "容器以引用方式跨线程共享，适合较大数据"
+      },
+      {
+        "id": "b",
+        "text": "容器元素需要满足 Sendable 要求"
+      },
+      {
+        "id": "c",
+        "text": "容器本身不保证线程安全，并发结构修改应使用锁协调"
+      },
+      {
+        "id": "d",
+        "text": "共享后每个线程都会得到完全独立的深拷贝"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  {
+    "id": "arkts-037",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "一个集合需要频繁按索引读取，插入删除主要发生在尾部，优先考虑哪种线性容器？",
+    "explanation": "ArrayList 基于连续、动态数组组织，随机读取效率较好；LinkedList 更适合频繁的中间插入删除。",
+    "knowledgePoints": [
+      "ArrayList",
+      "线性容器",
+      "数据结构选型"
+    ],
+    "sourceRefs": [
+      {
+        "title": "线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/linear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 37,
+    "options": [
+      {
+        "id": "a",
+        "text": "ArrayList"
+      },
+      {
+        "id": "b",
+        "text": "LinkedList"
+      },
+      {
+        "id": "c",
+        "text": "Stack"
+      },
+      {
+        "id": "d",
+        "text": "Queue"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-038",
+    "categoryId": "arkts",
+    "type": "multiple",
+    "difficulty": "easy",
+    "title": "关于 Queue 与 Stack 的访问顺序，哪些说法正确？",
+    "explanation": "Queue 用于先进先出的排队处理，Stack 用于后进先出的层级回退等场景，元素类型并不限于字符串。",
+    "knowledgePoints": [
+      "Queue",
+      "Stack",
+      "线性容器"
+    ],
+    "sourceRefs": [
+      {
+        "title": "线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/linear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 38,
+    "options": [
+      {
+        "id": "a",
+        "text": "Queue 通常遵循先进先出"
+      },
+      {
+        "id": "b",
+        "text": "Stack 通常遵循后进先出"
+      },
+      {
+        "id": "c",
+        "text": "Queue 和 Stack 都按键排序"
+      },
+      {
+        "id": "d",
+        "text": "Stack 只能存储字符串"
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "arkts-039",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "需要让键值数据按自定义键顺序遍历时，HashMap 与 TreeMap 中应优先选择哪一个？",
+    "explanation": "TreeMap 基于有序树结构并支持自定义排序；HashMap 更强调快速键查找，但不保证遍历顺序。",
+    "knowledgePoints": [
+      "TreeMap",
+      "HashMap",
+      "有序映射"
+    ],
+    "sourceRefs": [
+      {
+        "title": "非线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/nonlinear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 39,
+    "options": [
+      {
+        "id": "a",
+        "text": "TreeMap"
+      },
+      {
+        "id": "b",
+        "text": "HashMap"
+      },
+      {
+        "id": "c",
+        "text": "HashSet"
+      },
+      {
+        "id": "d",
+        "text": "Deque"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-040",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "在键值数量较少且更关注内存占用的场景中，哪个容器是官方文档给出的轻量选择？",
+    "explanation": "LightWeightMap 以更紧凑的数据组织方式降低小规模映射的内存成本，适合数据量不大的场景。",
+    "knowledgePoints": [
+      "LightWeightMap",
+      "容器内存"
+    ],
+    "sourceRefs": [
+      {
+        "title": "非线性容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/nonlinear-container.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 40,
+    "options": [
+      {
+        "id": "a",
+        "text": "LightWeightMap"
+      },
+      {
+        "id": "b",
+        "text": "TreeMap"
+      },
+      {
+        "id": "c",
+        "text": "LinkedList"
+      },
+      {
+        "id": "d",
+        "text": "PriorityQueue"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-041",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "medium",
+    "title": "懒加载模块对冷启动阶段的主要作用是什么？",
+    "explanation": "懒加载把模块执行推迟到首次使用，有助于冷启动，但首次真正访问时仍会同步执行模块代码。",
+    "knowledgePoints": [
+      "lazy import",
+      "冷启动",
+      "模块加载"
+    ],
+    "sourceRefs": [
+      {
+        "title": "懒加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-lazy-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 41,
+    "options": [
+      {
+        "id": "a",
+        "text": "延后模块源码执行，减少启动阶段不必要的解析与执行"
+      },
+      {
+        "id": "b",
+        "text": "把所有模块永久从安装包删除"
+      },
+      {
+        "id": "c",
+        "text": "把同步接口自动改成网络接口"
+      },
+      {
+        "id": "d",
+        "text": "保证首次使用模块时完全没有耗时"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-042",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "medium",
+    "title": "使用 lazy import 后，模块首次被真正访问时仍可能同步执行并造成交互卡顿，因此不能无差别地给所有模块加懒加载。",
+    "explanation": "懒加载只是转移执行时机。应把它用于启动阶段不需要、且首次使用时延迟可接受的模块，并测量实际收益。",
+    "knowledgePoints": [
+      "lazy import",
+      "首次访问性能"
+    ],
+    "sourceRefs": [
+      {
+        "title": "懒加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-lazy-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 42,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-043",
+    "categoryId": "arkts",
+    "type": "single",
+    "difficulty": "hard",
+    "title": "使用变量路径进行动态 import 时，构建配置可能需要补充哪类声明以确保运行时模块被打包？",
+    "explanation": "变量动态 import 无法像常量路径那样在构建期完整解析依赖，可能需要通过 runtimeOnly 声明运行时依赖。",
+    "knowledgePoints": [
+      "dynamic import",
+      "runtimeOnly",
+      "模块打包"
+    ],
+    "sourceRefs": [
+      {
+        "title": "动态加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-dynamic-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 43,
+    "options": [
+      {
+        "id": "a",
+        "text": "runtimeOnly"
+      },
+      {
+        "id": "b",
+        "text": "compileOnly"
+      },
+      {
+        "id": "c",
+        "text": "testOnly"
+      },
+      {
+        "id": "d",
+        "text": "previewOnly"
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ]
+  },
+  {
+    "id": "arkts-044",
+    "categoryId": "arkts",
+    "type": "boolean",
+    "difficulty": "hard",
+    "title": "同一个 ETS 文件中若对相关导入未完整使用懒加载标记，模块延迟执行可能失效。",
+    "explanation": "同一文件对模块的普通导入可能提前触发其加载，使其他懒加载导入失去预期效果，因此要检查导入链的一致性。",
+    "knowledgePoints": [
+      "lazy import",
+      "导入一致性"
+    ],
+    "sourceRefs": [
+      {
+        "title": "懒加载模块",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-lazy-import.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 44,
+    "answerBoolean": true
+  },
+  {
+    "id": "arkts-045",
+    "categoryId": "arkts",
+    "type": "short",
+    "difficulty": "hard",
+    "title": "企业协作应用把文档解析任务放入 TaskPool 后，如何设计取消、异常处理和共享状态保护？",
+    "explanation": "可靠并发设计要同时覆盖结果传输、取消、异常和共享状态，不能只把函数提交到 TaskPool。",
+    "knowledgePoints": [
+      "TaskPool",
+      "任务取消",
+      "AsyncLock",
+      "Sendable"
+    ],
+    "sourceRefs": [
+      {
+        "title": "TaskPool简介",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/taskpool-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "取消TaskPool任务",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/multi-thread-cancel-task.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "异步锁",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-async-lock-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      },
+      {
+        "title": "ArkTS共享容器",
+        "url": "https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/arkts-utils/arkts-collections-introduction.md",
+        "publisher": "OpenHarmony Docs"
+      }
+    ],
+    "verifiedAt": "2026-07-29",
+    "reviewStatus": "verified",
+    "status": "published",
+    "order": 45,
+    "referenceAnswer": "把可并行的解析函数声明为可并发任务，在任务内部 await 所有异步步骤并用 try/catch 转换可识别错误；通过 Task ID 和 Sendable 控制对象跨线程传递取消请求，不传 Task 或 pending Promise；共享容器中的数据应满足 Sendable 要求，并使用 AsyncLock 保护并发结构修改；主线程根据完成、拒绝或取消结果更新界面，不执行重解析。",
+    "scoringPoints": [
+      "任务内部 await 并捕获异常",
+      "通过 Task ID 与 Sendable 传递取消请求",
+      "共享数据满足 Sendable 并用 AsyncLock 协调",
+      "主线程只消费最终结果并更新界面"
+    ]
   }
 ]
