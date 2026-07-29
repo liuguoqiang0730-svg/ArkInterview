@@ -278,6 +278,13 @@ async function runChecks() {
     questionId: 'q-smoke-single',
     selectedOptionIds: ['a']
   });
+  const practiceStats = await getJson('/api/users/me/stats');
+  assert(practiceStats.recentRecords.length === 2, 'stats should include recent answer records');
+  assert(practiceStats.recentRecords[0].questionId === 'q-smoke-single', 'recent records should include question id');
+  assert(practiceStats.recentRecords[0].questionTitle.includes('已复核'), 'recent records should include question title');
+  assert(practiceStats.recentRecords[0].categoryName === 'ArkTS', 'recent records should include category name');
+  assert(practiceStats.recentRecords[0].questionType === 'single', 'recent records should include question type');
+  assert(practiceStats.recentRecords[0].isCorrect === false, 'recent records should be ordered newest first');
   const wrongPractice = await getJson('/api/practice/session?mode=wrongs&count=5');
   assert(wrongPractice.total === 1, 'wrong practice should include wrong question');
 
@@ -288,6 +295,7 @@ async function runChecks() {
 
   const isolatedStats = await getJson('/api/users/me/stats', 'smoke-test-secondary');
   assert(isolatedStats.totalAnswers === 0, 'a second anonymous device should have isolated answer stats');
+  assert(isolatedStats.recentRecords.length === 0, 'a second anonymous device should have no recent records');
   const isolatedWrongs = await getJson('/api/users/me/wrongs', 'smoke-test-secondary');
   assert(isolatedWrongs.items.length === 0, 'a second anonymous device should not inherit wrong questions');
   const isolatedFavorites = await getJson('/api/users/me/favorites', 'smoke-test-secondary');

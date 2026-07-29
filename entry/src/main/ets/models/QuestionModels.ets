@@ -104,6 +104,17 @@ export interface CategoryStats {
   accuracy: number;
 }
 
+export interface PracticeRecordItem {
+  id: string;
+  questionId: string;
+  categoryId: string;
+  categoryName: string;
+  questionTitle: string;
+  questionType: QuestionType;
+  isCorrect: boolean | null;
+  submittedAt: string;
+}
+
 export interface UserStats {
   totalAnswers: number;
   answeredQuestionCount: number;
@@ -113,5 +124,6 @@ export interface UserStats {
   masteredWrongCount: number;
   favoriteCount: number;
   lastPracticedAt?: string;
+  recentRecords: PracticeRecordItem[];
   categories: CategoryStats[];
 }

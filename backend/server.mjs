@@ -447,6 +447,8 @@ function statsFor(db, user) {
   const correctAnswers = gradedAnswers.filter((answer) => answer.isCorrect).length;
   const answeredQuestionCount = new Set(user.answers.map((answer) => answer.questionId)).size;
   const masteredWrongCount = Object.values(user.wrongs).filter((wrong) => wrong.mastered).length;
+  const questionMap = new Map(db.questions.map((question) => [question.id, question]));
+  const categoryNameMap = new Map(db.categories.map((category) => [category.id, category.name]));
   const categoryMap = new Map(db.categories.map((category) => [category.id, {
     categoryId: category.id,
     name: category.name,
@@ -468,6 +470,20 @@ function statsFor(db, user) {
     }
   }
 
+  const recentRecords = user.answers.slice(-12).reverse().map((answer) => {
+    const question = questionMap.get(answer.questionId);
+    return {
+      id: answer.id,
+      questionId: answer.questionId,
+      categoryId: answer.categoryId,
+      categoryName: categoryNameMap.get(answer.categoryId) || '未分类',
+      questionTitle: question?.title || '题目已下架',
+      questionType: answer.type,
+      isCorrect: answer.isCorrect,
+      submittedAt: answer.submittedAt
+    };
+  });
+
   return {
     totalAnswers,
     answeredQuestionCount,
@@ -477,6 +493,7 @@ function statsFor(db, user) {
     masteredWrongCount,
     favoriteCount: user.favorites.length,
     lastPracticedAt: user.answers.at(-1)?.submittedAt || null,
+    recentRecords,
     categories: Array.from(categoryMap.values()).map((item) => {
       const answered = item.answeredQuestionIds.size;
       return {

@@ -6,7 +6,7 @@ SQLite 当前使用以下业务表：
 
 - `categories`、`questions`：分类和题目。
 - `users`、`anonymous_devices`：应用内部用户与一个或多个匿名安装设备的映射。
-- `favorites`、`wrong_questions`、`answer_attempts`：用户学习数据。
+- `favorites`、`wrong_questions`、`answer_attempts`：用户学习数据。练习记录页从 `answer_attempts` 读取最近 12 次提交，并关联题目和分类生成只读展示数据，不额外维护重复的记录表。
 - `user_identities`：保存经过服务端验证的华为账号等外部身份与内部用户的映射。
 - `auth_sessions`：保存 ArkInterview 自己签发的登录会话，包括访问令牌哈希、刷新令牌哈希、各自过期时间和吊销时间。
 - `user_moderation_events`：保存管理员对登录账号执行的封禁/解封动作、原因和时间，作为不可由客户端修改的操作审计记录。
