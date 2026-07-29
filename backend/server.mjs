@@ -536,6 +536,7 @@ function statsFor(db, user) {
         categoryId: item.categoryId,
         name: item.name,
         attempts: item.attempts,
+        gradedAttempts: item.gradedAttempts,
         answered,
         correct: item.correct,
         totalPublished: item.totalPublished,

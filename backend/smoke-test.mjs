@@ -290,6 +290,9 @@ async function runChecks() {
   assert(practiceStats.dailyStats[0].gradedAttempts === 2, 'daily stats should count graded attempts');
   assert(practiceStats.dailyStats[0].correct === 1, 'daily stats should count correct answers');
   assert(practiceStats.dailyStats[0].accuracy === 0.5, 'daily stats should calculate graded accuracy');
+  const arktsCategoryStats = practiceStats.categories.find((item) => item.categoryId === 'arkts');
+  assert(arktsCategoryStats.gradedAttempts === 2, 'category stats should expose objective answer count');
+  assert(arktsCategoryStats.correct === 1, 'category stats should expose correct objective answers');
   const firstRecordPage = await getJson('/api/users/me/records?page=1&pageSize=1');
   assert(firstRecordPage.total === 2, 'record pagination should include total answer count');
   assert(firstRecordPage.items.length === 1, 'record pagination should honor page size');

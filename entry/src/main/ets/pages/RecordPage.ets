@@ -344,6 +344,10 @@ struct RecordPage {
             .fontSize(12)
             .fontColor('#d8efe8')
             .margin({ top: 4 })
+          Text(this.practiceStreakLabel())
+            .fontSize(11)
+            .fontColor('#8ed8c5')
+            .margin({ top: 3 })
         }
         .alignItems(HorizontalAlign.End)
       }
@@ -356,7 +360,37 @@ struct RecordPage {
         this.MetricCard('收藏', String(this.stats?.favoriteCount ?? 0), COLOR_SOFT_GREEN, COLOR_GREEN)
       }
       .width('100%')
-      .margin({ top: 18 })
+      .margin({ top: 14 })
+
+      Row() {
+        Column() {
+          Text(this.focusCategoryTitle())
+            .fontSize(11)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#d8efe8')
+          Text(this.focusCategoryDetail())
+            .fontSize(12)
+            .fontColor('#ffffff')
+            .maxLines(2)
+            .lineHeight(18)
+            .margin({ top: 3 })
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+
+        if (this.focusCategory() !== undefined) {
+          Text('去练习 >')
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#8ed8c5')
+            .margin({ left: 10 })
+        }
+      }
+      .width('100%')
+      .padding({ top: 12 })
+      .margin({ top: 12 })
+      .border({ width: { top: 1 }, color: '#ffffff24' })
+      .onClick(() => this.openFocusCategory())
     }
     .width('100%')
     .padding(18)
@@ -969,6 +1003,88 @@ struct RecordPage {
     return '未开始';
   }
 
+  practiceStreakLabel(): string {
+    const streak = this.currentPracticeStreak();
+    return streak > 0 ? `连续 ${streak} 天` : '今天开始练习';
+  }
+
+  currentPracticeStreak(): number {
+    const source = this.defaultDailyStats();
+    if (source.length === 0) {
+      return 0;
+    }
+    let cursor = this.shanghaiToday();
+    if (!this.hasPracticeOnDate(source, cursor)) {
+      cursor = this.shiftDateKey(cursor, -1);
+    }
+    let streak = 0;
+    while (this.hasPracticeOnDate(source, cursor)) {
+      streak += 1;
+      cursor = this.shiftDateKey(cursor, -1);
+    }
+    return streak;
+  }
+
+  hasPracticeOnDate(source: DailyPracticeStats[], date: string): boolean {
+    return source.some((item: DailyPracticeStats) => item.date === date && item.attempts > 0);
+  }
+
+  shanghaiToday(): string {
+    return new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10);
+  }
+
+  shiftDateKey(date: string, days: number): string {
+    const timestamp = Date.parse(`${date}T00:00:00Z`);
+    return new Date(timestamp + days * 24 * 60 * 60 * 1000).toISOString().substring(0, 10);
+  }
+
+  focusCategory(): CategoryStats | undefined {
+    let result: CategoryStats | undefined = undefined;
+    (this.stats?.categories ?? []).forEach((item: CategoryStats) => {
+      if (this.categoryGradedAttempts(item) < 3) {
+        return;
+      }
+      if (result === undefined ||
+        item.accuracy < result.accuracy ||
+        (item.accuracy === result.accuracy && item.completionRate < result.completionRate)) {
+        result = item;
+      }
+    });
+    return result;
+  }
+
+  categoryGradedAttempts(item: CategoryStats): number {
+    if (item.gradedAttempts !== undefined) {
+      return item.gradedAttempts;
+    }
+    let count = 0;
+    (this.stats?.recentRecords ?? []).forEach((record: PracticeRecordItem) => {
+      if (record.categoryId === item.categoryId && record.isCorrect !== null) {
+        count += 1;
+      }
+    });
+    return count;
+  }
+
+  focusCategoryTitle(): string {
+    const category = this.focusCategory();
+    if (category === undefined) {
+      return '重点模块建议';
+    }
+    return category.accuracy < 0.8 ? '薄弱模块' : '建议拓展';
+  }
+
+  focusCategoryDetail(): string {
+    const category = this.focusCategory();
+    if (category === undefined) {
+      return '每个模块完成至少 3 次客观题判分后，这里会给出复习建议。';
+    }
+    if (category.accuracy < 0.8) {
+      return `${category.name} · 正确率 ${FormatUtils.percent(category.accuracy)}，建议优先巩固`;
+    }
+    return `${category.name} · 正确率稳定，可继续提高题目覆盖率`;
+  }
+
   reviewHint(): string {
     if ((this.stats?.wrongCount ?? 0) > 0) {
       return '从尚未掌握的错题开始巩固';
@@ -1529,6 +1645,13 @@ struct RecordPage {
       categoryId: item.categoryId,
       title: item.name
     });
+  }
+
+  openFocusCategory(): void {
+    const category = this.focusCategory();
+    if (category !== undefined) {
+      this.openCategoryPractice(category);
+    }
   }
 
   updateLayoutMode(): void {

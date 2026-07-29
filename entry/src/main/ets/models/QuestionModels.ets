@@ -97,6 +97,7 @@ export interface CategoryStats {
   categoryId: string;
   name: string;
   attempts: number;
+  gradedAttempts?: number;
   answered: number;
   correct: number;
   totalPublished: number;
