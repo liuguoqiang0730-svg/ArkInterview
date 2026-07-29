@@ -148,15 +148,26 @@ async function runChecks() {
     preflightResponse.headers.get('access-control-allow-headers')?.toLowerCase().includes('authorization'),
     'admin API preflight should allow the Authorization header'
   );
+  assert(
+    preflightResponse.headers.get('access-control-allow-headers')?.toLowerCase().includes('x-admin-operator'),
+    'admin API preflight should allow the operator identity header'
+  );
 
   const leaderboardAudit = await getJson('/api/admin/leaderboard/users');
   assert(leaderboardAudit.summary.totalAccounts === 0, 'anonymous users should not enter account audit');
   assert(Array.isArray(leaderboardAudit.items), 'leaderboard audit should return an item list');
+  assert(leaderboardAudit.pagination.page === 1, 'leaderboard audit should expose server pagination');
+  assert(leaderboardAudit.pagination.pageSize === 20, 'leaderboard audit should use the default page size');
   const invalidAuditFilter = await fetch(
     `${baseUrl}/api/admin/leaderboard/users?risk=unknown`,
     { headers: requestHeaders('/api/admin/leaderboard/users') }
   );
   assert(invalidAuditFilter.status === 400, 'leaderboard audit should reject invalid risk filters');
+  const invalidAuditPage = await fetch(
+    `${baseUrl}/api/admin/leaderboard/users?page=0`,
+    { headers: requestHeaders('/api/admin/leaderboard/users') }
+  );
+  assert(invalidAuditPage.status === 400, 'leaderboard audit should reject invalid page numbers');
   const missingAuditUser = await patchJson('/api/admin/leaderboard/users/missing-user/status', {
     status: 'suspended',
     reason: '烟雾测试验证不存在账号'
@@ -547,7 +558,10 @@ async function patchJson(pathname, body, expectOk = true) {
 function requestHeaders(pathname, extraHeaders = {}, deviceId = 'smoke-test') {
   return {
     'X-Device-Id': deviceId,
-    ...(pathname.startsWith('/api/admin/') ? { Authorization: `Bearer ${adminToken}` } : {}),
+    ...(pathname.startsWith('/api/admin/') ? {
+      Authorization: `Bearer ${adminToken}`,
+      'X-Admin-Operator': 'smoke-admin'
+    } : {}),
     ...extraHeaders
   };
 }

@@ -91,6 +91,17 @@ function authorizeAdmin(req) {
   }
 }
 
+function getAdminOperator(req) {
+  const header = req.headers['x-admin-operator'];
+  const value = Array.isArray(header) ? header[0] : header;
+  const encoded = String(value || '').trim();
+  try {
+    return decodeURIComponent(encoded);
+  } catch {
+    throw httpError(400, '操作员标识编码无效');
+  }
+}
+
 function safeSecretEqual(left, right) {
   const leftDigest = createHash('sha256').update(left).digest();
   const rightDigest = createHash('sha256').update(right).digest();
@@ -681,7 +692,7 @@ function sendJson(res, status, data, extraHeaders = {}) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device-Id',
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device-Id, X-Admin-Operator',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     ...extraHeaders
   });
@@ -999,7 +1010,9 @@ async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
     const result = leaderboardAdminService.listUsers({
       risk: searchParams.get('risk') || 'all',
       status: searchParams.get('status') || 'all',
-      query: searchParams.get('q') || ''
+      query: searchParams.get('q') || '',
+      page: searchParams.get('page') || 1,
+      pageSize: searchParams.get('pageSize') || 20
     });
     sendJson(res, 200, result, { 'Cache-Control': 'no-store' });
     return;
@@ -1011,7 +1024,9 @@ async function routeAdmin(req, res, db, url, store, leaderboardAdminService) {
     const item = leaderboardAdminService.updateUserStatus({
       userId: decodeURIComponent(leaderboardUserMatch[1]),
       status: payload.status,
-      reason: payload.reason
+      reason: payload.reason,
+      note: payload.note,
+      operator: getAdminOperator(req)
     });
     sendJson(res, 200, { item }, { 'Cache-Control': 'no-store' });
     return;

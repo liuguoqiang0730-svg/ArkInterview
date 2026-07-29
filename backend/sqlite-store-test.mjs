@@ -99,8 +99,8 @@ try {
   assert.equal(reopened.store.integrityCheck(), 'ok', 'reopened SQLite database should pass integrity check');
   assert.equal(
     reopened.store.database.pragma('user_version', { simple: true }),
-    4,
-    'opening a schema v1 database should migrate it to schema v4'
+    5,
+    'opening a schema v1 database should migrate it to schema v5'
   );
   const authSessionColumns = reopened.store.database
     .pragma('table_info(auth_sessions)')
@@ -129,6 +129,11 @@ try {
     "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'user_moderation_events'"
   ).all();
   assert.equal(moderationTables.length, 1, 'schema v4 should add the user moderation audit table');
+  const moderationColumns = reopened.store.database
+    .pragma('table_info(user_moderation_events)')
+    .map((column) => column.name);
+  assert(moderationColumns.includes('operator'), 'schema v5 should identify the moderation operator');
+  assert(moderationColumns.includes('note'), 'schema v5 should store optional moderation notes');
   assert.equal(await readFile(legacyDbFile, 'utf8'), legacyText, 'migration must not modify legacy JSON');
   assert.equal(existsSync(dbFile), true, 'migration should create the SQLite database file');
 

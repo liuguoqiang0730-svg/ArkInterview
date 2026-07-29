@@ -64,16 +64,27 @@ try {
   assert.match(risky.riskReasons[0], /60 秒内提交 20 次/);
   assert.equal(service.listUsers({ risk: 'flagged' }).items.length, 1);
   assert.equal(service.listUsers({ query: '高频测试账号' }).items[0].userId, riskyLogin.user.id);
+  const firstPage = service.listUsers({ page: 1, pageSize: 1 });
+  const secondPage = service.listUsers({ page: 2, pageSize: 1 });
+  assert.equal(firstPage.pagination.totalItems, 2);
+  assert.equal(firstPage.pagination.totalPages, 2);
+  assert.equal(firstPage.pagination.hasNext, true);
+  assert.equal(secondPage.pagination.hasPrevious, true);
+  assert.notEqual(firstPage.items[0].userId, secondPage.items[0].userId);
 
   clock = new Date('2026-07-24T10:00:00.000Z');
   const suspended = service.updateUserStatus({
     userId: riskyLogin.user.id,
     status: 'suspended',
-    reason: '一分钟内连续提交次数异常，人工复核后暂停排行榜资格'
+    reason: '一分钟内连续提交次数异常，人工复核后暂停排行榜资格',
+    operator: '刘国强',
+    note: '已保留提交时间线和测试设备信息，等待账号持有人说明。'
   });
   assert.equal(suspended.status, 'suspended');
   assert.equal(suspended.score, 2, 'moderation audit should retain the historical score after suspension');
   assert.equal(suspended.lastModeration.action, 'suspend');
+  assert.equal(suspended.lastModeration.operator, '刘国强');
+  assert.match(suspended.lastModeration.note, /提交时间线/);
   assert.equal(service.listUsers().summary.suspendedAccounts, 1);
   assert.equal(
     opened.store.listLeaderboardRows().some((row) => row.userId === riskyLogin.user.id),
@@ -98,10 +109,13 @@ try {
   const restored = service.updateUserStatus({
     userId: riskyLogin.user.id,
     status: 'active',
-    reason: '人工复核完成，确认是内部压测账号，恢复正常使用'
+    reason: '人工复核完成，确认是内部压测账号，恢复正常使用',
+    operator: '复核管理员',
+    note: '账号已完成归属确认。'
   });
   assert.equal(restored.status, 'active');
   assert.equal(restored.lastModeration.action, 'restore');
+  assert.equal(restored.lastModeration.operator, '复核管理员');
   assert.equal(restored.moderationCount, 2, 'suspend and restore actions should both remain auditable');
   assert.throws(
     () => auth.resolvePrincipal(`Bearer ${riskyLogin.accessToken}`, 'unused-device'),
@@ -118,7 +132,8 @@ try {
     () => service.updateUserStatus({
       userId: riskyLogin.user.id,
       status: 'suspended',
-      reason: '短'
+      reason: '短',
+      operator: '刘国强'
     }),
     (error) => error instanceof LeaderboardAdminError && error.status === 400,
     'moderation actions should require a meaningful reason'
@@ -127,6 +142,25 @@ try {
     () => service.listUsers({ risk: 'unknown' }),
     (error) => error instanceof LeaderboardAdminError && error.status === 400,
     'unsupported audit filters should be rejected'
+  );
+  assert.throws(
+    () => service.listUsers({ page: 0 }),
+    (error) => error instanceof LeaderboardAdminError && error.status === 400,
+    'audit pagination should reject non-positive pages'
+  );
+  assert.throws(
+    () => service.listUsers({ pageSize: 101 }),
+    (error) => error instanceof LeaderboardAdminError && error.status === 400,
+    'audit pagination should enforce the maximum page size'
+  );
+  assert.throws(
+    () => service.updateUserStatus({
+      userId: riskyLogin.user.id,
+      status: 'suspended',
+      reason: '再次发现异常提交，需要暂停账号'
+    }),
+    (error) => error instanceof LeaderboardAdminError && error.status === 400,
+    'moderation actions should require an operator identity'
   );
   assert.equal(opened.store.integrityCheck(), 'ok');
 

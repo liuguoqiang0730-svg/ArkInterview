@@ -4,7 +4,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-const schemaVersion = 4;
+const schemaVersion = 5;
 
 export function resolveDatabasePaths(defaultStorageDir) {
   const configuredDbFile = process.env.DB_FILE
@@ -223,6 +223,8 @@ export class SqliteStore {
           user_id TEXT NOT NULL,
           action TEXT NOT NULL,
           reason TEXT NOT NULL,
+          operator TEXT NOT NULL,
+          note TEXT NOT NULL DEFAULT '',
           created_at TEXT NOT NULL,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
@@ -271,6 +273,8 @@ export class SqliteStore {
           user_id TEXT NOT NULL,
           action TEXT NOT NULL,
           reason TEXT NOT NULL,
+          operator TEXT NOT NULL DEFAULT 'legacy-admin',
+          note TEXT NOT NULL DEFAULT '',
           created_at TEXT NOT NULL,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
@@ -278,6 +282,22 @@ export class SqliteStore {
         CREATE INDEX IF NOT EXISTS idx_user_moderation_events_user
           ON user_moderation_events(user_id, created_at DESC);
       `);
+      this.database.pragma('user_version = 4');
+    }
+    if (currentVersion >= 1 && currentVersion <= 4) {
+      const moderationColumns = this.database
+        .pragma('table_info(user_moderation_events)')
+        .map((column) => column.name);
+      if (!moderationColumns.includes('operator')) {
+        this.database.exec(
+          "ALTER TABLE user_moderation_events ADD COLUMN operator TEXT NOT NULL DEFAULT 'legacy-admin'"
+        );
+      }
+      if (!moderationColumns.includes('note')) {
+        this.database.exec(
+          "ALTER TABLE user_moderation_events ADD COLUMN note TEXT NOT NULL DEFAULT ''"
+        );
+      }
       this.database.pragma(`user_version = ${schemaVersion}`);
     }
     this.assertSupportedSchema();
@@ -611,7 +631,7 @@ export class SqliteStore {
 
   listUserModerationEvents() {
     return this.database.prepare(
-      `SELECT id, user_id, action, reason, created_at
+      `SELECT id, user_id, action, reason, operator, note, created_at
        FROM user_moderation_events
        ORDER BY created_at DESC, id DESC`
     ).all().map((row) => ({
@@ -619,6 +639,8 @@ export class SqliteStore {
       userId: row.user_id,
       action: row.action,
       reason: row.reason,
+      operator: row.operator,
+      note: row.note || '',
       createdAt: row.created_at
     }));
   }
@@ -628,9 +650,18 @@ export class SqliteStore {
       this.saveMetadataRecord(metadata);
       this.saveUserRecord(user);
       this.database.prepare(
-        `INSERT INTO user_moderation_events (id, user_id, action, reason, created_at)
-         VALUES (?, ?, ?, ?, ?)`
-      ).run(event.id, user.id, event.action, event.reason, event.createdAt);
+        `INSERT INTO user_moderation_events
+           (id, user_id, action, reason, operator, note, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).run(
+        event.id,
+        user.id,
+        event.action,
+        event.reason,
+        event.operator,
+        event.note || '',
+        event.createdAt
+      );
       if (event.action === 'suspend') {
         this.database.prepare(
           `UPDATE auth_sessions

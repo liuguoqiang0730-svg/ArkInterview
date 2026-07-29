@@ -7,6 +7,8 @@ const reviewMinuteThreshold = 15;
 const highMinuteThreshold = 30;
 const reviewFiveMinuteThreshold = 40;
 const highFiveMinuteThreshold = 80;
+const defaultPageSize = 20;
+const maximumPageSize = 100;
 
 export class LeaderboardAdminService {
   constructor({ store, db, now = () => new Date() }) {
@@ -18,11 +20,15 @@ export class LeaderboardAdminService {
   listUsers({
     risk: riskInput = 'all',
     status: statusInput = 'all',
-    query: queryInput = ''
+    query: queryInput = '',
+    page: pageInput = 1,
+    pageSize: pageSizeInput = defaultPageSize
   } = {}) {
     const risk = String(riskInput || 'all').trim();
     const status = String(statusInput || 'all').trim();
     const query = String(queryInput || '').trim().toLocaleLowerCase('zh-CN');
+    const requestedPage = positiveInteger(pageInput, 'page');
+    const pageSize = positiveInteger(pageSizeInput, 'pageSize', maximumPageSize);
     if (!validRiskFilters.has(risk)) {
       throw new LeaderboardAdminError(400, 'risk 筛选条件无效');
     }
@@ -33,24 +39,18 @@ export class LeaderboardAdminService {
       throw new LeaderboardAdminError(400, '搜索内容不能超过 100 个字符');
     }
 
-    const attemptsByUser = groupByUser(this.store.listLeaderboardAuditAttempts());
-    const eventsByUser = groupByUser(this.store.listUserModerationEvents());
-    const scoresByUser = new Map(
-      this.store.listLeaderboardRows({ includeInactive: true })
-        .map((row) => [row.userId, Number(row.score)])
-    );
-    const allItems = this.store.listLeaderboardAuditUsers().map((user) => buildAuditItem(
-      user,
-      attemptsByUser.get(user.userId) || [],
-      eventsByUser.get(user.userId) || [],
-      scoresByUser.get(user.userId) || 0
-    ));
+    const allItems = this.buildAuditItems();
 
-    const items = allItems
+    const filteredItems = allItems
       .filter((item) => status === 'all' || item.status === status)
       .filter((item) => riskMatches(item.riskLevel, risk))
       .filter((item) => !query || searchText(item).includes(query))
       .sort(compareAuditItems);
+    const totalItems = filteredItems.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const page = Math.min(requestedPage, totalPages);
+    const offset = (page - 1) * pageSize;
+    const items = filteredItems.slice(offset, offset + pageSize);
 
     return {
       generatedAt: this.nowIso(),
@@ -65,21 +65,40 @@ export class LeaderboardAdminService {
         optedInAccounts: allItems.filter((item) => item.leaderboardOptIn).length,
         flaggedAccounts: allItems.filter((item) => item.riskLevel !== 'normal').length,
         suspendedAccounts: allItems.filter((item) => item.status === 'suspended').length,
-        filteredAccounts: items.length
+        filteredAccounts: totalItems
+      },
+      pagination: {
+        page,
+        pageSize,
+        totalItems,
+        totalPages,
+        hasPrevious: page > 1,
+        hasNext: page < totalPages
       },
       items
     };
   }
 
-  updateUserStatus({ userId: userIdInput, status: statusInput, reason: reasonInput }) {
+  updateUserStatus({
+    userId: userIdInput,
+    status: statusInput,
+    reason: reasonInput,
+    operator: operatorInput,
+    note: noteInput = ''
+  }) {
     const userId = String(userIdInput || '').trim();
     const status = String(statusInput || '').trim();
     const reason = String(reasonInput || '').trim();
+    const operator = normalizeOperator(operatorInput);
+    const note = String(noteInput || '').trim();
     if (!validUserStatuses.has(status)) {
       throw new LeaderboardAdminError(400, '用户状态只能是 active 或 suspended');
     }
     if (reason.length < 4 || reason.length > 300) {
       throw new LeaderboardAdminError(400, '操作原因必须包含 4 至 300 个字符');
+    }
+    if (note.length > 1000) {
+      throw new LeaderboardAdminError(400, '管理员备注不能超过 1000 个字符');
     }
 
     const user = uniqueUsers(this.db).find((item) => item.id === userId);
@@ -98,10 +117,27 @@ export class LeaderboardAdminService {
       id: `moderation-${randomUUID()}`,
       action: status === 'suspended' ? 'suspend' : 'restore',
       reason,
+      operator,
+      note,
       createdAt: timestamp
     }, this.db.meta);
 
-    return this.listUsers().items.find((item) => item.userId === userId);
+    return this.buildAuditItems().find((item) => item.userId === userId);
+  }
+
+  buildAuditItems() {
+    const attemptsByUser = groupByUser(this.store.listLeaderboardAuditAttempts());
+    const eventsByUser = groupByUser(this.store.listUserModerationEvents());
+    const scoresByUser = new Map(
+      this.store.listLeaderboardRows({ includeInactive: true })
+        .map((row) => [row.userId, Number(row.score)])
+    );
+    return this.store.listLeaderboardAuditUsers().map((user) => buildAuditItem(
+      user,
+      attemptsByUser.get(user.userId) || [],
+      eventsByUser.get(user.userId) || [],
+      scoresByUser.get(user.userId) || 0
+    ));
   }
 
   nowIso() {
@@ -116,6 +152,23 @@ export class LeaderboardAdminError extends Error {
     this.name = 'LeaderboardAdminError';
     this.status = status;
   }
+}
+
+function positiveInteger(value, field, maximum = Number.MAX_SAFE_INTEGER) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > maximum) {
+    const maximumHint = maximum === Number.MAX_SAFE_INTEGER ? '' : `且不能超过 ${maximum}`;
+    throw new LeaderboardAdminError(400, `${field} 必须是正整数${maximumHint}`);
+  }
+  return parsed;
+}
+
+function normalizeOperator(value) {
+  const operator = String(value || '').trim().replace(/\s+/g, ' ');
+  if (operator.length < 2 || operator.length > 64) {
+    throw new LeaderboardAdminError(400, '操作员标识必须包含 2 至 64 个字符');
+  }
+  return operator;
 }
 
 function buildAuditItem(user, attempts, events, score) {

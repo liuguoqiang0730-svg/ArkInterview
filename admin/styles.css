@@ -527,6 +527,16 @@ button:disabled {
   text-align: center;
 }
 
+.operator-badge {
+  max-width: 180px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .audit-heading {
   align-items: flex-end;
   flex-wrap: wrap;
@@ -569,6 +579,7 @@ button:disabled {
 .audit-table-wrap {
   width: 100%;
   max-width: 100%;
+  contain: layout paint inline-size;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
 }
@@ -676,6 +687,43 @@ button:disabled {
   white-space: nowrap;
 }
 
+.audit-note-preview {
+  color: var(--text);
+}
+
+.audit-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 58px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.audit-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.audit-page-actions select {
+  width: 76px;
+  min-height: 36px;
+}
+
+.audit-page-actions .icon-button {
+  width: 36px;
+  height: 36px;
+}
+
+.audit-page-actions .icon-button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
 .moderation-dialog,
 .question-editor-dialog {
   width: min(500px, calc(100% - 32px));
@@ -728,6 +776,15 @@ button:disabled {
   min-height: 0;
 }
 
+.moderation-operator {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.moderation-operator strong {
+  color: var(--text);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -777,6 +834,11 @@ button:disabled {
 
   .audit-filters input {
     width: min(100%, 320px);
+  }
+
+  .audit-pagination {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
@@ -837,6 +899,16 @@ button:disabled {
   .audit-note {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .audit-page-actions {
+    display: grid;
+    grid-template-columns: auto 76px 36px minmax(52px, 1fr) 36px;
+    width: 100%;
+  }
+
+  .audit-page-actions select {
+    width: 76px;
   }
 
   .question-controls select,

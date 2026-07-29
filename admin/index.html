@@ -13,6 +13,7 @@
         <h1>运营后台</h1>
       </div>
       <div class="topbar-actions">
+        <span id="adminOperatorBadge" class="operator-badge" hidden></span>
         <button id="refreshButton" class="icon-button" title="刷新数据" aria-label="刷新数据" hidden>↻</button>
         <button id="logoutButton" class="secondary-button" type="button" hidden>退出</button>
       </div>
@@ -23,6 +24,17 @@
         <p class="eyebrow">Protected Console</p>
         <h2 id="authTitle">管理员验证</h2>
         <form id="authForm" class="auth-form">
+          <label for="adminOperatorInput">操作员标识</label>
+          <input
+            id="adminOperatorInput"
+            name="adminOperator"
+            type="text"
+            minlength="2"
+            maxlength="64"
+            autocomplete="username"
+            placeholder="姓名、工号或值班账号"
+            required
+          >
           <label for="adminTokenInput">管理员令牌</label>
           <input
             id="adminTokenInput"
@@ -304,6 +316,20 @@
             </table>
             <p id="auditEmpty" class="empty" hidden>当前筛选条件下没有账号。</p>
           </div>
+          <div class="audit-pagination">
+            <span id="auditPageSummary">0 人</span>
+            <div class="audit-page-actions">
+              <label for="auditPageSize">每页</label>
+              <select id="auditPageSize" aria-label="每页显示账号数量">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+              </select>
+              <button id="auditPreviousPage" class="icon-button" type="button" title="上一页" aria-label="上一页">←</button>
+              <span id="auditPageNumber">1 / 1</span>
+              <button id="auditNextPage" class="icon-button" type="button" title="下一页" aria-label="下一页">→</button>
+            </div>
+          </div>
         </section>
       </div>
     </main>
@@ -438,6 +464,16 @@
             placeholder="填写复核依据，操作记录会永久保留"
           ></textarea>
         </label>
+        <label for="moderationNoteInput">
+          内部备注（可选）
+          <textarea
+            id="moderationNoteInput"
+            maxlength="1000"
+            rows="3"
+            placeholder="记录证据位置、沟通结果或后续跟进事项"
+          ></textarea>
+        </label>
+        <p class="moderation-operator">本次操作员：<strong id="moderationOperator"></strong></p>
         <p id="moderationMessage" class="auth-message" role="alert"></p>
         <div class="form-actions">
           <button id="moderationCancelButton" class="secondary-button" type="button">取消</button>

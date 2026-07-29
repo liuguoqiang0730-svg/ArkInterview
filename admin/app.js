@@ -13,6 +13,8 @@ const state = {
   auditRisk: 'all',
   auditStatus: 'all',
   auditQuery: '',
+  auditPage: 1,
+  auditPageSize: 20,
   audit: {
     summary: {
       totalAccounts: 0,
@@ -21,10 +23,19 @@ const state = {
       suspendedAccounts: 0,
       filteredAccounts: 0
     },
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      totalItems: 0,
+      totalPages: 1,
+      hasPrevious: false,
+      hasNext: false
+    },
     items: []
   },
   moderationTarget: null,
-  adminToken: sessionStorage.getItem('arkinterview.adminToken') || ''
+  adminToken: sessionStorage.getItem('arkinterview.adminToken') || '',
+  adminOperator: sessionStorage.getItem('arkinterview.adminOperator') || ''
 };
 
 const els = {
@@ -34,6 +45,7 @@ const els = {
   leaderboardAuditView: document.querySelector('#leaderboardAuditView'),
   adminTabs: [...document.querySelectorAll('.admin-tab')],
   authForm: document.querySelector('#authForm'),
+  adminOperatorInput: document.querySelector('#adminOperatorInput'),
   adminTokenInput: document.querySelector('#adminTokenInput'),
   authMessage: document.querySelector('#authMessage'),
   categoryCount: document.querySelector('#categoryCount'),
@@ -55,6 +67,7 @@ const els = {
   clearSelectionButton: document.querySelector('#clearSelectionButton'),
   refreshButton: document.querySelector('#refreshButton'),
   logoutButton: document.querySelector('#logoutButton'),
+  adminOperatorBadge: document.querySelector('#adminOperatorBadge'),
   questionForm: document.querySelector('#questionForm'),
   categoryInput: document.querySelector('#categoryInput'),
   questionTypeInput: document.querySelector('#questionTypeInput'),
@@ -78,11 +91,18 @@ const els = {
   auditMessage: document.querySelector('#auditMessage'),
   auditTableBody: document.querySelector('#auditTableBody'),
   auditEmpty: document.querySelector('#auditEmpty'),
+  auditPageSummary: document.querySelector('#auditPageSummary'),
+  auditPageSize: document.querySelector('#auditPageSize'),
+  auditPreviousPage: document.querySelector('#auditPreviousPage'),
+  auditPageNumber: document.querySelector('#auditPageNumber'),
+  auditNextPage: document.querySelector('#auditNextPage'),
   moderationDialog: document.querySelector('#moderationDialog'),
   moderationForm: document.querySelector('#moderationForm'),
   moderationTitle: document.querySelector('#moderationTitle'),
   moderationDescription: document.querySelector('#moderationDescription'),
   moderationReasonInput: document.querySelector('#moderationReasonInput'),
+  moderationNoteInput: document.querySelector('#moderationNoteInput'),
+  moderationOperator: document.querySelector('#moderationOperator'),
   moderationMessage: document.querySelector('#moderationMessage'),
   moderationCancelButton: document.querySelector('#moderationCancelButton'),
   moderationSubmitButton: document.querySelector('#moderationSubmitButton')
@@ -117,6 +137,7 @@ async function request(path, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
     ...(state.adminToken ? { Authorization: `Bearer ${state.adminToken}` } : {}),
+    ...(state.adminOperator ? { 'X-Admin-Operator': encodeURIComponent(state.adminOperator) } : {}),
     ...(options.headers || {})
   };
   const response = await fetch(path, {
@@ -138,12 +159,16 @@ function showAdmin() {
   els.adminView.hidden = false;
   els.refreshButton.hidden = false;
   els.logoutButton.hidden = false;
+  els.adminOperatorBadge.hidden = false;
+  els.adminOperatorBadge.textContent = state.adminOperator;
   els.authMessage.textContent = '';
+  els.adminOperatorInput.value = '';
   els.adminTokenInput.value = '';
 }
 
 function lockAdmin(message = '') {
   state.adminToken = '';
+  state.adminOperator = '';
   state.categories = [];
   state.questions = [];
   state.editingQuestionId = null;
@@ -151,10 +176,13 @@ function lockAdmin(message = '') {
   state.moderationTarget = null;
   state.selectedQuestionIds.clear();
   sessionStorage.removeItem('arkinterview.adminToken');
+  sessionStorage.removeItem('arkinterview.adminOperator');
   els.authView.hidden = false;
   els.adminView.hidden = true;
   els.refreshButton.hidden = true;
   els.logoutButton.hidden = true;
+  els.adminOperatorBadge.hidden = true;
+  els.adminOperatorBadge.textContent = '';
   els.authMessage.textContent = message;
   if (els.moderationDialog.open) {
     els.moderationDialog.close();
@@ -162,13 +190,15 @@ function lockAdmin(message = '') {
   if (els.questionEditorDialog.open) {
     els.questionEditorDialog.close();
   }
-  els.adminTokenInput.focus();
+  els.adminOperatorInput.focus();
 }
 
-async function unlockAdmin(token) {
+async function unlockAdmin(token, operator) {
   state.adminToken = token.trim();
+  state.adminOperator = operator.trim().replace(/\s+/g, ' ');
   await loadData();
   sessionStorage.setItem('arkinterview.adminToken', state.adminToken);
+  sessionStorage.setItem('arkinterview.adminOperator', state.adminOperator);
   showAdmin();
 }
 
@@ -219,6 +249,16 @@ function renderStats() {
 
 function renderAudit() {
   const { summary, items } = state.audit;
+  const pagination = state.audit.pagination || {
+    page: 1,
+    pageSize: state.auditPageSize,
+    totalItems: summary.filteredAccounts,
+    totalPages: 1,
+    hasPrevious: false,
+    hasNext: false
+  };
+  state.auditPage = pagination.page;
+  state.auditPageSize = pagination.pageSize;
   els.auditAccountCount.textContent = String(summary.totalAccounts);
   els.auditOptInCount.textContent = String(summary.optedInAccounts);
   els.auditFlaggedCount.textContent = String(summary.flaggedAccounts);
@@ -226,6 +266,15 @@ function renderAudit() {
   els.auditVisibleCount.textContent = `${summary.filteredAccounts} 人`;
   els.auditEmpty.hidden = items.length > 0;
   els.auditTableBody.replaceChildren(...items.map(auditRow));
+  const first = pagination.totalItems === 0 ? 0 : (pagination.page - 1) * pagination.pageSize + 1;
+  const last = pagination.totalItems === 0 ? 0 : first + items.length - 1;
+  els.auditPageSummary.textContent = pagination.totalItems === 0
+    ? '0 人'
+    : `${first}-${last} / ${pagination.totalItems} 人`;
+  els.auditPageSize.value = String(pagination.pageSize);
+  els.auditPageNumber.textContent = `${pagination.page} / ${pagination.totalPages}`;
+  els.auditPreviousPage.disabled = !pagination.hasPrevious;
+  els.auditNextPage.disabled = !pagination.hasNext;
 }
 
 function auditRow(item) {
@@ -242,6 +291,12 @@ function auditRow(item) {
   const latestAction = item.lastModeration
     ? `${item.lastModeration.action === 'suspend' ? '封禁' : '解封'}：${item.lastModeration.reason}`
     : '';
+  const latestOperator = item.lastModeration
+    ? `${item.lastModeration.operator} · ${formatDate(item.lastModeration.createdAt)}`
+    : '';
+  const latestNote = item.lastModeration?.note
+    ? `备注：${item.lastModeration.note}`
+    : '';
   row.innerHTML = `
     <td>
       <strong class="account-name">${escapeHtml(item.displayName || '未设置昵称')}</strong>
@@ -254,6 +309,8 @@ function auditRow(item) {
         <span class="badge risk-${escapeHtml(item.riskLevel)}" title="${escapeHtml(riskReason)}">${riskLabels[item.riskLevel] || item.riskLevel}</span>
       </div>
       ${latestAction ? `<span class="audit-secondary" title="${escapeHtml(latestAction)}">${escapeHtml(latestAction)}</span>` : ''}
+      ${latestOperator ? `<span class="audit-secondary">${escapeHtml(latestOperator)}</span>` : ''}
+      ${latestNote ? `<span class="audit-secondary audit-note-preview" title="${escapeHtml(latestNote)}">${escapeHtml(latestNote)}</span>` : ''}
     </td>
     <td><strong class="numeric-value">${item.score}</strong></td>
     <td>
@@ -285,7 +342,9 @@ function auditRow(item) {
 function auditRequestPath() {
   const params = new URLSearchParams({
     risk: state.auditRisk,
-    status: state.auditStatus
+    status: state.auditStatus,
+    page: String(state.auditPage),
+    pageSize: String(state.auditPageSize)
   });
   if (state.auditQuery) {
     params.set('q', state.auditQuery);
@@ -297,6 +356,7 @@ async function loadAuditData() {
   setAuditMessage('正在刷新审计数据...');
   try {
     state.audit = await request(auditRequestPath());
+    state.auditPage = state.audit.pagination?.page || 1;
     renderAudit();
     setAuditMessage('');
   } catch (error) {
@@ -320,6 +380,8 @@ function openModerationDialog(item) {
   els.moderationSubmitButton.textContent = suspending ? '确认封禁' : '确认解封';
   els.moderationSubmitButton.className = suspending ? 'danger-button' : 'primary-button';
   els.moderationReasonInput.value = '';
+  els.moderationNoteInput.value = '';
+  els.moderationOperator.textContent = state.adminOperator;
   els.moderationMessage.textContent = '';
   els.moderationDialog.showModal();
   els.moderationReasonInput.focus();
@@ -331,6 +393,7 @@ async function submitModeration() {
     return;
   }
   const reason = els.moderationReasonInput.value.trim();
+  const note = els.moderationNoteInput.value.trim();
   els.moderationSubmitButton.disabled = true;
   els.moderationMessage.textContent = '处理中...';
   try {
@@ -338,7 +401,8 @@ async function submitModeration() {
       method: 'PATCH',
       body: JSON.stringify({
         status: target.status,
-        reason
+        reason,
+        note
       })
     });
     els.moderationDialog.close();
@@ -879,16 +943,41 @@ for (const button of els.adminTabs) {
 els.auditFilterForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   state.auditQuery = els.auditSearchInput.value.trim();
+  state.auditPage = 1;
   await loadAuditData().catch(() => {});
 });
 
 els.auditRiskFilter.addEventListener('change', async (event) => {
   state.auditRisk = event.target.value;
+  state.auditPage = 1;
   await loadAuditData().catch(() => {});
 });
 
 els.auditStatusFilter.addEventListener('change', async (event) => {
   state.auditStatus = event.target.value;
+  state.auditPage = 1;
+  await loadAuditData().catch(() => {});
+});
+
+els.auditPageSize.addEventListener('change', async (event) => {
+  state.auditPageSize = Number(event.target.value);
+  state.auditPage = 1;
+  await loadAuditData().catch(() => {});
+});
+
+els.auditPreviousPage.addEventListener('click', async () => {
+  if (state.auditPage <= 1) {
+    return;
+  }
+  state.auditPage -= 1;
+  await loadAuditData().catch(() => {});
+});
+
+els.auditNextPage.addEventListener('click', async () => {
+  if (!state.audit.pagination?.hasNext) {
+    return;
+  }
+  state.auditPage += 1;
   await loadAuditData().catch(() => {});
 });
 
@@ -912,11 +1001,12 @@ els.moderationDialog.addEventListener('click', (event) => {
 els.authForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const button = els.authForm.querySelector('button[type="submit"]');
+  const operator = els.adminOperatorInput.value.trim();
   const token = els.adminTokenInput.value.trim();
   button.disabled = true;
   els.authMessage.textContent = '验证中...';
   try {
-    await unlockAdmin(token);
+    await unlockAdmin(token, operator);
   } catch (error) {
     lockAdmin(error.message);
   } finally {
@@ -941,7 +1031,7 @@ els.refreshButton.addEventListener('click', async () => {
   }
 });
 
-if (state.adminToken) {
+if (state.adminToken && state.adminOperator) {
   loadData()
     .then(showAdmin)
     .catch((error) => lockAdmin(error.message));

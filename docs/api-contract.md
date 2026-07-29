@@ -304,25 +304,30 @@ Authorization: Bearer <ADMIN_TOKEN>
 - `risk`：`all`、`flagged`、`normal`、`review` 或 `high`。
 - `status`：`all`、`active` 或 `suspended`。
 - `q`：按展示名、内部用户 ID 或身份提供方搜索，最长 100 个字符。
+- `page`：页码，默认 `1`。
+- `pageSize`：每页数量，默认 `20`，最大 `100`。
 
-响应包含账号总数、参与数、待复核数、封禁数，以及每个账号的历史积分、有效提交数、正确率、60 秒/5 分钟峰值、风险原因和最近一次管理员操作。异常检测只提供复核信号，不会自动封禁。
+响应包含账号总数、参与数、待复核数、封禁数，以及当前页账号的历史积分、有效提交数、正确率、60 秒/5 分钟峰值、风险原因和最近一次管理员操作。`pagination` 返回 `page`、`pageSize`、`totalItems`、`totalPages`、`hasPrevious` 和 `hasNext`。异常检测只提供复核信号，不会自动封禁。
 
 ### PATCH /api/admin/leaderboard/users/{userId}/status
 
-封禁或解封已绑定账号。请求体：
+封禁或解封已绑定账号。除管理 Bearer Token 外，必须发送 `X-Admin-Operator` 请求头；操作人名称为 2 至 64 个字符，浏览器端应使用 `encodeURIComponent` 编码，服务端会解码后写入审计记录。请求体：
 
 ```json
 {
   "status": "suspended",
-  "reason": "一分钟内连续提交次数异常，人工复核后暂停排行榜资格"
+  "reason": "一分钟内连续提交次数异常，人工复核后暂停排行榜资格",
+  "note": "相关提交记录已归档，等待下一轮人工复核"
 }
 ```
 
 - `status` 仅允许 `active` 或 `suspended`。
 - `reason` 必须包含 4 至 300 个字符。
+- `note` 为可选内部备注，最多 1000 个字符，不对普通用户公开。
 - 封禁会立即从公开排行榜移除账号、吊销全部有效 ArkInterview 登录会话，并阻止该华为身份重新登录。
 - 解封后旧会话不会恢复，用户需要重新登录。
-- 每次状态变化都会写入独立审计记录；重复设置相同状态返回 `409`。
+- 每次状态变化都会把操作、原因、操作人、内部备注和时间写入独立审计记录；重复设置相同状态返回 `409`。
+- 当前操作人身份仍建立在共享管理令牌可信的前提上，不等同于独立管理员账号鉴权。
 
 ### GET /api/admin/categories
 
