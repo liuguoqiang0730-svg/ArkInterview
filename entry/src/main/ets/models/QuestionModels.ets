@@ -124,6 +124,6 @@ export interface UserStats {
   masteredWrongCount: number;
   favoriteCount: number;
   lastPracticedAt?: string;
-  recentRecords: PracticeRecordItem[];
+  recentRecords?: PracticeRecordItem[];
   categories: CategoryStats[];
 }

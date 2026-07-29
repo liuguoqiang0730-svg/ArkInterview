@@ -398,14 +398,14 @@ struct RecordPage {
         }
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Start)
-        Text(`${this.stats?.recentRecords.length ?? 0} 条`)
+        Text(`${this.stats?.recentRecords?.length ?? 0} 条`)
           .fontSize(12)
           .fontColor(COLOR_MUTED)
       }
       .width('100%')
       .margin({ bottom: 10 })
 
-      if ((this.stats?.recentRecords.length ?? 0) === 0) {
+      if ((this.stats?.recentRecords?.length ?? 0) === 0) {
         Text('完成答题后，最近提交记录会显示在这里。')
           .width('100%')
           .fontSize(13)
