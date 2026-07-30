@@ -1,7 +1,7 @@
 import display from '@ohos.display';
 import { APP_NAME } from '../app/AppConfig';
 import { BottomNavBar } from '../components/BottomNavBar';
-import { Category, UserStats } from '../models/QuestionModels';
+import { Category, CategoryStats, UserStats } from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
@@ -72,7 +72,7 @@ struct HomePage {
         .backgroundColor(COLOR_BG)
       }
 
-      BottomNavBar({ active: 'home', isTablet: this.isTablet })
+      BottomNavBar({ active: 'home', isTablet: this.isTablet, isRootPage: true })
     }
     .width('100%')
     .height('100%')
@@ -156,23 +156,33 @@ struct HomePage {
   @Builder
   CategoryHeader() {
     Row() {
-      Text('题库模块')
-        .fontSize(18)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(COLOR_NAVY)
+      Column() {
+        Text('优先模块')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+        Text(`从 ${this.categories.length} 个模块、${this.totalPublishedCount()} 道题中继续`)
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 4 })
+      }
+      .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
-      Text(`${this.categories.length} 个分类 · ${this.totalPublishedCount()} 道题`)
+
+      Text('全部训练 >')
         .fontSize(12)
-        .fontColor(COLOR_MUTED)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_GREEN)
+        .onClick(() => this.openTrainingCenter())
     }
     .width('100%')
-    .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 8 })
+    .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 10 })
   }
 
   @Builder
   CategoryList() {
     Column() {
-      ForEach(this.categories, (category: Category) => {
+      ForEach(this.homeCategories(), (category: Category) => {
         this.CategoryCard(category)
       }, (category: Category) => category.id)
     }
@@ -573,6 +583,50 @@ struct HomePage {
     return count;
   }
 
+  homeCategories(): Category[] {
+    const result: Category[] = [];
+    const limit = this.isTablet ? 4 : 3;
+    for (const category of this.categories) {
+      const stats = this.categoryStats(category.id);
+      if (stats !== undefined && stats.attempts > 0 && stats.completionRate < 1) {
+        result.push(category);
+        if (result.length >= limit) {
+          return result;
+        }
+      }
+    }
+    for (const category of this.categories) {
+      if (!this.containsCategory(result, category.id)) {
+        result.push(category);
+        if (result.length >= limit) {
+          return result;
+        }
+      }
+    }
+    return result;
+  }
+
+  categoryStats(categoryId: string): CategoryStats | undefined {
+    if (!this.stats) {
+      return undefined;
+    }
+    for (const item of this.stats.categories) {
+      if (item.categoryId === categoryId) {
+        return item;
+      }
+    }
+    return undefined;
+  }
+
+  containsCategory(items: Category[], categoryId: string): boolean {
+    for (const item of items) {
+      if (item.id === categoryId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   categoryCompletionRate(categoryId: string): number {
     if (!this.stats) {
       return 0;
@@ -736,5 +790,9 @@ struct HomePage {
 
   openInterviewExperience(): void {
     AppRouter.push(this.getUIContext(), 'pages/InterviewExperiencePage');
+  }
+
+  openTrainingCenter(): void {
+    AppRouter.push(this.getUIContext(), 'pages/TrainingPage');
   }
 }

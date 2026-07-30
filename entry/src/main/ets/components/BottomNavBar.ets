@@ -12,6 +12,7 @@ const NAV_ANIMATION_DURATION: number = 180;
 export struct BottomNavBar {
   @Prop active: string = '';
   @Prop isTablet: boolean = false;
+  @Prop isRootPage: boolean = false;
 
   build() {
     Column() {
@@ -80,7 +81,7 @@ export struct BottomNavBar {
   }
 
   openTarget(target: string): void {
-    if (target === this.active) {
+    if (target === this.active && this.isRootPage) {
       return;
     }
     if (target === 'home') {
@@ -88,11 +89,7 @@ export struct BottomNavBar {
       return;
     }
     if (target === 'practice') {
-      AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
-        mode: 'random',
-        categoryId: '',
-        title: '随机练习'
-      });
+      AppRouter.push(this.getUIContext(), 'pages/TrainingPage');
       return;
     }
     if (target === 'profile') {

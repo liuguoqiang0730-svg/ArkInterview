@@ -302,7 +302,7 @@ struct MyPage {
       .width('100%')
       .layoutWeight(1)
 
-      BottomNavBar({ active: 'profile', isTablet: this.isTablet })
+      BottomNavBar({ active: 'profile', isTablet: this.isTablet, isRootPage: true })
     }
     .width('100%')
     .height('100%')

@@ -1,6 +1,7 @@
 {
   "src": [
     "pages/HomePage",
+    "pages/TrainingPage",
     "pages/PracticePage",
     "pages/QuestionPage",
     "pages/InterviewExperiencePage",
