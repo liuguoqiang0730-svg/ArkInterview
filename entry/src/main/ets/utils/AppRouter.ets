@@ -40,7 +40,11 @@ export class AppRouter {
 
   static params(uiContext: UIContext): Record<string, string> {
     try {
-      return uiContext.getRouter().getParams() as Record<string, string>;
+      const params = uiContext.getRouter().getParams();
+      if (params === undefined || params === null) {
+        return {};
+      }
+      return params as Record<string, string>;
     } catch (error) {
       console.error(`route params failed: ${String(error)}`);
       return {};

@@ -29,7 +29,7 @@ const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
 const COLOR_SOFT_RED: string = '#fee4e2';
-const COLOR_SHADOW: string = '#1f2a3714';
+const COLOR_SHADOW: string = '#141f2a37';
 const TABLET_MIN_VP: number = 680;
 
 @Entry
@@ -393,7 +393,7 @@ struct RecordPage {
         Row()
           .width('100%')
           .height(6)
-          .backgroundColor('#ffffff24')
+          .backgroundColor('#24ffffff')
           .borderRadius(3)
         Row()
           .width(this.streakProgressWidth())
@@ -414,7 +414,7 @@ struct RecordPage {
     .width('100%')
     .padding({ top: 12 })
     .margin({ top: 12 })
-    .border({ width: { top: 1 }, color: '#ffffff24' })
+    .border({ width: { top: 1 }, color: '#24ffffff' })
   }
 
   @Builder
@@ -455,7 +455,7 @@ struct RecordPage {
     .width('100%')
     .padding({ top: 12 })
     .margin({ top: 12 })
-    .border({ width: { top: 1 }, color: '#ffffff24' })
+    .border({ width: { top: 1 }, color: '#24ffffff' })
     .onClick(() => this.openFocusCategory())
   }
 

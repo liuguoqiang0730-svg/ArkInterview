@@ -21,7 +21,7 @@ const COLOR_BLUE: string = '#2c5f8f';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
-const COLOR_SHADOW: string = '#1f2a3714';
+const COLOR_SHADOW: string = '#141f2a37';
 const TABLET_MIN_VP: number = 680;
 
 @Entry

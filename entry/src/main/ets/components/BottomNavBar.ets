@@ -5,7 +5,7 @@ const COLOR_GREEN: string = '#16745f';
 const COLOR_MUTED: string = '#667085';
 const COLOR_LINE: string = '#e4e9f0';
 const COLOR_SOFT_GREEN: string = '#e7f4ef';
-const COLOR_SHADOW: string = '#1f2a3714';
+const COLOR_SHADOW: string = '#141f2a37';
 const NAV_ANIMATION_DURATION: number = 180;
 
 @Component

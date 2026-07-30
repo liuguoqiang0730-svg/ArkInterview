@@ -21,7 +21,7 @@ const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
 const COLOR_SOFT_RED: string = '#fee4e2';
-const COLOR_SHADOW: string = '#1f2a3714';
+const COLOR_SHADOW: string = '#141f2a37';
 const TABLET_MIN_VP: number = 680;
 const ANSWER_STATUS_UNANSWERED: string = 'unanswered';
 const ANSWER_STATUS_CORRECT: string = 'correct';
@@ -362,9 +362,9 @@ struct QuestionPage {
       .width(108)
       .height(108)
       .justifyContent(FlexAlign.Center)
-      .backgroundColor('#ffffff1f')
+      .backgroundColor('#1fffffff')
       .borderRadius(8)
-      .border({ width: 1, color: '#ffffff33' })
+      .border({ width: 1, color: '#33ffffff' })
     }
     .width('100%')
     .padding(18)
@@ -444,7 +444,7 @@ struct QuestionPage {
       Column()
         .width('100%')
         .height('100%')
-        .backgroundColor('#10203314')
+        .backgroundColor('#14102033')
         .onClick(() => this.showProgressPanel = false)
 
       Column() {
@@ -529,7 +529,7 @@ struct QuestionPage {
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
-    .shadow({ radius: 18, color: '#1f2a3726', offsetX: 0, offsetY: 8 })
+    .shadow({ radius: 18, color: '#261f2a37', offsetX: 0, offsetY: 8 })
   }
 
   @Builder

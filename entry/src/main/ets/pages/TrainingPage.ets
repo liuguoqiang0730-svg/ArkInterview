@@ -30,7 +30,7 @@ const COLOR_SOFT_GREEN: string = '#e7f4ef';
 const COLOR_SOFT_BLUE: string = '#e9f0f7';
 const COLOR_SOFT_ORANGE: string = '#fff1e5';
 const COLOR_SOFT_RED: string = '#fcebea';
-const COLOR_SHADOW: string = '#1f2a3714';
+const COLOR_SHADOW: string = '#141f2a37';
 const TABLET_MIN_VP: number = 680;
 
 @Entry
@@ -219,8 +219,8 @@ struct TrainingPage {
       Column()
         .width('100%')
         .height('100%')
-        .backgroundColor('#10203352')
-        .onClick(() => this.showSetup = false)
+        .backgroundColor('#52102033')
+        .onClick(() => this.closeSetup())
 
       this.SetupPanel()
     }
@@ -233,99 +233,194 @@ struct TrainingPage {
     Column() {
       Row() {
         Column() {
-          Text('训练设置')
+          Text('配置本轮训练')
             .fontSize(19)
             .fontWeight(FontWeight.Bold)
             .fontColor(COLOR_NAVY)
-          Text(this.setupTitle)
+          Text(`${this.setupTitle} · ${this.setupScopeText()}`)
             .fontSize(12)
             .fontColor(COLOR_MUTED)
             .margin({ top: 4 })
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
 
         Button('×')
-          .width(34)
-          .height(34)
-          .fontSize(19)
+          .width(40)
+          .height(40)
+          .fontSize(21)
           .fontColor(COLOR_MUTED)
           .backgroundColor('#eef2f6')
           .borderRadius(8)
-          .onClick(() => this.showSetup = false)
+          .onClick(() => this.closeSetup())
       }
       .width('100%')
-      .padding({ left: 18, right: 18, top: 16, bottom: 14 })
+      .padding({ left: 20, right: 16, top: 16, bottom: 14 })
       .border({ width: { bottom: 1 }, color: COLOR_LINE })
 
+      if (this.isTablet) {
+        this.TabletSetupBody()
+      } else {
+        this.PhoneSetupBody()
+      }
+
+      this.SetupFooter()
+    }
+    .width(this.isTablet ? '92%' : '100%')
+    .height(this.isTablet ? '82%' : '92%')
+    .constraintSize({
+      maxWidth: this.isTablet ? 780 : 520,
+      maxHeight: this.isTablet ? 640 : 760
+    })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(this.isTablet ? 8 : { topLeft: 8, topRight: 8 })
+    .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 20, color: '#33102033', offsetX: 0, offsetY: -6 })
+  }
+
+  @Builder
+  TabletSetupBody() {
+    Row() {
       Scroll() {
         Column() {
           this.SetupSummary()
           this.AvailabilityStatus()
-          this.CountSelector()
-
-          if (this.setupMode === 'interview') {
-            Row() {
-              Text('面')
-                .width(36)
-                .height(36)
-                .fontSize(13)
-                .fontWeight(FontWeight.Bold)
-                .fontColor(COLOR_BLUE)
-                .textAlign(TextAlign.Center)
-                .backgroundColor(COLOR_SOFT_BLUE)
-                .borderRadius(8)
-                .margin({ right: 11 })
-              Column() {
-                Text('保持混合题型与难度')
-                  .fontSize(14)
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor(COLOR_TEXT)
-                Text('优先覆盖简答、单选、多选和判断，接近真实面试节奏')
-                  .fontSize(11)
-                  .fontColor(COLOR_MUTED)
-                  .lineHeight(17)
-                  .margin({ top: 4 })
-              }
-              .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1)
-            }
-            .width('100%')
-            .padding(13)
-            .margin({ top: 16 })
-            .backgroundColor(COLOR_SOFT_BLUE)
-            .border({ width: 1, color: '#d6e4f2' })
-            .borderRadius(8)
-          } else {
-            this.TypeSelector()
-            this.DifficultySelector()
-          }
         }
         .width('100%')
-        .padding({ left: 18, right: 18, bottom: 16 })
+        .padding({ left: 20, right: 20, bottom: 18 })
       }
-      .width('100%')
-      .layoutWeight(1)
+      .width(286)
+      .height('100%')
       .scrollBar(BarState.Auto)
 
-      Button(this.startButtonText())
+      Column()
+        .width(1)
+        .height('100%')
+        .backgroundColor(COLOR_LINE)
+
+      Scroll() {
+        Column() {
+          this.SetupConfiguration()
+        }
         .width('100%')
-        .height(46)
+        .padding({ left: 22, right: 22, bottom: 18 })
+      }
+      .layoutWeight(1)
+      .height('100%')
+      .scrollBar(BarState.Auto)
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .alignItems(VerticalAlign.Top)
+  }
+
+  @Builder
+  PhoneSetupBody() {
+    Scroll() {
+      Column() {
+        this.SetupSummary()
+        this.AvailabilityStatus()
+        this.SetupConfiguration()
+      }
+      .width('100%')
+      .padding({ left: 18, right: 18, bottom: 18 })
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .scrollBar(BarState.Auto)
+  }
+
+  @Builder
+  SetupConfiguration() {
+    Column() {
+      this.CountSelector()
+
+      if (this.setupMode === 'interview') {
+        this.InterviewSetupNote()
+      } else {
+        this.TypeSelector()
+        this.DifficultySelector()
+      }
+    }
+    .width('100%')
+  }
+
+  @Builder
+  InterviewSetupNote() {
+    Row() {
+      Text('面')
+        .width(40)
+        .height(40)
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_BLUE)
+        .textAlign(TextAlign.Center)
+        .backgroundColor('#ffffff')
+        .borderRadius(8)
+        .margin({ right: 11 })
+      Column() {
+        Text('保持混合题型与难度')
+          .fontSize(14)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+        Text('覆盖简答、单选、多选和判断，保持完整面试节奏')
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(17)
+          .margin({ top: 4 })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+    }
+    .width('100%')
+    .padding(13)
+    .margin({ top: 18 })
+    .backgroundColor(COLOR_SOFT_BLUE)
+    .border({ width: 1, color: '#d6e4f2' })
+    .borderRadius(8)
+  }
+
+  @Builder
+  SetupFooter() {
+    Row() {
+      if (this.isTablet) {
+        Column() {
+          Text(this.setupFooterTitle())
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.canStartConfiguredTraining() ? COLOR_TEXT : COLOR_MUTED)
+          Text(this.setupFooterDetail())
+            .fontSize(11)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 3 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+        .margin({ right: 18 })
+      }
+
+      Button(this.startButtonText())
+        .width(this.isTablet ? 248 : '100%')
+        .height(48)
         .fontSize(15)
         .fontWeight(FontWeight.Bold)
         .fontColor('#ffffff')
         .enabled(this.canStartConfiguredTraining())
         .backgroundColor(this.canStartConfiguredTraining() ? COLOR_GREEN : '#aab3bd')
         .borderRadius(8)
-        .margin({ left: 18, right: 18, bottom: this.isTablet ? 18 : 22 })
         .onClick(() => this.startConfiguredTraining())
     }
-    .width(this.isTablet ? 520 : '100%')
-    .height(this.isTablet ? 560 : '86%')
+    .width('100%')
+    .padding({
+      left: this.isTablet ? 20 : 18,
+      right: this.isTablet ? 20 : 18,
+      top: 14,
+      bottom: this.isTablet ? 16 : 22
+    })
     .backgroundColor(COLOR_SURFACE)
-    .borderRadius(this.isTablet ? 8 : { topLeft: 8, topRight: 8 })
-    .border({ width: 1, color: COLOR_LINE })
-    .shadow({ radius: 20, color: '#10203333', offsetX: 0, offsetY: -6 })
+    .border({ width: { top: 1 }, color: COLOR_LINE })
   }
 
   @Builder
@@ -361,10 +456,10 @@ struct TrainingPage {
         .fontColor(this.setupModeColor())
     }
     .width('100%')
-    .padding(13)
+    .padding(14)
     .margin({ top: 16 })
-    .backgroundColor('#f8fafc')
-    .border({ width: 1, color: COLOR_LINE })
+    .backgroundColor(this.setupModeSoftColor())
+    .border({ width: 1, color: this.setupSummaryBorderColor() })
     .borderRadius(8)
   }
 
@@ -406,8 +501,8 @@ struct TrainingPage {
 
       if (this.availabilityError.length > 0) {
         Button('重试')
-          .height(30)
-          .fontSize(11)
+          .height(38)
+          .fontSize(12)
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_BLUE)
           .backgroundColor(COLOR_SOFT_BLUE)
@@ -511,7 +606,7 @@ struct TrainingPage {
   SetupChoice(label: string, selected: boolean, width: string, action: () => void) {
     Button(label)
       .width(width)
-      .height(38)
+      .height(44)
       .fontSize(13)
       .fontWeight(selected ? FontWeight.Bold : FontWeight.Normal)
       .fontColor(selected ? '#ffffff' : COLOR_TEXT)
@@ -621,9 +716,9 @@ struct TrainingPage {
     .layoutWeight(1)
     .padding({ top: 10, bottom: 10 })
     .margin({ left: 3, right: 3 })
-    .backgroundColor('#ffffff14')
+    .backgroundColor('#14ffffff')
     .borderRadius(8)
-    .border({ width: 1, color: '#ffffff26' })
+    .border({ width: 1, color: '#26ffffff' })
   }
 
   @Builder
@@ -954,6 +1049,12 @@ struct TrainingPage {
     this.refreshAvailability();
   }
 
+  private closeSetup(): void {
+    this.availabilityRequestVersion += 1;
+    this.availabilityLoading = false;
+    this.showSetup = false;
+  }
+
   private selectSetupCount(count: number): void {
     this.setupCount = count;
   }
@@ -1110,6 +1211,41 @@ struct TrainingPage {
       return `开始 ${Math.min(this.setupCount, this.availableCount)} 题训练`;
     }
     return `开始 ${this.setupCount} 题训练`;
+  }
+
+  private setupFooterTitle(): string {
+    if (this.availabilityLoading) {
+      return '正在核对题池';
+    }
+    if (!this.availabilitySupported || this.availabilityError.length > 0) {
+      return '仍可创建本轮题单';
+    }
+    if (this.availableCount === 0) {
+      return '需要调整训练条件';
+    }
+    if (this.availableCount < this.setupCount) {
+      return '将按实际题量开始';
+    }
+    return '训练方案已准备好';
+  }
+
+  private setupFooterDetail(): string {
+    if (this.availabilityLoading) {
+      return '完成后即可开始';
+    }
+    if (!this.availabilitySupported) {
+      return '服务器暂不返回预估数量';
+    }
+    if (this.availabilityError.length > 0) {
+      return '题单会按当前条件生成';
+    }
+    if (this.availableCount === 0) {
+      return '放宽题型或难度后重试';
+    }
+    if (this.availableCount < this.setupCount) {
+      return `本轮生成 ${this.availableCount} 道题`;
+    }
+    return `本轮抽取 ${this.setupCount} 道题`;
   }
 
   private availabilityTitle(): string {
@@ -1278,6 +1414,19 @@ struct TrainingPage {
       return COLOR_SOFT_ORANGE;
     }
     return COLOR_SOFT_GREEN;
+  }
+
+  private setupSummaryBorderColor(): string {
+    if (this.setupMode === 'interview') {
+      return '#d6e4f2';
+    }
+    if (this.setupMode === 'wrongs') {
+      return '#f3c7c4';
+    }
+    if (this.setupMode === 'favorites') {
+      return '#f1c89f';
+    }
+    return '#b9dfd2';
   }
 
   private categoryStats(categoryId: string): CategoryStats | undefined {
