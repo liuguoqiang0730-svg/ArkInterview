@@ -57,20 +57,22 @@ struct PracticePage {
     this.loading = true;
 
     try {
+      let loadedSession: PracticeSession;
       if (mode === 'interview') {
-        this.session = await store.startInterview(count, categoryId);
+        loadedSession = await store.startInterview(count, categoryId);
       } else {
-        this.session = await store.startPractice(mode as PracticeMode, {
+        loadedSession = await store.startPractice(mode as PracticeMode, {
           categoryId,
           type,
           difficulty,
           count
         });
-        this.applyLegacyDifficultyFilter(difficulty);
+        this.applyLegacyDifficultyFilter(loadedSession, difficulty);
       }
-      if ((this.session?.items.length ?? 0) > 0) {
+      this.session = loadedSession;
+      if (loadedSession.items.length > 0) {
         this.resetFilters();
-        this.selectedQuestion = this.filteredQuestions()[0];
+        this.selectedQuestion = loadedSession.items[0];
       } else {
         this.selectedQuestion = undefined;
       }
@@ -110,7 +112,23 @@ struct PracticePage {
           .width('100%')
 
           Row() {
-            this.SummaryPill('题量', `${this.session?.total ?? 0}`)
+            Column() {
+              Text(String(this.session?.items.length ?? 0))
+                .fontSize(15)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(COLOR_TEXT)
+                .maxLines(1)
+              Text('题量')
+                .fontSize(11)
+                .fontColor(COLOR_MUTED)
+                .margin({ top: 2 })
+            }
+            .layoutWeight(1)
+            .padding({ top: 10, bottom: 10 })
+            .margin({ left: 3, right: 3 })
+            .backgroundColor('#f6f8fb')
+            .borderRadius(8)
+            .border({ width: 1, color: COLOR_LINE })
             this.SummaryPill('模式', this.title)
             this.SummaryPill('条件', this.conditionSummary())
           }
@@ -566,19 +584,19 @@ struct PracticePage {
     return undefined;
   }
 
-  applyLegacyDifficultyFilter(difficulty: Difficulty | undefined): void {
-    if (difficulty === undefined || this.session === undefined || this.session.difficulty === difficulty) {
+  applyLegacyDifficultyFilter(session: PracticeSession, difficulty: Difficulty | undefined): void {
+    if (difficulty === undefined || session.difficulty === difficulty) {
       return;
     }
     const filtered: Question[] = [];
-    for (const question of this.session.items) {
+    for (const question of session.items) {
       if (question.difficulty === difficulty) {
         filtered.push(question);
       }
     }
-    this.session.items = filtered;
-    this.session.total = filtered.length;
-    this.session.difficulty = difficulty;
+    session.items = filtered;
+    session.total = filtered.length;
+    session.difficulty = difficulty;
   }
 
   conditionSummary(): string {

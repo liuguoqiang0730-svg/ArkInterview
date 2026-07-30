@@ -53,6 +53,7 @@ struct QuestionPage {
   @State private feedback: SubmitAnswerResponse | undefined = undefined;
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
+  @State private viewportWidthVp: number = 0;
   @State private masteringWrong: boolean = false;
   @State private showCompletionSummary: boolean = false;
 
@@ -91,14 +92,14 @@ struct QuestionPage {
         Column() {
         Row() {
           Button('<')
-            .width(38)
-            .height(34)
+            .width(40)
+            .height(40)
             .fontColor(COLOR_NAVY)
             .backgroundColor('#eef2f6')
             .borderRadius(8)
             .onClick(() => AppRouter.back(this.getUIContext()))
           Column() {
-            Text('训练答题')
+            Text(this.pageTitleText())
               .fontSize(22)
               .fontWeight(FontWeight.Bold)
               .fontColor(COLOR_NAVY)
@@ -108,10 +109,10 @@ struct QuestionPage {
               .margin({ top: 2 })
           }
             .layoutWeight(1)
-            .alignItems(HorizontalAlign.Center)
+            .alignItems(HorizontalAlign.Start)
           this.ProgressButton()
           Button(this.favoriteButtonText())
-            .height(34)
+            .height(40)
             .fontSize(13)
             .fontColor(this.question?.isFavorite ? COLOR_ORANGE : COLOR_GREEN)
             .backgroundColor(this.question?.isFavorite ? COLOR_SOFT_ORANGE : COLOR_SOFT_GREEN)
@@ -189,7 +190,7 @@ struct QuestionPage {
         .fontColor(this.showProgressPanel ? '#e9f0f7' : COLOR_MUTED)
         .margin({ left: 6 })
     }
-    .height(34)
+    .height(40)
     .padding({ left: 12, right: 12 })
     .margin({ right: 8 })
     .justifyContent(FlexAlign.Center)
@@ -207,7 +208,7 @@ struct QuestionPage {
       }
       .width('100%')
       .padding(16)
-      .constraintSize({ maxWidth: this.pageMaxWidth() })
+      .constraintSize({ maxWidth: this.completionMaxWidth() })
       .alignSelf(ItemAlign.Center)
     }
     .width('100%')
@@ -218,22 +219,7 @@ struct QuestionPage {
   CompletionPanel() {
     Column() {
       this.CompletionHero()
-
-      Row() {
-        this.SummaryMetric('题量', String(this.questionIds.length), COLOR_SOFT_BLUE, COLOR_BLUE)
-        this.SummaryMetric('已答', String(this.answeredCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
-        this.SummaryMetric('正确率', this.correctRateText(), COLOR_SOFT_ORANGE, COLOR_ORANGE)
-      }
-      .width('100%')
-      .margin({ top: 18 })
-
-      Row() {
-        this.SummaryMetric('正确', String(this.correctCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
-        this.SummaryMetric('错误', String(this.wrongCount()), COLOR_SOFT_RED, COLOR_RED)
-        this.SummaryMetric('未答', String(this.unansweredCount()), '#f8fafc', COLOR_MUTED)
-      }
-      .width('100%')
-      .margin({ top: 10 })
+      this.CompletionMetrics()
 
       Column() {
         Text(this.completionAdviceTitle())
@@ -262,6 +248,8 @@ struct QuestionPage {
         .width('100%')
         .margin({ top: 20 })
 
+      this.CompletionLegend()
+
       Grid() {
         ForEach(this.answerProgress, (item: AnswerProgressItem) => {
           GridItem() {
@@ -271,7 +259,7 @@ struct QuestionPage {
               .fontColor(this.progressTextColor(item))
               .textAlign(TextAlign.Center)
               .width('100%')
-              .height(36)
+              .height(40)
               .backgroundColor(this.progressBgColor(item))
               .borderRadius(8)
               .border({ width: 1, color: this.progressBorderColor(item) })
@@ -285,49 +273,143 @@ struct QuestionPage {
       .width('100%')
       .margin({ top: 12 })
 
-      Row() {
-        Button('复盘错题')
-          .layoutWeight(1)
-          .height(44)
-          .fontSize(15)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.wrongCount() > 0 ? '#ffffff' : COLOR_MUTED)
-          .enabled(this.wrongCount() > 0)
-          .backgroundColor(this.wrongCount() > 0 ? COLOR_RED : '#eef2f6')
-          .borderRadius(8)
-          .margin({ right: 8 })
-          .onClick(() => this.goFirstByStatus(ANSWER_STATUS_WRONG))
-        Button('查看未答')
-          .layoutWeight(1)
-          .height(44)
-          .fontSize(15)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.unansweredCount() > 0 ? '#ffffff' : COLOR_MUTED)
-          .enabled(this.unansweredCount() > 0)
-          .backgroundColor(this.unansweredCount() > 0 ? COLOR_BLUE : '#eef2f6')
-          .borderRadius(8)
-          .margin({ left: 8 })
-          .onClick(() => this.goFirstByStatus(ANSWER_STATUS_UNANSWERED))
-      }
-      .width('100%')
-      .margin({ top: 22 })
-
-      Button('返回题单')
-        .width('100%')
-        .height(44)
-        .fontSize(15)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(COLOR_GREEN)
-        .backgroundColor(COLOR_SOFT_GREEN)
-        .borderRadius(8)
-        .margin({ top: 12 })
-        .onClick(() => AppRouter.back(this.getUIContext()))
+      this.CompletionActions()
     }
     .width('100%')
     .padding(18)
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  CompletionMetrics() {
+    if (this.isTablet) {
+      Row() {
+        this.SummaryMetric('题量', String(this.questionIds.length), COLOR_SOFT_BLUE, COLOR_BLUE)
+        this.SummaryMetric('已答', String(this.answeredCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+        this.SummaryMetric('正确', String(this.correctCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+        this.SummaryMetric('错误', String(this.wrongCount()), COLOR_SOFT_RED, COLOR_RED)
+        this.SummaryMetric('未答', String(this.unansweredCount()), '#f8fafc', COLOR_MUTED)
+        this.SummaryMetric('正确率', this.correctRateText(), COLOR_SOFT_ORANGE, COLOR_ORANGE)
+      }
+      .width('100%')
+      .margin({ top: 18 })
+    } else {
+      Column() {
+        Row() {
+          this.SummaryMetric('题量', String(this.questionIds.length), COLOR_SOFT_BLUE, COLOR_BLUE)
+          this.SummaryMetric('已答', String(this.answeredCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+          this.SummaryMetric('正确率', this.correctRateText(), COLOR_SOFT_ORANGE, COLOR_ORANGE)
+        }
+        .width('100%')
+
+        Row() {
+          this.SummaryMetric('正确', String(this.correctCount()), COLOR_SOFT_GREEN, COLOR_GREEN)
+          this.SummaryMetric('错误', String(this.wrongCount()), COLOR_SOFT_RED, COLOR_RED)
+          this.SummaryMetric('未答', String(this.unansweredCount()), '#f8fafc', COLOR_MUTED)
+        }
+        .width('100%')
+        .margin({ top: 10 })
+      }
+      .width('100%')
+      .margin({ top: 18 })
+    }
+  }
+
+  @Builder
+  CompletionLegend() {
+    Row() {
+      this.ProgressLegend('正确', COLOR_SOFT_GREEN, COLOR_GREEN)
+      this.ProgressLegend('错误', COLOR_SOFT_RED, COLOR_RED)
+      this.ProgressLegend('未答', '#f8fafc', COLOR_LINE)
+      this.ProgressLegend('自评', COLOR_SOFT_BLUE, COLOR_BLUE)
+    }
+    .width('100%')
+    .padding({ top: 10, bottom: 2 })
+  }
+
+  @Builder
+  CompletionActions() {
+    if (this.isTablet) {
+      Row() {
+        Button('返回题单')
+          .layoutWeight(1)
+          .height(46)
+          .fontSize(14)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_GREEN)
+          .backgroundColor(COLOR_SOFT_GREEN)
+          .borderRadius(8)
+          .margin({ right: 6 })
+          .onClick(() => AppRouter.back(this.getUIContext()))
+        Button('复盘错题')
+          .layoutWeight(1)
+          .height(46)
+          .fontSize(14)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.wrongCount() > 0 ? '#ffffff' : COLOR_MUTED)
+          .enabled(this.wrongCount() > 0)
+          .backgroundColor(this.wrongCount() > 0 ? COLOR_RED : '#eef2f6')
+          .borderRadius(8)
+          .margin({ left: 6, right: 6 })
+          .onClick(() => this.goFirstByStatus(ANSWER_STATUS_WRONG))
+        Button('查看未答')
+          .layoutWeight(1)
+          .height(46)
+          .fontSize(14)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.unansweredCount() > 0 ? '#ffffff' : COLOR_MUTED)
+          .enabled(this.unansweredCount() > 0)
+          .backgroundColor(this.unansweredCount() > 0 ? COLOR_BLUE : '#eef2f6')
+          .borderRadius(8)
+          .margin({ left: 6 })
+          .onClick(() => this.goFirstByStatus(ANSWER_STATUS_UNANSWERED))
+      }
+      .width('100%')
+      .margin({ top: 22 })
+    } else {
+      Column() {
+        Row() {
+          Button('复盘错题')
+            .layoutWeight(1)
+            .height(46)
+            .fontSize(14)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.wrongCount() > 0 ? '#ffffff' : COLOR_MUTED)
+            .enabled(this.wrongCount() > 0)
+            .backgroundColor(this.wrongCount() > 0 ? COLOR_RED : '#eef2f6')
+            .borderRadius(8)
+            .margin({ right: 6 })
+            .onClick(() => this.goFirstByStatus(ANSWER_STATUS_WRONG))
+          Button('查看未答')
+            .layoutWeight(1)
+            .height(46)
+            .fontSize(14)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.unansweredCount() > 0 ? '#ffffff' : COLOR_MUTED)
+            .enabled(this.unansweredCount() > 0)
+            .backgroundColor(this.unansweredCount() > 0 ? COLOR_BLUE : '#eef2f6')
+            .borderRadius(8)
+            .margin({ left: 6 })
+            .onClick(() => this.goFirstByStatus(ANSWER_STATUS_UNANSWERED))
+        }
+        .width('100%')
+
+        Button('返回题单')
+          .width('100%')
+          .height(46)
+          .fontSize(14)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_GREEN)
+          .backgroundColor(COLOR_SOFT_GREEN)
+          .borderRadius(8)
+          .margin({ top: 12 })
+          .onClick(() => AppRouter.back(this.getUIContext()))
+      }
+      .width('100%')
+      .margin({ top: 22 })
+    }
   }
 
   @Builder
@@ -434,8 +516,9 @@ struct QuestionPage {
     }
     .width('100%')
     .layoutWeight(1)
-    .constraintSize({ maxWidth: this.pageMaxWidth() })
+    .constraintSize({ maxWidth: this.answerContentMaxWidth() })
     .alignSelf(ItemAlign.Center)
+    .scrollBar(BarState.Auto)
   }
 
   @Builder
@@ -448,18 +531,11 @@ struct QuestionPage {
         .onClick(() => this.showProgressPanel = false)
 
       Column() {
-        Column() {
-          this.ProgressPanel()
-        }
-        .width('100%')
-        .constraintSize({ maxWidth: this.pageMaxWidth() })
-        .alignItems(HorizontalAlign.End)
-        .padding({ right: 16 })
+        this.ProgressPanel()
       }
-      .width('100%')
-      .height('100%')
-      .padding({ top: this.isTablet ? 90 : 66 })
-      .alignItems(HorizontalAlign.Center)
+      .width(this.progressPanelWidth())
+      .height(this.progressPanelHeight())
+      .position({ x: this.progressPanelX(), y: this.isTablet ? 90 : 66 })
     }
     .width('100%')
     .height('100%')
@@ -475,8 +551,8 @@ struct QuestionPage {
           .fontColor(COLOR_NAVY)
           .layoutWeight(1)
         Button('×')
-          .width(30)
-          .height(30)
+          .width(40)
+          .height(40)
           .fontSize(18)
           .fontColor(COLOR_MUTED)
           .backgroundColor('#eef2f6')
@@ -511,7 +587,7 @@ struct QuestionPage {
               .fontColor(this.progressTextColor(item))
               .textAlign(TextAlign.Center)
               .width('100%')
-              .height(30)
+              .height(40)
               .backgroundColor(this.progressBgColor(item))
               .borderRadius(8)
               .border({ width: 1, color: this.currentIndex === item.order ? COLOR_NAVY : this.progressBorderColor(item) })
@@ -520,11 +596,12 @@ struct QuestionPage {
         }, (item: AnswerProgressItem) => item.questionId)
       }
       .columnsTemplate(this.isTablet ? '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr' : '1fr 1fr 1fr 1fr 1fr')
-      .columnsGap(7)
-      .rowsGap(7)
+      .columnsGap(8)
+      .rowsGap(8)
       .width('100%')
     }
-    .width(this.isTablet ? 392 : 312)
+    .width(this.progressPanelWidth())
+    .height(this.progressPanelHeight())
     .padding(14)
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
@@ -536,7 +613,7 @@ struct QuestionPage {
   QuestionNavigator() {
     Row() {
       Button('上一题')
-        .height(38)
+        .height(44)
         .fontSize(13)
         .fontColor(this.hasPrevious() ? COLOR_NAVY : COLOR_MUTED)
         .enabled(this.hasPrevious())
@@ -552,7 +629,7 @@ struct QuestionPage {
         .layoutWeight(1)
 
       Button('下一题')
-        .height(38)
+        .height(44)
         .fontSize(13)
         .fontColor(this.hasNext() ? COLOR_NAVY : COLOR_MUTED)
         .enabled(this.hasNext())
@@ -796,22 +873,7 @@ struct QuestionPage {
   @Builder
   FeedbackPanel() {
     Column() {
-      if (this.feedback?.isCorrect === true) {
-        Text('回答正确')
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_GREEN)
-      } else if (this.feedback?.isCorrect === false) {
-        Text('回答错误')
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_RED)
-      } else {
-        Text(this.feedbackTitleText())
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_BLUE)
-      }
+      this.FeedbackHeader()
 
       if (this.feedback?.correctOptionIds) {
         this.ResultLine('正确选项', this.feedback.correctOptionIds.join(', '))
@@ -845,11 +907,43 @@ struct QuestionPage {
       this.FeedbackActions()
     }
     .width('100%')
-    .padding(16)
+    .alignItems(HorizontalAlign.Start)
+    .padding(this.isTablet ? 20 : 16)
     .margin({ top: 16, bottom: 24 })
-    .backgroundColor(this.feedbackBgColor())
+    .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: this.feedbackColor() })
+  }
+
+  @Builder
+  FeedbackHeader() {
+    Row() {
+      Text(this.feedbackStateMark())
+        .width(40)
+        .height(40)
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#ffffff')
+        .textAlign(TextAlign.Center)
+        .backgroundColor(this.feedbackColor())
+        .borderRadius(8)
+        .margin({ right: 12 })
+      Column() {
+        Text(this.feedbackTitleText())
+          .fontSize(17)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.feedbackColor())
+        Text(this.feedbackSubtitleText())
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 4 })
+      }
+      .layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+    }
+    .width('100%')
+    .padding({ bottom: 12 })
+    .border({ width: { bottom: 1 }, color: COLOR_LINE })
   }
 
   @Builder
@@ -915,7 +1009,9 @@ struct QuestionPage {
         .width('100%')
     }
     .width('100%')
+    .padding({ top: 12 })
     .margin({ top: 12 })
+    .border({ width: { top: 1 }, color: COLOR_LINE })
   }
 
   typeLabel(type: string): string {
@@ -1070,16 +1166,6 @@ struct QuestionPage {
     return COLOR_BLUE;
   }
 
-  feedbackBgColor(): string {
-    if (this.feedback?.isCorrect === false) {
-      return COLOR_SOFT_RED;
-    }
-    if (this.feedback?.isCorrect === true) {
-      return COLOR_SOFT_GREEN;
-    }
-    return COLOR_SOFT_BLUE;
-  }
-
   canMarkMastered(): boolean {
     if (!this.question || !this.question.wrong || !this.feedback) {
       return false;
@@ -1089,6 +1175,51 @@ struct QuestionPage {
 
   pageMaxWidth(): number {
     return this.isTablet ? 1120 : 520;
+  }
+
+  answerContentMaxWidth(): number {
+    return this.isTablet ? 860 : 520;
+  }
+
+  completionMaxWidth(): number {
+    return this.isTablet ? 960 : 520;
+  }
+
+  progressPanelHeight(): number {
+    const columns = this.isTablet ? 10 : 5;
+    const questionCount = this.questionIds.length > 0 ? this.questionIds.length : 1;
+    const rows = Math.ceil(questionCount / columns);
+    return 190 + rows * 48;
+  }
+
+  progressPanelWidth(): number {
+    return this.isTablet ? 392 : 312;
+  }
+
+  progressPanelX(): number {
+    const pageWidth = Math.min(this.viewportWidthVp, this.pageMaxWidth());
+    const pageStart = Math.max(0, (this.viewportWidthVp - pageWidth) / 2);
+    return Math.max(0, pageStart + pageWidth - this.progressPanelWidth() - 16);
+  }
+
+  feedbackStateMark(): string {
+    if (this.feedback?.isCorrect === true) {
+      return '对';
+    }
+    if (this.feedback?.isCorrect === false) {
+      return '错';
+    }
+    return '评';
+  }
+
+  feedbackSubtitleText(): string {
+    if (this.feedback?.isCorrect === true) {
+      return '你的答案与正确答案一致';
+    }
+    if (this.feedback?.isCorrect === false) {
+      return '查看正确答案和解析后再复盘';
+    }
+    return '请对照参考答案和评分点完成自评';
   }
 
   parseQuestionIds(value: string | undefined, fallback: string): string[] {
@@ -1167,7 +1298,14 @@ struct QuestionPage {
     return `已答 ${this.answeredCount()}/${this.questionIds.length || 1}`;
   }
 
+  pageTitleText(): string {
+    return this.showCompletionSummary ? '本轮结果' : '训练答题';
+  }
+
   headerProgressText(): string {
+    if (this.showCompletionSummary) {
+      return `本轮已完成 · 共 ${this.questionIds.length || 1} 题`;
+    }
     return `第 ${this.currentIndex + 1}/${this.questionIds.length || 1} 题 · 已答 ${this.answeredCount()}`;
   }
 
@@ -1207,6 +1345,12 @@ struct QuestionPage {
   }
 
   feedbackTitleText(): string {
+    if (this.feedback?.isCorrect === true) {
+      return '回答正确';
+    }
+    if (this.feedback?.isCorrect === false) {
+      return '回答错误';
+    }
     return this.question?.type === 'short' ? '参考答案与评分点' : '参考答案';
   }
 
@@ -1412,9 +1556,11 @@ struct QuestionPage {
     try {
       const currentDisplay = display.getDefaultDisplaySync();
       const density = currentDisplay.densityPixels > 0 ? currentDisplay.densityPixels : 1;
+      this.viewportWidthVp = currentDisplay.width / density;
       const shortSideVp = Math.min(currentDisplay.width, currentDisplay.height) / density;
       this.isTablet = shortSideVp >= TABLET_MIN_VP;
     } catch (error) {
+      this.viewportWidthVp = 0;
       this.isTablet = false;
     }
   }
