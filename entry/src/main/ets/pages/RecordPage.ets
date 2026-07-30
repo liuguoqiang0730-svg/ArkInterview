@@ -157,7 +157,7 @@ struct RecordPage {
       .layoutWeight(1)
       .width('100%')
 
-      BottomNavBar({ active: 'records', isTablet: this.isTablet })
+      BottomNavBar({ active: 'profile', isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')
@@ -1736,8 +1736,7 @@ struct RecordPage {
     AppRouter.push(this.getUIContext(), 'pages/QuestionPage', {
       questionId: item.questionId,
       questionIds: item.questionId,
-      questionIndex: '0',
-      navActive: 'records'
+      questionIndex: '0'
     });
   }
 

@@ -54,7 +54,6 @@ struct QuestionPage {
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
   @State private masteringWrong: boolean = false;
-  @State private navActive: string = 'home';
   @State private showCompletionSummary: boolean = false;
 
   aboutToAppear(): void {
@@ -66,7 +65,6 @@ struct QuestionPage {
       AppRouter.back(this.getUIContext());
       return;
     }
-    this.navActive = params.navActive || 'home';
     const ids = this.parseQuestionIds(params.questionIds, questionId);
     this.questionIds = ids;
     this.answerProgress = this.createProgress(ids);
@@ -162,7 +160,7 @@ struct QuestionPage {
       .layoutWeight(1)
       .width('100%')
 
-      BottomNavBar({ active: this.navActive, isTablet: this.isTablet })
+      BottomNavBar({ active: 'practice', isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')

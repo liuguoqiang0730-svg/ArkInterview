@@ -286,7 +286,7 @@ struct MyPage {
                 this.StatsPanel()
               }
 
-              this.LeaderboardEntryPanel()
+              this.LearningCenterPanel()
               this.DataStatusPanel()
             }
             .width('100%')
@@ -659,47 +659,195 @@ struct MyPage {
   }
 
   @Builder
-  LeaderboardEntryPanel() {
+  LearningCenterPanel() {
+    Column() {
+      Row() {
+        Column() {
+          Text('学习中心')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+          Text('练习历史、复习资产与能力排名')
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        Text('4 个入口')
+          .fontSize(11)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_GREEN)
+          .backgroundColor(COLOR_SOFT_GREEN)
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .borderRadius(8)
+      }
+      .width('100%')
+      .padding({ left: 18, right: 18, top: 17, bottom: 12 })
+
+      Divider()
+        .color(COLOR_LINE)
+
+      if (this.isTablet) {
+        Row() {
+          this.LearningEntry(
+            '记',
+            '练习记录',
+            this.recordEntryDetail(),
+            String(this.stats?.totalAnswers ?? 0),
+            COLOR_BLUE,
+            COLOR_SOFT_BLUE,
+            'records'
+          )
+          this.LearningEntry(
+            '错',
+            '错题本',
+            this.wrongEntryDetail(),
+            String(this.stats?.wrongCount ?? 0),
+            COLOR_RED,
+            COLOR_SOFT_RED,
+            'wrongs'
+          )
+        }
+        .width('100%')
+        .justifyContent(FlexAlign.SpaceBetween)
+
+        Divider()
+          .color(COLOR_LINE)
+          .margin({ left: 18, right: 18 })
+
+        Row() {
+          this.LearningEntry(
+            '藏',
+            '收藏题目',
+            this.favoriteEntryDetail(),
+            String(this.stats?.favoriteCount ?? 0),
+            COLOR_ORANGE,
+            COLOR_SOFT_ORANGE,
+            'favorites'
+          )
+          this.LearningEntry(
+            '榜',
+            '开发者排行榜',
+            this.leaderboardEntryDetail(),
+            '查看',
+            COLOR_GREEN,
+            COLOR_SOFT_GREEN,
+            'leaderboard'
+          )
+        }
+        .width('100%')
+        .justifyContent(FlexAlign.SpaceBetween)
+      } else {
+        this.LearningEntry(
+          '记',
+          '练习记录',
+          this.recordEntryDetail(),
+          String(this.stats?.totalAnswers ?? 0),
+          COLOR_BLUE,
+          COLOR_SOFT_BLUE,
+          'records'
+        )
+        this.LearningDivider()
+        this.LearningEntry(
+          '错',
+          '错题本',
+          this.wrongEntryDetail(),
+          String(this.stats?.wrongCount ?? 0),
+          COLOR_RED,
+          COLOR_SOFT_RED,
+          'wrongs'
+        )
+        this.LearningDivider()
+        this.LearningEntry(
+          '藏',
+          '收藏题目',
+          this.favoriteEntryDetail(),
+          String(this.stats?.favoriteCount ?? 0),
+          COLOR_ORANGE,
+          COLOR_SOFT_ORANGE,
+          'favorites'
+        )
+        this.LearningDivider()
+        this.LearningEntry(
+          '榜',
+          '开发者排行榜',
+          this.leaderboardEntryDetail(),
+          '查看',
+          COLOR_GREEN,
+          COLOR_SOFT_GREEN,
+          'leaderboard'
+        )
+      }
+    }
+    .width('100%')
+    .margin({ top: 16 })
+    .backgroundColor(COLOR_SURFACE)
+    .border({ width: 1, color: COLOR_LINE })
+    .borderRadius(8)
+    .shadow({ radius: 12, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
+  }
+
+  @Builder
+  LearningEntry(
+    mark: string,
+    title: string,
+    detail: string,
+    value: string,
+    color: string,
+    softColor: string,
+    target: string
+  ) {
     Row() {
-      Text('榜')
+      Text(mark)
         .width(42)
         .height(42)
-        .fontSize(16)
+        .fontSize(15)
         .fontWeight(FontWeight.Bold)
-        .fontColor(COLOR_ORANGE)
+        .fontColor(color)
         .textAlign(TextAlign.Center)
-        .backgroundColor(COLOR_SOFT_ORANGE)
+        .backgroundColor(softColor)
         .borderRadius(8)
         .margin({ right: 12 })
 
       Column() {
-        Text('开发者排行榜')
-          .fontSize(16)
+        Text(title)
+          .fontSize(15)
           .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_NAVY)
-        Text('查看本周、总榜和模块排名')
-          .fontSize(12)
+          .fontColor(COLOR_TEXT)
+        Text(detail)
+          .fontSize(11)
           .fontColor(COLOR_MUTED)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({ top: 4 })
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
-      Button('查看')
-        .height(36)
+      Text(value)
         .fontSize(13)
         .fontWeight(FontWeight.Bold)
-        .fontColor(COLOR_GREEN)
-        .backgroundColor(COLOR_SOFT_GREEN)
-        .borderRadius(8)
-        .onClick(() => AppRouter.push(this.getUIContext(), 'pages/LeaderboardPage'))
+        .fontColor(color)
+        .margin({ left: 8 })
+
+      Text('>')
+        .fontSize(17)
+        .fontColor(COLOR_MUTED)
+        .margin({ left: 8 })
     }
-    .width('100%')
-    .padding(16)
-    .margin({ top: 16 })
-    .backgroundColor(COLOR_SURFACE)
-    .border({ width: 1, color: COLOR_LINE })
-    .borderRadius(8)
+    .width(this.isTablet ? '49.5%' : '100%')
+    .height(74)
+    .padding({ left: 18, right: 16 })
+    .onClick(() => this.openLearningEntry(target))
+  }
+
+  @Builder
+  LearningDivider() {
+    Divider()
+      .color(COLOR_LINE)
+      .margin({ left: 72, right: 18 })
   }
 
   @Builder
@@ -845,6 +993,50 @@ struct MyPage {
   private lastPracticeLabel(): string {
     const value = this.stats?.lastPracticedAt;
     return value && value.length >= 10 ? value.substring(0, 10) : '暂无记录';
+  }
+
+  private recordEntryDetail(): string {
+    return `累计 ${this.stats?.answeredQuestionCount ?? 0} 道题，最近 ${this.lastPracticeLabel()}`;
+  }
+
+  private wrongEntryDetail(): string {
+    const mastered = this.stats?.masteredWrongCount ?? 0;
+    return mastered > 0 ? `待复盘题目，另有 ${mastered} 道已掌握` : '集中复盘答错且尚未掌握的题目';
+  }
+
+  private favoriteEntryDetail(): string {
+    return (this.stats?.favoriteCount ?? 0) > 0 ? '集中复习已收藏的重点题目' : '收藏重点题后可在这里集中复习';
+  }
+
+  private leaderboardEntryDetail(): string {
+    if (!this.authenticated) {
+      return '登录后可参与周榜、总榜和模块榜';
+    }
+    return this.currentUser?.leaderboardOptIn === true ? '已参与成绩排名，查看当前名次' : '可选择参与周榜、总榜和模块榜';
+  }
+
+  private openLearningEntry(target: string): void {
+    if (target === 'records') {
+      AppRouter.push(this.getUIContext(), 'pages/RecordPage');
+      return;
+    }
+    if (target === 'wrongs') {
+      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
+        mode: 'wrongs',
+        title: '错题本'
+      });
+      return;
+    }
+    if (target === 'favorites') {
+      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
+        mode: 'favorites',
+        title: '收藏题目'
+      });
+      return;
+    }
+    if (target === 'leaderboard') {
+      AppRouter.push(this.getUIContext(), 'pages/LeaderboardPage');
+    }
   }
 
   private openAgreement(): void {

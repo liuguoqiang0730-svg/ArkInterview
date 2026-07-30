@@ -105,7 +105,7 @@ struct ReviewListPage {
       .layoutWeight(1)
       .width('100%')
 
-      BottomNavBar({ active: this.navActive(), isTablet: this.isTablet })
+      BottomNavBar({ active: 'profile', isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')
@@ -635,10 +635,6 @@ struct ReviewListPage {
     return count;
   }
 
-  navActive(): string {
-    return this.mode === 'favorites' ? 'favorites' : 'wrongs';
-  }
-
   emptyTitle(): string {
     if (this.questions.length === 0) {
       return this.mode === 'favorites' ? '还没有收藏题目' : '还没有错题';
@@ -1074,8 +1070,7 @@ struct ReviewListPage {
     AppRouter.push(this.getUIContext(), 'pages/QuestionPage', {
       questionId: items[index].id,
       questionIds: ids.join(','),
-      questionIndex: String(index),
-      navActive: this.navActive()
+      questionIndex: String(index)
     });
   }
 

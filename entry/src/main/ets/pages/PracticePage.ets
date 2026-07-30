@@ -170,7 +170,7 @@ struct PracticePage {
       .layoutWeight(1)
       .width('100%')
 
-      BottomNavBar({ active: this.navActive(), isTablet: this.isTablet })
+      BottomNavBar({ active: 'practice', isTablet: this.isTablet })
     }
     .width('100%')
     .height('100%')
@@ -595,13 +595,6 @@ struct PracticePage {
     this.wrongScope = this.mode === 'wrongs' ? 'active' : 'all';
   }
 
-  navActive(): string {
-    if (this.mode === 'wrongs' || this.mode === 'favorites') {
-      return this.mode;
-    }
-    return 'home';
-  }
-
   filteredQuestions(): Question[] {
     const result: Question[] = [];
     for (const question of this.session?.items ?? []) {
@@ -841,8 +834,7 @@ struct PracticePage {
     AppRouter.push(this.getUIContext(), 'pages/QuestionPage', {
       questionId: question.id,
       questionIds: this.sessionQuestionIds(),
-      questionIndex: String(this.questionIndex(question)),
-      navActive: this.navActive()
+      questionIndex: String(this.questionIndex(question))
     });
   }
 

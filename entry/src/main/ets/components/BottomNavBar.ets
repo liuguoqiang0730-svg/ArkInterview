@@ -14,18 +14,22 @@ export struct BottomNavBar {
   @Prop isTablet: boolean = false;
 
   build() {
-    Row() {
-      this.NavItem('首', '首页', '训练', 'home')
-      this.NavItem('错', '错题', '复盘', 'wrongs')
-      this.NavItem('藏', '收藏', '重点', 'favorites')
-      this.NavItem('记', '记录', '进度', 'records')
-      this.NavItem('我', '我的', '账户', 'profile')
+    Column() {
+      Row() {
+        this.NavItem('首', '首页', '总览', 'home')
+        this.NavItem('练', '训练', '题单', 'practice')
+        this.NavItem('我', '我的', '档案', 'profile')
+      }
+      .width('100%')
+      .height('100%')
+      .constraintSize({ maxWidth: this.isTablet ? 760 : 520 })
+      .padding({ left: this.isTablet ? 20 : 14, right: this.isTablet ? 20 : 14, top: 8, bottom: 8 })
     }
     .width('100%')
     .height(this.isTablet ? 72 : 64)
     .constraintSize({ maxWidth: this.isTablet ? 1220 : 520 })
     .alignSelf(ItemAlign.Center)
-    .padding({ left: this.isTablet ? 28 : 18, right: this.isTablet ? 28 : 18, top: 8, bottom: 8 })
+    .alignItems(HorizontalAlign.Center)
     .backgroundColor(COLOR_SURFACE)
     .border({ width: { top: 1 }, color: COLOR_LINE })
     .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: -4 })
@@ -83,26 +87,16 @@ export struct BottomNavBar {
       AppRouter.push(this.getUIContext(), 'pages/HomePage');
       return;
     }
-    if (target === 'records') {
-      AppRouter.push(this.getUIContext(), 'pages/RecordPage');
+    if (target === 'practice') {
+      AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
+        mode: 'random',
+        categoryId: '',
+        title: '随机练习'
+      });
       return;
     }
     if (target === 'profile') {
       AppRouter.push(this.getUIContext(), 'pages/MyPage');
-      return;
-    }
-    if (target === 'wrongs') {
-      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
-        mode: 'wrongs',
-        title: '错题本'
-      });
-      return;
-    }
-    if (target === 'favorites') {
-      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
-        mode: 'favorites',
-        title: '收藏题目'
-      });
     }
   }
 }

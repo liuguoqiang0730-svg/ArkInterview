@@ -8,7 +8,6 @@ export interface AppRouteParams {
   questionId?: string;
   questionIds?: string;
   questionIndex?: string;
-  navActive?: string;
 }
 
 export class AppRouter {
