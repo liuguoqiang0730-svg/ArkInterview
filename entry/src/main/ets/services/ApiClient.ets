@@ -13,6 +13,7 @@ import {
 } from '../models/AccountModels';
 import {
   Category,
+  Difficulty,
   ItemResult,
   ListResult,
   PageResult,
@@ -136,6 +137,7 @@ export class ApiClient {
     this.appendQueryParam(pairs, 'mode', mode);
     this.appendQueryParam(pairs, 'categoryId', options?.categoryId);
     this.appendQueryParam(pairs, 'type', options?.type);
+    this.appendQueryParam(pairs, 'difficulty', options?.difficulty);
     this.appendQueryParam(pairs, 'count', options?.count ? String(options.count) : undefined);
     const query = this.queryString(pairs);
     return this.request<PracticeSession>(`/practice/session${query}`);
@@ -366,6 +368,7 @@ export class ApiClient {
 export interface PracticeSessionOptions {
   categoryId?: string;
   type?: QuestionType;
+  difficulty?: Difficulty;
   count?: number;
 }
 

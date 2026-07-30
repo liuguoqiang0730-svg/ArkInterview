@@ -70,6 +70,7 @@ export interface PracticeSession {
   mode: PracticeMode;
   categoryId?: string;
   type?: QuestionType;
+  difficulty?: Difficulty;
   total: number;
   items: Question[];
 }

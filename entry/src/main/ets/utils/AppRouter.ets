@@ -5,6 +5,9 @@ export interface AppRouteParams {
   mode?: string;
   title?: string;
   categoryId?: string;
+  count?: string;
+  type?: string;
+  difficulty?: string;
   questionId?: string;
   questionIds?: string;
   questionIndex?: string;

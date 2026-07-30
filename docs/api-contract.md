@@ -140,7 +140,9 @@ Query 参数：
 Query 参数：
 
 - `categoryId`：可选，限定分类。
-- `count`：可选，默认 `8`，最大 `30`。
+- `count`：可选，默认 `8`，范围 `1` 到 `30`。
+
+模拟面试固定使用混合题型与混合难度，不接受 `type` 和 `difficulty`。不存在的 `categoryId`、非整数题量或越界题量返回 `400`。
 
 返回示例：
 
@@ -148,6 +150,7 @@ Query 参数：
 {
   "sessionId": "interview-1782960000000",
   "mode": "basic",
+  "categoryId": null,
   "total": 4,
   "items": []
 }
@@ -164,15 +167,18 @@ Query 参数：
 - `mode`：练习模式，支持 `category`、`random`、`wrongs`、`favorites`，默认 `random`。
 - `categoryId`：可选。`mode=category` 时必填；`mode=random` 时可用于限制分类。
 - `type`：可选，`single`、`multiple`、`boolean`、`short`。
-- `count`：可选，默认 `10`，最大 `50`。
+- `difficulty`：可选，`easy`、`medium`、`hard`。
+- `count`：可选，默认 `10`，范围 `1` 到 `50`。
+
+题型和难度筛选适用于随机、分类、错题和收藏练习。不存在的 `categoryId`、不支持的枚举值、非整数题量或越界题量返回 `400`，服务端不会静默修正非法参数。
 
 示例：
 
 ```http
-GET /api/practice/session?mode=category&categoryId=arkui&count=20
-GET /api/practice/session?mode=random&count=10
-GET /api/practice/session?mode=wrongs&count=20
-GET /api/practice/session?mode=favorites&count=20
+GET /api/practice/session?mode=category&categoryId=arkui&type=short&difficulty=hard&count=20
+GET /api/practice/session?mode=random&type=single&difficulty=easy&count=10
+GET /api/practice/session?mode=wrongs&difficulty=medium&count=20
+GET /api/practice/session?mode=favorites&type=multiple&count=20
 ```
 
 ## 答题

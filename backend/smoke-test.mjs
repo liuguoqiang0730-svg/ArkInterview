@@ -346,6 +346,30 @@ async function runChecks() {
   const categoryPractice = await getJson('/api/practice/session?mode=category&categoryId=arkui&count=2');
   assert(categoryPractice.items.every((item) => item.categoryId === 'arkui'), 'category practice should filter category');
 
+  const configuredPractice = await getJson(
+    '/api/practice/session?mode=random&type=single&difficulty=easy&count=3'
+  );
+  assert(configuredPractice.total === 3, 'configured practice should honor requested count');
+  assert(configuredPractice.type === 'single', 'configured practice should echo question type');
+  assert(configuredPractice.difficulty === 'easy', 'configured practice should echo difficulty');
+  assert(
+    configuredPractice.items.every((item) => item.type === 'single' && item.difficulty === 'easy'),
+    'configured practice should filter type and difficulty'
+  );
+
+  const invalidPracticeCount = await getError('/api/practice/session?mode=random&count=0');
+  assert(invalidPracticeCount.status === 400, 'practice should reject count below range');
+  const invalidPracticeDecimalCount = await getError('/api/practice/session?mode=random&count=3.5');
+  assert(invalidPracticeDecimalCount.status === 400, 'practice should reject non-integer count');
+  const invalidPracticeMode = await getError('/api/practice/session?mode=timed');
+  assert(invalidPracticeMode.status === 400, 'practice should reject unsupported mode');
+  const invalidPracticeType = await getError('/api/practice/session?mode=random&type=code');
+  assert(invalidPracticeType.status === 400, 'practice should reject unsupported question type');
+  const invalidPracticeDifficulty = await getError('/api/practice/session?mode=random&difficulty=expert');
+  assert(invalidPracticeDifficulty.status === 400, 'practice should reject unsupported difficulty');
+  const invalidPracticeCategory = await getError('/api/practice/session?mode=category&categoryId=missing');
+  assert(invalidPracticeCategory.status === 400, 'practice should reject missing category');
+
   const correctAnswer = await postJson('/api/answers/submit', {
     questionId: 'q-smoke-single',
     selectedOptionIds: ['b']
@@ -493,6 +517,12 @@ async function runChecks() {
 
   const interview = await getJson('/api/interviews/basic?count=4');
   assert(interview.total === 4, 'basic interview should return 4 questions');
+  const invalidInterviewCount = await getError('/api/interviews/basic?count=31');
+  assert(invalidInterviewCount.status === 400, 'basic interview should reject count above range');
+  const invalidInterviewCategory = await getError('/api/interviews/basic?categoryId=missing');
+  assert(invalidInterviewCategory.status === 400, 'basic interview should reject missing category');
+  const invalidInterviewFilter = await getError('/api/interviews/basic?type=single');
+  assert(invalidInterviewFilter.status === 400, 'basic interview should reject fixed type filters');
 
   const reviewDraft = await postJson('/api/admin/questions', {
     categoryId: 'arkts',
@@ -596,6 +626,16 @@ async function getJson(pathname, deviceId = 'smoke-test') {
     headers: requestHeaders(pathname, {}, deviceId)
   });
   return parseResponse(response);
+}
+
+async function getError(pathname, deviceId = 'smoke-test') {
+  const response = await fetch(`${baseUrl}${pathname}`, {
+    headers: requestHeaders(pathname, {}, deviceId)
+  });
+  return {
+    status: response.status,
+    data: await response.json()
+  };
 }
 
 async function postJson(pathname, body, expectOk = true, deviceId = 'smoke-test') {

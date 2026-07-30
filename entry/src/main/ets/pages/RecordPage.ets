@@ -713,7 +713,7 @@ struct RecordPage {
         .backgroundColor(COLOR_GREEN)
         .borderRadius(8)
         .margin({ top: 14 })
-        .onClick(() => AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
+        .onClick(() => AppRouter.push(this.getUIContext(), 'pages/TrainingPage', {
           mode: 'random',
           categoryId: '',
           title: '随机练习'
@@ -1725,7 +1725,7 @@ struct RecordPage {
       });
       return;
     }
-    AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
+    AppRouter.push(this.getUIContext(), 'pages/TrainingPage', {
       mode: 'random',
       categoryId: '',
       title: '随机练习'
@@ -1741,7 +1741,7 @@ struct RecordPage {
   }
 
   openCategoryPractice(item: CategoryStats): void {
-    AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
+    AppRouter.push(this.getUIContext(), 'pages/TrainingPage', {
       mode: 'category',
       categoryId: item.categoryId,
       title: item.name

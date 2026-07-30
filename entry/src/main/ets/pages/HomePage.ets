@@ -773,18 +773,10 @@ struct HomePage {
   }
 
   openPractice(mode: string, category?: Category) {
-    if (mode === 'interview') {
-      AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
-        mode: 'interview',
-        categoryId: '',
-        title: '基础模拟面试'
-      });
-      return;
-    }
-    AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
+    AppRouter.push(this.getUIContext(), 'pages/TrainingPage', {
       mode,
       categoryId: category?.id ?? '',
-      title: category?.name ?? ''
+      title: category?.name ?? (mode === 'interview' ? '基础模拟面试' : '')
     });
   }
 

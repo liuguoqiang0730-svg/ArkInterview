@@ -1,6 +1,6 @@
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
-import { PracticeMode, PracticeSession, Question } from '../models/QuestionModels';
+import { Difficulty, PracticeMode, PracticeSession, Question, QuestionType } from '../models/QuestionModels';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { PracticeStore } from '../viewmodels/PracticeStore';
@@ -33,6 +33,9 @@ struct PracticePage {
   @State private categoryFilter: string = 'all';
   @State private typeFilter: string = 'all';
   @State private wrongScope: string = 'active';
+  @State private requestedCount: number = 20;
+  @State private requestedType: string = '';
+  @State private requestedDifficulty: string = '';
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -43,18 +46,27 @@ struct PracticePage {
     const params = AppRouter.params(this.getUIContext());
     const mode = params.mode || 'random';
     const categoryId = params.categoryId || undefined;
+    const count = this.parseRequestedCount(params.count, mode === 'interview' ? 8 : 20);
+    const type = this.parseQuestionType(params.type);
+    const difficulty = this.parseDifficulty(params.difficulty);
     this.mode = mode;
     this.title = params.title || this.modeTitle(mode);
+    this.requestedCount = count;
+    this.requestedType = type ?? '';
+    this.requestedDifficulty = difficulty ?? '';
     this.loading = true;
 
     try {
       if (mode === 'interview') {
-        this.session = await store.startInterview(8, categoryId);
+        this.session = await store.startInterview(count, categoryId);
       } else {
         this.session = await store.startPractice(mode as PracticeMode, {
           categoryId,
-          count: 20
+          type,
+          difficulty,
+          count
         });
+        this.applyLegacyDifficultyFilter(difficulty);
       }
       if ((this.session?.items.length ?? 0) > 0) {
         this.resetFilters();
@@ -100,7 +112,7 @@ struct PracticePage {
           Row() {
             this.SummaryPill('题量', `${this.session?.total ?? 0}`)
             this.SummaryPill('模式', this.title)
-            this.SummaryPill('状态', this.loading ? '加载中' : '可练习')
+            this.SummaryPill('条件', this.conditionSummary())
           }
           .width('100%')
           .margin({ top: 14 })
@@ -139,7 +151,7 @@ struct PracticePage {
               .lineHeight(19)
               .textAlign(TextAlign.Center)
               .margin({ top: 8 })
-            Button('返回首页')
+            Button('返回训练中心')
               .height(38)
               .fontSize(13)
               .fontWeight(FontWeight.Bold)
@@ -147,7 +159,7 @@ struct PracticePage {
               .backgroundColor(COLOR_GREEN)
               .borderRadius(8)
               .margin({ top: 16 })
-              .onClick(() => AppRouter.push(this.getUIContext(), 'pages/HomePage'))
+              .onClick(() => AppRouter.push(this.getUIContext(), 'pages/TrainingPage'))
           }
           .width('100%')
           .padding(20)
@@ -527,6 +539,67 @@ struct PracticePage {
       return '基础模拟面试';
     }
     return '随机练习';
+  }
+
+  parseRequestedCount(value: string | undefined, fallback: number): number {
+    if (value === undefined || value.length === 0) {
+      return fallback;
+    }
+    const parsed = Number(value);
+    if (!Number.isInteger(parsed) || parsed < 1 || parsed > 50) {
+      return fallback;
+    }
+    return parsed;
+  }
+
+  parseQuestionType(value: string | undefined): QuestionType | undefined {
+    if (value === 'single' || value === 'multiple' || value === 'boolean' || value === 'short') {
+      return value;
+    }
+    return undefined;
+  }
+
+  parseDifficulty(value: string | undefined): Difficulty | undefined {
+    if (value === 'easy' || value === 'medium' || value === 'hard') {
+      return value;
+    }
+    return undefined;
+  }
+
+  applyLegacyDifficultyFilter(difficulty: Difficulty | undefined): void {
+    if (difficulty === undefined || this.session === undefined || this.session.difficulty === difficulty) {
+      return;
+    }
+    const filtered: Question[] = [];
+    for (const question of this.session.items) {
+      if (question.difficulty === difficulty) {
+        filtered.push(question);
+      }
+    }
+    this.session.items = filtered;
+    this.session.total = filtered.length;
+    this.session.difficulty = difficulty;
+  }
+
+  conditionSummary(): string {
+    if (this.mode === 'interview') {
+      return '混合题型 · 混合难度';
+    }
+    return `${this.typeConditionLabel()} · ${this.difficultyConditionLabel()}`;
+  }
+
+  typeConditionLabel(): string {
+    if (this.requestedType.length === 0) {
+      return '全题型';
+    }
+    return this.typeLabel(this.requestedType);
+  }
+
+  difficultyConditionLabel(): string {
+    if (this.requestedDifficulty.length === 0) {
+      return '全难度';
+    }
+    return this.difficultyLabel(this.requestedDifficulty);
   }
 
   difficultyLabel(difficulty: string): string {

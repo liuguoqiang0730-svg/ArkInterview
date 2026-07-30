@@ -333,9 +333,43 @@ function isOfficialSourceUrl(value) {
   }
 }
 
+function readBoundedInteger(query, name, fallback, minimum, maximum) {
+  const raw = query.get(name);
+  if (raw === null || raw === '') {
+    return fallback;
+  }
+  if (!/^\d+$/.test(raw)) {
+    throw httpError(400, `${name} 必须是整数`);
+  }
+  const value = Number(raw);
+  if (!Number.isSafeInteger(value) || value < minimum || value > maximum) {
+    throw httpError(400, `${name} 必须在 ${minimum}-${maximum} 之间`);
+  }
+  return value;
+}
+
+function readOptionalEnum(query, name, allowed, message) {
+  const value = query.get(name) || '';
+  if (value && !allowed.has(value)) {
+    throw httpError(400, message);
+  }
+  return value;
+}
+
+function readOptionalCategory(db, query) {
+  const categoryId = query.get('categoryId') || '';
+  if (categoryId && !db.categories.some((category) => category.id === categoryId)) {
+    throw httpError(400, 'categoryId 不存在');
+  }
+  return categoryId;
+}
+
 function interviewPlan(db, query) {
-  const categoryId = query.get('categoryId');
-  const count = Math.min(Math.max(Number(query.get('count') || 8), 1), 30);
+  if ((query.get('type') || '').length > 0 || (query.get('difficulty') || '').length > 0) {
+    throw httpError(400, '基础模拟面试固定使用混合题型和难度');
+  }
+  const categoryId = readOptionalCategory(db, query);
+  const count = readBoundedInteger(query, 'count', 8, 1, 30);
   const pool = db.questions
     .filter((question) => question.status === 'published')
     .filter((question) => !categoryId || question.categoryId === categoryId);
@@ -361,6 +395,7 @@ function interviewPlan(db, query) {
   return {
     sessionId: `interview-${Date.now()}`,
     mode: 'basic',
+    categoryId: categoryId || null,
     total: selected.length,
     items: selected.slice(0, count).map((question, index) => ({
       order: index + 1,
@@ -371,12 +406,28 @@ function interviewPlan(db, query) {
 
 function practiceSession(db, user, query) {
   const mode = query.get('mode') || 'random';
-  const categoryId = query.get('categoryId');
-  const type = query.get('type');
-  const count = Math.min(Math.max(Number(query.get('count') || 10), 1), 50);
+  const modes = new Set(['category', 'random', 'wrongs', 'favorites']);
+  if (!modes.has(mode)) {
+    throw httpError(400, '练习模式必须是 category、random、wrongs 或 favorites');
+  }
+  const categoryId = readOptionalCategory(db, query);
+  const type = readOptionalEnum(
+    query,
+    'type',
+    new Set(['single', 'multiple', 'boolean', 'short']),
+    'type 必须是 single、multiple、boolean 或 short'
+  );
+  const difficulty = readOptionalEnum(
+    query,
+    'difficulty',
+    new Set(['easy', 'medium', 'hard']),
+    'difficulty 必须是 easy、medium 或 hard'
+  );
+  const count = readBoundedInteger(query, 'count', 10, 1, 50);
   const publishedQuestions = db.questions
     .filter((question) => question.status === 'published')
-    .filter((question) => !type || question.type === type);
+    .filter((question) => !type || question.type === type)
+    .filter((question) => !difficulty || question.difficulty === difficulty);
 
   let pool = [];
   if (mode === 'category') {
@@ -394,8 +445,6 @@ function practiceSession(db, user, query) {
   } else if (mode === 'favorites') {
     const ids = new Set(user.favorites);
     pool = publishedQuestions.filter((question) => ids.has(question.id));
-  } else {
-    throw httpError(400, '练习模式必须是 category、random、wrongs 或 favorites');
   }
 
   const selected = shuffle(pool).slice(0, count);
@@ -404,6 +453,7 @@ function practiceSession(db, user, query) {
     mode,
     categoryId: categoryId || null,
     type: type || null,
+    difficulty: difficulty || null,
     total: selected.length,
     items: selected.map((question, index) => questionForPractice(question, user, index + 1))
   };
