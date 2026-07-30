@@ -357,6 +357,18 @@ async function runChecks() {
     'configured practice should filter type and difficulty'
   );
 
+  const configuredAvailability = await getJson(
+    '/api/practice/availability?mode=random&type=single&difficulty=easy'
+  );
+  assert(configuredAvailability.availableCount >= 3, 'availability should count matching questions');
+  assert(configuredAvailability.maxCount === 50, 'practice availability should expose session limit');
+  assert(configuredAvailability.type === 'single', 'availability should echo question type');
+  assert(configuredAvailability.difficulty === 'easy', 'availability should echo difficulty');
+  assert(configuredAvailability.items === undefined, 'availability must not return question items');
+
+  const emptyWrongAvailability = await getJson('/api/practice/availability?mode=wrongs');
+  assert(emptyWrongAvailability.availableCount === 0, 'availability should reflect the current user wrong pool');
+
   const invalidPracticeCount = await getError('/api/practice/session?mode=random&count=0');
   assert(invalidPracticeCount.status === 400, 'practice should reject count below range');
   const invalidPracticeDecimalCount = await getError('/api/practice/session?mode=random&count=3.5');
@@ -369,6 +381,8 @@ async function runChecks() {
   assert(invalidPracticeDifficulty.status === 400, 'practice should reject unsupported difficulty');
   const invalidPracticeCategory = await getError('/api/practice/session?mode=category&categoryId=missing');
   assert(invalidPracticeCategory.status === 400, 'practice should reject missing category');
+  const invalidAvailabilityMode = await getError('/api/practice/availability?mode=timed');
+  assert(invalidAvailabilityMode.status === 400, 'availability should reject unsupported mode');
 
   const correctAnswer = await postJson('/api/answers/submit', {
     questionId: 'q-smoke-single',
@@ -517,6 +531,9 @@ async function runChecks() {
 
   const interview = await getJson('/api/interviews/basic?count=4');
   assert(interview.total === 4, 'basic interview should return 4 questions');
+  const interviewAvailability = await getJson('/api/practice/availability?mode=interview');
+  assert(interviewAvailability.availableCount >= 4, 'interview availability should count published questions');
+  assert(interviewAvailability.maxCount === 30, 'interview availability should expose interview limit');
   const invalidInterviewCount = await getError('/api/interviews/basic?count=31');
   assert(invalidInterviewCount.status === 400, 'basic interview should reject count above range');
   const invalidInterviewCategory = await getError('/api/interviews/basic?categoryId=missing');

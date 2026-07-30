@@ -1,6 +1,14 @@
 import display from '@ohos.display';
 import { BottomNavBar } from '../components/BottomNavBar';
-import { Category, CategoryStats, UserStats } from '../models/QuestionModels';
+import {
+  Category,
+  CategoryStats,
+  Difficulty,
+  PracticeAvailability,
+  QuestionType,
+  UserStats
+} from '../models/QuestionModels';
+import { ApiRequestError } from '../services/ApiClient';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
@@ -41,10 +49,15 @@ struct TrainingPage {
   @State private setupCount: number = 20;
   @State private setupType: string = '';
   @State private setupDifficulty: string = '';
+  @State private availabilityLoading: boolean = false;
+  @State private availabilitySupported: boolean = true;
+  @State private availableCount: number = 0;
+  @State private availabilityError: string = '';
   private observedStatsVersion: number = 0;
   private pendingSetupMode: string = '';
   private pendingSetupCategoryId: string = '';
   private pendingSetupTitle: string = '';
+  private availabilityRequestVersion: number = 0;
 
   aboutToAppear(): void {
     this.updateLayoutMode();
@@ -248,6 +261,7 @@ struct TrainingPage {
       Scroll() {
         Column() {
           this.SetupSummary()
+          this.AvailabilityStatus()
           this.CountSelector()
 
           if (this.setupMode === 'interview') {
@@ -294,13 +308,14 @@ struct TrainingPage {
       .layoutWeight(1)
       .scrollBar(BarState.Auto)
 
-      Button('开始训练')
+      Button(this.startButtonText())
         .width('100%')
         .height(46)
         .fontSize(15)
         .fontWeight(FontWeight.Bold)
         .fontColor('#ffffff')
-        .backgroundColor(COLOR_GREEN)
+        .enabled(this.canStartConfiguredTraining())
+        .backgroundColor(this.canStartConfiguredTraining() ? COLOR_GREEN : '#aab3bd')
         .borderRadius(8)
         .margin({ left: 18, right: 18, bottom: this.isTablet ? 18 : 22 })
         .onClick(() => this.startConfiguredTraining())
@@ -354,21 +369,76 @@ struct TrainingPage {
   }
 
   @Builder
+  AvailabilityStatus() {
+    Row() {
+      if (this.availabilityLoading) {
+        LoadingProgress()
+          .width(24)
+          .height(24)
+          .color(COLOR_BLUE)
+          .margin({ right: 10 })
+      } else {
+        Text(this.availabilityMark())
+          .width(26)
+          .height(26)
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.availabilityColor())
+          .textAlign(TextAlign.Center)
+          .backgroundColor('#ffffff')
+          .borderRadius(8)
+          .margin({ right: 10 })
+      }
+
+      Column() {
+        Text(this.availabilityTitle())
+          .fontSize(13)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.availabilityColor())
+        Text(this.availabilityDetail())
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(17)
+          .margin({ top: 3 })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      if (this.availabilityError.length > 0) {
+        Button('重试')
+          .height(30)
+          .fontSize(11)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_BLUE)
+          .backgroundColor(COLOR_SOFT_BLUE)
+          .borderRadius(8)
+          .onClick(() => this.refreshAvailability())
+      }
+    }
+    .width('100%')
+    .padding(12)
+    .margin({ top: 10 })
+    .backgroundColor(this.availabilityBackgroundColor())
+    .border({ width: 1, color: this.availabilityBorderColor() })
+    .borderRadius(8)
+  }
+
+  @Builder
   CountSelector() {
     Column() {
       this.SetupSectionTitle('题量', this.setupMode === 'interview' ? '建议 8-10 题' : '本轮抽取数量')
 
       Row() {
         if (this.setupMode === 'interview') {
-          this.SetupChoice('5', this.setupCount === 5, '23.5%', () => this.setupCount = 5)
-          this.SetupChoice('8', this.setupCount === 8, '23.5%', () => this.setupCount = 8)
-          this.SetupChoice('10', this.setupCount === 10, '23.5%', () => this.setupCount = 10)
-          this.SetupChoice('15', this.setupCount === 15, '23.5%', () => this.setupCount = 15)
+          this.SetupChoice('5', this.setupCount === 5, '23.5%', () => this.selectSetupCount(5))
+          this.SetupChoice('8', this.setupCount === 8, '23.5%', () => this.selectSetupCount(8))
+          this.SetupChoice('10', this.setupCount === 10, '23.5%', () => this.selectSetupCount(10))
+          this.SetupChoice('15', this.setupCount === 15, '23.5%', () => this.selectSetupCount(15))
         } else {
-          this.SetupChoice('5', this.setupCount === 5, '23.5%', () => this.setupCount = 5)
-          this.SetupChoice('10', this.setupCount === 10, '23.5%', () => this.setupCount = 10)
-          this.SetupChoice('20', this.setupCount === 20, '23.5%', () => this.setupCount = 20)
-          this.SetupChoice('30', this.setupCount === 30, '23.5%', () => this.setupCount = 30)
+          this.SetupChoice('5', this.setupCount === 5, '23.5%', () => this.selectSetupCount(5))
+          this.SetupChoice('10', this.setupCount === 10, '23.5%', () => this.selectSetupCount(10))
+          this.SetupChoice('20', this.setupCount === 20, '23.5%', () => this.selectSetupCount(20))
+          this.SetupChoice('30', this.setupCount === 30, '23.5%', () => this.selectSetupCount(30))
         }
       }
       .width('100%')
@@ -390,11 +460,11 @@ struct TrainingPage {
         justifyContent: FlexAlign.SpaceBetween,
         alignItems: ItemAlign.Start
       }) {
-        this.SetupChoice('全部', this.setupType === '', '31.8%', () => this.setupType = '')
-        this.SetupChoice('单选', this.setupType === 'single', '31.8%', () => this.setupType = 'single')
-        this.SetupChoice('多选', this.setupType === 'multiple', '31.8%', () => this.setupType = 'multiple')
-        this.SetupChoice('判断', this.setupType === 'boolean', '31.8%', () => this.setupType = 'boolean')
-        this.SetupChoice('简答', this.setupType === 'short', '31.8%', () => this.setupType = 'short')
+        this.SetupChoice('全部', this.setupType === '', '31.8%', () => this.selectSetupType(''))
+        this.SetupChoice('单选', this.setupType === 'single', '31.8%', () => this.selectSetupType('single'))
+        this.SetupChoice('多选', this.setupType === 'multiple', '31.8%', () => this.selectSetupType('multiple'))
+        this.SetupChoice('判断', this.setupType === 'boolean', '31.8%', () => this.selectSetupType('boolean'))
+        this.SetupChoice('简答', this.setupType === 'short', '31.8%', () => this.selectSetupType('short'))
       }
       .width('100%')
       .margin({ top: 10 })
@@ -409,10 +479,10 @@ struct TrainingPage {
       this.SetupSectionTitle('难度', '按当前能力安排')
 
       Row() {
-        this.SetupChoice('全部', this.setupDifficulty === '', '23.5%', () => this.setupDifficulty = '')
-        this.SetupChoice('基础', this.setupDifficulty === 'easy', '23.5%', () => this.setupDifficulty = 'easy')
-        this.SetupChoice('中等', this.setupDifficulty === 'medium', '23.5%', () => this.setupDifficulty = 'medium')
-        this.SetupChoice('困难', this.setupDifficulty === 'hard', '23.5%', () => this.setupDifficulty = 'hard')
+        this.SetupChoice('全部', this.setupDifficulty === '', '23.5%', () => this.selectSetupDifficulty(''))
+        this.SetupChoice('基础', this.setupDifficulty === 'easy', '23.5%', () => this.selectSetupDifficulty('easy'))
+        this.SetupChoice('中等', this.setupDifficulty === 'medium', '23.5%', () => this.selectSetupDifficulty('medium'))
+        this.SetupChoice('困难', this.setupDifficulty === 'hard', '23.5%', () => this.selectSetupDifficulty('hard'))
       }
       .width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -881,6 +951,76 @@ struct TrainingPage {
     this.setupType = '';
     this.setupDifficulty = '';
     this.showSetup = true;
+    this.refreshAvailability();
+  }
+
+  private selectSetupCount(count: number): void {
+    this.setupCount = count;
+  }
+
+  private selectSetupType(type: string): void {
+    if (this.setupType === type) {
+      return;
+    }
+    this.setupType = type;
+    this.refreshAvailability();
+  }
+
+  private selectSetupDifficulty(difficulty: string): void {
+    if (this.setupDifficulty === difficulty) {
+      return;
+    }
+    this.setupDifficulty = difficulty;
+    this.refreshAvailability();
+  }
+
+  private async refreshAvailability(): Promise<void> {
+    const requestVersion = this.availabilityRequestVersion + 1;
+    this.availabilityRequestVersion = requestVersion;
+    this.availabilityLoading = true;
+    this.availabilitySupported = true;
+    this.availabilityError = '';
+    try {
+      const response: PracticeAvailability = await store.loadPracticeAvailability(this.setupMode, {
+        categoryId: this.setupCategoryId.length > 0 ? this.setupCategoryId : undefined,
+        type: this.setupMode === 'interview' ? undefined : this.setupQuestionType(),
+        difficulty: this.setupMode === 'interview' ? undefined : this.setupQuestionDifficulty()
+      });
+      if (requestVersion !== this.availabilityRequestVersion) {
+        return;
+      }
+      this.availableCount = response.availableCount;
+    } catch (error) {
+      if (requestVersion !== this.availabilityRequestVersion) {
+        return;
+      }
+      if (error instanceof ApiRequestError && error.statusCode === 404) {
+        this.availabilitySupported = false;
+        this.availableCount = 0;
+      } else {
+        this.availabilityError = this.readableError(error);
+      }
+    } finally {
+      if (requestVersion === this.availabilityRequestVersion) {
+        this.availabilityLoading = false;
+      }
+    }
+  }
+
+  private setupQuestionType(): QuestionType | undefined {
+    if (this.setupType === 'single' || this.setupType === 'multiple' ||
+      this.setupType === 'boolean' || this.setupType === 'short') {
+      return this.setupType;
+    }
+    return undefined;
+  }
+
+  private setupQuestionDifficulty(): Difficulty | undefined {
+    if (this.setupDifficulty === 'easy' || this.setupDifficulty === 'medium' ||
+      this.setupDifficulty === 'hard') {
+      return this.setupDifficulty;
+    }
+    return undefined;
   }
 
   private openPendingSetup(): void {
@@ -926,6 +1066,9 @@ struct TrainingPage {
   }
 
   private startConfiguredTraining(): void {
+    if (!this.canStartConfiguredTraining()) {
+      return;
+    }
     this.showSetup = false;
     if (this.setupMode === 'interview') {
       AppRouter.push(this.getUIContext(), 'pages/PracticePage', {
@@ -944,6 +1087,129 @@ struct TrainingPage {
       type: this.setupType,
       difficulty: this.setupDifficulty
     });
+  }
+
+  private canStartConfiguredTraining(): boolean {
+    if (this.availabilityLoading) {
+      return false;
+    }
+    if (!this.availabilitySupported || this.availabilityError.length > 0) {
+      return true;
+    }
+    return this.availableCount > 0;
+  }
+
+  private startButtonText(): string {
+    if (this.availabilityLoading) {
+      return '正在检查题量';
+    }
+    if (this.availabilitySupported && this.availabilityError.length === 0) {
+      if (this.availableCount === 0) {
+        return '当前条件无可用题';
+      }
+      return `开始 ${Math.min(this.setupCount, this.availableCount)} 题训练`;
+    }
+    return `开始 ${this.setupCount} 题训练`;
+  }
+
+  private availabilityTitle(): string {
+    if (this.availabilityLoading) {
+      return '正在检查可用题量';
+    }
+    if (!this.availabilitySupported) {
+      return '暂不支持题量预估';
+    }
+    if (this.availabilityError.length > 0) {
+      return '题量预估失败';
+    }
+    if (this.availableCount === 0) {
+      return '没有匹配题目';
+    }
+    if (this.availableCount < this.setupCount) {
+      return `当前可用 ${this.availableCount} 道`;
+    }
+    return `当前可用 ${this.availableCount} 道`;
+  }
+
+  private availabilityDetail(): string {
+    if (this.availabilityLoading) {
+      return '正在按当前模块、题型和难度统计';
+    }
+    if (!this.availabilitySupported) {
+      return '当前服务器版本较旧，仍可按所选条件开始训练';
+    }
+    if (this.availabilityError.length > 0) {
+      return '可继续开始训练，或检查网络后重试预估';
+    }
+    if (this.availableCount === 0) {
+      return '建议改为全部题型、全部难度或切换训练模块';
+    }
+    if (this.availableCount < this.setupCount) {
+      return `少于所选 ${this.setupCount} 道，本轮将生成 ${this.availableCount} 道`;
+    }
+    return `满足所选题量，本轮将随机抽取 ${this.setupCount} 道`;
+  }
+
+  private availabilityMark(): string {
+    if (!this.availabilitySupported) {
+      return '兼';
+    }
+    if (this.availabilityError.length > 0) {
+      return '!';
+    }
+    if (this.availableCount === 0) {
+      return '0';
+    }
+    if (this.availableCount < this.setupCount) {
+      return '少';
+    }
+    return '足';
+  }
+
+  private availabilityColor(): string {
+    if (this.availabilityLoading || !this.availabilitySupported) {
+      return COLOR_BLUE;
+    }
+    if (this.availabilityError.length > 0 || this.availableCount === 0) {
+      return COLOR_RED;
+    }
+    if (this.availableCount < this.setupCount) {
+      return COLOR_ORANGE;
+    }
+    return COLOR_GREEN;
+  }
+
+  private availabilityBackgroundColor(): string {
+    if (this.availabilityLoading || !this.availabilitySupported) {
+      return COLOR_SOFT_BLUE;
+    }
+    if (this.availabilityError.length > 0 || this.availableCount === 0) {
+      return COLOR_SOFT_RED;
+    }
+    if (this.availableCount < this.setupCount) {
+      return COLOR_SOFT_ORANGE;
+    }
+    return COLOR_SOFT_GREEN;
+  }
+
+  private availabilityBorderColor(): string {
+    if (this.availabilityLoading || !this.availabilitySupported) {
+      return '#d6e4f2';
+    }
+    if (this.availabilityError.length > 0 || this.availableCount === 0) {
+      return '#f3c7c4';
+    }
+    if (this.availableCount < this.setupCount) {
+      return '#f1c89f';
+    }
+    return '#b9dfd2';
+  }
+
+  private readableError(error: Object): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return String(error);
   }
 
   private modeTitle(mode: string): string {

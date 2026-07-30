@@ -75,6 +75,15 @@ export interface PracticeSession {
   items: Question[];
 }
 
+export interface PracticeAvailability {
+  mode: string;
+  categoryId?: string;
+  type?: QuestionType;
+  difficulty?: Difficulty;
+  availableCount: number;
+  maxCount: number;
+}
+
 export interface SubmitAnswerRequest {
   questionId: string;
   selectedOptionIds?: string[];

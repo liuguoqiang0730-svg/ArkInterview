@@ -181,6 +181,25 @@ GET /api/practice/session?mode=wrongs&difficulty=medium&count=20
 GET /api/practice/session?mode=favorites&type=multiple&count=20
 ```
 
+### GET /api/practice/availability
+
+按当前训练条件返回可用题目数量，不创建题单，也不返回题目内容。客户端可在用户确认训练前调用，用于提示条件过窄或实际可生成题量。
+
+Query 参数与练习会话一致；`mode` 额外支持 `interview`。当 `mode=interview` 时固定使用混合题型和混合难度，只接受可选 `categoryId`。响应设置 `Cache-Control: no-store`，错题和收藏数量按当前用户实时计算。
+
+```json
+{
+  "mode": "category",
+  "categoryId": "arkui",
+  "type": "short",
+  "difficulty": "hard",
+  "availableCount": 6,
+  "maxCount": 50
+}
+```
+
+`availableCount` 是当前条件实际匹配数量；`maxCount` 是对应训练模式单次允许请求的题量上限。该接口与题单创建复用同一套条件解析和题池计算逻辑。
+
 ## 答题
 
 ### POST /api/answers/submit

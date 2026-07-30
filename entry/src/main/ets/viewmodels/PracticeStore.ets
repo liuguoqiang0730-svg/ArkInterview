@@ -1,6 +1,7 @@
 import { ApiClient, ApiRequestError, PracticeSessionOptions } from '../services/ApiClient';
 import {
   Category,
+  PracticeAvailability,
   PracticeMode,
   PracticeRecordPage,
   PracticeSession,
@@ -40,6 +41,13 @@ export class PracticeStore {
 
   async startPractice(mode: PracticeMode, options?: PracticeSessionOptions): Promise<PracticeSession> {
     return this.api.getPracticeSession(mode, options);
+  }
+
+  async loadPracticeAvailability(
+    mode: string,
+    options?: PracticeSessionOptions
+  ): Promise<PracticeAvailability> {
+    return this.api.getPracticeAvailability(mode, options);
   }
 
   async startInterview(count: number = 8, categoryId?: string): Promise<PracticeSession> {

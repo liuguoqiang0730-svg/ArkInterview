@@ -364,15 +364,20 @@ function readOptionalCategory(db, query) {
   return categoryId;
 }
 
-function interviewPlan(db, query) {
+function interviewPool(db, query) {
   if ((query.get('type') || '').length > 0 || (query.get('difficulty') || '').length > 0) {
     throw httpError(400, '基础模拟面试固定使用混合题型和难度');
   }
   const categoryId = readOptionalCategory(db, query);
-  const count = readBoundedInteger(query, 'count', 8, 1, 30);
   const pool = db.questions
     .filter((question) => question.status === 'published')
     .filter((question) => !categoryId || question.categoryId === categoryId);
+  return { categoryId, pool };
+}
+
+function interviewPlan(db, query) {
+  const count = readBoundedInteger(query, 'count', 8, 1, 30);
+  const { categoryId, pool } = interviewPool(db, query);
 
   const preferredOrder = ['short', 'single', 'multiple', 'boolean'];
   const selected = [];
@@ -404,7 +409,7 @@ function interviewPlan(db, query) {
   };
 }
 
-function practiceSession(db, user, query) {
+function practicePool(db, user, query) {
   const mode = query.get('mode') || 'random';
   const modes = new Set(['category', 'random', 'wrongs', 'favorites']);
   if (!modes.has(mode)) {
@@ -423,7 +428,6 @@ function practiceSession(db, user, query) {
     new Set(['easy', 'medium', 'hard']),
     'difficulty 必须是 easy、medium 或 hard'
   );
-  const count = readBoundedInteger(query, 'count', 10, 1, 50);
   const publishedQuestions = db.questions
     .filter((question) => question.status === 'published')
     .filter((question) => !type || question.type === type)
@@ -446,7 +450,12 @@ function practiceSession(db, user, query) {
     const ids = new Set(user.favorites);
     pool = publishedQuestions.filter((question) => ids.has(question.id));
   }
+  return { mode, categoryId, type, difficulty, pool };
+}
 
+function practiceSession(db, user, query) {
+  const count = readBoundedInteger(query, 'count', 10, 1, 50);
+  const { mode, categoryId, type, difficulty, pool } = practicePool(db, user, query);
   const selected = shuffle(pool).slice(0, count);
   return {
     sessionId: `practice-${mode}-${Date.now()}`,
@@ -456,6 +465,30 @@ function practiceSession(db, user, query) {
     difficulty: difficulty || null,
     total: selected.length,
     items: selected.map((question, index) => questionForPractice(question, user, index + 1))
+  };
+}
+
+function practiceAvailability(db, user, query) {
+  const mode = query.get('mode') || 'random';
+  if (mode === 'interview') {
+    const { categoryId, pool } = interviewPool(db, query);
+    return {
+      mode,
+      categoryId: categoryId || null,
+      type: null,
+      difficulty: null,
+      availableCount: pool.length,
+      maxCount: 30
+    };
+  }
+  const { categoryId, type, difficulty, pool } = practicePool(db, user, query);
+  return {
+    mode,
+    categoryId: categoryId || null,
+    type: type || null,
+    difficulty: difficulty || null,
+    availableCount: pool.length,
+    maxCount: 50
   };
 }
 
@@ -875,6 +908,11 @@ async function routeApi(
 
   if (method === 'GET' && pathname === '/api/interviews/basic') {
     sendJson(res, 200, interviewPlan(db, searchParams));
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/practice/availability') {
+    sendJson(res, 200, practiceAvailability(db, user, searchParams), { 'Cache-Control': 'no-store' });
     return;
   }
 

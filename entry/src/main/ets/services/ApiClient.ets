@@ -17,6 +17,7 @@ import {
   ItemResult,
   ListResult,
   PageResult,
+  PracticeAvailability,
   PracticeMode,
   PracticeRecordPage,
   PracticeSession,
@@ -141,6 +142,15 @@ export class ApiClient {
     this.appendQueryParam(pairs, 'count', options?.count ? String(options.count) : undefined);
     const query = this.queryString(pairs);
     return this.request<PracticeSession>(`/practice/session${query}`);
+  }
+
+  async getPracticeAvailability(mode: string, options?: PracticeSessionOptions): Promise<PracticeAvailability> {
+    const pairs: string[] = [];
+    this.appendQueryParam(pairs, 'mode', mode);
+    this.appendQueryParam(pairs, 'categoryId', options?.categoryId);
+    this.appendQueryParam(pairs, 'type', options?.type);
+    this.appendQueryParam(pairs, 'difficulty', options?.difficulty);
+    return this.request<PracticeAvailability>(`/practice/availability${this.queryString(pairs)}`);
   }
 
   async getBasicInterview(count: number = 8, categoryId?: string): Promise<PracticeSession> {
