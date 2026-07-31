@@ -9,6 +9,7 @@ import {
   UserStats
 } from '../models/QuestionModels';
 import { ApiRequestError } from '../services/ApiClient';
+import { StudyPreferenceStore } from '../services/StudyPreferenceStore';
 import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
@@ -1042,7 +1043,7 @@ struct TrainingPage {
     this.setupMode = mode;
     this.setupTitle = category?.name ?? this.modeTitle(mode);
     this.setupCategoryId = category?.id ?? '';
-    this.setupCount = mode === 'interview' ? 8 : 20;
+    this.setupCount = mode === 'interview' ? 8 : StudyPreferenceStore.practiceCount();
     this.setupType = '';
     this.setupDifficulty = '';
     this.showSetup = true;

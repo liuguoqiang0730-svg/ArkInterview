@@ -8,6 +8,7 @@ import { AuthStatusResponse, AuthUser, UserProfileResponse } from '../models/Acc
 import { UserStats } from '../models/QuestionModels';
 import { ApiClient, ApiRequestError } from '../services/ApiClient';
 import { AuthSessionStore } from '../services/AuthSessionStore';
+import { StudyPreferenceStore } from '../services/StudyPreferenceStore';
 import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
 
@@ -46,11 +47,14 @@ struct MyPage {
   @State private backendReachable: boolean = false;
   @State private huaweiLoginEnabled: boolean = false;
   @State private loadError: string = '';
+  @State private preferredPracticeCount: number = StudyPreferenceStore.practiceCount();
+  @State private preferenceBusy: boolean = false;
   private loginButtonController: loginComponentManager.LoginWithHuaweiIDButtonController =
     new loginComponentManager.LoginWithHuaweiIDButtonController();
 
   aboutToAppear(): void {
     this.updateLayoutMode();
+    this.preferredPracticeCount = StudyPreferenceStore.practiceCount();
     this.registerHuaweiLogin();
     this.loadData(false);
   }
@@ -233,14 +237,6 @@ struct MyPage {
           .width('100%')
           .layoutWeight(1)
           .justifyContent(FlexAlign.Center)
-        } else if (this.isTablet) {
-          Column() {
-            this.ProfileContent()
-          }
-          .width('100%')
-          .layoutWeight(1)
-          .alignItems(HorizontalAlign.Center)
-          .justifyContent(FlexAlign.Start)
         } else {
           Scroll() {
             this.ProfileContent()
@@ -286,6 +282,8 @@ struct MyPage {
         this.AccountPanel()
         this.StatsPanel()
       }
+
+      this.BasicSettingsPanel()
     }
     .width('100%')
     .padding({ left: 16, right: 16, top: 16, bottom: 24 })
@@ -316,16 +314,6 @@ struct MyPage {
         .backgroundColor(this.authenticated ? COLOR_SOFT_GREEN : COLOR_SOFT_BLUE)
         .padding({ left: 10, right: 10, top: 6, bottom: 6 })
         .borderRadius(8)
-        .margin({ right: 10 })
-
-      Button(this.refreshing ? '刷新中' : '刷新')
-        .height(36)
-        .fontSize(13)
-        .fontColor(COLOR_GREEN)
-        .backgroundColor(COLOR_SOFT_GREEN)
-        .borderRadius(8)
-        .enabled(!this.refreshing)
-        .onClick(() => this.loadData(true))
     }
     .width('100%')
     .padding({ left: 18, right: 18, top: 15, bottom: 14 })
@@ -605,6 +593,183 @@ struct MyPage {
         .margin({ top: 4 })
     }
     .layoutWeight(1)
+  }
+
+  @Builder
+  BasicSettingsPanel() {
+    Column() {
+      Row() {
+        Column() {
+          Text('基础设置')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+          Text('训练偏好与当前应用状态')
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        Text('本机生效')
+          .fontSize(11)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_GREEN)
+          .backgroundColor(COLOR_SOFT_GREEN)
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .borderRadius(8)
+      }
+      .width('100%')
+
+      Divider()
+        .color(COLOR_LINE)
+        .margin({ top: 15, bottom: 14 })
+
+      if (this.isTablet) {
+        Row() {
+          Column() {
+            this.PracticeCountLabel()
+          }
+          .layoutWeight(1)
+
+          this.PracticeCountChoices()
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Center)
+      } else {
+        this.PracticeCountLabel()
+        this.PracticeCountChoices()
+      }
+
+      Divider()
+        .color(COLOR_LINE)
+        .margin({ top: 14 })
+
+      Row() {
+        Column() {
+          Text('学习数据')
+            .fontSize(14)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+          Text(this.authenticated ? '已关联当前华为账号' : '保存在当前设备游客档案')
+            .fontSize(11)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        Button(this.refreshing ? '刷新中' : '立即刷新')
+          .height(36)
+          .fontSize(12)
+          .fontColor(COLOR_GREEN)
+          .backgroundColor(COLOR_SOFT_GREEN)
+          .borderRadius(8)
+          .enabled(!this.refreshing)
+          .onClick(() => this.loadData(true))
+      }
+      .width('100%')
+      .padding({ top: 14 })
+
+      Divider()
+        .color(COLOR_LINE)
+        .margin({ top: 14 })
+
+      Row() {
+        Column() {
+          Text('华为账号认证协议')
+            .fontSize(14)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+          Text('查看账号授权和认证规则')
+            .fontSize(11)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        Text('查看 >')
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_BLUE)
+      }
+      .width('100%')
+      .padding({ top: 14 })
+      .onClick(() => this.openAgreement())
+    }
+    .width('100%')
+    .padding(18)
+    .margin({ top: 16 })
+    .backgroundColor(COLOR_SURFACE)
+    .border({ width: 1, color: COLOR_LINE })
+    .borderRadius(8)
+    .shadow({ radius: 12, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
+  }
+
+  @Builder
+  PracticeCountLabel() {
+    Column() {
+      Text('默认练习题量')
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_TEXT)
+      Text('随机、模块、错题和收藏训练默认使用')
+        .fontSize(11)
+        .fontColor(COLOR_MUTED)
+        .margin({ top: 4 })
+    }
+    .alignItems(HorizontalAlign.Start)
+  }
+
+  @Builder
+  PracticeCountChoices() {
+    Row() {
+      this.PracticeCountChoice(5)
+      this.PracticeCountChoice(10)
+      this.PracticeCountChoice(20)
+      this.PracticeCountChoice(30)
+    }
+    .width(this.isTablet ? 330 : '100%')
+    .height(42)
+    .padding(3)
+    .margin({ top: this.isTablet ? 0 : 12 })
+    .backgroundColor('#eef2f6')
+    .borderRadius(8)
+  }
+
+  @Builder
+  PracticeCountChoice(count: number) {
+    Text(`${count} 题`)
+      .fontSize(12)
+      .fontWeight(this.preferredPracticeCount === count ? FontWeight.Bold : FontWeight.Medium)
+      .fontColor(this.preferredPracticeCount === count ? COLOR_GREEN : COLOR_MUTED)
+      .textAlign(TextAlign.Center)
+      .layoutWeight(1)
+      .height('100%')
+      .backgroundColor(this.preferredPracticeCount === count ? COLOR_SURFACE : '#00ffffff')
+      .borderRadius(6)
+      .enabled(!this.preferenceBusy)
+      .onClick(() => this.updatePracticeCount(count))
+  }
+
+  private async updatePracticeCount(count: number): Promise<void> {
+    if (this.preferenceBusy || count === this.preferredPracticeCount) {
+      return;
+    }
+    const previous = this.preferredPracticeCount;
+    this.preferredPracticeCount = count;
+    this.preferenceBusy = true;
+    try {
+      await StudyPreferenceStore.setPracticeCount(count);
+      AppToast.show(this.getUIContext(), `默认练习题量已设为 ${count} 题`);
+    } catch (error) {
+      this.preferredPracticeCount = previous;
+      AppToast.show(this.getUIContext(), '设置保存失败，请重试');
+    } finally {
+      this.preferenceBusy = false;
+    }
   }
 
   private loginReady(): boolean {

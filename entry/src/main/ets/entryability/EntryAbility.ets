@@ -2,6 +2,7 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { AuthSessionStore } from '../services/AuthSessionStore';
+import { StudyPreferenceStore } from '../services/StudyPreferenceStore';
 import { DeviceIdentity } from '../utils/DeviceIdentity';
 
 const DOMAIN: number = 0x0001;
@@ -36,6 +37,12 @@ export default class EntryAbility extends UIAbility {
       await AuthSessionStore.initialize();
     } catch (error) {
       hilog.error(DOMAIN, 'ArkInterview', 'Secure session restore failed: %{public}s', String(error));
+    }
+
+    try {
+      await StudyPreferenceStore.initialize(this.context);
+    } catch (error) {
+      hilog.error(DOMAIN, 'ArkInterview', 'Study preferences restore failed: %{public}s', String(error));
     }
   }
 
