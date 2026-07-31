@@ -49,6 +49,7 @@ struct ReviewListPage {
     this.mode = params.mode || 'wrongs';
     this.title = params.title || (this.mode === 'favorites' ? '收藏题目' : '错题本');
     this.wrongScope = this.mode === 'wrongs' ? 'active' : 'all';
+    this.sortMode = this.mode === 'wrongs' ? 'wrongCount' : 'default';
     this.loadQuestions();
   }
 
@@ -87,10 +88,12 @@ struct ReviewListPage {
           .width('100%')
           .layoutWeight(1)
           .justifyContent(FlexAlign.Center)
+        } else if (this.isTablet) {
+          this.TabletReviewWorkspace()
         } else {
           Scroll() {
             Column() {
-              this.ToolPanel()
+              this.PhoneToolPanel()
               this.QuestionList()
             }
             .width('100%')
@@ -114,6 +117,50 @@ struct ReviewListPage {
 
   @Builder
   Header() {
+    if (this.isTablet) {
+      Row() {
+        Button('<')
+          .width(40)
+          .height(40)
+          .fontColor(COLOR_NAVY)
+          .backgroundColor('#eef2f6')
+          .borderRadius(8)
+          .onClick(() => AppRouter.back(this.getUIContext()))
+
+        Column() {
+          Text(this.title)
+            .fontSize(22)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+          Text(this.headerSubtitleText())
+            .fontSize(11)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 3 })
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+        .margin({ left: 12 })
+
+        this.HeaderMetrics()
+
+        Button('刷新')
+          .height(40)
+          .fontSize(13)
+          .fontColor(COLOR_GREEN)
+          .backgroundColor(COLOR_SOFT_GREEN)
+          .borderRadius(8)
+          .margin({ left: 12 })
+          .onClick(() => this.loadQuestions())
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 14, bottom: 14 })
+      .backgroundColor(COLOR_SURFACE)
+      .borderRadius(8)
+      .constraintSize({ maxWidth: this.pageMaxWidth() })
+      .alignSelf(ItemAlign.Center)
+      .margin({ top: 16 })
+      .shadow({ radius: 16, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
+    } else {
     Column() {
       Row() {
         Button('<')
@@ -140,13 +187,7 @@ struct ReviewListPage {
       .width('100%')
 
       Row() {
-        this.Metric('全部', String(this.questions.length), COLOR_SOFT_BLUE, COLOR_BLUE)
-        this.Metric('当前', String(this.filteredQuestions().length), COLOR_SOFT_GREEN, COLOR_GREEN)
-        if (this.mode === 'wrongs') {
-          this.Metric('未掌握', String(this.activeWrongCount()), COLOR_SOFT_ORANGE, COLOR_ORANGE)
-        } else {
-          this.Metric('可复习', String(this.questions.length), COLOR_SOFT_ORANGE, COLOR_ORANGE)
-        }
+        this.HeaderMetrics()
       }
       .width('100%')
       .margin({ top: 14 })
@@ -159,10 +200,337 @@ struct ReviewListPage {
     .alignSelf(ItemAlign.Center)
     .margin({ top: this.isTablet ? 20 : 0 })
     .shadow({ radius: 16, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
+    }
   }
 
   @Builder
-  ToolPanel() {
+  HeaderMetrics() {
+    Row() {
+      Column() {
+        Text(String(this.questions.length))
+          .fontSize(this.isTablet ? 15 : 17)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_BLUE)
+        Text('全部')
+          .fontSize(10)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 2 })
+      }
+      .width(this.isTablet ? 108 : '33%')
+      .padding({ top: 8, bottom: 8 })
+      .margin({ left: 3, right: 3 })
+      .backgroundColor(COLOR_SOFT_BLUE)
+      .borderRadius(8)
+
+      Column() {
+        Text(String(this.filteredQuestions().length))
+          .fontSize(this.isTablet ? 15 : 17)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_GREEN)
+        Text('当前')
+          .fontSize(10)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 2 })
+      }
+      .width(this.isTablet ? 108 : '33%')
+      .padding({ top: 8, bottom: 8 })
+      .margin({ left: 3, right: 3 })
+      .backgroundColor(COLOR_SOFT_GREEN)
+      .borderRadius(8)
+
+      Column() {
+        Text(String(this.mode === 'wrongs' ? this.activeWrongCount() : this.questions.length))
+          .fontSize(this.isTablet ? 15 : 17)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_ORANGE)
+        Text(this.mode === 'wrongs' ? '未掌握' : '可复习')
+          .fontSize(10)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 2 })
+      }
+      .width(this.isTablet ? 108 : '33%')
+      .padding({ top: 8, bottom: 8 })
+      .margin({ left: 3, right: 3 })
+      .backgroundColor(COLOR_SOFT_ORANGE)
+      .borderRadius(8)
+    }
+    .width(this.isTablet ? 342 : '100%')
+  }
+
+  @Builder
+  TabletReviewWorkspace() {
+    Row() {
+      this.TabletFilterPanel()
+
+      Column() {
+        this.TabletListToolbar()
+        if (this.selectionMode) {
+          this.TabletBatchBar()
+        }
+        this.TabletQuestionGrid()
+      }
+      .layoutWeight(1)
+      .height('100%')
+      .margin({ left: 12 })
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .padding({ left: 16, right: 16, top: 14, bottom: 16 })
+    .constraintSize({ maxWidth: this.pageMaxWidth() })
+    .alignSelf(ItemAlign.Center)
+    .alignItems(VerticalAlign.Top)
+  }
+
+  @Builder
+  TabletFilterPanel() {
+    Column() {
+      Column() {
+        Text('复盘筛选')
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+        Text(this.reviewToolSummary())
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(17)
+          .margin({ top: 4 })
+      }
+      .width('100%')
+      .alignItems(HorizontalAlign.Start)
+
+      TextInput({ placeholder: '搜索题干或知识点', text: this.keyword })
+        .height(40)
+        .width('100%')
+        .fontSize(13)
+        .fontColor(COLOR_TEXT)
+        .placeholderColor(COLOR_MUTED)
+        .backgroundColor('#f8fafc')
+        .borderRadius(8)
+        .border({ width: 1, color: COLOR_LINE })
+        .margin({ top: 14 })
+        .onChange((value: string) => {
+          this.keyword = value;
+        })
+
+      Row() {
+        this.FilterChip('模块', 'category', COLOR_BLUE, COLOR_SOFT_BLUE,
+          () => this.nextCategoryFilter())
+      }
+      .width('100%')
+      .margin({ top: 10 })
+
+      Row() {
+        this.FilterChip('题型', 'type', COLOR_GREEN, COLOR_SOFT_GREEN,
+          () => this.nextTypeFilter())
+        this.FilterChip('难度', 'difficulty', COLOR_ORANGE, COLOR_SOFT_ORANGE,
+          () => this.nextDifficultyFilter())
+      }
+      .width('100%')
+      .margin({ top: 10 })
+
+      Row() {
+        this.FilterChip('排序', 'sort', COLOR_BLUE, COLOR_SOFT_BLUE,
+          () => this.nextSortMode())
+        if (this.mode === 'wrongs') {
+          this.FilterChip('范围', 'scope', COLOR_ORANGE, COLOR_SOFT_ORANGE,
+            () => this.nextWrongScope())
+        }
+      }
+      .width('100%')
+      .margin({ top: 10 })
+
+      if (this.hasActiveFilters()) {
+        Row() {
+          Text(this.activeFilterText())
+            .fontSize(11)
+            .fontColor(COLOR_BLUE)
+            .layoutWeight(1)
+          Button('清空')
+            .height(30)
+            .fontSize(11)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_GREEN)
+            .backgroundColor(COLOR_SOFT_GREEN)
+            .borderRadius(8)
+            .onClick(() => this.resetFilters())
+        }
+        .width('100%')
+        .padding({ left: 10, right: 8, top: 7, bottom: 7 })
+        .margin({ top: 10 })
+        .backgroundColor(COLOR_SOFT_BLUE)
+        .borderRadius(8)
+      }
+
+      Blank()
+
+      Button(this.filteredQuestions().length > 0 ? this.reviewAllButtonText() : '当前筛选无题')
+        .width('100%')
+        .height(44)
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.filteredQuestions().length > 0 ? '#ffffff' : COLOR_MUTED)
+        .enabled(this.filteredQuestions().length > 0)
+        .backgroundColor(this.filteredQuestions().length > 0 ? COLOR_GREEN : '#eef2f6')
+        .borderRadius(8)
+        .onClick(() => this.openReviewAt(0))
+    }
+    .width(300)
+    .height('100%')
+    .padding(14)
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: 7 })
+  }
+
+  @Builder
+  TabletListToolbar() {
+    Row() {
+      Column() {
+        Text('题目列表')
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+        Text(this.filteredQuestions().length > 0 ?
+          `当前显示 ${this.filteredQuestions().length} 道，可直接复盘或批量管理` :
+          '当前条件下没有可复盘题目')
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 3 })
+      }
+      .layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+
+      Text(`${this.filteredQuestions().length}/${this.questions.length}`)
+        .fontSize(12)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_BLUE)
+        .backgroundColor(COLOR_SOFT_BLUE)
+        .padding({ left: 10, right: 10, top: 6, bottom: 6 })
+        .borderRadius(8)
+        .margin({ right: 8 })
+
+      Button(this.selectionMode ? '完成' : '批量')
+        .height(38)
+        .fontSize(12)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.selectionMode ? '#ffffff' : COLOR_GREEN)
+        .backgroundColor(this.selectionMode ? COLOR_GREEN : COLOR_SOFT_GREEN)
+        .borderRadius(8)
+        .onClick(() => this.toggleSelectionMode())
+    }
+    .width('100%')
+    .padding({ left: 14, right: 14, top: 11, bottom: 11 })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  TabletBatchBar() {
+    Row() {
+      Column() {
+        Text(`已选择 ${this.selectedQuestionIds.length} 题`)
+          .fontSize(13)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_NAVY)
+        Text('选择可跨越当前筛选条件')
+          .fontSize(10)
+          .fontColor(COLOR_MUTED)
+          .margin({ top: 2 })
+      }
+      .layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+
+      Button(this.allFilteredSelected() ? '取消当前' : '全选当前')
+        .height(36)
+        .fontSize(11)
+        .fontColor(COLOR_BLUE)
+        .backgroundColor(COLOR_SOFT_BLUE)
+        .borderRadius(8)
+        .onClick(() => this.toggleCurrentSelection())
+
+      Button('清空')
+        .height(36)
+        .fontSize(11)
+        .fontColor(COLOR_MUTED)
+        .enabled(this.selectedQuestionIds.length > 0)
+        .backgroundColor('#eef2f6')
+        .borderRadius(8)
+        .margin({ left: 8 })
+        .onClick(() => this.clearSelection())
+
+      Button(this.bulkBusy ? '处理中' : this.batchActionText())
+        .height(36)
+        .fontSize(11)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.selectedQuestionIds.length > 0 ? '#ffffff' : COLOR_MUTED)
+        .enabled(this.selectedQuestionIds.length > 0 && !this.bulkBusy)
+        .backgroundColor(this.selectedQuestionIds.length > 0 ? this.batchActionColor() : '#eef2f6')
+        .borderRadius(8)
+        .margin({ left: 8 })
+        .onClick(() => this.runBatchAction())
+    }
+    .width('100%')
+    .padding({ left: 14, right: 14, top: 9, bottom: 9 })
+    .margin({ top: 10 })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+  }
+
+  @Builder
+  TabletQuestionGrid() {
+    if (this.filteredQuestions().length === 0) {
+      Column() {
+        Text(this.emptyTitle())
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+        Text(this.emptyHint())
+          .fontSize(12)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(18)
+          .textAlign(TextAlign.Center)
+          .margin({ top: 7 })
+        Button(this.emptyActionText())
+          .height(38)
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#ffffff')
+          .backgroundColor(COLOR_GREEN)
+          .borderRadius(8)
+          .margin({ top: 14 })
+          .onClick(() => this.handleEmptyAction())
+      }
+      .width('100%')
+      .layoutWeight(1)
+      .justifyContent(FlexAlign.Center)
+      .padding(20)
+      .margin({ top: 10 })
+      .backgroundColor(COLOR_SURFACE)
+      .borderRadius(8)
+      .border({ width: 1, color: COLOR_LINE })
+    } else {
+      Grid() {
+        ForEach(this.filteredQuestions(), (question: Question, index: number) => {
+          GridItem() {
+            this.QuestionItem(question, index)
+          }
+        }, (question: Question) => question.id)
+      }
+      .columnsTemplate('1fr 1fr')
+      .columnsGap(12)
+      .rowsGap(12)
+      .width('100%')
+      .layoutWeight(1)
+      .margin({ top: 10 })
+      .scrollBar(BarState.Auto)
+    }
+  }
+
+  @Builder
+  PhoneToolPanel() {
     Column() {
       Row() {
         Column() {
@@ -213,17 +581,17 @@ struct ReviewListPage {
         })
 
       Row() {
-        this.FilterChip('模块', this.categoryFilterLabel(), COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextCategoryFilter())
-        this.FilterChip('题型', this.typeFilterLabel(), COLOR_GREEN, COLOR_SOFT_GREEN, () => this.nextTypeFilter())
-        this.FilterChip('难度', this.difficultyFilterLabel(), COLOR_ORANGE, COLOR_SOFT_ORANGE, () => this.nextDifficultyFilter())
+        this.FilterChip('模块', 'category', COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextCategoryFilter())
+        this.FilterChip('题型', 'type', COLOR_GREEN, COLOR_SOFT_GREEN, () => this.nextTypeFilter())
+        this.FilterChip('难度', 'difficulty', COLOR_ORANGE, COLOR_SOFT_ORANGE, () => this.nextDifficultyFilter())
       }
       .width('100%')
       .margin({ top: 10 })
 
       Row() {
-        this.FilterChip('排序', this.sortModeLabel(), COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextSortMode())
+        this.FilterChip('排序', 'sort', COLOR_BLUE, COLOR_SOFT_BLUE, () => this.nextSortMode())
         if (this.mode === 'wrongs') {
-          this.FilterChip('范围', this.wrongScopeLabel(), COLOR_ORANGE, COLOR_SOFT_ORANGE, () => this.nextWrongScope())
+          this.FilterChip('范围', 'scope', COLOR_ORANGE, COLOR_SOFT_ORANGE, () => this.nextWrongScope())
         }
       }
       .width('100%')
@@ -419,6 +787,9 @@ struct ReviewListPage {
         .fontWeight(FontWeight.Bold)
         .fontColor(COLOR_TEXT)
         .lineHeight(22)
+        .maxLines(2)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .height(46)
         .margin({ top: 10 })
         .width('100%')
 
@@ -434,8 +805,11 @@ struct ReviewListPage {
           .fontSize(12)
           .fontColor(COLOR_MUTED)
           .lineHeight(18)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
           .layoutWeight(1)
       }
+        .height(24)
         .margin({ top: 8 })
         .width('100%')
 
@@ -491,9 +865,10 @@ struct ReviewListPage {
       .width('100%')
       .margin({ top: 12 })
     }
-    .width(this.isTablet ? '49.4%' : '100%')
+    .width('100%')
+    .constraintSize({ minHeight: this.isTablet ? 232 : 0 })
     .padding(14)
-    .margin({ top: 12 })
+    .margin({ top: this.isTablet ? 0 : 12 })
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({
@@ -504,31 +879,12 @@ struct ReviewListPage {
   }
 
   @Builder
-  Metric(label: string, value: string, bgColor: string, textColor: string) {
-    Column() {
-      Text(value)
-        .fontSize(17)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(textColor)
-      Text(label)
-        .fontSize(10)
-        .fontColor(COLOR_MUTED)
-        .margin({ top: 2 })
-    }
-    .layoutWeight(1)
-    .padding({ top: 10, bottom: 10 })
-    .margin({ left: 3, right: 3 })
-    .backgroundColor(bgColor)
-    .borderRadius(8)
-  }
-
-  @Builder
-  FilterChip(label: string, value: string, color: string, bgColor: string, action: () => void) {
+  FilterChip(label: string, filterKey: string, color: string, bgColor: string, action: () => void) {
     Column() {
       Text(label)
         .fontSize(10)
         .fontColor(COLOR_MUTED)
-      Text(value)
+      Text(this.filterChipValue(filterKey))
         .fontSize(13)
         .fontWeight(FontWeight.Bold)
         .fontColor(color)
@@ -722,6 +1078,17 @@ struct ReviewListPage {
     return '优先处理未掌握错题，按错误次数或难度复盘。';
   }
 
+  headerSubtitleText(): string {
+    if (this.mode === 'favorites') {
+      return '集中回看已收藏的重点题目';
+    }
+    return '复盘未掌握题目并跟踪掌握状态';
+  }
+
+  reviewAllButtonText(): string {
+    return this.mode === 'favorites' ? '复习当前收藏' : '复盘当前错题';
+  }
+
   knowledgeSummary(question: Question): string {
     if ((question.knowledgePoints || []).length === 0) {
       return '待补充';
@@ -817,6 +1184,22 @@ struct ReviewListPage {
 
   wrongScopeLabel(): string {
     return this.wrongScope === 'all' ? '全部错题' : '未掌握';
+  }
+
+  filterChipValue(filterKey: string): string {
+    if (filterKey === 'category') {
+      return this.categoryFilterLabel();
+    }
+    if (filterKey === 'type') {
+      return this.typeFilterLabel();
+    }
+    if (filterKey === 'difficulty') {
+      return this.difficultyFilterLabel();
+    }
+    if (filterKey === 'scope') {
+      return this.wrongScopeLabel();
+    }
+    return this.sortModeLabel();
   }
 
   nextCategoryFilter(): void {
