@@ -40,7 +40,6 @@ struct MyPage {
   @State private refreshing: boolean = false;
   @State private loginBusy: boolean = false;
   @State private logoutBusy: boolean = false;
-  @State private preferenceBusy: boolean = false;
   @State private agreementAccepted: boolean = false;
   @State private authenticated: boolean = false;
   @State private currentUser: AuthUser | undefined = undefined;
@@ -87,7 +86,6 @@ struct MyPage {
     } catch (error) {
       this.backendReachable = false;
       this.huaweiLoginEnabled = false;
-      this.loadError = this.authStatusError(error);
     }
 
     try {
@@ -195,29 +193,6 @@ struct MyPage {
       loginComponentManager.AgreementStatus.NOT_ACCEPTED);
   }
 
-  private async updateLeaderboardPreference(enabled: boolean): Promise<void> {
-    if (this.preferenceBusy) {
-      return;
-    }
-    if (!this.authenticated || !api.isSecureAuthTransport()) {
-      AppToast.show(this.getUIContext(), '排行榜设置需要登录并使用 HTTPS 服务');
-      return;
-    }
-
-    this.preferenceBusy = true;
-    try {
-      this.currentUser = await api.updateLeaderboardPreference(enabled);
-      AppToast.show(
-        this.getUIContext(),
-        enabled ? '已同意参与排行榜' : '已退出排行榜'
-      );
-    } catch (error) {
-      AppToast.show(this.getUIContext(), `排行榜设置失败：${this.readableError(error)}`);
-    } finally {
-      this.preferenceBusy = false;
-    }
-  }
-
   private updateLoginButtonState(): void {
     this.loginButtonController.setEnabled(this.loginReady() && !this.loginBusy);
   }
@@ -287,7 +262,6 @@ struct MyPage {
               }
 
               this.LearningCenterPanel()
-              this.DataStatusPanel()
             }
             .width('100%')
             .padding({ left: 16, right: 16, top: 16, bottom: 24 })
@@ -317,7 +291,7 @@ struct MyPage {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_NAVY)
-        Text(this.authenticated ? '华为账号已关联' : '当前使用匿名档案')
+        Text(this.authenticated ? '华为账号已关联' : '游客模式可直接使用')
           .fontSize(12)
           .fontColor(COLOR_MUTED)
           .margin({ top: 3 })
@@ -325,7 +299,7 @@ struct MyPage {
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
-      Text(this.authenticated ? '已登录' : '匿名')
+      Text(this.authenticated ? '已登录' : '游客')
         .fontSize(12)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.authenticated ? COLOR_GREEN : COLOR_BLUE)
@@ -410,7 +384,7 @@ struct MyPage {
             .fontColor(COLOR_NAVY)
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-          Text(this.authenticated ? '学习数据已关联 ArkInterview 账号' : '无需登录即可继续刷题')
+          Text(this.authenticated ? '学习记录已关联当前华为账号' : '学习记录保存在当前设备档案')
             .fontSize(12)
             .fontColor(COLOR_MUTED)
             .margin({ top: 5 })
@@ -427,8 +401,7 @@ struct MyPage {
 
       if (this.authenticated) {
         this.AccountInfoRow('登录方式', '华为账号', COLOR_GREEN)
-        this.AccountInfoRow('云端档案', '已连接', COLOR_GREEN)
-        this.LeaderboardPreferenceRow()
+        this.AccountInfoRow('学习档案', '已关联', COLOR_GREEN)
 
         Button(this.logoutBusy ? '正在退出' : '退出登录')
           .width('100%')
@@ -441,33 +414,19 @@ struct MyPage {
           .enabled(!this.logoutBusy)
           .onClick(() => this.confirmLogout())
       } else {
-        Text('可选登录')
-          .fontSize(15)
+        Text('华为账号一键登录')
+          .fontSize(16)
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_TEXT)
           .width('100%')
         Text(this.loginAvailabilityMessage())
           .fontSize(12)
-          .fontColor(this.loginReady() ? COLOR_MUTED : COLOR_ORANGE)
+          .fontColor(COLOR_MUTED)
           .lineHeight(19)
           .width('100%')
           .margin({ top: 6 })
 
         if (this.loginReady()) {
-          LoginWithHuaweiIDButton({
-            params: {
-              style: loginComponentManager.Style.BUTTON_WHITE_OUTLINE,
-              borderRadius: 8,
-              supportDarkMode: true,
-              loginType: loginComponentManager.LoginType.ID,
-              textAndIconStyle: true
-            },
-            controller: this.loginButtonController
-          })
-            .width('100%')
-            .height(42)
-            .margin({ top: 14 })
-
           Row() {
             Checkbox({ name: 'huaweiAgreement', group: 'accountAgreement' })
               .width(18)
@@ -485,12 +444,28 @@ struct MyPage {
               .onClick(() => this.openAgreement())
           }
           .width('100%')
-          .margin({ top: 11 })
+          .margin({ top: 13 })
           .alignItems(VerticalAlign.Center)
-        } else {
+        }
+
+        LoginWithHuaweiIDButton({
+          params: {
+            style: loginComponentManager.Style.BUTTON_RED,
+            borderRadius: 8,
+            supportDarkMode: true,
+            loginType: loginComponentManager.LoginType.ID,
+            textAndIconStyle: true
+          },
+          controller: this.loginButtonController
+        })
+          .width('100%')
+          .height(44)
+          .margin({ top: 13 })
+
+        if (!this.loginReady()) {
           Row() {
-            Text('登录暂不可用')
-              .fontSize(13)
+            Text('华为账号登录配置中')
+              .fontSize(12)
               .fontWeight(FontWeight.Bold)
               .fontColor(COLOR_ORANGE)
               .layoutWeight(1)
@@ -502,8 +477,8 @@ struct MyPage {
               .borderRadius(8)
           }
           .width('100%')
-          .padding(12)
-          .margin({ top: 14 })
+          .padding({ left: 11, right: 10, top: 8, bottom: 8 })
+          .margin({ top: 10 })
           .backgroundColor('#fffaf5')
           .border({ width: 1, color: '#f1c89f' })
           .borderRadius(8)
@@ -532,42 +507,6 @@ struct MyPage {
     }
     .width('100%')
     .height(32)
-  }
-
-  @Builder
-  LeaderboardPreferenceRow() {
-    Row() {
-      Column() {
-        Text('参与排行榜')
-          .fontSize(13)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_TEXT)
-        Text('允许使用有效客观题成绩，默认关闭')
-          .fontSize(11)
-          .fontColor(COLOR_MUTED)
-          .margin({ top: 3 })
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
-
-      if (this.preferenceBusy) {
-        LoadingProgress()
-          .width(22)
-          .height(22)
-          .color(COLOR_GREEN)
-          .margin({ right: 8 })
-      }
-
-      Toggle({
-        type: ToggleType.Switch,
-        isOn: this.currentUser?.leaderboardOptIn ?? false
-      })
-        .selectedColor(COLOR_GREEN)
-        .enabled(!this.preferenceBusy && api.isSecureAuthTransport())
-        .onChange((enabled: boolean) => this.updateLeaderboardPreference(enabled))
-    }
-    .width('100%')
-    .padding({ top: 10, bottom: 8 })
   }
 
   @Builder
@@ -850,69 +789,6 @@ struct MyPage {
       .margin({ left: 72, right: 18 })
   }
 
-  @Builder
-  DataStatusPanel() {
-    Column() {
-      Row() {
-        Text('数据与安全')
-          .fontSize(17)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_NAVY)
-          .layoutWeight(1)
-        Text(this.authenticated ? '账号模式' : '匿名模式')
-          .fontSize(11)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.authenticated ? COLOR_GREEN : COLOR_BLUE)
-          .backgroundColor(this.authenticated ? COLOR_SOFT_GREEN : COLOR_SOFT_BLUE)
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-          .borderRadius(8)
-      }
-      .width('100%')
-
-      this.StatusRow(
-        '练习记录',
-        this.authenticated ? '保存在账号档案中' : '由本机匿名设备 ID 关联',
-        this.authenticated ? COLOR_GREEN : COLOR_BLUE
-      )
-      this.StatusRow(
-        '登录凭证',
-        this.authenticated ? '由系统 AssetStore 加密保存' : '当前没有登录凭证',
-        this.authenticated ? COLOR_GREEN : COLOR_MUTED
-      )
-      this.StatusRow(
-        '传输保护',
-        api.isSecureAuthTransport() ? 'HTTPS 已启用' : '当前 API 为 HTTP，账号凭证禁止发送',
-        api.isSecureAuthTransport() ? COLOR_GREEN : COLOR_ORANGE
-      )
-    }
-    .width('100%')
-    .padding(18)
-    .margin({ top: 16 })
-    .backgroundColor(COLOR_SURFACE)
-    .border({ width: 1, color: COLOR_LINE })
-    .borderRadius(8)
-  }
-
-  @Builder
-  StatusRow(label: string, value: string, valueColor: string) {
-    Row() {
-      Text(label)
-        .fontSize(13)
-        .fontColor(COLOR_MUTED)
-        .width(this.isTablet ? 100 : 82)
-      Text(value)
-        .fontSize(13)
-        .fontColor(valueColor)
-        .lineHeight(19)
-        .layoutWeight(1)
-        .textAlign(TextAlign.End)
-    }
-    .width('100%')
-    .padding({ top: 13 })
-    .margin({ top: 12 })
-    .border({ width: { top: 1 }, color: COLOR_LINE })
-  }
-
   private loginReady(): boolean {
     return api.isSecureAuthTransport() &&
       HuaweiAccountConfig.isConfigured() &&
@@ -921,19 +797,10 @@ struct MyPage {
   }
 
   private loginAvailabilityMessage(): string {
-    if (!api.isSecureAuthTransport()) {
-      return '登录仅支持 HTTPS 服务地址。匿名刷题不受影响，当前不会发送任何账号凭证。';
+    if (!this.loginReady()) {
+      return '登录服务完成配置后即可使用，当前学习记录会继续保存在游客档案。';
     }
-    if (!HuaweiAccountConfig.isConfigured()) {
-      return '需要先在 AGC 开通 Account Kit，并填写 OAuth Client ID。';
-    }
-    if (!this.backendReachable) {
-      return '暂时无法确认服务器登录能力，请检查服务版本与网络。';
-    }
-    if (!this.huaweiLoginEnabled) {
-      return '服务器尚未配置华为账号凭据，匿名刷题可以继续使用。';
-    }
-    return '登录后可将当前设备的学习记录归入账号档案。';
+    return '登录后会把当前设备的练习记录关联到华为账号。';
   }
 
   private loginStatusTag(): string {
@@ -947,13 +814,6 @@ struct MyPage {
       return '服务未就绪';
     }
     return '服务端未启用';
-  }
-
-  private authStatusError(error: Object): string {
-    if (error instanceof ApiRequestError && error.statusCode === 404) {
-      return '服务器尚未部署账号接口，匿名模式保持可用';
-    }
-    return `账号服务状态获取失败：${this.readableError(error)}`;
   }
 
   private loginRequestError(error: Object): string {
@@ -975,7 +835,7 @@ struct MyPage {
 
   private accountName(): string {
     if (!this.authenticated) {
-      return '访客用户';
+      return '游客模式';
     }
     const displayName = this.currentUser?.displayName.trim() ?? '';
     return displayName.length > 0 ? displayName : '华为账号用户';

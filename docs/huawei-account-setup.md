@@ -2,6 +2,8 @@
 
 ArkInterview 的账号登录是可选能力。未登录时，刷题、收藏、错题和练习记录继续使用匿名设备档案；完成华为账号登录后，服务端把当前匿名学习记录合并到 ArkInterview 内部账号。
 
+当前阶段只接入华为账号一键登录，不建设手机号、密码、短信验证码或其他第三方登录。登录不是使用 App 的前置条件。
+
 ## 前置条件
 
 1. 在 AppGallery Connect 创建 HarmonyOS 应用，包名必须是 `com.lgq.arkinterview`。
