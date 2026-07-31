@@ -261,13 +261,9 @@ struct RecordPage {
     Row() {
       Column() {
         this.SummaryPanel()
-        if (this.isEmptyRecord()) {
-          this.EmptyRecordPanel()
-        } else {
-          this.ReviewShortcutPanel()
-        }
+        this.TabletGuidancePanel()
       }
-      .width(350)
+      .width(344)
       .height('100%')
       .padding({ left: 16, top: 16, bottom: 16 })
 
@@ -362,15 +358,168 @@ struct RecordPage {
       .width('100%')
       .margin({ top: 14 })
 
-      this.StreakMilestonePanel()
-
-      this.FocusCategoryPanel()
+      if (!this.isTablet) {
+        this.StreakMilestonePanel()
+        this.FocusCategoryPanel()
+      }
     }
     .width('100%')
-    .padding(18)
+    .padding(this.isTablet ? 16 : 18)
     .backgroundColor(COLOR_NAVY)
     .borderRadius(8)
     .shadow({ radius: 18, color: COLOR_SHADOW, offsetX: 0, offsetY: 8 })
+  }
+
+  @Builder
+  TabletGuidancePanel() {
+    Column() {
+      Row() {
+        Text('学习节奏')
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+          .layoutWeight(1)
+
+        Text(this.practiceTodayLabel())
+          .fontSize(10)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.practiceTodayColor())
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .backgroundColor(this.practiceTodayBgColor())
+          .borderRadius(7)
+      }
+      .width('100%')
+
+      Column() {
+        Row() {
+          Text(this.practiceStreakLabel())
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+            .layoutWeight(1)
+
+          Text(`${this.currentPracticeStreak()}/${this.nextStreakMilestone()} 天`)
+            .fontSize(11)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_GREEN)
+        }
+        .width('100%')
+
+        Stack({ alignContent: Alignment.Start }) {
+          Row()
+            .width('100%')
+            .height(6)
+            .backgroundColor('#e6ecef')
+            .borderRadius(3)
+          Row()
+            .width(this.streakProgressWidth())
+            .height(6)
+            .backgroundColor('#58c4a7')
+            .borderRadius(3)
+        }
+        .width('100%')
+        .height(6)
+        .margin({ top: 8 })
+
+        Text(this.streakMilestoneDetail())
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(17)
+          .maxLines(2)
+          .width('100%')
+          .margin({ top: 7 })
+      }
+      .width('100%')
+      .padding(12)
+      .margin({ top: 12 })
+      .backgroundColor('#f8fafb')
+      .borderRadius(8)
+      .border({ width: 1, color: COLOR_LINE })
+
+      Column() {
+        Row() {
+          Text(this.focusCategoryTitle())
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+            .layoutWeight(1)
+
+          Text(this.focusCategoryActionLabel())
+            .fontSize(11)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_BLUE)
+        }
+        .width('100%')
+
+        Text(this.focusCategoryDetail())
+          .fontSize(11)
+          .fontColor(COLOR_MUTED)
+          .lineHeight(17)
+          .maxLines(2)
+          .width('100%')
+          .margin({ top: 6 })
+
+        if (this.focusCategory() !== undefined) {
+          Row() {
+            Text('推荐依据')
+              .fontSize(10)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(COLOR_BLUE)
+              .margin({ right: 7 })
+            Text(this.focusCategoryEvidence())
+              .fontSize(10)
+              .fontColor(COLOR_MUTED)
+              .layoutWeight(1)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+          .width('100%')
+          .padding({ left: 9, right: 9, top: 7, bottom: 7 })
+          .margin({ top: 8 })
+          .backgroundColor(COLOR_SOFT_BLUE)
+          .borderRadius(7)
+        }
+      }
+      .width('100%')
+      .padding({ top: 12 })
+      .margin({ top: 12 })
+      .border({ width: { top: 1 }, color: COLOR_LINE })
+      .onClick(() => this.openFocusCategory())
+
+      Row() {
+        Column() {
+          Text('复盘建议')
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_TEXT)
+          Text(this.reviewHint())
+            .fontSize(10)
+            .fontColor(COLOR_MUTED)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 4 })
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+
+        Text(this.tabletReviewActionLabel())
+          .fontSize(11)
+          .fontWeight(FontWeight.Bold)
+          .fontColor((this.stats?.wrongCount ?? 0) > 0 ? COLOR_ORANGE : COLOR_BLUE)
+          .margin({ left: 10 })
+      }
+      .width('100%')
+      .padding({ top: 12 })
+      .margin({ top: 12 })
+      .border({ width: { top: 1 }, color: COLOR_LINE })
+      .onClick(() => this.openReview())
+    }
+    .width('100%')
+    .padding(16)
+    .margin({ top: 12 })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
   }
 
   @Builder
@@ -578,7 +727,7 @@ struct RecordPage {
     }
     .width('100%')
     .padding(16)
-    .margin({ top: 14 })
+    .margin({ top: this.isTablet ? 0 : 14 })
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
@@ -1072,6 +1221,15 @@ struct RecordPage {
     return this.hasPracticeOnDate(this.defaultDailyStats(), this.shanghaiToday()) ? '今日已记录' : '今日待练习';
   }
 
+  practiceTodayColor(): string {
+    return this.hasPracticeOnDate(this.defaultDailyStats(), this.shanghaiToday()) ? COLOR_GREEN : COLOR_ORANGE;
+  }
+
+  practiceTodayBgColor(): string {
+    return this.hasPracticeOnDate(this.defaultDailyStats(), this.shanghaiToday()) ?
+      COLOR_SOFT_GREEN : COLOR_SOFT_ORANGE;
+  }
+
   nextStreakMilestone(): number {
     const streak = this.currentPracticeStreak();
     const milestones: number[] = [3, 7, 14, 30, 60, 100, 180, 365];
@@ -1187,6 +1345,10 @@ struct RecordPage {
     return `判分 ${this.categoryGradedAttempts(category)} 次 · 正确率 ${FormatUtils.percent(category.accuracy)} · 完成度 ${FormatUtils.percent(category.completionRate)}`;
   }
 
+  focusCategoryActionLabel(): string {
+    return this.focusCategory() === undefined ? '开始积累 >' : '去练习 >';
+  }
+
   reviewHint(): string {
     if ((this.stats?.wrongCount ?? 0) > 0) {
       return '从尚未掌握的错题开始巩固';
@@ -1196,6 +1358,11 @@ struct RecordPage {
 
   reviewButtonLabel(): string {
     return (this.stats?.wrongCount ?? 0) > 0 ? '进入错题本' : '开始随机练习';
+  }
+
+  tabletReviewActionLabel(): string {
+    const wrongCount = this.stats?.wrongCount ?? 0;
+    return wrongCount > 0 ? `${wrongCount} 道 >` : '随机练习 >';
   }
 
   recordStatusMark(item: PracticeRecordItem): string {
@@ -1278,7 +1445,7 @@ struct RecordPage {
   }
 
   defaultDailyStats(): DailyPracticeStats[] {
-    if (this.stats?.dailyStats !== undefined) {
+    if (this.stats?.dailyStats !== undefined && this.stats.dailyStats.length > 0) {
       return this.stats.dailyStats;
     }
     return this.buildDailyStats(this.stats?.recentRecords ?? []);
@@ -1532,7 +1699,10 @@ struct RecordPage {
       return `按北京时间筛选当天提交${filter.length > 0 ? ` · ${filter}` : ''}`;
     }
     if (!this.historyApiAvailable) {
-      return `最近 12 次提交记录${filter.length > 0 ? ` · ${filter}` : ''}`;
+      if (this.records.length === 0) {
+        return `当前服务器仅返回累计统计，暂无历史明细${filter.length > 0 ? ` · ${filter}` : ''}`;
+      }
+      return `最近 ${this.records.length} 次提交记录${filter.length > 0 ? ` · ${filter}` : ''}`;
     }
     return `按提交时间从新到旧排列${filter.length > 0 ? ` · ${filter}` : ''}`;
   }
@@ -1540,6 +1710,9 @@ struct RecordPage {
   emptyRecordsLabel(): string {
     if (this.selectedDate.length > 0 || this.hasRecordFilters()) {
       return '当前筛选条件下没有作答记录。';
+    }
+    if (!this.historyApiAvailable && (this.stats?.totalAnswers ?? 0) > 0) {
+      return '当前服务器未提供历史明细，累计答题和分类进度仍可正常查看。';
     }
     return '完成作答后，提交记录会显示在这里。';
   }
@@ -1752,7 +1925,13 @@ struct RecordPage {
     const category = this.focusCategory();
     if (category !== undefined) {
       this.openCategoryPractice(category);
+      return;
     }
+    AppRouter.push(this.getUIContext(), 'pages/TrainingPage', {
+      mode: 'random',
+      categoryId: '',
+      title: '随机练习'
+    });
   }
 
   updateLayoutMode(): void {
