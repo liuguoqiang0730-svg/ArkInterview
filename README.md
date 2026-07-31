@@ -60,7 +60,7 @@ export HUAWEI_REDIRECT_URI="<registered redirect uri>"
 
 可选令牌有效期变量为 `AUTH_ACCESS_TTL_SECONDS` 和 `AUTH_REFRESH_TTL_SECONDS`，默认分别为 `900` 秒和 `2592000` 秒。`HUAWEI_CLIENT_SECRET`、华为授权码和所有明文令牌都不能写入仓库或日志，公网登录接口必须使用 HTTPS。
 
-客户端还需要填写 AGC OAuth Client ID，并把 API 地址切换为 HTTPS。完整步骤和验收项见 [`docs/huawei-account-setup.md`](docs/huawei-account-setup.md)。当前仓库使用 `HUAWEI_CLIENT_ID_PENDING` 占位符且公网 API 仍是 HTTP，因此登录入口会安全禁用，不影响匿名使用。
+客户端已经配置 AGC OAuth Client ID，但 API 地址仍需切换为正式 HTTPS 域名，并在服务端部署账号接口和对应环境变量。完整步骤和验收项见 [`docs/huawei-account-setup.md`](docs/huawei-account-setup.md)。在 HTTPS 与服务端登录能力启用前，登录入口会安全禁用，不影响匿名使用。
 
 ## 发布远程题库
 

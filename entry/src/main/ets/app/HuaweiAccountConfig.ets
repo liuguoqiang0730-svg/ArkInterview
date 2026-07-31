@@ -1,4 +1,4 @@
-export const HUAWEI_CLIENT_ID: string = 'HUAWEI_CLIENT_ID_PENDING';
+export const HUAWEI_CLIENT_ID: string = '6917612395530063101';
 
 export class HuaweiAccountConfig {
   static isConfigured(): boolean {
