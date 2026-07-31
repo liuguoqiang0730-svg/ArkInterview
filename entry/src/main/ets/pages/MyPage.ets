@@ -8,7 +8,6 @@ import { AuthStatusResponse, AuthUser, UserProfileResponse } from '../models/Acc
 import { UserStats } from '../models/QuestionModels';
 import { ApiClient, ApiRequestError } from '../services/ApiClient';
 import { AuthSessionStore } from '../services/AuthSessionStore';
-import { AppRouter } from '../utils/AppRouter';
 import { AppToast } from '../utils/AppToast';
 import { FormatUtils } from '../utils/FormatUtils';
 
@@ -234,39 +233,17 @@ struct MyPage {
           .width('100%')
           .layoutWeight(1)
           .justifyContent(FlexAlign.Center)
+        } else if (this.isTablet) {
+          Column() {
+            this.ProfileContent()
+          }
+          .width('100%')
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.Center)
+          .justifyContent(FlexAlign.Start)
         } else {
           Scroll() {
-            Column() {
-              if (this.loadError.length > 0) {
-                this.ErrorBanner()
-              }
-
-              if (this.isTablet) {
-                Row() {
-                  Column() {
-                    this.AccountPanel()
-                  }
-                  .layoutWeight(6)
-
-                  Column() {
-                    this.StatsPanel()
-                  }
-                  .layoutWeight(5)
-                  .margin({ left: 16 })
-                }
-                .width('100%')
-                .alignItems(VerticalAlign.Top)
-              } else {
-                this.AccountPanel()
-                this.StatsPanel()
-              }
-
-              this.LearningCenterPanel()
-            }
-            .width('100%')
-            .padding({ left: 16, right: 16, top: 16, bottom: 24 })
-            .constraintSize({ maxWidth: this.pageMaxWidth() })
-            .alignSelf(ItemAlign.Center)
+            this.ProfileContent()
           }
           .width('100%')
           .layoutWeight(1)
@@ -284,6 +261,39 @@ struct MyPage {
   }
 
   @Builder
+  ProfileContent() {
+    Column() {
+      if (this.loadError.length > 0) {
+        this.ErrorBanner()
+      }
+
+      if (this.isTablet) {
+        Row() {
+          Column() {
+            this.AccountPanel()
+          }
+          .layoutWeight(6)
+
+          Column() {
+            this.StatsPanel()
+          }
+          .layoutWeight(5)
+          .margin({ left: 16 })
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Top)
+      } else {
+        this.AccountPanel()
+        this.StatsPanel()
+      }
+    }
+    .width('100%')
+    .padding({ left: 16, right: 16, top: 16, bottom: 24 })
+    .constraintSize({ maxWidth: this.pageMaxWidth() })
+    .alignSelf(ItemAlign.Center)
+  }
+
+  @Builder
   Header() {
     Row() {
       Column() {
@@ -291,7 +301,7 @@ struct MyPage {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
           .fontColor(COLOR_NAVY)
-        Text(this.authenticated ? '华为账号已关联' : '游客模式可直接使用')
+        Text(this.authenticated ? '账号、档案与基础设置' : '游客档案与基础设置')
           .fontSize(12)
           .fontColor(COLOR_MUTED)
           .margin({ top: 3 })
@@ -597,198 +607,6 @@ struct MyPage {
     .layoutWeight(1)
   }
 
-  @Builder
-  LearningCenterPanel() {
-    Column() {
-      Row() {
-        Column() {
-          Text('学习中心')
-            .fontSize(18)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(COLOR_NAVY)
-          Text('练习历史、复习资产与能力排名')
-            .fontSize(12)
-            .fontColor(COLOR_MUTED)
-            .margin({ top: 4 })
-        }
-        .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1)
-
-        Text('4 个入口')
-          .fontSize(11)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_GREEN)
-          .backgroundColor(COLOR_SOFT_GREEN)
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-          .borderRadius(8)
-      }
-      .width('100%')
-      .padding({ left: 18, right: 18, top: 17, bottom: 12 })
-
-      Divider()
-        .color(COLOR_LINE)
-
-      if (this.isTablet) {
-        Row() {
-          this.LearningEntry(
-            '记',
-            '练习记录',
-            this.recordEntryDetail(),
-            String(this.stats?.totalAnswers ?? 0),
-            COLOR_BLUE,
-            COLOR_SOFT_BLUE,
-            'records'
-          )
-          this.LearningEntry(
-            '错',
-            '错题本',
-            this.wrongEntryDetail(),
-            String(this.stats?.wrongCount ?? 0),
-            COLOR_RED,
-            COLOR_SOFT_RED,
-            'wrongs'
-          )
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-
-        Divider()
-          .color(COLOR_LINE)
-          .margin({ left: 18, right: 18 })
-
-        Row() {
-          this.LearningEntry(
-            '藏',
-            '收藏题目',
-            this.favoriteEntryDetail(),
-            String(this.stats?.favoriteCount ?? 0),
-            COLOR_ORANGE,
-            COLOR_SOFT_ORANGE,
-            'favorites'
-          )
-          this.LearningEntry(
-            '榜',
-            '开发者排行榜',
-            this.leaderboardEntryDetail(),
-            '查看',
-            COLOR_GREEN,
-            COLOR_SOFT_GREEN,
-            'leaderboard'
-          )
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-      } else {
-        this.LearningEntry(
-          '记',
-          '练习记录',
-          this.recordEntryDetail(),
-          String(this.stats?.totalAnswers ?? 0),
-          COLOR_BLUE,
-          COLOR_SOFT_BLUE,
-          'records'
-        )
-        this.LearningDivider()
-        this.LearningEntry(
-          '错',
-          '错题本',
-          this.wrongEntryDetail(),
-          String(this.stats?.wrongCount ?? 0),
-          COLOR_RED,
-          COLOR_SOFT_RED,
-          'wrongs'
-        )
-        this.LearningDivider()
-        this.LearningEntry(
-          '藏',
-          '收藏题目',
-          this.favoriteEntryDetail(),
-          String(this.stats?.favoriteCount ?? 0),
-          COLOR_ORANGE,
-          COLOR_SOFT_ORANGE,
-          'favorites'
-        )
-        this.LearningDivider()
-        this.LearningEntry(
-          '榜',
-          '开发者排行榜',
-          this.leaderboardEntryDetail(),
-          '查看',
-          COLOR_GREEN,
-          COLOR_SOFT_GREEN,
-          'leaderboard'
-        )
-      }
-    }
-    .width('100%')
-    .margin({ top: 16 })
-    .backgroundColor(COLOR_SURFACE)
-    .border({ width: 1, color: COLOR_LINE })
-    .borderRadius(8)
-    .shadow({ radius: 12, color: COLOR_SHADOW, offsetX: 0, offsetY: 5 })
-  }
-
-  @Builder
-  LearningEntry(
-    mark: string,
-    title: string,
-    detail: string,
-    value: string,
-    color: string,
-    softColor: string,
-    target: string
-  ) {
-    Row() {
-      Text(mark)
-        .width(42)
-        .height(42)
-        .fontSize(15)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(color)
-        .textAlign(TextAlign.Center)
-        .backgroundColor(softColor)
-        .borderRadius(8)
-        .margin({ right: 12 })
-
-      Column() {
-        Text(title)
-          .fontSize(15)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(COLOR_TEXT)
-        Text(detail)
-          .fontSize(11)
-          .fontColor(COLOR_MUTED)
-          .maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .margin({ top: 4 })
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
-
-      Text(value)
-        .fontSize(13)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(color)
-        .margin({ left: 8 })
-
-      Text('>')
-        .fontSize(17)
-        .fontColor(COLOR_MUTED)
-        .margin({ left: 8 })
-    }
-    .width(this.isTablet ? '49.5%' : '100%')
-    .height(74)
-    .padding({ left: 18, right: 16 })
-    .onClick(() => this.openLearningEntry(target))
-  }
-
-  @Builder
-  LearningDivider() {
-    Divider()
-      .color(COLOR_LINE)
-      .margin({ left: 72, right: 18 })
-  }
-
   private loginReady(): boolean {
     return api.isSecureAuthTransport() &&
       HuaweiAccountConfig.isConfigured() &&
@@ -853,50 +671,6 @@ struct MyPage {
   private lastPracticeLabel(): string {
     const value = this.stats?.lastPracticedAt;
     return value && value.length >= 10 ? value.substring(0, 10) : '暂无记录';
-  }
-
-  private recordEntryDetail(): string {
-    return `累计 ${this.stats?.answeredQuestionCount ?? 0} 道题，最近 ${this.lastPracticeLabel()}`;
-  }
-
-  private wrongEntryDetail(): string {
-    const mastered = this.stats?.masteredWrongCount ?? 0;
-    return mastered > 0 ? `待复盘题目，另有 ${mastered} 道已掌握` : '集中复盘答错且尚未掌握的题目';
-  }
-
-  private favoriteEntryDetail(): string {
-    return (this.stats?.favoriteCount ?? 0) > 0 ? '集中复习已收藏的重点题目' : '收藏重点题后可在这里集中复习';
-  }
-
-  private leaderboardEntryDetail(): string {
-    if (!this.authenticated) {
-      return '登录后可参与周榜、总榜和模块榜';
-    }
-    return this.currentUser?.leaderboardOptIn === true ? '已参与成绩排名，查看当前名次' : '可选择参与周榜、总榜和模块榜';
-  }
-
-  private openLearningEntry(target: string): void {
-    if (target === 'records') {
-      AppRouter.push(this.getUIContext(), 'pages/RecordPage');
-      return;
-    }
-    if (target === 'wrongs') {
-      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
-        mode: 'wrongs',
-        title: '错题本'
-      });
-      return;
-    }
-    if (target === 'favorites') {
-      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
-        mode: 'favorites',
-        title: '收藏题目'
-      });
-      return;
-    }
-    if (target === 'leaderboard') {
-      AppRouter.push(this.getUIContext(), 'pages/LeaderboardPage');
-    }
   }
 
   private openAgreement(): void {

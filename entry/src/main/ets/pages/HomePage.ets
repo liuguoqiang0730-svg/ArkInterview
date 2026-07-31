@@ -94,6 +94,7 @@ struct HomePage {
       .justifyContent(FlexAlign.Start)
 
       Column() {
+        this.LearningCenterSection()
         this.InterviewShareSection()
         this.CategoryHeader()
         if (this.loading) {
@@ -128,6 +129,7 @@ struct HomePage {
     Column() {
       this.HomeHeader()
       this.OverviewPanel()
+      this.LearningCenterSection()
       this.ActionGrid()
       this.InterviewShareSection()
       this.CategorySection()
@@ -300,6 +302,120 @@ struct HomePage {
     }
     .width('100%')
     .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 16 })
+  }
+
+  @Builder
+  LearningCenterSection() {
+    Column() {
+      Row() {
+        Column() {
+          Text('学习中心')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(COLOR_NAVY)
+          Text('查看记录、错题、收藏与能力排名')
+            .fontSize(12)
+            .fontColor(COLOR_MUTED)
+            .margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        Text('学习资产')
+          .fontSize(11)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_GREEN)
+          .backgroundColor(COLOR_SOFT_GREEN)
+          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .borderRadius(8)
+      }
+      .width('100%')
+      .margin({ bottom: 10 })
+
+      if (this.isTablet) {
+        Row() {
+          this.LearningAssetCard('记', '练习记录', String(this.stats?.totalAnswers ?? 0),
+            COLOR_BLUE, COLOR_SOFT_BLUE, 'records')
+          this.LearningAssetCard('错', '错题本', String(this.stats?.wrongCount ?? 0),
+            COLOR_ORANGE, COLOR_SOFT_ORANGE, 'wrongs')
+          this.LearningAssetCard('藏', '收藏题目', String(this.stats?.favoriteCount ?? 0),
+            COLOR_GREEN, COLOR_SOFT_GREEN, 'favorites')
+          this.LearningAssetCard('榜', '排行榜', '查看',
+            COLOR_NAVY, COLOR_SOFT_BLUE, 'leaderboard')
+        }
+        .width('100%')
+      } else {
+        Row() {
+          this.LearningAssetCard('记', '练习记录', String(this.stats?.totalAnswers ?? 0),
+            COLOR_BLUE, COLOR_SOFT_BLUE, 'records')
+          this.LearningAssetCard('错', '错题本', String(this.stats?.wrongCount ?? 0),
+            COLOR_ORANGE, COLOR_SOFT_ORANGE, 'wrongs')
+        }
+        .width('100%')
+
+        Row() {
+          this.LearningAssetCard('藏', '收藏题目', String(this.stats?.favoriteCount ?? 0),
+            COLOR_GREEN, COLOR_SOFT_GREEN, 'favorites')
+          this.LearningAssetCard('榜', '排行榜', '查看',
+            COLOR_NAVY, COLOR_SOFT_BLUE, 'leaderboard')
+        }
+        .width('100%')
+        .margin({ top: 8 })
+      }
+    }
+    .width('100%')
+    .padding({ left: this.isTablet ? 0 : 18, right: this.isTablet ? 0 : 18, bottom: 16 })
+  }
+
+  @Builder
+  LearningAssetCard(
+    mark: string,
+    title: string,
+    value: string,
+    color: string,
+    softColor: string,
+    target: string
+  ) {
+    Row() {
+      Text(mark)
+        .width(34)
+        .height(34)
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(color)
+        .textAlign(TextAlign.Center)
+        .backgroundColor(softColor)
+        .borderRadius(8)
+        .margin({ right: 9 })
+
+      Column() {
+        Text(title)
+          .fontSize(this.isTablet ? 13 : 14)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(COLOR_TEXT)
+          .maxLines(1)
+        Text(value)
+          .fontSize(11)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(color)
+          .margin({ top: 4 })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      Text('>')
+        .fontSize(15)
+        .fontColor(COLOR_MUTED)
+    }
+    .layoutWeight(1)
+    .height(this.isTablet ? 68 : 66)
+    .padding({ left: 10, right: 9 })
+    .margin({ left: 4, right: 4 })
+    .backgroundColor(COLOR_SURFACE)
+    .borderRadius(8)
+    .border({ width: 1, color: COLOR_LINE })
+    .shadow({ radius: 8, color: COLOR_SHADOW, offsetX: 0, offsetY: 4 })
+    .onClick(() => this.openLearningAsset(target))
   }
 
   @Builder
@@ -786,5 +902,29 @@ struct HomePage {
 
   openTrainingCenter(): void {
     AppRouter.push(this.getUIContext(), 'pages/TrainingPage');
+  }
+
+  openLearningAsset(target: string): void {
+    if (target === 'records') {
+      AppRouter.push(this.getUIContext(), 'pages/RecordPage');
+      return;
+    }
+    if (target === 'wrongs') {
+      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
+        mode: 'wrongs',
+        title: '错题本'
+      });
+      return;
+    }
+    if (target === 'favorites') {
+      AppRouter.push(this.getUIContext(), 'pages/ReviewListPage', {
+        mode: 'favorites',
+        title: '收藏题目'
+      });
+      return;
+    }
+    if (target === 'leaderboard') {
+      AppRouter.push(this.getUIContext(), 'pages/LeaderboardPage');
+    }
   }
 }
