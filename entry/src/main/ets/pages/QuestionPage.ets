@@ -54,6 +54,7 @@ struct QuestionPage {
   @State private loading: boolean = true;
   @State private isTablet: boolean = false;
   @State private viewportWidthVp: number = 0;
+  @State private viewportHeightVp: number = 0;
   @State private masteringWrong: boolean = false;
   @State private showCompletionSummary: boolean = false;
 
@@ -90,66 +91,43 @@ struct QuestionPage {
     Column() {
       Stack({ alignContent: Alignment.TopEnd }) {
         Column() {
-        Row() {
-          Button('<')
-            .width(40)
-            .height(40)
-            .fontColor(COLOR_NAVY)
-            .backgroundColor('#eef2f6')
-            .borderRadius(8)
-            .onClick(() => AppRouter.back(this.getUIContext()))
           Column() {
-            Text(this.pageTitleText())
-              .fontSize(22)
-              .fontWeight(FontWeight.Bold)
-              .fontColor(COLOR_NAVY)
-            Text(this.headerProgressText())
-              .fontSize(11)
-              .fontColor(COLOR_MUTED)
-              .margin({ top: 2 })
-          }
-            .layoutWeight(1)
-            .alignItems(HorizontalAlign.Start)
-          this.ProgressButton()
-          Button(this.favoriteButtonText())
-            .height(40)
-            .fontSize(13)
-            .fontColor(this.question?.isFavorite ? COLOR_ORANGE : COLOR_GREEN)
-            .backgroundColor(this.question?.isFavorite ? COLOR_SOFT_ORANGE : COLOR_SOFT_GREEN)
-            .borderRadius(8)
-            .onClick(() => this.toggleFavorite())
-        }
-        .width('100%')
-        .padding({ left: 16, right: 16, top: 16, bottom: 14 })
-        .backgroundColor(COLOR_SURFACE)
-        .borderRadius(this.isTablet ? 8 : 0)
-        .constraintSize({ maxWidth: this.pageMaxWidth() })
-        .alignSelf(ItemAlign.Center)
-        .margin({ top: this.isTablet ? 20 : 0 })
-        .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: 7 })
-
-        if (this.showCompletionSummary) {
-          this.CompletionFlow()
-        } else if (this.loading) {
-          Column() {
-            LoadingProgress()
-              .width(36)
-              .height(36)
-            Text('正在加载题目详情')
-              .fontSize(14)
-              .fontColor(COLOR_MUTED)
-              .margin({ top: 12 })
+            if (this.isTablet) {
+              this.TabletHeader()
+            } else {
+              this.PhoneHeader()
+            }
           }
           .width('100%')
-          .layoutWeight(1)
-          .justifyContent(FlexAlign.Center)
-        } else if (this.question) {
-          if (this.isTablet) {
-            this.TabletAnswerWorkspace()
-          } else {
-            this.PhoneAnswerFlow()
+          .backgroundColor(COLOR_SURFACE)
+          .borderRadius(this.isTablet ? 8 : 0)
+          .constraintSize({ maxWidth: this.pageMaxWidth() })
+          .alignSelf(ItemAlign.Center)
+          .margin({ top: this.isTablet ? 20 : 0 })
+          .shadow({ radius: 14, color: COLOR_SHADOW, offsetX: 0, offsetY: 7 })
+
+          if (this.showCompletionSummary) {
+            this.CompletionFlow()
+          } else if (this.loading) {
+            Column() {
+              LoadingProgress()
+                .width(36)
+                .height(36)
+              Text('正在加载题目详情')
+                .fontSize(14)
+                .fontColor(COLOR_MUTED)
+                .margin({ top: 12 })
+            }
+            .width('100%')
+            .layoutWeight(1)
+            .justifyContent(FlexAlign.Center)
+          } else if (this.question) {
+            if (this.isTablet) {
+              this.TabletAnswerWorkspace()
+            } else {
+              this.PhoneAnswerFlow()
+            }
           }
-        }
         }
         .width('100%')
         .height('100%')
@@ -166,6 +144,86 @@ struct QuestionPage {
     .width('100%')
     .height('100%')
     .backgroundColor(COLOR_BG)
+  }
+
+  @Builder
+  TabletHeader() {
+    Row() {
+      this.BackButton()
+      this.HeaderTitle(22)
+      this.ProgressButton()
+      Button(this.favoriteButtonText())
+        .height(40)
+        .fontSize(13)
+        .fontColor(this.question?.isFavorite ? COLOR_ORANGE : COLOR_GREEN)
+        .backgroundColor(this.question?.isFavorite ? COLOR_SOFT_ORANGE : COLOR_SOFT_GREEN)
+        .borderRadius(8)
+        .onClick(() => this.toggleFavorite())
+    }
+    .width('100%')
+    .padding({ left: 16, right: 16, top: 16, bottom: 14 })
+  }
+
+  @Builder
+  PhoneHeader() {
+    Row() {
+      this.BackButton()
+      this.HeaderTitle(18)
+      Button('题')
+        .width(40)
+        .height(40)
+        .fontSize(13)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.showProgressPanel ? '#ffffff' : COLOR_BLUE)
+        .backgroundColor(this.showProgressPanel ? COLOR_BLUE : COLOR_SOFT_BLUE)
+        .borderRadius(8)
+        .margin({ right: 8 })
+        .onClick(() => this.showProgressPanel = !this.showProgressPanel)
+      Button(this.question?.isFavorite ? '★' : '☆')
+        .width(40)
+        .height(40)
+        .fontSize(20)
+        .fontColor(this.question?.isFavorite ? COLOR_ORANGE : COLOR_GREEN)
+        .backgroundColor(this.question?.isFavorite ? COLOR_SOFT_ORANGE : COLOR_SOFT_GREEN)
+        .borderRadius(8)
+        .onClick(() => this.toggleFavorite())
+    }
+    .width('100%')
+    .padding({ left: 12, right: 12, top: 12, bottom: 10 })
+  }
+
+  @Builder
+  BackButton() {
+    Button('<')
+      .width(40)
+      .height(40)
+      .fontColor(COLOR_NAVY)
+      .backgroundColor('#eef2f6')
+      .borderRadius(8)
+      .onClick(() => AppRouter.back(this.getUIContext()))
+  }
+
+  @Builder
+  HeaderTitle(fontSize: number) {
+    Column() {
+      Text(this.pageTitleText())
+        .fontSize(fontSize)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(COLOR_NAVY)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .width('100%')
+      Text(this.headerProgressText())
+        .fontSize(11)
+        .fontColor(COLOR_MUTED)
+        .margin({ top: 2 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .width('100%')
+    }
+    .layoutWeight(1)
+    .alignItems(HorizontalAlign.Start)
+    .margin({ left: 10, right: 10 })
   }
 
   @Builder
@@ -489,12 +547,13 @@ struct QuestionPage {
         }
       }
       .width('100%')
-      .padding(16)
+      .padding({ left: 12, right: 12, top: 12, bottom: 24 })
       .constraintSize({ maxWidth: this.pageMaxWidth() })
       .alignSelf(ItemAlign.Center)
     }
     .width('100%')
     .layoutWeight(1)
+    .scrollBar(BarState.Auto)
   }
 
   @Builder
@@ -715,10 +774,10 @@ struct QuestionPage {
       .width('100%')
 
       Text(this.question?.title ?? '')
-        .fontSize(20)
+        .fontSize(this.isTablet ? 20 : 18)
         .fontWeight(FontWeight.Bold)
         .fontColor(COLOR_TEXT)
-        .lineHeight(28)
+        .lineHeight(this.isTablet ? 28 : 26)
         .margin({ top: 14 })
         .width('100%')
 
@@ -730,7 +789,7 @@ struct QuestionPage {
         .width('100%')
     }
     .width('100%')
-    .padding(16)
+    .padding(this.isTablet ? 16 : 14)
     .backgroundColor(COLOR_SURFACE)
     .borderRadius(8)
     .border({ width: 1, color: COLOR_LINE })
@@ -849,7 +908,7 @@ struct QuestionPage {
           .margin({ top: 8 })
           .width('100%')
         TextArea({ placeholder: '输入你的作答思路，提交后对照参考答案和评分点自评。', text: this.shortAnswer })
-          .height(160)
+          .height(this.shortAnswerInputHeight())
           .width('100%')
           .fontSize(14)
           .fontColor(COLOR_TEXT)
@@ -1189,11 +1248,23 @@ struct QuestionPage {
     const columns = this.isTablet ? 10 : 5;
     const questionCount = this.questionIds.length > 0 ? this.questionIds.length : 1;
     const rows = Math.ceil(questionCount / columns);
-    return 190 + rows * 48;
+    const contentHeight = 190 + rows * 48;
+    const availableHeight = Math.max(240, this.viewportHeightVp - (this.isTablet ? 130 : 96));
+    return Math.min(contentHeight, availableHeight);
   }
 
   progressPanelWidth(): number {
-    return this.isTablet ? 392 : 312;
+    if (this.isTablet) {
+      return 392;
+    }
+    return Math.min(312, Math.max(280, this.viewportWidthVp - 24));
+  }
+
+  shortAnswerInputHeight(): number {
+    if (this.isTablet) {
+      return 160;
+    }
+    return this.viewportHeightVp > 0 && this.viewportHeightVp < 700 ? 120 : 150;
   }
 
   progressPanelX(): number {
@@ -1557,10 +1628,12 @@ struct QuestionPage {
       const currentDisplay = display.getDefaultDisplaySync();
       const density = currentDisplay.densityPixels > 0 ? currentDisplay.densityPixels : 1;
       this.viewportWidthVp = currentDisplay.width / density;
+      this.viewportHeightVp = currentDisplay.height / density;
       const shortSideVp = Math.min(currentDisplay.width, currentDisplay.height) / density;
       this.isTablet = shortSideVp >= TABLET_MIN_VP;
     } catch (error) {
       this.viewportWidthVp = 0;
+      this.viewportHeightVp = 0;
       this.isTablet = false;
     }
   }
